@@ -1,0 +1,342 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-11-10",
+  "scope": "Curated official listings for learning and evaluation; availability is a dated snapshot.",
+  "courses": [
+    {
+      "id": "SF-001",
+      "title": "ChatGPT Begins With Me",
+      "provider": "National University of Singapore",
+      "kind": "skillsfuture",
+      "summary": "Explore introductory generative AI and ChatGPT concepts.",
+      "tags": [
+        "ai",
+        "chatgpt",
+        "digital",
+        "workplace"
+      ],
+      "source_url": "https://www.stat.nus.edu.sg/education/cet/short-course/",
+      "captured_on": "2026-11-10",
+      "duration_hours": null,
+      "availability": "unknown",
+      "funding_note": "NUS lists SSG funding. Individual subsidy and credit eligibility require official confirmation.",
+      "cost_note": "Total unsubsidised fee has not been verified; confirm with the provider."
+    },
+    {
+      "id": "SF-002",
+      "title": "Data Analytics Begins With Me",
+      "provider": "National University of Singapore",
+      "kind": "skillsfuture",
+      "summary": "Build an introductory understanding of data analytics.",
+      "tags": [
+        "data",
+        "analytics",
+        "business",
+        "workplace"
+      ],
+      "source_url": "https://www.stat.nus.edu.sg/education/cet/short-course/",
+      "captured_on": "2026-11-10",
+      "duration_hours": null,
+      "availability": "unknown",
+      "funding_note": "NUS lists SSG funding. Individual subsidy and credit eligibility require official confirmation.",
+      "cost_note": "Total unsubsidised fee has not been verified; confirm with the provider."
+    },
+    {
+      "id": "SF-003",
+      "title": "Fundamentals of Data Analytics & Visualization using Python",
+      "provider": "National University of Singapore",
+      "kind": "skillsfuture",
+      "summary": "Practise Python data preparation, descriptive statistics and visualisation.",
+      "tags": [
+        "python",
+        "data",
+        "analytics",
+        "visualisation",
+        "coding"
+      ],
+      "source_url": "https://www.stat.nus.edu.sg/fundamentals-of-data-analytics-visualization-using-python/",
+      "captured_on": "2026-11-10",
+      "duration_hours": null,
+      "availability": "unknown",
+      "funding_note": "NUS lists SSG funding. Individual subsidy and credit eligibility require official confirmation.",
+      "cost_note": "Total unsubsidised fee has not been verified; confirm with the provider."
+    },
+    {
+      "id": "SF-004",
+      "title": "Introduction to Supply Chain Management",
+      "provider": "Institute of Technical Education",
+      "kind": "skillsfuture",
+      "summary": "Learn principles for managing product flow through a supply chain.",
+      "tags": [
+        "supply",
+        "chain",
+        "logistics",
+        "operations",
+        "workplace"
+      ],
+      "source_url": "https://www.aic.sg/Age-Well/Learning-and-Volunteerism/Learning-Opportunities/Business-Skills",
+      "captured_on": "2026-11-10",
+      "duration_hours": 7,
+      "availability": "unknown",
+      "funding_note": "AIC lists SkillsFuture Credit eligibility. Its published subsidised fee does not establish this learner\u2019s entitlement.",
+      "cost_note": "Total unsubsidised fee has not been verified; confirm with the provider.",
+      "prerequisite_note": "AIC Age Well directory listing; confirm provider age, entry and intake requirements."
+    },
+    {
+      "id": "SF-005",
+      "title": "Project Management - Essential Skills",
+      "provider": "Institute of Technical Education",
+      "kind": "skillsfuture",
+      "summary": "Study the project life cycle, budgeting and risk management.",
+      "tags": [
+        "project",
+        "management",
+        "budget",
+        "operations",
+        "workplace"
+      ],
+      "source_url": "https://www.aic.sg/Age-Well/Learning-and-Volunteerism/Learning-Opportunities/Business-Skills",
+      "captured_on": "2026-11-10",
+      "duration_hours": 16,
+      "availability": "unknown",
+      "funding_note": "AIC lists SkillsFuture Credit eligibility. Its published subsidised fee does not establish this learner\u2019s entitlement.",
+      "cost_note": "Total unsubsidised fee has not been verified; confirm with the provider.",
+      "prerequisite_note": "AIC Age Well directory listing; confirm provider age, entry and intake requirements."
+    },
+    {
+      "id": "SF-006",
+      "title": "IT Literacy - Basic Microsoft Excel",
+      "provider": "Institute of Technical Education",
+      "kind": "skillsfuture",
+      "summary": "Develop foundational spreadsheet and Excel skills.",
+      "tags": [
+        "excel",
+        "spreadsheet",
+        "computer",
+        "digital",
+        "office",
+        "data"
+      ],
+      "source_url": "https://www.aic.sg/Age-Well/Learning-and-Volunteerism/Learning-Opportunities/Computer-Skills",
+      "captured_on": "2026-11-10",
+      "duration_hours": 7,
+      "availability": "unknown",
+      "funding_note": "AIC lists SkillsFuture Credit eligibility. Its published subsidised fee does not establish this learner\u2019s entitlement.",
+      "cost_note": "Total unsubsidised fee has not been verified; confirm with the provider.",
+      "prerequisite_note": "AIC Age Well directory listing; confirm provider age, entry and intake requirements."
+    },
+    {
+      "id": "CC-001",
+      "title": "Photography and Photo Enhancement with AI (AI30)",
+      "provider": "Toa Payoh West CC",
+      "kind": "community",
+      "summary": "Learn smartphone photo capture and AI-assisted editing.",
+      "tags": [
+        "photography",
+        "photo",
+        "smartphone",
+        "ai",
+        "creative"
+      ],
+      "source_url": "https://www.onepa.gov.sg/courses/photography-and-photo-enhancement-with-ai-ai30-c027245625",
+      "captured_on": "2026-11-10",
+      "venue": "Toa Payoh West CC",
+      "planning_area": "Toa Payoh",
+      "price_min_sgd": 10,
+      "price_max_sgd": 10,
+      "extra_cost_sgd": null,
+      "start_date": "2026-12-12",
+      "end_date": "2026-12-12",
+      "registration_closes": "2026-12-12",
+      "weekdays": [
+        5
+      ],
+      "schedule_note": "14:00-17:00; one session.",
+      "duration_hours": 3,
+      "prerequisite_note": "Access to Gemini on a smartphone or browser is required.",
+      "availability": "listed",
+      "prerequisites": [],
+      "languages": null,
+      "funding_note": "Personal eligibility is unverified; check the official course listing and provider.",
+      "cost_note": "Published course-fee range; add the stated material fee. Other checkout costs are unconfirmed."
+    },
+    {
+      "id": "CC-002",
+      "title": "SkillsFuture@PA Pastry Baking",
+      "provider": "Nee Soon East CC",
+      "kind": "community",
+      "summary": "Practise pastry preparation and baking techniques.",
+      "tags": [
+        "baking",
+        "pastry",
+        "culinary",
+        "cooking"
+      ],
+      "source_url": "https://www.onepa.gov.sg/courses/skillsfuturepa-pastry-baking-c027246640",
+      "captured_on": "2026-11-10",
+      "venue": "Nee Soon East CC",
+      "planning_area": "Yishun",
+      "price_min_sgd": 90,
+      "price_max_sgd": 100,
+      "extra_cost_sgd": 30,
+      "start_date": "2026-12-08",
+      "end_date": "2026-12-22",
+      "registration_closes": "2026-12-01",
+      "weekdays": [
+        1
+      ],
+      "schedule_note": "09:30-12:30; three sessions.",
+      "duration_hours": 9,
+      "prerequisite_note": "Hands-on work in pairs; English instruction.",
+      "availability": "listed",
+      "prerequisites": [],
+      "languages": [
+        "English"
+      ],
+      "funding_note": "Personal eligibility is unverified; check the official course listing and provider.",
+      "cost_note": "Published course-fee range; add the stated material fee. Other checkout costs are unconfirmed."
+    },
+    {
+      "id": "CC-003",
+      "title": "Chinese Calligraphy",
+      "provider": "Tampines Changkat CC",
+      "kind": "community",
+      "summary": "Practise brush handling and Chinese writing techniques.",
+      "tags": [
+        "calligraphy",
+        "arts",
+        "creative",
+        "brush"
+      ],
+      "source_url": "https://www.onepa.gov.sg/courses/chinese-calligraphy-c027251104",
+      "captured_on": "2026-11-10",
+      "venue": "Tampines Changkat CC",
+      "planning_area": "Tampines",
+      "price_min_sgd": 158,
+      "price_max_sgd": 168,
+      "extra_cost_sgd": 48,
+      "start_date": "2026-12-12",
+      "end_date": "2027-01-30",
+      "registration_closes": "2026-12-09",
+      "weekdays": [
+        5
+      ],
+      "schedule_note": "19:15-21:15; eight sessions.",
+      "duration_hours": 16,
+      "prerequisite_note": "Mandarin instruction; age seven and above; must be able to hold a brush.",
+      "availability": "listed",
+      "prerequisites": [],
+      "languages": [
+        "Mandarin"
+      ],
+      "funding_note": "Personal eligibility is unverified; check the official course listing and provider.",
+      "cost_note": "Published course-fee range; add the stated material fee. Other checkout costs are unconfirmed."
+    },
+    {
+      "id": "CC-004",
+      "title": "SkillsFuture@PA Basic Computer Step 3",
+      "provider": "Chua Chu Kang CC",
+      "kind": "community",
+      "summary": "Practise Windows settings, files, folders and basic computer tasks.",
+      "tags": [
+        "computer",
+        "digital",
+        "literacy",
+        "windows",
+        "office"
+      ],
+      "source_url": "https://www.onepa.gov.sg/courses/skillsfuturepa-basic-computer-step-3-c027252351",
+      "captured_on": "2026-11-10",
+      "venue": "Chua Chu Kang CC",
+      "planning_area": "Choa Chu Kang",
+      "price_min_sgd": 85,
+      "price_max_sgd": 95,
+      "extra_cost_sgd": null,
+      "start_date": "2026-11-27",
+      "end_date": "2026-11-27",
+      "registration_closes": "2026-11-20",
+      "weekdays": [
+        4
+      ],
+      "schedule_note": "10:00-18:00; one session.",
+      "duration_hours": null,
+      "prerequisite_note": "Requires Basic Computer Steps 1 and 2 or basic computer operation skills.",
+      "availability": "listed",
+      "prerequisites": [
+        "basic_computer"
+      ],
+      "languages": null,
+      "funding_note": "Personal eligibility is unverified; check the official course listing and provider.",
+      "cost_note": "Published course-fee range; add the stated material fee. Other checkout costs are unconfirmed."
+    },
+    {
+      "id": "CC-005",
+      "title": "Taijiquan (HealthierSG)",
+      "provider": "Ci Yuan CC",
+      "kind": "community",
+      "summary": "Join a beginner-friendly traditional movement class.",
+      "tags": [
+        "taijiquan",
+        "tai",
+        "chi",
+        "wellness",
+        "movement"
+      ],
+      "source_url": "https://www.onepa.gov.sg/courses/taijiquan-healthiersg-c027251055",
+      "captured_on": "2026-11-10",
+      "venue": "Ci Yuan CC",
+      "planning_area": "Hougang",
+      "price_min_sgd": 55,
+      "price_max_sgd": 65,
+      "extra_cost_sgd": null,
+      "start_date": "2026-12-06",
+      "end_date": "2027-02-28",
+      "registration_closes": "2026-12-06",
+      "weekdays": [
+        6
+      ],
+      "schedule_note": "09:00-10:30; twelve sessions; no class on 7 February.",
+      "duration_hours": 18,
+      "prerequisite_note": "Beginners welcome; ongoing class.",
+      "availability": "listed",
+      "prerequisites": [],
+      "languages": null,
+      "funding_note": "Personal eligibility is unverified; check the official course listing and provider.",
+      "cost_note": "Published course-fee range; add the stated material fee. Other checkout costs are unconfirmed."
+    },
+    {
+      "id": "CC-006",
+      "title": "Hatha Yoga (Elementary) (HealthierSG)",
+      "provider": "Nee Soon Central CC",
+      "kind": "community",
+      "summary": "Practise basic yoga poses, breathing and concentration.",
+      "tags": [
+        "yoga",
+        "wellness",
+        "movement",
+        "fitness"
+      ],
+      "source_url": "https://www.onepa.gov.sg/courses/hatha-yoga-elementary-healthiersg-c027254183",
+      "captured_on": "2026-11-10",
+      "venue": "Nee Soon Central CC",
+      "planning_area": "Yishun",
+      "price_min_sgd": 70,
+      "price_max_sgd": 80,
+      "extra_cost_sgd": null,
+      "start_date": "2026-12-01",
+      "end_date": "2027-01-19",
+      "registration_closes": "2026-12-01",
+      "weekdays": [
+        1
+      ],
+      "schedule_note": "11:00-12:15; eight sessions.",
+      "duration_hours": 10,
+      "prerequisite_note": "Bring your own yoga mat.",
+      "availability": "listed",
+      "prerequisites": [],
+      "languages": null,
+      "funding_note": "Personal eligibility is unverified; check the official course listing and provider.",
+      "cost_note": "Published course-fee range; add the stated material fee. Other checkout costs are unconfirmed."
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+name: Application checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: astral-sh/setup-uv@v10.3.3
+        with:
+          python-version: '3.12'
+          enable-cache: true
+      - uses: actions/setup-node@v7.1.0
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install compatible SDK environments
+        run: |
+          uv sync --locked
+          uv sync --project integrations/helix --locked
+          uv sync --project integrations/designer --locked
+      - name: Check Python and native SDK behaviour
+        run: |
+          uv run ruff check src tests scripts integrations
+          uv run pytest -q
+          uv run --project integrations/helix python integrations/helix/validate_agent.py
+      - name: Install and verify Svelte application
+        run: |
+          npm --prefix web ci
+          npm --prefix web run check
+          npm --prefix web test
+          npm --prefix web run build
+      - name: Install browser
+        working-directory: web
+        run: npx playwright install --with-deps chromium
+      - name: Exercise the browser and real local worker
+        run: npm --prefix web run test:e2e

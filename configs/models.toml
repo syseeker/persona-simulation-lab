@@ -1,0 +1,7 @@
+# Used only for UserSim input materialization. The host supplies actual model responses.
+models = [
+  {alias = "user_model", model = "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning", provider = "nvidia", max_tokens = 1024, max_parallel_requests = 1},
+  {alias = "assistant_model", model = "nvidia/nemotron-3.5-lightning-30b-a3b", provider = "nvidia", max_tokens = 1024, max_parallel_requests = 1},
+  {alias = "judge_model", model = "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning", provider = "nvidia", max_tokens = 1024, max_parallel_requests = 1},
+  {alias = "summary_model", model = "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning", provider = "nvidia", max_tokens = 1024, max_parallel_requests = 1},
+]

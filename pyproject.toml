@@ -1,0 +1,51 @@
+[project]
+name = "persona-simulation-lab"
+version = "0.1.0"
+description = "A Singapore learning advisor and a persona-based agent evaluation lab"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "pydantic>=2.12,<3",
+  "httpx>=0.28,<1",
+  "aiohttp>=3.14.1,<4",
+  "python-dotenv>=1,<2",
+  "typer>=0.20,<1",
+  "mcp>=1.30,<2",
+  "deepagents==0.7.35",
+  "langchain-openai>=1.3,<2",
+  "langchain>=1.4.9,<2",
+  "langgraph>=1.2.20,<2",
+  "langchain-mcp-adapters>=0.2.2,<0.3",
+  "pyarrow>=24,<25",
+  "huggingface-hub>=1.33,<2",
+  "usersim==0.3.0",
+  "nemo-relay==0.11.1",
+  "nemo-fabric[deepagents,relay]==0.6.1",
+  "certifi>=2026.10.19",
+]
+
+[project.scripts]
+learning-lab = "learning_lab.cli:main"
+learning-lab-worker = "learning_lab.worker:main"
+learning-lab-courses = "learning_lab.course_mcp:main"
+
+[project.entry-points."usersim.probes"]
+learning-advisor = "learning_lab.probe:LearningAdvisorProbe"
+
+[dependency-groups]
+dev = ["pytest>=8,<10", "pytest-asyncio>=1,<2", "ruff>=0.14,<0.15"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/learning_lab"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 110

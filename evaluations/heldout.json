@@ -1,0 +1,12 @@
+{
+  "version": "learning-heldout-v1",
+  "frozen_on": "2026-11-10",
+  "cases": [
+    {"id":"photo-budget", "preferences":{"goal":"photography","budget_sgd":50,"days":[5]}, "must_include":"CC-001"},
+    {"id":"baking-materials", "preferences":{"goal":"baking","budget_sgd":120}, "must_exclude":"CC-002"},
+    {"id":"calligraphy-fit", "preferences":{"goal":"calligraphy","budget_sgd":250,"days":[5]}, "must_include":"CC-003"},
+    {"id":"calligraphy-over-budget", "preferences":{"goal":"calligraphy","budget_sgd":200}, "must_exclude":"CC-003"},
+    {"id":"computer-prerequisite", "preferences":{"goal":"basic computer","known_skills":[]}, "must_exclude":"CC-004"},
+    {"id":"project-fee-unknown", "preferences":{"goal":"project management"}, "must_include":"SF-005"}
+  ]
+}

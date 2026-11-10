@@ -1,0 +1,26 @@
+# Local credentials and restricted source material
+.env
+.env.*
+!.env.example
+.private/
+data/
+runs/
+artifacts/
+# Local environments and generated caches
+.venv/
+venvs/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.DS_Store
+node_modules/
+.svelte-kit/
+build/
+coverage/
+playwright-report/
+test-results/
+.coverage
+*.egg-info/
+.data-designer/
+.nemo-relay/
