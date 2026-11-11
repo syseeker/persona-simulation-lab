@@ -96,3 +96,15 @@ async def test_cancellation_keeps_a_terminal_manifest(tmp_path):
     assert result["status"] == "cancelled"
     assert result["ended_at"]
     await service.close()
+
+
+async def test_failed_model_turn_retains_partial_real_tool_history(tmp_path):
+    async with Gateway(Budget(1), "demo").serving() as gateway:
+        async with DirectTarget(gateway, tmp_path / "workspace", "offline-scripted") as target:
+            with pytest.raises(Exception, match="1-call budget"):
+                await target.reply("photography", Preferences(goal="photography"))
+    history = json.loads((tmp_path / "target-history.json").read_text())
+    tools = [m for m in history if m["role"] == "tool"]
+    assert tools and tools[0]["name"] == "search_courses"
+    assert tools[0]["tool_call_id"]
+    assert "CC-001" in json.dumps(tools[0]["content"])

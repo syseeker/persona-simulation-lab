@@ -4,7 +4,7 @@ import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { randomUUID } from 'node:crypto';
 
-export type Operation = 'status' | 'catalogue' | 'chat' | 'runs' | 'start_run' | 'get_run' | 'cancel_run' | 'evaluate_run';
+export type Operation = 'status' | 'catalogue' | 'chat' | 'runs' | 'start_run' | 'get_run' | 'get_trace' | 'cancel_run' | 'evaluate_run';
 type Pending = { resolve: (value: unknown) => void; reject: (error: Error) => void; timer: ReturnType<typeof setTimeout> };
 
 export class WorkerClient {

@@ -8,9 +8,9 @@
 
 ## Offline Checks
 
-On 11 November 2026, the Python suite passed **26 tests without API credentials**. Coverage includes source parsing, immutable snapshots, constraint enforcement, repairable model tool arguments, real local MCP calls, Deep Agents and Fabric lifecycles, Relay events, UserSim hosted parity, cancellation, crash recovery, worker messaging, actual Helix pass/fail scoring and actual Data Designer source integrity.
+On 11 November 2026, the Python suite passed **33 tests without API credentials**. Coverage includes source parsing, immutable snapshots, constraint enforcement, repairable model tool arguments, real local MCP calls, Deep Agents and Fabric lifecycles, Relay events, UserSim hosted parity, cancellation, crash recovery, worker messaging, actual Helix pass/fail scoring and actual Data Designer source integrity. Source-trace checks cover per-turn provenance, missing snapshots, failed conditions, unambiguous tool associations, partial histories and filtering before the history limit.
 
-The frontend passed **four unit tests and three browser tests**, with zero Svelte type errors or warnings. Browser checks exercise a real advisor request, saved simulation and local Helix scoring, a narrow viewport and inert rendering of supplied active markup. The Node production build also passed.
+The frontend passed **four unit tests and four browser tests**, with zero Svelte type errors or warnings. Browser checks exercise a real advisor request, saved simulation and local Helix scoring, a narrow viewport, inert rendering of supplied active markup, result filtering and saved-source tracing. The Node production build also passed. Source tracing and filter checks use saved data or fabricated fixtures, with no new live inference calls.
 
 The full public dataset audit covered **148,000 records**. The coaching skill passed its validator. The managed Helix YAML passed schema loading, translation and Fabric planning in its compatible environment. That check performs no registration or deployment.
 

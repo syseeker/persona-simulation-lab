@@ -24,6 +24,7 @@ class Request(StrictModel):
         "runs",
         "start_run",
         "get_run",
+        "get_trace",
         "cancel_run",
         "evaluate_run",
         "shutdown",
@@ -57,11 +58,13 @@ async def serve():
                     case "chat":
                         result = await service.chat(ChatSpec.model_validate(request.params))
                     case "runs":
-                        result = service.list_runs()
+                        result = service.list_runs(request.params.get("mode"))
                     case "start_run":
                         result = await service.start_run(RunSpec.model_validate(request.params))
                     case "get_run":
                         result = service.get_run(request.params["run_id"])
+                    case "get_trace":
+                        result = service.get_trace(request.params["run_id"], request.params["episode_id"])
                     case "cancel_run":
                         result = await service.cancel(request.params["run_id"])
                     case "evaluate_run":

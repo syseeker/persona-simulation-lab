@@ -12,7 +12,19 @@
 
 Start the web app in offline mode. Ask for a Saturday photography class with a S$50 budget. Inspect the official listing and compare its published fee with the unknown extra costs. Then select live NIM and ask the same question.
 
-Follow `Preferences` through the matching service, MCP tool, advisor harness and gateway. Run one live HF profile-only simulation and read every user and assistant message. Explain which parts came from the source persona, which came from the catalogue and which were generated.
+Follow `Preferences` through the advisor harness, inference gateway, MCP tool and matching service. The harness asks the model for an action, the model selects a course tool, the tool returns saved catalogue facts, and the model produces its reply.
+
+For a live HF profile-only simulation, select one profile and keep Data Designer and strategy comparison off. After it finishes:
+
+1. Open **Review results**. **Show experiments** filters the saved history by Live NVIDIA NIM, Offline demo or all inference modes. New-run inference settings belong to the advisor and simulation screens. The list contains the most recent 30 runs matching the filter.
+2. Select the saved experiment and click **Trace sources**. Choose a profile/strategy under **Conversation to trace**.
+3. Read **Source profile** for the dataset's original occupation, skills, interests and career ambitions. Read **Application scenario** for the theme, strategy and optional preference hypotheses added by the application.
+4. Read each **Generated learner message** and **Generated advisor reply**. Compare their claims with the source fields above.
+5. Expand **Saved tool steps** to inspect requested arguments and returned facts. Compare course IDs in the reply with **Frozen course facts**, including fees, unknown extras, prerequisites, funding notes and official links.
+
+Opening a trace makes no model calls. A course ID found in the catalogue does not establish that every sentence in the reply is correct. A tool result may also list an excluded course; inspect the result's conditions before interpreting it as a recommendation.
+
+Failed conditions retain their stop reason. A condition that stopped before a final reply will show that no reply was saved. New Deep Agents failures retain partial tool history; some earlier failed runs and Fabric runs have no structured tool records. Missing evidence is labelled explicitly. Use a completed episode for the full input-to-recommendation exercise.
 
 Try changing the budget for baking from S$120 to S$130. The known material fee changes which course fits. Unknown fees must stay unknown.
 

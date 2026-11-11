@@ -58,7 +58,9 @@ uv run learning-lab enrich
 uv run learning-lab ablate --live
 ```
 
-The interface also provides simulation progress, cancellation, saved conversations and local Helix checks. Each experiment or benchmark has a 120-call cap, including model retries and judges. Provider responses are capped at 1,024 output tokens; conversations have at most three turns. Four tool rounds are allowed per advisor reply. Provider retries are disabled.
+The interface also provides simulation progress, cancellation, saved conversations and local Helix checks. **Review results** has its own history filter and **Trace sources** view for comparing the source profile, application scenario, generated messages, saved tool steps and frozen course facts. Inspecting saved evidence makes no inference calls.
+
+Each experiment or benchmark has a 120-call cap, including model retries and judges. Provider responses are capped at 1,024 output tokens; conversations have at most three turns. Four tool rounds are allowed per advisor reply. Provider retries are disabled.
 
 ## Data And Results
 

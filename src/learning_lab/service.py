@@ -95,14 +95,20 @@ class LabService:
             "limits": {"calls": 120, "output_tokens_per_call": 1024, "turns": 3, "concurrent_episodes": 1},
         }
 
-    def list_runs(self):
+    def list_runs(self, mode=None):
+        if mode not in {None, "live", "demo"}:
+            raise ValueError("Choose live, demo or omit the saved-run filter")
         self.recover_interrupted()
         output = []
-        for path in sorted(self.runs.glob("*/run.json"), key=lambda p: p.stat().st_mtime, reverse=True)[:30]:
+        for path in sorted(self.runs.glob("*/run.json"), key=lambda p: p.stat().st_mtime, reverse=True):
             try:
-                output.append(json.loads(path.read_text()))
+                run = json.loads(path.read_text())
             except ValueError:
                 continue
+            if mode is None or run.get("spec", {}).get("mode") == mode:
+                output.append(run)
+            if len(output) == 30:
+                break
         return output
 
     def get_run(self, run_id: str):
@@ -117,6 +123,14 @@ class LabService:
             [json.loads(line) for line in events.read_text().splitlines()] if events.exists() else []
         )
         return result
+
+    def get_trace(self, run_id: str, episode_id: str):
+        from .provenance import build_trace
+
+        run = self.get_run(run_id)
+        if not re.fullmatch(r"[a-f0-9-]{36}", episode_id):
+            raise ValueError("Invalid episode ID")
+        return build_trace(self.runs / run_id, run, episode_id)
 
     async def start_run(self, spec: RunSpec):
         if any(not task.done() for task in self.tasks.values()) or self.lock.locked():

@@ -29,7 +29,7 @@ The architecture review is complete and all five phases are implemented. Inspect
 
 ## Inspect Integration Evidence
 
-- **Phase 1:** follow a stated budget and goal through deterministic matching, MCP, Deep Agents and the NIM gateway. For UserSim, preserve activation messages and send only the latest public learner message to the target.
+- **Phase 1:** follow a stated budget and goal through deterministic matching, MCP, Deep Agents and the NIM gateway. Use **Review results**, its saved-run filter and **Trace sources** to compare source profiles, scenario settings, generated messages, saved tool steps and frozen course facts. Opening saved traces requires no new model calls. Preserve missing evidence and failed conditions. For UserSim, preserve activation messages and send only the latest public learner message to the target.
 - **Phase 2:** inspect native Relay events. Pair start/end UUIDs and parent relationships; keep gateway usage for simulator, target and judges distinguishable.
 - **Phase 3:** inspect typed Fabric planning and its persistent runtime. Use the installed adapter's global allowlist. Avoid attaching Relay twice; preserve the explicit generated Relay configuration path while required by Fabric 0.6.1.
 - **Phase 4:** generate fresh outputs on frozen cases, then use the actual local Helix Evals SDK. Read row-level failures and execution errors before aggregate scores. The managed YAML is locally validated; Platform registration and deployment remain separate.

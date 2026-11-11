@@ -9,7 +9,7 @@
 
 ## Web And Worker
 
-The browser calls SvelteKit routes under `/api`. Read operations are `status`, `catalogue`, `runs` and `run?id=...`. POST operations are `chat`, `runs`, `cancel` and `evaluate`.
+The browser calls SvelteKit routes under `/api`. Read operations are `status`, `catalogue`, `runs?mode=live|demo`, `run?id=...` and `trace?run_id=...&episode_id=...`. Omitting the history mode includes both modes. Filtering occurs before the 30-run history limit. POST operations are `chat`, `runs`, `cancel` and `evaluate`.
 
 The server maps these to a version-1 worker envelope containing `id`, `method` and `params`. A response contains the same ID and either `result` or a bounded `error`. Inputs use strict Pydantic models; unknown methods and unexpected fields are rejected. Individual worker lines are limited to 1 MiB, and web request bodies to 64 KiB.
 
@@ -36,5 +36,7 @@ Stored resolved rows are the replay inputs. Experiments save them exactly; repea
 `runs/<uuid>/` contains the run manifest, event JSONL, resolved inputs, condition folders, native UserSim results and optional Helix scores. Relay files and target histories stay there. Benchmarks and enrichment ablations have separate ignored subdirectories.
 
 Terminal run states include completed, completed with warnings, completed with failed conditions, cancelled, interrupted, budget exhausted, timed out and failed. Reports preserve the native UserSim outcome rather than treating every finished loop as a quality success.
+
+The read-only trace view joins an episode to its saved source row, scenario and per-turn tool history. Course facts come from that run's frozen snapshot; missing snapshots never fall back to the current catalogue. Missing responses and tool records remain missing. Older parallel tool results without IDs are associated with requests only when the association is unambiguous. New direct-target failures save available checkpoint messages and tool-call IDs before returning the error.
 
 The gateway admits no more than 120 provider attempts per experiment or benchmark, caps output at 1,024 tokens per call and allows four tool rounds per advisor reply. At most one episode runs at a time. Cancellation retains the ledger, including failed or cancelled attempts whose billing or usage may be unknown.

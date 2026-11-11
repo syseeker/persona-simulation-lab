@@ -135,29 +135,27 @@ class DirectTarget:
             content += "\nLAB_PREFERENCES=" + preferences.model_dump_json(exclude_none=True)
         config = {"configurable": {"thread_id": self.thread_id}, "recursion_limit": 24}
         before = len((await self.agent.aget_state(config)).values.get("messages", []))
-        if self.relay:
-            import nemo_relay
-            from nemo_relay.integrations.deepagents import NemoRelayDeepAgentsCallbackHandler
+        try:
+            if self.relay:
+                import nemo_relay
+                from nemo_relay.integrations.deepagents import NemoRelayDeepAgentsCallbackHandler
 
-            config["callbacks"] = [NemoRelayDeepAgentsCallbackHandler()]
-            with nemo_relay.scope.scope("course-advisor-request", nemo_relay.ScopeType.Agent):
+                config["callbacks"] = [NemoRelayDeepAgentsCallbackHandler()]
+                with nemo_relay.scope.scope("course-advisor-request", nemo_relay.ScopeType.Agent):
+                    result = await self.agent.ainvoke(
+                        {"messages": [{"role": "user", "content": content}]}, config
+                    )
+                await nemo_relay.subscribers.flush_async()
+            else:
                 result = await self.agent.ainvoke(
                     {"messages": [{"role": "user", "content": content}]}, config
                 )
-            await nemo_relay.subscribers.flush_async()
-        else:
-            result = await self.agent.ainvoke({"messages": [{"role": "user", "content": content}]}, config)
+        except Exception:
+            state = await self.agent.aget_state(config)
+            self._save_history(state.values.get("messages", []))
+            raise
         new = result["messages"][before:]
-        (self.workspace.parent / "target-history.json").write_text(
-            json.dumps(
-                [
-                    {"role": m.type, "content": m.content, "tool_calls": getattr(m, "tool_calls", None)}
-                    for m in result["messages"]
-                ],
-                indent=2,
-                default=str,
-            )
-        )
+        self._save_history(result["messages"])
         output = result["messages"][-1]
         if output.type != "ai" or not output.content:
             raise RuntimeError(
@@ -168,6 +166,24 @@ class DirectTarget:
             "tools": [{"name": m.name, "content": m.content} for m in new if m.type == "tool"],
             "thread_id": self.thread_id,
         }
+
+    def _save_history(self, messages):
+        (self.workspace.parent / "target-history.json").write_text(
+            json.dumps(
+                [
+                    {
+                        "role": m.type,
+                        "content": m.content,
+                        "name": m.name,
+                        "tool_call_id": getattr(m, "tool_call_id", None),
+                        "tool_calls": getattr(m, "tool_calls", None),
+                    }
+                    for m in messages
+                ],
+                indent=2,
+                default=str,
+            )
+        )
 
     async def __aexit__(self, *exc):
         await self.stack.aclose()
