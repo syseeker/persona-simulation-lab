@@ -6,6 +6,8 @@ Replaced the schema page's OCEAN storage/audit explanation and three data-guidan
 
 Svelte/TypeScript reported zero errors and warnings; the production build and documentation/archive checks passed. Desktop/mobile browser inspection verified the new summary, schema ordering/search/scope filters and installed HF/NGC browsing, with no runtime errors or non-GET requests. Only the schema presentation and its walkthrough/verification notes changed.
 
+The subsequent review removed the replacement **The main difference** box as requested. Its unused styles and walkthrough reference were removed; the surrounding dataset UI is unchanged. Svelte/TypeScript, documentation/archive checks and targeted desktop/mobile browser inspection passed, with zero non-GET requests.
+
 ## Shared foundation and photography review · 20 November 2026
 
 The repository-hosted guide now connects Scenario 1 through the nine teaching stages. Its process chart has an alternating timeline with three phase bands with no horizontal scrolling; unrelated presentation and dataset browsing were preserved. Scenarios 2/3 remain illustrative. The user requested publication on `dev` with fixed sanitized recordings; `main` is retained for later acceptance.

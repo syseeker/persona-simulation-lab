@@ -79,12 +79,6 @@
     <p class="schema-note">All fields are marked nullable in these schemas; that describes allowed nulls, not completeness. Six NGC fields have Arrow type <code>null</code>: <code>street_number</code>, <code>street_name</code>, <code>unit</code>, <code>city</code>, <code>region</code> and <code>bachelors_field</code>.</p>
   </section>
 
-  <section class="dataset-difference" aria-labelledby="difference-heading">
-    <h2 id="difference-heading">The main difference</h2>
-    <p><strong>Public Hugging Face:</strong> Profile details, interests and goals, without OCEAN personality fields.</p>
-    <p><strong>NGC Extended:</strong> More profile fields, plus five synthetic personality traits (OCEAN) to shape simulated behaviour.</p>
-  </section>
-
   <footer class="datasets-footer"><div><strong>Metadata inspection only</strong><p>Data schema preserves this dated schema and audit reference without bundling persona rows. Use Explore profiles to read and filter the separately installed local Parquet files. Reading data starts no inference.</p></div>{#if onchoose}<button class="locate-button" onclick={() => onchoose?.()}>Locate personas in map <span aria-hidden="true">→</span></button>{/if}</footer>
 </main>
 
@@ -160,9 +154,6 @@
   .empty { text-align: center; padding: 30px 12px; color: #5b6f7b; }
   .schema-note { color: #5b6f7b; font-size: 10px; line-height: 1.8; margin-top: 11px; }
   .schema-note code { font-size: 10px; }
-  .dataset-difference { margin-top: 31px; padding: 20px 24px; border: 1px solid #dce5e9; border-radius: 5px; background: #fff; }
-  .dataset-difference p { margin: 9px 0 0; color: #5b6f7b; font-size: 12px; line-height: 1.8; }
-  .dataset-difference strong { color: #293d4d; font-weight: 600; }
   .datasets-footer { display: flex; align-items: center; justify-content: space-between; gap: 30px; border-top: 1px solid #dce5e9; margin-top: 28px; padding-top: 21px; }
   .datasets-footer>div { max-width: 730px; }
   .datasets-footer strong { color: #5b6f7b; font-size: 11px; font-weight: 550; }
