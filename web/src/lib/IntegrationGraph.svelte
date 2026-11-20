@@ -71,10 +71,11 @@
       const used=members.some(m=>componentUsed(m,options.scenario));
       const text=`${title} ${members.map(m=>componentTitle(m,options.scenario)).join(' ')} ${operations.map(o=>o.title).join(' ')}`.toLocaleLowerCase();
       let badge='';
+      const recorded=['photography','boardgames'].includes(options.scenario);
       if(!used)badge='Not used in this preset';
-      else if(options.scenario!=='photography'&&['designer','routing','guardrails','helix','platform'].includes(node.id))badge='Planned · no scenario evidence';
-      else if(node.id==='guardrails')badge='Not used in photography';
-      else if(node.id==='openshell')badge=options.scenario==='photography'?'Verified standalone boundary':preset(options.scenario).helix?'Planned managed boundary':'Planned standalone boundary';
+      else if(!recorded&&['designer','routing','guardrails','helix','platform'].includes(node.id))badge='Planned · no scenario evidence';
+      else if(node.id==='guardrails')badge='Native checks recorded';
+      else if(node.id==='openshell')badge=recorded?'Verified standalone boundary':preset(options.scenario).helix?'Planned managed boundary':'Planned standalone boundary';
       else if(node.id==='harness')badge='Selected harness';
       return {...node,data:{title,kind:simple?.kind||component.kind,subtitle:simple?.purpose,
         modules,active:options.focus&&isActive,dim:(!!query&&!text.includes(query))||(options.focus&&!isActive),
