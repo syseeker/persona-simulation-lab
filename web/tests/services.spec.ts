@@ -5,8 +5,11 @@ test('the integrated guide starts no execution operation on entry', async ({ pag
   // A regression must fail without starting a worker or a workload from the landing.
   await page.route('**/api/**', async route => {
     apiRequests.push(route.request().url());
-    if (route.request().url().includes('/api/journey/list')) {
-      await route.fulfill({json:{runs:[],scenario_id:'photography'}});
+    expect(route.request().method()).toBe('GET');
+    if (route.request().url().includes('/api/journey/lesson')) {
+      await route.fulfill({json:{state:'unavailable',scenario_id:'photography',trace:null,artifacts:[],sources:{}}});
+    } else if (route.request().url().includes('/api/journey/demo-persona')) {
+      await route.fulfill({json:{available:false,notice:'Offline test: source unavailable'}});
     } else await route.abort('blockedbyclient');
   });
 
@@ -15,7 +18,7 @@ test('the integrated guide starts no execution operation on entry', async ({ pag
   await expect(page.getByRole('button', {name:'Simulate a Session',exact:true})).toBeEnabled();
   await expect(page.getByRole('button', {name:'Trace a Request',exact:true})).toHaveAttribute('aria-pressed','true');
   await page.waitForLoadState('networkidle');
-  expect(apiRequests.every(url=>url.includes('/api/journey/list'))).toBe(true);
+  expect(apiRequests.every(url=>/\/api\/journey\/(lesson|demo-persona)\?scenario_id=photography$/.test(url))).toBe(true);
 });
 
 test('retained metadata routes reach the real local worker without inference', async ({ request }) => {
@@ -48,4 +51,8 @@ test('the HTTP boundary rejects unknown operations and invalid shapes before wor
   const invalid = await request.post('/api/chat', { data: [] });
   expect(invalid.status()).toBe(400);
   expect(await invalid.json()).toEqual({ error: 'Expected an object' });
+  for(const path of ['/api/journey/lesson?scenario_id=photography&run_id=arbitrary', '/api/journey/demo-persona?path=.env', '/api/journey/lesson?scenario_id=photography&scenario_id=boardgames']){
+    expect((await request.get(path)).status()).toBe(400);
+  }
+  expect((await request.post('/api/journey/lesson',{data:{scenario_id:'photography'}})).status()).toBe(404);
 });

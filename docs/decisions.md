@@ -1,5 +1,13 @@
 # Architecture Decisions
 
+## 21 November 2026: Scenario-bound developer review architecture
+
+Treat the learner as developer zero: the guide must support reviewing our own integration, not just introducing product names. One shared operation model drives Simplified, Detailed and the teaching panel across all 27 scenario/lesson combinations. Seven plain-language responsibilities remain distinct from nine numbered lessons. Important substeps expose design/ownership, input, configuration, output and a meaningful check; exact committed code/configuration and scenario/run-specific proof open outside the limited panel. Raw previews and run-history selection are removed from the teaching UI, while retained APIs stay compatible.
+
+Step 1 verifies/displays the actual original and does not activate UserSim. Step 2 configures UserSim and distinguishes source traits, supplied situation and saved generated wording; the loop executes in Step 4. Relay attaches to the harness; accounting and native scope identities remain separate. Safeguards surround the advisor’s public boundaries; OpenShell encloses the workload with a distinct trusted supervisor; Helix evaluation and managed operations have separate responsibilities.
+
+Photography uses one canonical demo. A separately hashed offline companion fills its configuration/lifecycle/result publication gaps without changing any immutable pack. Board games and retail learning keep no execution artifacts. Preserve explicit missing, planned, unused and not-called states. No scenario execution, deployment, SDK upgrade or Scenario 2/3 backend work is part of this review redesign.
+
 ## 20 November 2026: Publish completed rounds and fixed review evidence on dev
 
 The user requested a `dev` branch from `main` in the existing GitHub repository, then a commit/push after each completed round so direct code links resolve. Keep `main` unchanged. Publish fixed sanitized scenario recordings with manifest hashes, GitHub log permalinks and verified in-app previews. Raw private runs/datasets/prompts/credentials stay ignored. Preserve earlier failed/reviewed photography attempts instead of replacing them with a success-only pack. Scenarios 2/3 remain illustrative until separately executed. Future live-log linking is deferred.

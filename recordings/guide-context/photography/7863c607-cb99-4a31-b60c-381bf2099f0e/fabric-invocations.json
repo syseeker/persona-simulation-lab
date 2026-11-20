@@ -1,0 +1,49 @@
+[
+  {
+    "runtime_status": "succeeded",
+    "runtime_id": "runtime-1795158608474-88-2",
+    "invocation_id": "invocation-1795158615882-88-5",
+    "outcome": {
+      "status": "valid",
+      "code": "public_answer",
+      "reason": "A nonempty public answer was saved; factual checks are separate."
+    },
+    "normalized_output_fields": [
+      "adapter",
+      "base_url",
+      "completed",
+      "event_count",
+      "events",
+      "harness",
+      "message_count",
+      "messages",
+      "mode",
+      "model",
+      "relay_artifacts",
+      "response",
+      "resumed",
+      "runtime_id",
+      "telemetry",
+      "thread_id",
+      "usage"
+    ],
+    "output": {
+      "adapter": "python",
+      "harness": "deepagents",
+      "mode": "deepagents",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "completed": true,
+      "event_count": 9,
+      "message_count": 4,
+      "runtime_id": "runtime-1795158608474-88-2",
+      "thread_id": "f79aa0e6c6fd4d7e9e7e93d6cb754e22",
+      "resumed": false,
+      "response": "Here’s a shortlist that matches your criteria (Saturday, ≤ S$50):\n\n- **Photography and Photo Enhancement with AI (AI30)**  \n  - **Provider:** Toa Payoh West CC  \n  - **Venue:** Toa Payoh West CC  \n  - **Planning area:** Toa Payoh  \n  - **Schedule:** Saturday, 14:00‑17:00 (single 3‑hour session on 12 Dec 2026)  \n  - **Fee:** S$10.00 (published range; material fee extra, unconfirmed)  \n  - **Link:** [https://www.onepa.gov.sg/courses/photography-and-photo-enhancement-with-ai-ai30-c027245625](https://www.onepa.gov.sg/courses/photography-and-photo-enhancement-with-ai-ai30-c027245625)  \n\n**Unresolved constraints:**  \n- The course is in **Toa Payoh**; proximity to your preferred area is unverified.  \n- Additional material costs are unconfirmed.  \n- SkillsFuture / funding eligibility is unverified; check the official listing.  \n\nLet me know if you’d like more details or a different time/area."
+    },
+    "usage": {
+      "prompt_tokens": 4236,
+      "completion_tokens": 355,
+      "total_tokens": 4591
+    }
+  }
+]

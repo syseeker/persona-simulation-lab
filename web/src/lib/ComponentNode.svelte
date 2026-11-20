@@ -1,7 +1,7 @@
 <script lang="ts">
   import { Handle, Position } from '@xyflow/svelte';
 
-  type Module = { id: string; title: string; component?: string; hint?: string };
+  type Module = { id: string; title: string; component?: string; hint?: string; active?:boolean };
   type NodeData = {
     title: string;
     eyebrow?: string;
@@ -21,7 +21,7 @@
 
   function inspect(event: MouseEvent, module?: Module, tab: 'overview' | 'evidence' | 'sources' = 'overview') {
     event.stopPropagation();
-    data.oninspect?.(module?.component ?? data.inspectId ?? id, module?.title, tab);
+    data.oninspect?.(module?.component ?? data.inspectId ?? id, module?.id, tab);
   }
 </script>
 
@@ -57,12 +57,8 @@
   {#if data.subtitle}<p class="subtitle">{data.subtitle}</p>{/if}
   <div class="modules">
     {#each data.modules as module (module.id)}
-      <div class="module" data-module={module.id}>
-        <span class="module-title" title={module.hint ?? module.title}>{module.title}</span>
-        <div class="module-actions nodrag nopan">
-          <button class="nodrag nopan" aria-label={`Code: ${data.title} / ${module.title}`} title={`Open source for ${module.title}`} onclick={(event) => inspect(event, module, 'sources')}>Code</button>
-          <button class="nodrag nopan" aria-label={`Log: ${data.title} / ${module.title}`} title={`Inspect evidence for ${module.title}`} onclick={(event) => inspect(event, module, 'evidence')}>Log</button>
-        </div>
+      <div class="module" class:operation-active={data.active && module.active} data-module={module.id} data-active={data.active && module.active ? 'true':'false'}>
+        <button class="module-title nodrag nopan" title={module.hint ?? module.title} aria-label={`Explain ${data.title}: ${module.title}`} onclick={(event) => inspect(event, module)}>{module.title}<span aria-hidden="true"> →</span></button>
       </div>
     {/each}
   </div>
@@ -92,9 +88,10 @@
   .module { display: flex; align-items: center; justify-content: space-between; gap: 6px; min-height: 28px; padding: 3px 1px; border-bottom: 1px solid #edf1f3; }
   .module:last-child { border-bottom: 0; }
   .module-title { font-size: 13.5px; line-height: 1.15; font-weight: 500; min-width: 0; }
-  .module-actions { display: flex; align-items: center; gap: 4px; flex: none; }
-  .module-actions button { background: #f2f6f8; border-radius: 3px; padding: 3px 4px; font-size: 11.5px; line-height: 1.3; color: #426777; }
-  .module-actions button:hover { background: #dfeef3; color: #1d566a; }
+  .module-title { width:100%; text-align:left; color:inherit; background:transparent; padding:4px; border-radius:3px; }
+  .module-title span { color:#69818c; }
+  .module-title:hover { background:#eaf2f4; }
+  .operation-active { background:#eaf2f4; border-radius:3px; }
   button:focus-visible { outline: 2px solid #2d7c96; outline-offset: 2px; }
   .wide .modules { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; }
   .wide .module { flex-direction: column; align-items: flex-start; justify-content: center; gap: 6px; border-bottom: 0; border-right: 1px solid #edf1f3; padding-right: 8px; }

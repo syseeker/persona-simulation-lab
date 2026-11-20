@@ -1,111 +1,145 @@
-import { expect, test } from '@playwright/test';
+import {expect,test} from '@playwright/test';
+import {readFileSync,readdirSync} from 'node:fs';
+import {resolve} from 'node:path';
 
-const first='11111111-1111-4111-8111-111111111111', second='22222222-2222-4222-8222-222222222222';
-function trace(id:string) {
-  return {run:{run_id:id,scenario_id:'photography',episode_id:`episode-${id}`,status:'completed',calls:5,cleanup_confirmed:true,
-    run_directory:`runs/journeys/${id}`,source_revision:'fixture-revision',configuration:{harness:'deepagents'}},
-    artifacts:[{id:`artifact-${id}`,path:'usage.json',url:`/api/journey/artifact?run_id=${id}&artifact_id=artifact-${id}`}],
-    source_lock:{source:'ngc',original_sha256:'fixture'},situation:{kind:'authored fixture'},
-    usage:{records:[{call:3,role:'assistant',status:'completed',selected_model:'fixture-model'}]},
-    conversation:[{turn:1,role:'user',content:'Photography on Saturday, S$50.'},{turn:1,role:'assistant',content:'Offline test fixture, not execution evidence.'}],
-    relay:{scopes:[],notices:['Fixture has no native scopes.']},tools:[],
-    evaluation:{passed:1,total:1,rows:[],coverage:'Fixture only'}};
+const run='7863c607-cb99-4a31-b60c-381bf2099f0e';
+const repo='https://github.com/syseeker/persona-simulation-lab';
+const read=(path:string)=>JSON.parse(readFileSync(resolve('..',path),'utf8'));
+function context(scenario:string){
+  if(scenario!=='photography')return {state:'planned',scenario_id:scenario,trace:null,context:{},artifacts:[],sources:{},notice:'No execution recorded for this scenario.'};
+  const folder=`recordings/photography/${run}`,companion=`recordings/guide-context/photography/${run}`;
+  const trace=read(`${folder}/trace.json`),extra:Record<string,unknown>={};
+  for(const name of readdirSync(resolve('..',companion)).filter(n=>n.endsWith('.json')&&n!=='manifest.json'))extra[name]=read(`${companion}/${name}`);
+  for(const name of ['fabric-plan.json','fabric-doctor.json','boundary-probes.json','cleanup.json','effective-policy.json'])extra[name]=read(`${folder}/${name}`);
+  const artifacts=[...Object.keys(read(`${folder}/manifest.json`).files).map(path=>({path,url:`${repo}/blob/recorded-commit/${folder}/${path}`})),...Object.keys(read(`${companion}/manifest.json`).files).map(path=>({path,url:`${repo}/blob/context-commit/${companion}/${path}`}))];
+  const link={available:true,path:'src/learning_lab/fabric_target.py',symbol:'def build_config',url:`${repo}/blob/source-commit/src/learning_lab/fabric_target.py#L25`,recording_match:'matched',notice:'Committed code matches the recorded source hash.'};
+  return {state:'recorded',scenario_id:scenario,run_id:run,trace,context:extra,artifacts,sources:{'fabric.config':link,'fabric.invoke':{...link,symbol:'self.runtime.invoke'},'fabric.result':link,'fabric.plan':link,'fabric.start':link}};
 }
-
 test.beforeEach(async({page})=>{
   await page.route('**/api/journey/**',async route=>{
     expect(route.request().method()).toBe('GET');
-    const url=new URL(route.request().url()),action=url.pathname.split('/').at(-1);
-    const id=url.searchParams.get('run_id') || first;
-    if(action==='list') await route.fulfill({json:{runs:[first,second].map(run_id=>({run_id,status:'completed',created_at:'2026-11-20T00:00:00Z'}))}});
-    else if(action==='trace') await route.fulfill({json:trace(id)});
-    else if(action==='source') await route.fulfill({json:{available:true,path:'src/learning_lab/fabric_target.py',symbol:'build_config',line:25,
-      github_url:'https://github.com/example/citizen-app/blob/fixture/src/learning_lab/fabric_target.py#L25',
-      repository_url:'https://github.com/example/citizen-app',content:'def build_config(): ...',github_notice:'Current checkout differs from saved source.',sha256:'fixture'}});
-    else if(action==='artifact') await route.fulfill({json:{run_id:id,path:'usage.json',url:url.pathname+url.search,sha256:'fixture',content:{selected_run:id}}});
-    else await route.abort();
+    const url=new URL(route.request().url()),scenario=url.searchParams.get('scenario_id')||'photography';
+    if(url.pathname.endsWith('/lesson'))await route.fulfill({json:context(scenario)});
+    else if(url.pathname.endsWith('/demo-persona'))await route.fulfill({json:scenario==='photography'?{available:true,name:'Review Fixture',source:'ngc',revision:'fixture-only',fields:[{label:'Age',value:24},{label:'Interests',value:'Photography'}],traits:[],original_sha256:'f'.repeat(64)}:{available:false,notice:'No recorded persona for this scenario.'}});
+    else throw new Error('Inspection attempted an unexpected operation: '+url.pathname);
   });
 });
 
-test('nine recorded stages, code and local logs retain the same run',async({page})=>{
+test('all 27 scenario lessons teach concepts, inputs/results and verification without execution',async({page})=>{
   const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto('/');
-  const counter=page.getByTestId('recorded-step-counter');
-  await expect(counter).toHaveText('Step 1 of 9');
-  for(let stage=2;stage<=9;stage++) {
-    await page.getByRole('button',{name:'Next →',exact:true}).click();
-    await expect(counter).toHaveText(`Step ${stage} of 9`);
+  for(const scenario of ['photography','boardgames','dreamjob']){
+    await page.getByLabel('Scenario',{exact:true}).selectOption(scenario);
+    for(let step=1;step<=9;step++){
+      await expect(page.getByTestId('step-counter')).toHaveText(`Step ${step} of 9`);
+      const panel=page.getByTestId('journey-panel');
+      for(const name of ['Why this matters','In this scenario','How it works','Check your implementation'])await expect(panel.getByRole('heading',{name,exact:true})).toBeVisible();
+      await expect(panel.locator('pre')).toHaveCount(0);
+      await expect(page.getByLabel('Photography evidence',{exact:true})).toHaveCount(0);
+      await expect(panel.getByText('All files in this run',{exact:true})).toHaveCount(0);
+      if(scenario!=='photography'){
+        await expect(panel.getByTestId('record-state')).toContainText('Planned scenario');
+        await expect(panel.locator('a[href*="recordings/photography"]')).toHaveCount(0);
+      }
+      if(step<9)await page.getByRole('button',{name:'Next →',exact:true}).click();
+    }
   }
-  await page.getByRole('button',{name:'Reset playback',exact:true}).click();
-  await page.getByRole('button',{name:'Next →',exact:true}).click();
-  await page.getByRole('button',{name:'Next →',exact:true}).click();
-  await page.getByRole('button',{name:'Application code',exact:true}).click();
-  await expect(page.getByRole('link',{name:'GitHub code ↗',exact:true})).toHaveAttribute('href',/github\.com\/example\/citizen-app\/blob\/fixture\/src\/learning_lab\/fabric_target.py#L25/);
-  await page.getByRole('button',{name:'← Back to the selected run',exact:true}).click();
-  for(let n=0;n<4;n++)await page.getByRole('button',{name:'Next →',exact:true}).click();
-  await page.getByRole('button',{name:'Scenario log',exact:true}).click();
-  await expect(page.getByRole('link',{name:'Open local record ↗',exact:true})).toHaveAttribute('href',`/api/journey/artifact?run_id=${first}&artifact_id=artifact-${first}`);
-  await page.getByRole('button',{name:'usage.json',exact:true}).first().click();
-  await expect(page.locator('.artifact-preview')).toContainText(first);
-  await page.locator('.saved-selection > summary').click();
-  await page.getByLabel('Photography evidence').selectOption(second);
-  await expect(counter).toHaveText('Step 7 of 9');
-  await page.getByRole('button',{name:'Scenario log',exact:true}).click();
-  await expect(page.getByRole('link',{name:'Open local record ↗',exact:true})).toHaveAttribute('href',`/api/journey/artifact?run_id=${second}&artifact_id=artifact-${second}`);
-  await expect(page.locator('.artifact-preview')).toHaveCount(0);
-  await page.reload();
-  await expect(counter).toHaveText('Step 7 of 9');
-  await expect(page.getByRole('link',{name:'Open local record ↗',exact:true})).toHaveAttribute('href',new RegExp(second));
   expect(errors).toEqual([]);
 });
 
-test('saved request attribution survives view changes and reload',async({page})=>{
-  await page.goto('/');await expect(page.getByTestId('recorded-step-counter')).toBeVisible();
-  for(let n=0;n<4;n++)await page.getByRole('button',{name:'Next →',exact:true}).click();
-  await page.getByLabel('Saved request',{exact:true}).selectOption('call:3');
-  await expect(page.locator('.canvas-caption')).toContainText('Native Relay span correlation is not assumed');
+test('overview shows everything; explicit persona focus does not activate UserSim',async({page})=>{
+  await page.goto('/');await expect(page.locator('[data-component="person"]')).toBeVisible();
+  await expect(page.locator('.component-node.dim')).toHaveCount(0);
+  await page.getByRole('button',{name:'Follow this step on the map →',exact:true}).click();
+  await expect(page.locator('.component-node.active')).toHaveCount(1);
+  await expect(page.locator('[data-component="person"]')).toHaveAttribute('data-active','true');
+  await expect(page.locator('[data-component="learner"]')).toHaveAttribute('data-active','false');
   await page.getByRole('button',{name:'Detailed',exact:true}).click();
-  await expect(page.getByLabel('Saved request',{exact:true})).toHaveValue('call:3');
+  await expect(page.locator('.component-node.dim')).toHaveCount(0);
+  await page.getByRole('button',{name:'Reset playback',exact:true}).click();
+  await expect(page.locator('.component-node.active')).toHaveCount(1);
+  await expect(page.locator('[data-component="personas"]')).toHaveAttribute('data-active','true');
+  await expect(page.locator('[data-component="usersim"]')).toHaveAttribute('data-active','false');
+  await page.getByRole('button',{name:'Reset layout',exact:true}).click();
+  await expect(page.locator('.component-node.dim')).toHaveCount(0);
+  await expect(page.locator('.component-node.active')).toHaveCount(0);
+});
+
+test('collapse keeps one scenario choice visible and Step 2 separates supplied inputs from generated wording',async({page})=>{
+  await page.goto('/');await expect(page.getByTestId('selected-persona')).toContainText('Review Fixture');
+  await page.getByRole('button',{name:'Next →',exact:true}).click();
+  await expect(page.getByTestId('scenario-facts')).toContainText('Supplied by this scenario');
+  await expect(page.getByTestId('scenario-facts')).toContainText('USERSIM WORDING · SAVED OPENING');
+  await expect(page.getByTestId('scenario-facts')).toContainText('Generated during Step 4');
+  await page.getByLabel('Toggle scenario summary',{exact:true}).click();
+  await expect(page.getByLabel('Scenario',{exact:true})).toBeVisible();
+  await expect(page.getByLabel('Scenario',{exact:true})).toHaveCount(1);
+  await page.getByLabel('Scenario',{exact:true}).selectOption('boardgames');
+  await expect(page.getByTestId('step-counter')).toHaveText('Step 1 of 9');
+  await expect(page.getByTestId('selected-persona')).toHaveCount(0);
+});
+
+test('Fabric operation has exact repository and run links; inspection preserves lesson and reload selection',async({page})=>{
+  await page.goto('/');
+  await page.getByRole('button',{name:'Next →',exact:true}).click();await page.getByRole('button',{name:'Next →',exact:true}).click();
+  await page.getByRole('button',{name:'Detailed',exact:true}).click();
+  await page.getByRole('button',{name:'Explain NeMo Fabric: Build FabricConfig and resolve the adapter',exact:true}).click();
+  await expect(page.getByTestId('step-counter')).toHaveText('Step 3 of 9');
+  const op=page.locator('[data-operation="fabric.config"]');
+  await expect(op.getByRole('link',{name:'Application call ↗',exact:true})).toHaveAttribute('href',`${repo}/blob/source-commit/src/learning_lab/fabric_target.py#L25`);
+  await expect(op.getByRole('link',{name:'Scenario log ↗',exact:true})).toHaveAttribute('href',new RegExp(`/recordings/(guide-context/)?photography/${run}/`));
+  await expect(op).toContainText('Committed code matches the recorded source hash.');
   await page.reload();
-  await expect(page.getByLabel('Saved request',{exact:true})).toHaveValue('call:3');
-  await expect(page.locator('.canvas-caption')).toContainText('Gateway call 3');
+  await expect(page.getByTestId('step-counter')).toHaveText('Step 3 of 9');
+  await expect(page.locator('.step-title')).toHaveText('Build FabricConfig and resolve the adapter');
+  await page.getByRole('button',{name:'Simplified',exact:true}).click();
+  await expect(page.locator('.step-title')).toHaveText('Build FabricConfig and resolve the adapter');
+  await expect(page.locator('.component-node.dim')).toHaveCount(0);
+  await page.getByRole('button',{name:'Detailed',exact:true}).click();
+  await expect(page.locator('.step-title')).toHaveText('Build FabricConfig and resolve the adapter');
+  await page.getByRole('button',{name:/Back to step 3/}).click();
+  await expect(page.locator('.step-title')).toHaveText('Build and connect the agent');
+  await page.getByRole('button',{name:/2\s+Integration Map/}).click();
+  await expect(page.locator('.component-node.dim')).toHaveCount(0);
 });
 
-test('fixed recording log links target the matching GitHub pack',async({page})=>{
-  await page.route('**/api/journey/trace?**',async route=>{
-    const value=trace(first);
-    const recorded={...value,recording_notice:'Fixed sanitized recording',
-      run:{...value.run,recording:true,kind:'recorded',run_directory:`recordings/photography/${first}`},
-      artifacts:value.artifacts.map(file=>({...file,kind:'recorded',url:`https://github.com/example/citizen-app/blob/recording-commit/recordings/photography/${first}/${file.path}`}))};
-    await route.fulfill({json:recorded});
-  });
-  await page.goto('/');await expect(page.getByTestId('recorded-step-counter')).toBeVisible();
-  for(let n=0;n<6;n++)await page.getByRole('button',{name:'Next →',exact:true}).click();
-  await page.getByRole('button',{name:'Scenario log',exact:true}).click();
-  await expect(page.getByRole('heading',{name:'Scenario-specific recorded logs'})).toBeVisible();
-  await expect(page.getByRole('link',{name:'Open recorded log ↗',exact:true})).toHaveAttribute('href',`https://github.com/example/citizen-app/blob/recording-commit/recordings/photography/${first}/usage.json`);
+test('saved geometry, inspector width and reduced-motion preferences survive the redesigned map',async({page})=>{
+  await page.emulateMedia({reducedMotion:'reduce'});await page.setViewportSize({width:1800,height:1100});
+  await page.goto('/');await expect(page.locator('[data-component="person"]')).toBeVisible();
+  const node=page.locator('.svelte-flow__node[data-id="person"]');
+  const header=node.locator('header'),box=await header.boundingBox();expect(box).not.toBeNull();
+  await page.mouse.move(box!.x+30,box!.y+15);await page.mouse.down();await page.mouse.move(box!.x+70,box!.y+45,{steps:8});await page.mouse.up();
+  const transform=await node.getAttribute('style');await page.getByRole('button',{name:'Save layout',exact:true}).click();
+  const divider=page.getByRole('separator');await divider.focus();await page.keyboard.press('ArrowLeft');
+  const width=await divider.getAttribute('aria-valuenow');
+  await page.reload();await expect(node).toHaveAttribute('style',transform!);await expect(divider).toHaveAttribute('aria-valuenow',width!);
+  await page.getByRole('button',{name:'Follow this step on the map →',exact:true}).click();
+  await page.getByRole('button',{name:'Next →',exact:true}).click();
+  const animations=await page.locator('.integration-edge.is-active .svelte-flow__edge-path').evaluateAll(paths=>paths.map(p=>getComputedStyle(p).animationName));
+  expect(animations.length).toBeGreaterThan(0);expect(animations.every(a=>a==='none')).toBe(true);
 });
 
-test('future scenarios stay illustrative without inheriting photography logs',async({page})=>{
-  await page.goto('/');await expect(page.getByTestId('recorded-step-counter')).toBeVisible();
-  for(const scenario of ['boardgames','dreamjob']) {
-    await page.getByLabel('Scenario',{exact:true}).selectOption(scenario);
-    await expect(page.getByRole('button',{name:'Simulate a Session',exact:true})).toBeDisabled();
-    await expect(page.getByTestId('journey-panel')).toHaveCount(0);
-    await expect(page.locator('.trace-heading')).toContainText('ILLUSTRATIVE');
-    for(let n=0;n<8;n++)await page.getByRole('button',{name:'Next →',exact:true}).click();
-    await expect(page.locator('.footer-step')).toHaveText('Step 9 of 9');
-  }
-  await page.getByLabel('Scenario',{exact:true}).selectOption('photography');
-  await expect(page.getByTestId('recorded-step-counter')).toHaveText('Step 1 of 9');
-  await expect(page.locator('.trace-heading')).toContainText('RECORDED');
+test('playback progresses through nine chapters without changing geometry or starting execution',async({page})=>{
+  await page.goto('/');await expect(page.getByTestId('step-counter')).toHaveText('Step 1 of 9');
+  await page.clock.install();await page.getByRole('button',{name:'Play',exact:true}).click();
+  for(let step=2;step<=9;step++){await page.clock.fastForward(4300);await expect(page.getByTestId('step-counter')).toHaveText(`Step ${step} of 9`);}
+  await page.clock.fastForward(4300);await expect(page.getByRole('button',{name:'Play',exact:true})).toHaveAttribute('aria-pressed','false');
 });
 
-test('journey chart fits desktop and phone widths without a horizontal scrollbar',async({page})=>{
+test('unavailable recordings and originals remain visible without substitute evidence',async({page})=>{
+  await page.route('**/api/journey/lesson?**',route=>route.fulfill({json:{state:'unavailable',scenario_id:'photography',trace:null,context:{},artifacts:[],sources:{},notice:'The tagged demo recording is unavailable. No substitute.'}}));
+  await page.route('**/api/journey/demo-persona?**',route=>route.fulfill({json:{available:false,notice:'No original matches this revision and hash. No substitute profile.'}}));
+  await page.goto('/');
+  await expect(page.getByTestId('record-state')).toContainText('Demo unavailable');
+  await expect(page.getByTestId('scenario-facts')).toContainText('No original matches');
+  await expect(page.locator('a[href*="recordings/photography"]')).toHaveCount(0);
+  await expect(page.getByTestId('selected-persona')).toHaveCount(0);
+});
+
+test('journey chart retains its responsive design',async({page})=>{
   await page.goto('/');await page.getByRole('button',{name:/1\s+Why NeMo Stack/}).click();
-  for(const width of [1800,1000,390]) {
-    await page.setViewportSize({width,height:1000});
-    const chart=page.locator('.journey-chart');
+  for(const width of [1800,1000,390]){
+    await page.setViewportSize({width,height:1000});const chart=page.locator('.journey-chart');
     await expect(chart.getByRole('button')).toHaveCount(9);
     expect(await chart.evaluate(el=>el.scrollWidth<=el.clientWidth+1)).toBe(true);
     expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1)).toBe(true);

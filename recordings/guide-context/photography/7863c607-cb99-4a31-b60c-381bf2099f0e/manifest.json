@@ -1,0 +1,44 @@
+{
+  "schema": "citizen-guide-context/v1",
+  "scenario_id": "photography",
+  "run_id": "7863c607-cb99-4a31-b60c-381bf2099f0e",
+  "recording_manifest_sha256": "83d6f077caa083f3b757a31c9fe0bd188decbb4ae3e7175b4564bf7bdaa9446b",
+  "projection_notice": "Offline allowlisted projections of the same completed native run. Original recording bytes are unchanged; no new model calls were made.",
+  "source_hashes": {
+    "src/learning_lab/journey.py": "fb053d962a822d41e1f79c1f12c6623d4e87d51698494033585e3fe4153333b7",
+    "src/learning_lab/datasets.py": "0f9f7af968f29b16e5c84998d80858945d12ff2e470ab194f429e9b53378703a",
+    "src/learning_lab/stories.py": "ed9a1100a220b3e42204e11c6d90e96e149c4d66da78066c70efcb406d09c320",
+    "src/learning_lab/simulation.py": "126c7878496d40bed5c993e9f149107003785973244edf461681324db8ff1fdb",
+    "src/learning_lab/fabric_target.py": "8f691b1e035a095dc93dbc31915a625f2dcff83d9f30f983608a9a4c24076835",
+    "src/learning_lab/course_mcp.py": "11dbf0f448883ae5a563d3c0ffa9719a41b130cd5b452fceb9e615a1b8fa2a6b",
+    "src/learning_lab/catalogue.py": "455b62d9841901ec3a317aed1b83cbed7633d09c54504b92d1132bb357443c5b",
+    "src/learning_lab/inference.py": "cb9b56decfd9d3170b4db715f1a73e508e8333bd08bd505314b7b32c53800803",
+    "integrations/proxy/litellm.yaml": "432feebd4bdcaafc11aa6e202c7e359b3c2b71fdd5645717cdd8b9f8e48520fb",
+    "src/learning_lab/settings.py": "2f938000cce64f7b21e4e52ec5ddd553ab12424d3a1ec845dcf935cab4b431a0",
+    "src/learning_lab/journey_checks.py": "8d6152c0f395a0022a1e027baba7f83512b58c12fd31d5347142a87e53308cbf",
+    "src/learning_lab/sandbox.py": "f3fbdb3c7a4732b209fcb3c7dd5ae864a16fce619d37af2ed640639075cd9d9c",
+    "src/learning_lab/sandbox_runtime.py": "610513d81c2961095fdc9bbab59448b515507bdcb9b8e0da46abb0b399b24aa6",
+    "catalogue/courses.json": "a0fec3e3c5e358f0e2913ad89d4c06dc17625d3724114eb9adc12940e53d66af",
+    "integrations/openshell/Dockerfile": "af10414332d99d3cf2dea2021ec1203c2a969dbfa9f0eeb816cccfe616473f42",
+    "pyproject.toml": "efc61a5dd7aa5723faef929a4fc12f42faf492214c0eb8cd32df5a333061d2d9",
+    "runtime-skills/course-advisor/SKILL.md": "f76a9075da2696b4d328eaae4e92320083827ca85acb09472462032efbbbf1dc",
+    "src/learning_lab/__init__.py": "6cb556fcb1446d4ef6754c82580c713be0a75043e060d377699276acf0c81fd8",
+    "src/learning_lab/evidence.py": "9871b499ba4f4bb966155a9b1edf8c52c39fe3ce21567cfd0cb37ff726176874",
+    "src/learning_lab/outcomes.py": "e86cb1299f0c2c969e0c8545e913c95729452ae270cf8d6aaab71334ecaa747c",
+    "src/learning_lab/runtime_profiles.py": "41ba8e9155e89084538781e6a032fb927682a7d51f623a2cf2ff2ceabc3c480a",
+    "src/learning_lab/target.py": "5a43f9439ceca1cfc5d0259e175e56ca00a3ae40556ebcc4daa25a3490572453",
+    "uv.lock": "b82f24dbfa319920994635ff6bfd7b8e4f5df2a02fa72bd8a4833bbaf22772b5"
+  },
+  "native_sources": {
+    "usersim-result.json": "93e0d16f16bf75020fd37a2c8f936d69e204f7a9378cd7256aacfc071330299d",
+    "7f316ad0-f473-47fa-93e7-becf159b2626/native/fabric-config.json": "fd48594250e7be062b2b7a7cab82850853f679f54bad738188b68342f3f4c18e",
+    "7f316ad0-f473-47fa-93e7-becf159b2626/native/reply-outcomes.jsonl": "b7171dcec6de214d43e7e27c7623974c9a7a863de8f4fa6a9cf2b51dee0623dc",
+    "7f316ad0-f473-47fa-93e7-becf159b2626/native/fabric-lifecycle.jsonl": "74577d21c0c383270599ce6aec98ebac0781f21c46982d330b1229b7a8a2eae0"
+  },
+  "files": {
+    "usersim-setup.json": "2dd9989500a2e6bc5ccb180a1561f30931d4b85ddf2e488d356b1558dd1169e9",
+    "framework-config.json": "4a1349610b8637bc39cd62bd8909cfdf9febf04e2e7c5aadacd563b5b12cae2c",
+    "fabric-invocations.json": "0b5ad2f42c3c7e322a052e825307ec4350e7f1ba0df63d4b005275607176c99b",
+    "fabric-lifecycle.jsonl": "5a5aa53541eabc2819f037b0ff750c567a627874d60e6d837dcf33d79cabca03"
+  }
+}

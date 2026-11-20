@@ -429,12 +429,16 @@ class JourneyService:
         params = dict(params)
         action = params.pop('action', None)
         keys = {'presets': set(), 'readiness': set(), 'sample': {'source'}, 'start': {'spec'}, 'list': {'scenario_id'},
+                'lesson': {'scenario_id'}, 'demo-persona': {'scenario_id'},
                 'get': {'run_id'}, 'trace': {'run_id'}, 'cancel': {'run_id'}, 'recover': {'run_id'},
                 'source': {'component', 'module'}, 'artifacts': {'run_id'}, 'artifact': {'run_id', 'artifact_id'}}
         if action not in keys or set(params) - keys[action]:
             raise ValueError('Unknown guide operation or unexpected fields')
         if action == 'presets':
             return scenario_presets()
+        if action in {'lesson', 'demo-persona'}:
+            from .guide_lessons import demo_persona, lesson_context
+            return browser_projection((lesson_context if action == 'lesson' else demo_persona)(**params))
         if action == 'readiness':
             return await self.readiness()
         if action == 'sample':

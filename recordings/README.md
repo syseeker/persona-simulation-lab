@@ -3,8 +3,9 @@
 These are sanitized, checked-in execution projections for the Integration Guide.
 They remain available after cloning, without the developer's private `runs/`
 directory. Each manifest binds a scenario/run to its files and SHA-256 hashes.
-Log links open the corresponding file at its GitHub commit. In-app previews use
-the same verified bytes and never infer.
+Log links open the corresponding file at its GitHub commit. The review panel
+interprets selected facts; retained preview APIs read verified bytes and never infer.
+The UI selects one curated demo per scenario, without run-history controls.
 
 ## Photography
 
@@ -16,6 +17,10 @@ These are three executions of the same locked source/story/harness/route, with
 fresh target memory. UserSim generated different public wording; they are not a
 controlled model-quality comparison. No historical result is rewritten. A passed
 application assertion is limited to its stated coverage.
+
+## Photography teaching companion
+
+The [review companion](guide-context/photography/7863c607-cb99-4a31-b60c-381bf2099f0e/manifest.json) adds allowlisted UserSim configuration/outcome, Fabric model/Relay configuration, lifecycle events and normalized invocation/result fields from the **same** native run. Its manifest records the original pack-manifest hash, source hashes and native input hashes. Original pack bytes are unchanged. It contains no original profile row, private resolved input, simulator prompt or raw reasoning. `python -m scripts.export_guide_context` is an offline, non-overwriting exporter; it does not run models.
 
 ## Board games and retail learning
 

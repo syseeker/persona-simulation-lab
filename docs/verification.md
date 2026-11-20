@@ -1,5 +1,22 @@
 # Verification Record
 
+## Scenario-bound review guide · 21 November 2026
+
+The Integration Map now teaches one architecture through nine lessons. Simplified has seven plain-language responsibilities; Detailed expands the same component/operation definition into important integration boundaries. The right panel explains purpose, concrete scenario inputs/results, design choices and cross-checks, with exact application/configuration and scenario/run-specific proof links. It has one permanently visible scenario choice and a collapsible summary. Raw JSON, partial snippets, duplicate evidence navigation, all-file dumps and run-history selection are removed from the teaching UI. Inspection preserves lesson position; view changes show the full architecture while retaining the inspected operation.
+
+The photography demo is fixed to `7863c607-cb99-4a31-b60c-381bf2099f0e`. Its selected original was resolved against the installed NGC distribution/revision by the recorded canonical row hash. Missing originals fail visibly rather than sampling a replacement. Step 2 separates original traits, supplied photography/Saturday/S$50 constraints and the saved UserSim opening; the conversation loop runs in Step 4. A separately manifest-verified [companion](../recordings/guide-context/photography/7863c607-cb99-4a31-b60c-381bf2099f0e/manifest.json) adds allowlisted UserSim setup/outcome, Fabric model/Relay configuration, lifecycle and normalized-result projections from the same native run. Original recording bytes are unchanged. No original row, private prompt or reasoning was published.
+
+Checks passed for this guide round:
+
+- **299 Python tests**, including canonical scenario binding, no private-history fallback, exact original/hash/revision resolution, untrusted cache hints, companion integrity/symlinks, source-link identities and existing workload isolation. Installed SDK checks use saved/local fixture inputs; no new live scenario was executed.
+- **25 web unit tests**, including all 27 scenario/lesson operation paths, seven responsibility blocks, persona/preparation/execution separation and progressive integration allocation.
+- **11 Chromium end-to-end tests**, including all 27 lesson selections, exact repository/run links, operation/lesson/reload persistence, always-visible scenario choice, missing originals/recordings, layout restoration, inspector width, reduced motion, playback and strict read-only HTTP inputs. UI fixtures are not native execution evidence.
+- **Actual-source browser inspection:** the original hash matched; the two saved public messages, actual Fabric configuration/result and effective policy/denial/cleanup facts rendered. There were zero non-GET inspection requests, no browser runtime errors and no change to the five-call recording ledger. HF and NGC each loaded ten actual rows; text/age filtering and narrow-screen browsing passed with zero execution requests.
+- Svelte/TypeScript reports **zero errors and warnings**; production build, Ruff, local documentation/source links and the 173-file immutable v0.2 archive check pass. Graph layers were visually checked so connections do not cover operation text.
+- The frozen-baseline comparison confirms unchanged global styling, dataset UI/reader, journey chart, all non-map page markup, runtime adapters, dependency pins, North Star and existing immutable recording packs. The recovery baseline hash was reverified. Private verification receipts/screenshots remain ignored.
+
+This check-in completes the read-only guide redesign. Board games and retail learning have no native recording at this point; their evidence is explicitly planned/unavailable. The user's subsequent instruction authorises implementing those scenarios next, with separate verification and check-ins; this guide result does not count as their execution evidence.
+
 ## Dataset presentation review · 20 November 2026
 
 Replaced the schema page's OCEAN storage/audit explanation and three data-guidance cards with one plain-language HF/NGC comparison. Existing dataset cards, schema fields, search/filter controls and profile browsing are unchanged. A recoverable baseline precedes the edit.
