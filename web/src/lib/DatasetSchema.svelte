@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { auditDate, datasetSnapshots, oceanAudit, oceanFieldNames, schemaComparison, schemaCounts, type FieldScope } from './datasetMetadata.ts';
+  import { auditDate, datasetSnapshots, schemaComparison, schemaCounts, type FieldScope } from './datasetMetadata.ts';
   import { fieldGroups, fieldLabel } from './fieldGroups.ts';
 
   let { onchoose }: { onchoose?: () => void } = $props();
@@ -79,15 +79,10 @@
     <p class="schema-note">All fields are marked nullable in these schemas; that describes allowed nulls, not completeness. Six NGC fields have Arrow type <code>null</code>: <code>street_number</code>, <code>street_name</code>, <code>unit</code>, <code>city</code>, <code>region</code> and <code>bachelors_field</code>.</p>
   </section>
 
-  <section class="ocean-section" aria-labelledby="ocean-heading">
-    <div><span class="section-label">THE EXTENDED BEHAVIOURAL FIELDS</span><h2 id="ocean-heading">OCEAN belongs to the NGC source.</h2><p>The five columns are physically Arrow <code>{oceanAudit.storedType}</code>. Each value is a JSON string that decodes to an object with three keys.</p><div class="trait-list" aria-label="Five OCEAN column names">{#each oceanFieldNames as field}<code>{field}</code>{/each}</div></div>
-    <div class="ocean-audit"><span class="audit-caption">DECODED STRUCTURE · NO VALUES</span><pre><code>{'{\n  description: string,\n  label: string,\n  t_score: number\n}'}</code></pre><p>The recorded local content audit found valid objects in all <strong>{oceanAudit.validObjectsPerField.toLocaleString('en-SG')}</strong> rows for each trait, with observed <code>t_score</code> values from <strong>{oceanAudit.observedScoreMinimum}</strong> to <strong>{oceanAudit.observedScoreMaximum}</strong>.</p><p class="audit-limit">This is a recorded audit result. The wireframe does not read or validate persona values.</p></div>
-  </section>
-
-  <section class="boundaries" aria-label="How source data is used">
-    <article><span class="boundary-number">01</span><h3>Preserve the source</h3><p>Keep original records, distribution, revision and hashes together. Synthetic profiles and OCEAN attributes are not observations or psychological assessments of actual residents.</p></article>
-    <article><span class="boundary-number">02</span><h3>Label Designer hypotheses</h3><p>Generated salary bands, favourite brands and scenario assumptions belong in separate derived records with lineage. They do not become original source facts.</p></article>
-    <article><span class="boundary-number">03</span><h3>Keep eligibility explicit</h3><p>A country field does not establish citizenship, funding eligibility, real demand or observed behaviour. The application must use trusted, explicit requirements.</p></article>
+  <section class="dataset-difference" aria-labelledby="difference-heading">
+    <h2 id="difference-heading">The main difference</h2>
+    <p><strong>Public Hugging Face:</strong> Profile details, interests and goals, without OCEAN personality fields.</p>
+    <p><strong>NGC Extended:</strong> More profile fields, plus five synthetic personality traits (OCEAN) to shape simulated behaviour.</p>
   </section>
 
   <footer class="datasets-footer"><div><strong>Metadata inspection only</strong><p>Data schema preserves this dated schema and audit reference without bundling persona rows. Use Explore profiles to read and filter the separately installed local Parquet files. Reading data starts no inference.</p></div>{#if onchoose}<button class="locate-button" onclick={() => onchoose?.()}>Locate personas in map <span aria-hidden="true">→</span></button>{/if}</footer>
@@ -165,29 +160,15 @@
   .empty { text-align: center; padding: 30px 12px; color: #5b6f7b; }
   .schema-note { color: #5b6f7b; font-size: 10px; line-height: 1.8; margin-top: 11px; }
   .schema-note code { font-size: 10px; }
-  .ocean-section { display: grid; grid-template-columns: minmax(0,1.1fr) minmax(0,1fr); gap: 35px; border-top: 1px solid #dce5e9; border-bottom: 1px solid #dce5e9; padding: 29px 0; margin-top: 31px; }
-  .ocean-section h2 { font-size: 21px; margin-bottom: 13px; }
-  .ocean-section p { font-size: 12px; color: #5b6f7b; line-height: 1.85; }
-  .ocean-section p code { font-size: 11px; }
-  .trait-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 18px; }
-  .trait-list code { font-size: 10px; color: #537367; background: #edf4ef; border: 1px solid #d5e4d9; border-radius: 4px; padding: 4px 7px; }
-  .ocean-audit { background: #fff; border: 1px solid #dce5e9; border-radius: 5px; padding: 18px 20px 6px; }
-  .audit-caption { font-size: 10px; letter-spacing: .75px; color: #5b6f7b; }
-  .ocean-audit pre { margin: 12px 0; padding: 0; background: transparent; color: #54736b; font-size: 11px; line-height: 1.65; }
-  .ocean-audit pre code { font-size: 11px; }
-  .ocean-audit p { font-size: 11px; margin-bottom: 11px; }
-  .ocean-audit strong { font-weight: 600; color: #5b7c6f; }
-  .ocean-audit p.audit-limit { font-size: 10px; color: #5b6f7b; }
-  .boundaries { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 27px; margin-top: 34px; }
-  .boundary-number { color: #5b6f7b; font-family: ui-monospace,monospace; font-size: 10px; }
-  .boundaries h3 { font-size: 13px; font-weight: 600; color: #5e7987; margin: 6px 0 8px; }
-  .boundaries p { font-size: 11px; color: #5b6f7b; line-height: 1.8; }
+  .dataset-difference { margin-top: 31px; padding: 20px 24px; border: 1px solid #dce5e9; border-radius: 5px; background: #fff; }
+  .dataset-difference p { margin: 9px 0 0; color: #5b6f7b; font-size: 12px; line-height: 1.8; }
+  .dataset-difference strong { color: #293d4d; font-weight: 600; }
   .datasets-footer { display: flex; align-items: center; justify-content: space-between; gap: 30px; border-top: 1px solid #dce5e9; margin-top: 28px; padding-top: 21px; }
   .datasets-footer>div { max-width: 730px; }
   .datasets-footer strong { color: #5b6f7b; font-size: 11px; font-weight: 550; }
   .datasets-footer p { color: #5b6f7b; font-size: 10px; line-height: 1.8; margin: 5px 0 0; }
   .locate-button { flex-shrink: 0; border: 1px solid #ccdeda; background: #edf5f1; color: #4e7e70; border-radius: 5px; padding: 9px 12px; font-size: 11px; cursor: pointer; white-space: nowrap; }
   input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible, summary:focus-visible, .schema-scroll:focus-visible { outline: 2px solid #528f8c; outline-offset: 3px; }
-  @media (max-width: 780px) { .datasets-page { padding: 36px 24px 28px; } .title-row { display: block; } .snapshot-label { display: inline-block; margin-top: 0; margin-bottom: 17px; } h1 { font-size: 31px; } .dataset-cards { gap: 13px; } .dataset-card { padding: 20px 18px; } .dataset-stats dd { font-size: 22px; } .dataset-stats { grid-template-columns: 1.3fr 1fr 1fr; gap: 7px; } .section-heading { display: block; } .schema-summary { margin-bottom: 13px; } .ocean-section { gap: 20px; } .boundaries { gap: 18px; } .datasets-footer { display: block; } .locate-button { margin-top: 17px; } }
-  @media (max-width: 600px) { .datasets-page { padding: 30px 19px 25px; } h1 { font-size: 28px; } .intro { font-size: 14px; } .audit-date { line-height: 1.8; } .audit-date>span { display: none; } .dataset-cards { grid-template-columns: 1fr; gap: 16px; margin-top: 23px; } .dataset-card { padding: 20px; } .dataset-stats dd { font-size: 26px; } .source-meaning { min-height: 0; } .comparison-section { margin-top: 32px; } .schema-tools { grid-template-columns: 1fr; gap: 10px; } .schema-result-summary { flex-direction: column; gap: 3px; } th, td { padding: 9px 9px; } th:first-child { width: 49%; } thead th { font-size: 9px; } th code, td code { font-size: 10px; } .schema-scroll { max-height: 470px; } .ocean-section { grid-template-columns: 1fr; gap: 15px; padding: 25px 0; } .boundaries { grid-template-columns: 1fr; gap: 11px; margin-top: 27px; } .boundaries article { border-bottom: 1px solid #e3e9ed; padding-bottom: 8px; } .boundaries article:last-child { border: 0; } .boundaries p { font-size: 12px; } }
+  @media (max-width: 780px) { .datasets-page { padding: 36px 24px 28px; } .title-row { display: block; } .snapshot-label { display: inline-block; margin-top: 0; margin-bottom: 17px; } h1 { font-size: 31px; } .dataset-cards { gap: 13px; } .dataset-card { padding: 20px 18px; } .dataset-stats dd { font-size: 22px; } .dataset-stats { grid-template-columns: 1.3fr 1fr 1fr; gap: 7px; } .section-heading { display: block; } .schema-summary { margin-bottom: 13px; } .datasets-footer { display: block; } .locate-button { margin-top: 17px; } }
+  @media (max-width: 600px) { .datasets-page { padding: 30px 19px 25px; } h1 { font-size: 28px; } .intro { font-size: 14px; } .audit-date { line-height: 1.8; } .audit-date>span { display: none; } .dataset-cards { grid-template-columns: 1fr; gap: 16px; margin-top: 23px; } .dataset-card { padding: 20px; } .dataset-stats dd { font-size: 26px; } .source-meaning { min-height: 0; } .comparison-section { margin-top: 32px; } .schema-tools { grid-template-columns: 1fr; gap: 10px; } .schema-result-summary { flex-direction: column; gap: 3px; } th, td { padding: 9px 9px; } th:first-child { width: 49%; } thead th { font-size: 9px; } th code, td code { font-size: 10px; } .schema-scroll { max-height: 470px; } }
 </style>
