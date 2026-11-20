@@ -78,9 +78,11 @@ def export(scenario_id='photography', *, run_root: Path | None = None, destinati
         if not isinstance(raw, dict) or raw.get('response') not in replies:
             raise ValueError('Publish only normalized replies matching the immutable public conversation')
         invocations.append({**pick(row, ['runtime_status', 'runtime_id', 'invocation_id', 'outcome']),
+                            'public_turn': len(invocations) + 1,
+                            'tool_scope_uuids': [tool['scope_uuid'] for tool in row.get('tools', []) if tool.get('scope_uuid')],
                             'normalized_output_fields': list(raw),
                             'output': pick(raw, ['adapter', 'harness', 'mode', 'model', 'completed', 'event_count',
-                                                 'message_count', 'runtime_id', 'thread_id', 'resumed', 'response']),
+                                                 'message_count', 'runtime_id', 'thread_id', 'resumed', 'response', 'enabled_toolsets']),
                             'usage': pick(raw.get('usage') or {}, ['prompt_tokens', 'completion_tokens', 'total_tokens', 'cost'])})
     lifecycle = [pick(row, ['at', 'event', 'status', 'harness', 'model_route', 'thread_id', 'runtime_id', 'invocation_id', 'error_type'])
                  for row in read(native / 'fabric-lifecycle.jsonl', lines=True)]
@@ -88,6 +90,11 @@ def export(scenario_id='photography', *, run_root: Path | None = None, destinati
         'usersim-setup.json': setup, 'framework-config.json': framework,
         'fabric-invocations.json': invocations, 'fabric-lifecycle.jsonl': lifecycle,
     }
+    traces = usersim.get('simulation_traces', [])
+    if isinstance(traces, str):
+        traces = json.loads(traces)
+    files['usersim-quality-flags.json'] = [pick(row, ['kind', 'turn_idx', 'rating', 'detail'])
+        for row in traces if row.get('kind') == 'assistant_quality' and row.get('rating') == 'failure']
     bodies = {name: ('\n'.join(json.dumps(clean(row), ensure_ascii=False) for row in value) + '\n'
                      if name.endswith('.jsonl') else json.dumps(clean(value), indent=2, ensure_ascii=False) + '\n')
               for name, value in files.items()}

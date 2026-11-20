@@ -4,7 +4,7 @@
     {operation:string;scenarioId:string;context:Record<string,any>|null;detailed?:boolean}=$props();
   const op=$derived(operationById[operation]);
   const call=$derived(context?.sources?.[sourceId(operation,scenarioId)||'']);
-  const config=$derived(context?.sources?.[op.configCall||'']);
+  const config=$derived(context?.sources?.[sourceId(op.configCall||operation,scenarioId)||'']);
   const files=$derived<Record<string,any>[]>((context?.artifacts||[]).filter((f:Record<string,any>)=>op.proof.includes(f.path)));
   const workflow=$derived(op.component==='harness'&&preset(scenarioId).harness==='hermes'?'https://docs.nvidia.com/nemo/fabric/adapter-contract/overview':componentById[op.component].workflow);
   const architecture=$derived(op.component==='personas'&&context?.trace?.source_lock?.source==='ngc'?componentById.personas.workflow:architectureUrl(op.component,scenarioId));
@@ -22,7 +22,7 @@
   </div>
   {#if detailed}
     {#if op.component==='personas'}<p class="source-note"><a href={componentById.personas.architecture} target="_blank" rel="noreferrer">HF dataset viewer ↗</a> · <a href={componentById.personas.workflow} target="_blank" rel="noreferrer">NGC Extended catalogue ↗</a></p>{:else if workflow}<p class="source-note"><a href={workflow} target="_blank" rel="noreferrer">Library workflow / sequence ↗</a></p>{/if}
-    {#if call?.url}<p class="source-note">{call.path} · {call.symbol || 'file'}<br />{scenarioId==='photography'?call.notice:'Existing integration reference; not verified for this planned scenario.'}{call.working_tree_differs?' Uncommitted working-tree changes are not in this link.':''}</p>{/if}
+    {#if call?.url}<p class="source-note">{call.path} · {call.symbol || 'file'}<br />{context?.state==='recorded'?call.notice:'Existing integration reference; not verified for this planned scenario.'}{call.working_tree_differs?' Uncommitted working-tree changes are not in this link.':''}</p>{/if}
     {#if files.length}<p class="record-links">Recorded configuration / proof: {#each files as file,i}{#if i} · {/if}{#if file.url}<a href={file.url} target="_blank" rel="noreferrer">{file.path} ↗</a>{:else}<span>{file.path} · publication pending</span>{/if}{/each}</p>{:else}<p class="source-note">Expected proof: {op.proof.join(', ')}. No matching record is published for this scenario.</p>{/if}
     {#if op.component==='harness'}<p class="source-note">The application calls Fabric. The selected adapter owns the internal harness operations.</p>{/if}
   {/if}

@@ -44,6 +44,8 @@ SOURCES = {
     'openshell/Access review': ('integrations/openshell/policy.yaml', ''),
     'standalone': ('src/learning_lab/sandbox.py', 'async def __aenter__'),
     'transport': ('src/learning_lab/sandbox_runtime.py', 'class ExecGateway'),
+    'guardrails': ('src/learning_lab/behavioural_safeguards.py', 'async def check'),
+    'hermes': ('src/learning_lab/fabric_target.py', 'def build_config'),
 }
 
 # Stable operation identifiers used by both levels of the teaching diagram.
@@ -53,7 +55,7 @@ OPERATIONS = {
     'persona.select': ('src/learning_lab/datasets.py', 'def sample_personas'),
     'persona.lock': ('src/learning_lab/datasets.py', 'def lock_personas'),
     'situation.authored': ('src/learning_lab/stories.py', 'STORIES'),
-    'situation.bind': ('src/learning_lab/simulation.py', 'def bind_scenario'),
+    'situation.bind': ('src/learning_lab/simulation.py', 'def prepare_rows'),
     'designer.schema': ('integrations/designer/learning_preferences.py', 'def workbench_builder'),
     'designer.generate': ('integrations/designer/learning_preferences.py', 'def generate_workbench'),
     'designer.lineage': ('src/learning_lab/workbench.py', 'def validate_generated_payload'),
@@ -85,6 +87,9 @@ OPERATIONS = {
     'relay.tools': ('src/learning_lab/evidence.py', 'def native_tool_records'),
     'records.read': ('src/learning_lab/recordings.py', 'def trace'),
     'checks.evaluate': ('src/learning_lab/journey_checks.py', 'def evaluate_photography'),
+    'checks.boardgames': ('src/learning_lab/journey_checks.py', 'def evaluate_boardgames'),
+    'guardrails.check': ('integrations/guardrails/runner.py', 'result = await rails.check_async'),
+    'guardrails.config': ('integrations/guardrails/config.yml', ''),
     'checks.coverage': ('src/learning_lab/journey_checks.py', "'coverage':"),
     'helix.evaluate': ('integrations/helix/evaluate.py', 'def evaluate'),
     'platform.register': ('integrations/platform/bridge.py', 'response = await client.register_agent'),

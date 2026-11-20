@@ -1,0 +1,17 @@
+{
+  "projection": "Allowlisted native fields; not a byte-for-byte original.",
+  "run_id": "938bdb3f-568e-442e-889f-fed046edf5a0",
+  "sandbox_name": "cl-938bdb3f568e442e",
+  "native_absence_confirmed": true,
+  "runtime_process_exited": true,
+  "native_artifact_sha256": {
+    "fabric-config.json": "d06f5983aba6249337c9e85c006c140826e91c77a5ca6e9892dccbdba46a0e69",
+    "fabric-doctor.json": "27abfb4dec20650b27929d2413b240a27f0797611d23c4226d32a7016f1a518c",
+    "fabric-lifecycle.jsonl": "6ac085f4a4ba2579c3de548325e8dd28ffe80dd085dc5b8ab30a144a3653a06f",
+    "fabric-plan.json": "d2608e3ab5b744e9b985cf86b1de713c44ee244b7d3ae89d65822b90ce89fb34",
+    "guardrails-config.json": "6e62fbc544a2459922ec08f37e564fb8b4925dea229fd3b97e074ed82bb4d7bb",
+    "fabric-traces/runtime-1795193530972-88-2/relay.jsonl": "feeb6da85e949fd6b27f0b1d02afa28fde1632e310908c0fc44c59a6993f8011",
+    "guardrails-decisions.jsonl": "d6719ce432579279de149ca45be2ea66829a0715e4d8a04b3240473bfc9b0ffe",
+    "reply-outcomes.jsonl": "59c41a1cb6a5ec1b42b11861c0f6aa79c4176f2088738a683901e79c5ff019a4"
+  }
+}

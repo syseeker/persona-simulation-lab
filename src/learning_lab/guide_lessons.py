@@ -20,7 +20,7 @@ from .guide_sources import _git, operation_links, repository_url
 from .settings import ROOT
 
 CANONICAL_DEMOS = {'photography': '7863c607-cb99-4a31-b60c-381bf2099f0e',
-                   'boardgames': None, 'dreamjob': None}
+                   'boardgames': '938bdb3f-568e-442e-889f-fed046edf5a0', 'dreamjob': None}
 CONTEXT_ROOT = ROOT / 'recordings/guide-context'
 INDEX_PATH = ROOT / '.private/cache/guide-original-index.json'
 
@@ -80,9 +80,13 @@ def lesson_context(scenario_id='photography') -> dict:
             hashes = extra.get('source_hashes', {})
             context = dict(extra['data'])
             for name in ['fabric-plan.json', 'fabric-doctor.json', 'effective-policy.json',
-                         'boundary-probes.json', 'cleanup.json', 'runtime-receipt.json']:
+                         'boundary-probes.json', 'cleanup.json', 'runtime-receipt.json',
+                         'guardrails-config.json', 'guardrails-probe.json']:
                 if name in recordings.load(run_id)['files']:
                     context[name] = json.loads(recordings.read(run_id, name))
+            if 'guardrails-decisions.jsonl' in recordings.load(run_id)['files']:
+                context['guardrails-decisions.jsonl'] = [json.loads(line) for line in
+                    recordings.read(run_id, 'guardrails-decisions.jsonl').splitlines() if line.strip()]
             result.update(state='recorded', trace=trace, context=context,
                           artifacts=trace['artifacts'] + extra['artifacts'],
                           notice=extra['notice'])

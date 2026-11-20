@@ -1,0 +1,50 @@
+[
+  {
+    "turn": 1,
+    "role": "user",
+    "content": "Hi, I'm interested in learning how to play board games—could you help me find a suitable class or community session?"
+  },
+  {
+    "turn": 1,
+    "role": "assistant",
+    "content": "The current catalogue snapshot (as of 2026‑11‑20) contains no courses matching “board games.” If you’re open to a different topic—such as game design, strategy thinking, or a related hobby—let me know and I can search again.",
+    "outcome": {
+      "status": "valid",
+      "code": "public_answer",
+      "reason": "A nonempty public answer was saved; factual checks are separate."
+    },
+    "thread_id": "13e0f72b-55e9-466a-a9e0-532ab52b2e57",
+    "preferences": {
+      "goal": "board games",
+      "budget_sgd": null,
+      "days": null,
+      "planning_area": null,
+      "known_skills": null,
+      "kind": null
+    }
+  },
+  {
+    "turn": 2,
+    "role": "user",
+    "content": "Oh, I see—no board‑games class. Is learning video‑game design the same as learning to play board games?"
+  },
+  {
+    "turn": 2,
+    "role": "assistant",
+    "content": "No, learning video‑game design focuses on coding, mechanics, graphics and software tools—very different from the social, tactile experience of playing board games. The catalogue has no board‑games offering, and a design class wouldn’t teach you how to play them.\n\nWould you like me to search for a related topic (e.g., strategy games, game night facilitation, or another hobby)? Or are you happy to explore something else?",
+    "outcome": {
+      "status": "valid",
+      "code": "public_answer",
+      "reason": "A nonempty public answer was saved; factual checks are separate."
+    },
+    "thread_id": "13e0f72b-55e9-466a-a9e0-532ab52b2e57",
+    "preferences": {
+      "goal": "board games",
+      "budget_sgd": null,
+      "days": null,
+      "planning_area": null,
+      "known_skills": null,
+      "kind": null
+    }
+  }
+]

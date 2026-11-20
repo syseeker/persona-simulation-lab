@@ -12,12 +12,16 @@ from .guide_sources import _git, repository_url
 from .settings import ROOT
 
 PACKS = ROOT / "recordings"
+SCENARIOS = ('photography', 'boardgames', 'dreamjob')
 
 
 def pack_folder(run_id):
     if not isinstance(run_id, str) or str(uuid.UUID(run_id)) != run_id:
         raise ValueError("Choose a canonical recording identity")
-    folder = PACKS / "photography" / run_id
+    candidates = [PACKS / scenario / run_id for scenario in SCENARIOS if (PACKS / scenario / run_id).exists()]
+    if len(candidates) > 1:
+        raise ValueError('A recording identity cannot be shared between scenarios')
+    folder = candidates[0] if candidates else PACKS / 'photography' / run_id
     if any(p.is_symlink() for p in (PACKS, folder.parent, folder)):
         raise ValueError("Symbolic recording directories are not accepted")
     return folder
@@ -34,7 +38,7 @@ def load(run_id):
     if (
         record.get("schema") != "citizen-recording/v1"
         or record.get("run_id") != run_id
-        or record.get("scenario_id") != "photography"
+        or record.get("scenario_id") != folder.parent.name
     ):
         raise ValueError("Invalid recording manifest")
     for name, digest in record["files"].items():
@@ -51,7 +55,8 @@ def load(run_id):
 
 
 def listed():
-    return [load(path.parent.name) for path in sorted((PACKS / "photography").glob("*/manifest.json"))]
+    return [load(path.parent.name) for scenario in SCENARIOS
+            for path in sorted((PACKS / scenario).glob('*/manifest.json'))]
 
 
 def read(run_id, name):
@@ -75,7 +80,7 @@ def trace(run_id):
         kind="recorded",
         recording=True,
         owned_by_this_worker=False,
-        run_directory=f"recordings/photography/{run_id}",
+        run_directory=f"recordings/{record['scenario_id']}/{run_id}",
     )
     value["recording_notice"] = record["projection_notice"]
     value["artifacts"] = artifacts(run_id)
@@ -86,7 +91,7 @@ def artifacts(run_id):
     record = load(run_id)
     if record is None:
         return []
-    relative = f"recordings/photography/{run_id}"
+    relative = f"recordings/{record['scenario_id']}/{run_id}"
     revision = _git("log", "-1", "--format=%H", "--", relative) or None
     repository = repository_url()
     result = []
@@ -123,7 +128,7 @@ def artifact(run_id, identity):
     return {
         **row,
         "run_id": run_id,
-        "scenario_id": "photography",
+        "scenario_id": load(run_id)['scenario_id'],
         "content": content,
         "truncated": len(raw) > len(clipped),
     }

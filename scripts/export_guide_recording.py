@@ -1,4 +1,4 @@
-"""Explicitly export one terminal photography condition as a sanitized review pack.
+"""Explicitly export one terminal scenario condition as a sanitized review pack.
 
 Private originals, resolved simulator inputs, prompts, credentials, process
 ownership and arbitrary native payloads are never copied to the public pack.
@@ -44,13 +44,14 @@ def export(run_id, *, note, destination=None):
     original = service.folder(run_id)
     state = json.loads((original / "run.json").read_text())
     if (
-        state["scenario_id"] != "photography"
+        state["scenario_id"] not in {'photography', 'boardgames', 'dreamjob'}
         or state["status"] not in TERMINAL
         or not state.get("cleanup_confirmed")
     ):
-        raise ValueError("Export only terminal photography conditions with verified cleanup")
+        raise ValueError("Export only terminal scenario conditions with verified cleanup")
     trace = service.trace(run_id)
-    target = destination or ROOT / "recordings/photography" / run_id
+    scenario_id = state['scenario_id']
+    target = destination or ROOT / 'recordings' / scenario_id / run_id
     if target.exists():
         raise ValueError("Recordings are immutable; choose a new condition instead of overwriting one")
     native = original / state["episode_id"]
@@ -199,6 +200,13 @@ def export(run_id, *, note, destination=None):
     emit("usersim-activations.jsonl", activations, original / "usersim-activations.jsonl", jsonl=True)
     if trace.get("developer_review"):
         emit("review-notes.json", trace["developer_review"], original / "review-notes.json")
+    for path in [original / 'guardrails-probe.json', native / 'native/guardrails-config.json']:
+        if path.is_file():
+            emit(path.name, json.loads(path.read_text()), path)
+    decisions = native / 'native/guardrails-decisions.jsonl'
+    if decisions.is_file():
+        emit(decisions.name, [json.loads(line) for line in decisions.read_text().splitlines() if line.strip()],
+             decisions, jsonl=True)
     for name, keys in {
         "fabric-config.json": ["schema_version", "metadata", "harness", "runtime", "tools"],
         "fabric-plan.json": ["agent_name", "resolution", "capability_plan", "capabilities"],
@@ -244,7 +252,7 @@ def export(run_id, *, note, destination=None):
     manifest = {
         "schema": "citizen-recording/v1",
         "run_id": run_id,
-        "scenario_id": "photography",
+        "scenario_id": scenario_id,
         "note": note,
         "projection_notice": "Fixed sanitized recording. Public messages/course facts/selected native fields are published; private context and raw payloads stay outside Git.",
         "files": {name: hashlib.sha256(raw.encode()).hexdigest() for name, raw in sorted(files.items())},

@@ -48,7 +48,7 @@
   {#if component}<p class="component-context">{componentTitle(component,scenarioId)} · lesson position preserved</p>{/if}
   <div class="record-state" data-testid="record-state">
     {#if loading}<span role="status">Loading this scenario’s review context…</span>
-    {:else if context?.state==='recorded'}<strong>Recorded photography demo</strong><span>Run {context.run_id.slice(0,8)} · {context.trace.run.status} · cleanup {context.trace.run.cleanup_confirmed?'confirmed':'not confirmed'}</span>
+    {:else if context?.state==='recorded'}<strong>Recorded {scenarioId==='photography'?'photography':scenarioId==='boardgames'?'board-games':'retail-learning'} demo</strong><span>Run {context.run_id.slice(0,8)} · {context.trace.run.status} · cleanup {context.trace.run.cleanup_confirmed?'confirmed':'not confirmed'}</span>
     {:else}<strong>{context?.state==='unavailable'?'Demo unavailable':'Planned scenario'}</strong><span>{context?.notice||'No verified recording is loaded.'}</span>{/if}
   </div>
   {#if error}<p class="operation-error" role="alert">{error} No recording was substituted.</p>{/if}

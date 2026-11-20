@@ -1,6 +1,6 @@
 # Sources and Compatibility
 
-These pins, public guides and workarounds cover retained integrations and the repository-hosted guide. Only photography is connected for current implementation review; configuration and historical results are not current readiness. See the [active plan](../PLAN.md), [current verification](verification.md) and [separate historical evidence](history/v0.2/docs/verification.md).
+These pins, public guides and workarounds cover retained integrations and the repository-hosted guide. Photography and board games are connected for current implementation review; configuration and historical results are not current readiness. See the [active plan](../PLAN.md), [current verification](verification.md) and [separate historical evidence](history/v0.2/docs/verification.md).
 
 Retained backend integration contracts are pinned below. Historical execution and limitations are recorded in the [v0.2 verification record](history/v0.2/docs/verification.md); installing a dependency or validating a configuration is not a live result. The [v0.1 source record](history/v0.1/docs/sources.md) preserves its earlier compatibility context.
 
@@ -21,7 +21,7 @@ The **Why NeMo Stack** cards in **Building Citizen Apps with NeMo** use the actu
 - [Relay](https://docs.nvidia.com/nemo/relay/latest/about-nemo-relay/overview).
 - [Switchyard](https://nvidia-nemo.github.io/Switchyard/) and [LiteLLM](https://docs.litellm.ai/).
 - [Helix overview](https://docs.nvidia.com/nemo-helix/latest/documentation/home), [evaluation](https://docs.nvidia.com/nemo-helix/latest/documentation/evaluate-models) and [agent deployment](https://docs.nvidia.com/nemo-helix/latest/documentation/agents/deploy-agents). Helix's broader operations, experiments and evaluation role is introduced by scenario 3; the first two presets omit it.
-- [Behavioural Guardrails](https://docs.nvidia.com/nemo/guardrails/latest/home) and [OpenShell](https://docs.nvidia.com/openshell/about/overview). Guardrails remains a future scenario gate. Standalone photography uses OpenShell 0.1.6; its [setup and image contract](../integrations/openshell/README.md) describe the native exec bridge and policy verification.
+- [Behavioural Guardrails](https://docs.nvidia.com/nemo/guardrails/latest/home) and [OpenShell](https://docs.nvidia.com/openshell/about/overview). Board games uses isolated `nemoguardrails==0.24.1` with native `LLMRails.check_async` and custom deterministic Colang actions; its lockfile is under `integrations/guardrails`. Standalone photography uses OpenShell 0.1.6; its [setup and image contract](../integrations/openshell/README.md) describe the native exec bridge and policy verification.
 
 The build/execute card links to the current [UserSim package documentation](https://github.com/NVIDIA-NeMo/UserSim/blob/main/README.md). Version-specific integration references remain in the contextual source inspector and the pinned list below.
 

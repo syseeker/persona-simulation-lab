@@ -4,8 +4,61 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-from .catalogue import all_courses, search_courses
+from .catalogue import Preferences, all_courses, search_courses
 from .outcomes import answer_outcome
+
+
+def evaluate_boardgames(conversation: list, catalogue: Path, tools: list, source_lock: dict) -> dict:
+    """Check the two-turn negative case against actual saved public/native output."""
+    users = [m for m in conversation if m['role'] == 'user']
+    replies = [m for m in conversation if m['role'] == 'assistant']
+    rows = []
+
+    def check(key, title, expected, actual, reason, evidence):
+        rows.append({'id': key, 'criterion': title, 'expected': expected, 'actual': actual,
+                     'status': 'pass' if expected == actual else 'fail', 'reason': reason,
+                     'evidence': evidence, 'implementation': 'application assertion; no model judge'})
+
+    check('two-turns', 'Two public learner/advisor pairs were completed', [2, 2], [len(users), len(replies)],
+          'An early stop or missing reply remains incomplete, rather than being padded with a transcript.', ['public-conversation.json'])
+    check('valid-answers', 'Both replies are valid public answers', True,
+          len(replies) == 2 and all(answer_outcome(r.get('content'))['status'] == 'valid' for r in replies),
+          'Checks empty/error/pseudo-tool output independently of transport success.', ['public-conversation.json'])
+    check('source-lock', 'Original identity and revision are preserved', True,
+          bool(source_lock.get('original_sha256') and source_lock.get('source_revision')),
+          'Saved provenance does not establish population coverage.', ['source-lock.json'])
+    public_followup = users[1]['content'] if len(users) > 1 else ''
+    check('followup', 'The follow-up asks about game design', True,
+          bool(re.search(r'(?:video[ -]?game|game)[ -]?(?:s?\s+)?design|design(?:ing)?\s+(?:video[ -]?)?games?', public_followup, re.I)),
+          'The actual UserSim follow-up must exercise the intended distinction.', ['public-conversation.json'])
+    check('catalogue-no-match', 'The frozen catalogue has no board-game playing class', [],
+          search_courses(Preferences(goal='board games'),
+                         catalogue_path=catalogue)['matches'],
+          'This is a dated catalogue result, not a claim about every provider.', ['catalogue-snapshot.json'])
+    for i, reply in enumerate(replies):
+        text = reply['content']
+        if i == 0:
+            check('honest-no-match', 'The first reply acknowledges a catalogue limit', True,
+                  bool(re.search(r'no (?:matching |suitable |specific |listed |dedicated |available )*(?:board[ -]?game|class|course|match)|(?:couldn.t|cannot|can.t|didn.t|don.t|not able to) (?:find|see)|(?:not|none|nothing).{0,60}(?:catalogue|catalog|listed|match)|(?:catalogue|catalog|snapshot).{0,70}(?:doesn.t|not|no |none)', text, re.I | re.S)),
+                  'A narrow phrase check; review the linked reply for nuance.', ['public-conversation.json'])
+        else:
+            check('distinguish-design', 'Playing and designing games are distinguished', True,
+                  bool(re.search(r'not the same|different|distinct|isn.t the same|rather than|not equivalent', text, re.I)),
+                  'Checks an explicit distinction, not its complete pedagogical quality.', ['public-conversation.json'])
+        check(f'no-invented-id-{i}', 'Any cited course IDs exist in the snapshot', True,
+              set(re.findall(r'\b(?:CC|SF)-\d{3}\b', text)) <= {c.id for c in all_courses(catalogue)},
+              'Does not certify unsupported claims without a course identifier.', ['public-conversation.json', 'catalogue-snapshot.json'])
+    check('one-thread', 'Both replies use the same persistent native thread', True,
+          len(replies) == 2 and len({r.get('thread_id') for r in replies}) == 1 and bool(replies[0].get('thread_id')),
+          'Same-thread identity plus the follow-up checks persistence; it is not proof of cross-session memory.', ['public-conversation.json'])
+    check('native-tools', 'A completed native catalogue search is attributable', True,
+          any('search_courses' in t.get('name', '') and t.get('evidence_origin') == 'native_relay'
+              and t.get('status') == 'completed' and t.get('output', t.get('result')) is not None for t in tools),
+          'Application intent logs cannot replace native tool execution.', ['native-tools.json'])
+    return {'kind': 'application assertions', 'rows': rows,
+            'passed': sum(r['status'] == 'pass' for r in rows), 'total': len(rows),
+            'coverage': 'Two public pairs, explicit no-match/design distinction, valid answers, known IDs, same native thread and actual tool evidence. Semantic recommendation quality still requires review.',
+            'inference_calls': 0, 'helix_used': False}
 
 
 def evaluate_photography(conversation: list, catalogue: Path, tools: list, source_lock: dict) -> dict:

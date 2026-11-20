@@ -1,0 +1,6 @@
+models: []
+rails:
+  input:
+    flows: [citizen input]
+  output:
+    flows: [citizen output]

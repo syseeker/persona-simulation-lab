@@ -1,0 +1,18 @@
+[
+  {
+    "name": "mcp__catalogue__search_courses",
+    "arguments": {
+      "goal": "board games"
+    },
+    "result": {
+      "snapshot_date": "2026-11-10",
+      "as_of": "2026-11-20",
+      "matches": [],
+      "excluded": [],
+      "notice": "Curated snapshot. Check the official listing before acting; individual eligibility is unknown."
+    },
+    "scope_uuid": "01a1f9df-9310-7c41-9c97-41fcd5dd316e",
+    "status": "completed",
+    "evidence_origin": "native_relay"
+  }
+]

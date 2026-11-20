@@ -1,5 +1,13 @@
 # Architecture Decisions
 
+## 21 November 2026: Continue implementation through Scenarios 2 and 3
+
+The user authorised finishing the redesigned guide, then implementing board games and retail learning without waiting for an intermediate reply. Keep verified rounds on `dev`, with `main` unchanged. Photography remains the regression baseline.
+
+Board games reuses the same Fabric call sites and selects its maintained Hermes adapter; its compatible Python 3.14 dependencies and native Guardrails 0.24.1 are isolated from the application's Python 3.12/UserSim environment. For three known tools, turn off Hermes deferred tool discovery in its supported managed configuration. Keep the host gateway's exact qualified-function allowlist. Native Guardrails validation runs inside OpenShell using custom deterministic Colang actions, with native status/action/configuration receipts. Its narrow policy probe stays separate from the legitimate learning conversation. UserSim generates the follow-up after the preceding reply; its custom relevance hook explains why the design-versus-play clarification belongs to this test. Preserve native quality flags even when application assertions pass.
+
+Each implemented scenario has one curated manifest-verified pack and companion. Never reuse another scenario's recording. New companions can record invocation-to-tool scope IDs actually captured by the application, while native model/gateway joins stay unavailable unless established. Preserve failed development conditions privately and describe material findings in the curated review note.
+
 ## 21 November 2026: Scenario-bound developer review architecture
 
 Treat the learner as developer zero: the guide must support reviewing our own integration, not just introducing product names. One shared operation model drives Simplified, Detailed and the teaching panel across all 27 scenario/lesson combinations. Seven plain-language responsibilities remain distinct from nine numbered lessons. Important substeps expose design/ownership, input, configuration, output and a meaningful check; exact committed code/configuration and scenario/run-specific proof open outside the limited panel. Raw previews and run-history selection are removed from the teaching UI, while retained APIs stay compatible.

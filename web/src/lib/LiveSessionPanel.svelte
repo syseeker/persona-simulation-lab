@@ -1,10 +1,12 @@
 <script lang="ts">
   import {onMount,untrack} from 'svelte';
+  import {scenarios} from './content';
   import {renderMarkdown} from './markdown';
   type Data=Record<string,any>;
-  let {runId=$bindable<string|null>(null),source=$bindable('ngc'),persona=$bindable<Data|null>(null)}:
-    {runId?:string|null;source?:string;persona?:Data|null}=$props();
+  let {scenarioId='photography',runId=$bindable<string|null>(null),source=$bindable('ngc'),persona=$bindable<Data|null>(null)}:
+    {scenarioId?:string;runId?:string|null;source?:string;persona?:Data|null}=$props();
   let readiness=$state<Data|null>(null),trace=$state<Data|null>(null),busy=$state(''),error=$state(''),mounted=$state(false);
+  const scenario=$derived(scenarios.find(s=>s.id===scenarioId)!);
   const active=$derived(trace&&!['completed','failed','cancelled','interrupted'].includes(trace.run.status));
   async function api(action:string,data?:Data,signal?:AbortSignal){
     const write=['sample','start','cancel','recover'].includes(action);
@@ -27,8 +29,8 @@
 </script>
 
 <section data-testid="live-session">
-  <span class="panel-eyebrow">NEW PHOTOGRAPHY CONDITION</span><h2>Run one real conversation.</h2>
-  <p>UserSim generates one public learner turn. Persistent Fabric with Deep Agents and the course tools runs inside a fresh OpenShell sandbox. The host gateway uses fixed LiteLLM access.</p>
+  <span class="panel-eyebrow">NEW {scenarioId==='boardgames'?'BOARD-GAMES':'PHOTOGRAPHY'} CONDITION</span><h2>Run one real conversation.</h2>
+  <p>UserSim generates {scenario.turns.length} public learner {scenario.turns.length===1?'turn':'turns'}. Persistent Fabric with {scenario.preset.harness==='hermes'?'Hermes':'Deep Agents'} and the course tools runs inside a fresh OpenShell sandbox. The host gateway uses fixed LiteLLM access.</p>
   <p class="small muted">This creates new results. Trace a Request always returns to the curated demo; it does not relabel this live run as the recording.</p>
   {#if error}<p class="operation-error" role="alert">{error}</p>{/if}{#if busy}<p role="status">{busy}…</p>{/if}
   <button onclick={()=>action('Checking prerequisites',async()=>{readiness=await api('readiness');})} disabled={!!busy}>Check prerequisites</button>
@@ -41,10 +43,10 @@
   <label>Test persona source<select aria-label="Live test persona source" bind:value={source}><option value="ngc">Singapore NGC Extended · OCEAN source traits</option><option value="hf-profile-only">HF Singapore · profile-only</option></select></label>
   <button onclick={()=>action('Sampling and locking one original',async()=>{persona=await api('sample',{source});})} disabled={!!busy||!!active}>Choose a random test persona</button>
   {#if persona}<div class="io-grid"><h3>Locked original</h3><dl>{#each Object.entries(persona.summary||{}) as [key,value]}<div><dt>{key.replaceAll('_',' ')}</dt><dd>{text(value)}</dd></div>{/each}</dl><p class="small muted">Revision {persona.source_revision}. This profile is simulator context; the advisor receives only public messages.</p></div>{/if}
-  <p class="small muted">Beginner photography · Saturday · S$50 before funding. One public turn, 120 total model calls, 1,024 output tokens per call and four advisor tool rounds. Designer generation, Switchyard, native Guardrails and Helix are omitted.</p>
-  <button class="primary" disabled={!!busy||!readiness?.ready||!persona||!!active} onclick={()=>action('Starting photography',async()=>{
-    const run=await api('start',{spec:{scenario_id:'photography',source:persona!.source,source_id:persona!.source_id,original_sha256:persona!.original_sha256}});runId=run.run_id;
-  })}>Start live photography simulation</button>
+  <p class="small muted">{scenario.preset.constraints} · {scenario.turns.length} public {scenario.turns.length===1?'turn':'turns'}, 120 total model calls, 1,024 output tokens per call and four advisor tool rounds. Designer generation, Switchyard and Helix are omitted. Native Guardrails is {scenario.preset.guardrails?'enabled with a separate negative policy probe':'omitted'}.</p>
+  <button class="primary" disabled={!!busy||!readiness?.ready||!persona||!!active} onclick={()=>action('Starting '+scenarioId,async()=>{
+    const run=await api('start',{spec:{scenario_id:scenarioId,source:persona!.source,source_id:persona!.source_id,original_sha256:persona!.original_sha256}});runId=run.run_id;
+  })}>Start live {scenarioId==='boardgames'?'board-games':'photography'} simulation</button>
   {#if trace}
     <p class="run-status"><strong>{trace.run.status}</strong> · {trace.run.calls} of 120 model calls · cleanup {trace.run.cleanup_confirmed?'confirmed':'pending'}</p>
     {#if trace.run.error}<p class="operation-error">{trace.run.error}</p>{/if}

@@ -3,3 +3,8 @@
 agent:
   api_max_retries: 1
   auto_recovery_cycles: 0
+# Three known course tools do not need deferred discovery wrappers. Keep the
+# provider-visible functions identical to the application gateway allowlist.
+tools:
+  tool_search:
+    enabled: "off"

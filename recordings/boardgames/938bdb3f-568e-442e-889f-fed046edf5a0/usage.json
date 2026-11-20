@@ -1,0 +1,303 @@
+{
+  "calls": 10,
+  "records": [
+    {
+      "call": 1,
+      "role": "user",
+      "mode": "live",
+      "status": "completed",
+      "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+      "provider_route": "litellm",
+      "requested_model": "lab-support",
+      "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+      "usage": {
+        "completion_tokens": 27,
+        "prompt_tokens": 1839,
+        "total_tokens": 1866,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 1792
+        }
+      },
+      "latency_ms": 579
+    },
+    {
+      "call": 2,
+      "role": "judge",
+      "mode": "live",
+      "status": "completed",
+      "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+      "provider_route": "litellm",
+      "requested_model": "lab-support",
+      "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+      "usage": {
+        "completion_tokens": 74,
+        "prompt_tokens": 216,
+        "total_tokens": 290,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "latency_ms": 976
+    },
+    {
+      "call": 3,
+      "role": "assistant",
+      "mode": "live",
+      "status": "completed",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "provider_route": "litellm",
+      "requested_model": "lab-advisor-fixed",
+      "selected_model": "openai/nvidia/nemotron-3.5-lightning-30b-a3b",
+      "usage": {
+        "completion_tokens": 49,
+        "prompt_tokens": 2277,
+        "total_tokens": 2326,
+        "completion_tokens_details": {
+          "reasoning_tokens": 16
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "latency_ms": 670,
+      "tool_surface": {
+        "source": "application_allowlist",
+        "received": [
+          "mcp__catalogue__compare_courses",
+          "mcp__catalogue__get_course_details",
+          "mcp__catalogue__get_prompt",
+          "mcp__catalogue__list_prompts",
+          "mcp__catalogue__list_resources",
+          "mcp__catalogue__read_resource",
+          "mcp__catalogue__search_courses"
+        ],
+        "exposed": [
+          "mcp__catalogue__compare_courses",
+          "mcp__catalogue__get_course_details",
+          "mcp__catalogue__search_courses"
+        ],
+        "withheld": [
+          "mcp__catalogue__get_prompt",
+          "mcp__catalogue__list_prompts",
+          "mcp__catalogue__list_resources",
+          "mcp__catalogue__read_resource"
+        ]
+      },
+      "control_request_id": "5531223d-3201-4381-b9f9-b7f8e91fc7d8",
+      "thread_id": "13e0f72b-55e9-466a-a9e0-532ab52b2e57",
+      "transport": "openshell-native-exec"
+    },
+    {
+      "call": 4,
+      "role": "assistant",
+      "mode": "live",
+      "status": "completed",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "provider_route": "litellm",
+      "requested_model": "lab-advisor-fixed",
+      "selected_model": "openai/nvidia/nemotron-3.5-lightning-30b-a3b",
+      "usage": {
+        "completion_tokens": 198,
+        "prompt_tokens": 2488,
+        "total_tokens": 2686,
+        "completion_tokens_details": {
+          "reasoning_tokens": 137
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 2112
+        }
+      },
+      "latency_ms": 2802,
+      "tool_surface": {
+        "source": "application_allowlist",
+        "received": [
+          "mcp__catalogue__compare_courses",
+          "mcp__catalogue__get_course_details",
+          "mcp__catalogue__get_prompt",
+          "mcp__catalogue__list_prompts",
+          "mcp__catalogue__list_resources",
+          "mcp__catalogue__read_resource",
+          "mcp__catalogue__search_courses"
+        ],
+        "exposed": [
+          "mcp__catalogue__compare_courses",
+          "mcp__catalogue__get_course_details",
+          "mcp__catalogue__search_courses"
+        ],
+        "withheld": [
+          "mcp__catalogue__get_prompt",
+          "mcp__catalogue__list_prompts",
+          "mcp__catalogue__list_resources",
+          "mcp__catalogue__read_resource"
+        ]
+      },
+      "control_request_id": "d9e15f2b-fe7a-4f5b-853f-197e378c2fbe",
+      "thread_id": "13e0f72b-55e9-466a-a9e0-532ab52b2e57",
+      "transport": "openshell-native-exec"
+    },
+    {
+      "call": 5,
+      "role": "judge",
+      "mode": "live",
+      "status": "completed",
+      "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+      "provider_route": "litellm",
+      "requested_model": "lab-support",
+      "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+      "usage": {
+        "completion_tokens": 111,
+        "prompt_tokens": 289,
+        "total_tokens": 400,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "latency_ms": 1174
+    },
+    {
+      "call": 6,
+      "role": "user",
+      "mode": "live",
+      "status": "completed",
+      "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+      "provider_route": "litellm",
+      "requested_model": "lab-support",
+      "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+      "usage": {
+        "completion_tokens": 28,
+        "prompt_tokens": 2127,
+        "total_tokens": 2155,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "latency_ms": 658
+    },
+    {
+      "call": 7,
+      "role": "judge",
+      "mode": "live",
+      "status": "completed",
+      "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+      "provider_route": "litellm",
+      "requested_model": "lab-support",
+      "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+      "usage": {
+        "completion_tokens": 68,
+        "prompt_tokens": 302,
+        "total_tokens": 370,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "latency_ms": 1068
+    },
+    {
+      "call": 8,
+      "role": "summary",
+      "mode": "live",
+      "status": "completed",
+      "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+      "provider_route": "litellm",
+      "requested_model": "lab-support",
+      "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+      "usage": {
+        "completion_tokens": 3,
+        "prompt_tokens": 123,
+        "total_tokens": 126,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "latency_ms": 446
+    },
+    {
+      "call": 9,
+      "role": "assistant",
+      "mode": "live",
+      "status": "completed",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "provider_route": "litellm",
+      "requested_model": "lab-advisor-fixed",
+      "selected_model": "openai/nvidia/nemotron-3.5-lightning-30b-a3b",
+      "usage": {
+        "completion_tokens": 167,
+        "prompt_tokens": 2598,
+        "total_tokens": 2765,
+        "completion_tokens_details": {
+          "reasoning_tokens": 77
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 2112
+        }
+      },
+      "latency_ms": 1473,
+      "tool_surface": {
+        "source": "application_allowlist",
+        "received": [
+          "mcp__catalogue__compare_courses",
+          "mcp__catalogue__get_course_details",
+          "mcp__catalogue__get_prompt",
+          "mcp__catalogue__list_prompts",
+          "mcp__catalogue__list_resources",
+          "mcp__catalogue__read_resource",
+          "mcp__catalogue__search_courses"
+        ],
+        "exposed": [
+          "mcp__catalogue__compare_courses",
+          "mcp__catalogue__get_course_details",
+          "mcp__catalogue__search_courses"
+        ],
+        "withheld": [
+          "mcp__catalogue__get_prompt",
+          "mcp__catalogue__list_prompts",
+          "mcp__catalogue__list_resources",
+          "mcp__catalogue__read_resource"
+        ]
+      },
+      "control_request_id": "1a618271-bd15-4e50-9fe5-b1bbf10eccf2",
+      "thread_id": "13e0f72b-55e9-466a-a9e0-532ab52b2e57",
+      "transport": "openshell-native-exec"
+    },
+    {
+      "call": 10,
+      "role": "judge",
+      "mode": "live",
+      "status": "completed",
+      "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+      "provider_route": "litellm",
+      "requested_model": "lab-support",
+      "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+      "usage": {
+        "completion_tokens": 119,
+        "prompt_tokens": 407,
+        "total_tokens": 526,
+        "completion_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "latency_ms": 1588
+    }
+  ]
+}

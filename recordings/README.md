@@ -22,10 +22,13 @@ application assertion is limited to its stated coverage.
 
 The [review companion](guide-context/photography/7863c607-cb99-4a31-b60c-381bf2099f0e/manifest.json) adds allowlisted UserSim configuration/outcome, Fabric model/Relay configuration, lifecycle events and normalized invocation/result fields from the **same** native run. Its manifest records the original pack-manifest hash, source hashes and native input hashes. Original pack bytes are unchanged. It contains no original profile row, private resolved input, simulator prompt or raw reasoning. `python -m scripts.export_guide_context` is an offline, non-overwriting exporter; it does not run models.
 
-## Board games and retail learning
+## Board games
 
-No executed recording is installed. Their UI content is illustrative. Add a
-separate, reviewed pack only after implementing and verifying each scenario.
+[Curated recording](boardgames/938bdb3f-568e-442e-889f-fed046edf5a0/manifest.json) and [teaching companion](guide-context/boardgames/938bdb3f-568e-442e-889f-fed046edf5a0/manifest.json): two actual UserSim turns with persistent Fabric/Hermes, an empty native MCP search, fixed LiteLLM, native Relay, 11 application assertions, four allowed Guardrails checks, a separate blocked policy probe and verified standalone OpenShell cleanup. The native UserSim assistant-quality flag and prior failed development conditions remain disclosed. A passing no-match assertion can disagree with an in-loop helpfulness judge; inspect both.
+
+## Retail learning
+
+No executed recording is installed yet. Its UI remains planned until this implementation gate has its own verified pack.
 
 ## Publication boundary
 

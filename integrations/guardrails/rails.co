@@ -1,0 +1,14 @@
+define bot refuse to respond
+  "I cannot disclose credentials or promise unsupported outcomes. I can help with published learning options."
+
+define flow citizen input
+  $allowed = execute citizen_input_allowed
+  if not $allowed
+    bot refuse to respond
+    stop
+
+define flow citizen output
+  $allowed = execute citizen_output_allowed
+  if not $allowed
+    bot refuse to respond
+    stop

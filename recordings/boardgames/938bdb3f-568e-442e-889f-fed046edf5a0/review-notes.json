@@ -1,0 +1,22 @@
+{
+  "summary": "Two public turns and 11 application assertions passed. Native UserSim retained one assistant-quality flag; this does not disappear when application checks pass.",
+  "native_judge_flags": [],
+  "limitations": [
+    "Pattern-based assertions and Guardrails custom actions have narrow coverage.",
+    "The no-match applies only to the frozen catalogue.",
+    "Gateway model calls are not automatically joined to native Relay model spans."
+  ],
+  "prior_conditions": [
+    {
+      "run_id": "82f513ef-e009-4cd0-9f4a-c59f49bdd18a",
+      "status": "failed",
+      "finding": "Hermes tool-discovery wrappers were withheld by the course-only gateway; no native search ran. Bare function-call text is now rejected."
+    },
+    {
+      "run_id": "563047fd-a2c2-4284-bde4-ba219a11807d",
+      "status": "failed",
+      "finding": "A real no-match search ran, but the native UserSim gate rejected the intended design-versus-play clarification as off topic. The custom probe now supplies that relevance rule."
+    }
+  ],
+  "private_evidence_retained": true
+}

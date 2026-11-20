@@ -25,6 +25,7 @@
   const storageKey='persona-lab-guide-wireframe:selection:v4';
   const currentScenario=$derived(scenarios.find(s=>s.id===scenarioId)||scenarios[0]);
   const harness=$derived(currentScenario.preset.harness),designer=$derived(currentScenario.preset.designer),routing=$derived(currentScenario.preset.routing);
+  const hasDemo=$derived(['photography','boardgames'].includes(scenarioId));
   const nativeGuards=$derived(currentScenario.preset.guardrails),managed=$derived(currentScenario.preset.helix);
   const lastStage=stages.length-1,faqGroups=[...new Set(faqs.map(f=>f.group))];
   const stage=$derived(stages[stageIndex]);
@@ -82,7 +83,7 @@
       <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
       <span><strong>Building Citizen Apps with NeMo</strong><small>NeMo Stack Integration Guide · Singapore</small></span>
     </button>
-    <div class="header-note"><span class="status-pill">INTEGRATION GUIDE</span><span class="header-caption">{page === 'datasets' ? 'Schema reference · local profile reader · no inference' : 'Photography connected · other scenarios illustrative'}</span></div>
+    <div class="header-note"><span class="status-pill">INTEGRATION GUIDE</span><span class="header-caption">{page === 'datasets' ? 'Schema reference · local profile reader · no inference' : 'Photography and board games recorded · retail learning planned'}</span></div>
   </header>
 
   <nav class="main-nav" aria-label="Main sections">
@@ -140,31 +141,31 @@
         <div class="toolbar-group"><button class:pressed={!detailed} aria-pressed={!detailed} onclick={()=>changeDetail(false)}>Simplified</button><button class:pressed={detailed} aria-pressed={detailed} onclick={()=>changeDetail(true)}>Detailed</button></div>
         <input class="map-search" aria-label="Search components" placeholder="Search components…" bind:value={search} />
         <label class="checkbox-label"><input type="checkbox" bind:checked={labels} /> Arrow labels</label>
-        <div class="toolbar-group workspace-actions"><button disabled={currentScenario.id !== 'photography'} class:pressed={liveMode} aria-pressed={liveMode} title={currentScenario.id === 'photography' ? 'Open explicit live execution controls' : 'This scenario is still illustrative'} onclick={()=>{liveMode=true;stopPlayback();}}>Simulate a Session</button><button class:pressed={!liveMode} aria-pressed={!liveMode} onclick={()=>{liveMode=false;returnToPlayer();}}>Trace a Request</button></div>
+        <div class="toolbar-group workspace-actions"><button disabled={!hasDemo} class:pressed={liveMode} aria-pressed={liveMode} title={hasDemo ? 'Open explicit live execution controls' : 'This scenario is still illustrative'} onclick={()=>{liveMode=true;stopPlayback();}}>Simulate a Session</button><button class:pressed={!liveMode} aria-pressed={!liveMode} onclick={()=>{liveMode=false;returnToPlayer();}}>Trace a Request</button></div>
         <div class="toolbar-group toolbar-layout"><button onclick={saveLayout}>Save layout</button><button onclick={resetLayout}>Reset layout</button></div>
       </div>
       <div class="workspace" bind:clientWidth={workspaceWidth} style:--inspector-width={`${panelWidth}px`}>
         <div class="graph-column">
-          <div class="canvas-caption"><span>{focused?'Highlighted paths explain the selected lesson or operation; logs establish what actually ran.':'Whole architecture · select a lesson or operation to follow its information flow.'}</span><span class="illustration-label">{currentScenario.id==='photography'?'Curated photography recording':'Planned scenario · no execution evidence'}</span></div>
+          <div class="canvas-caption"><span>{focused?'Highlighted paths explain the selected lesson or operation; logs establish what actually ran.':'Whole architecture · select a lesson or operation to follow its information flow.'}</span><span class="illustration-label">{hasDemo?'Curated scenario recording':'Planned scenario · no execution evidence'}</span></div>
           <div class="graph-host"><IntegrationGraph bind:this={graph} {detailed} {scenarioId} active={activeOperations} {focused} {search} {labels} {selected} oninspect={inspect} /></div>
           <div class="graph-footer"><div class="flow-legend"><span><i class="prep"></i>Preparation</span><span><i class="request"></i>Request / response</span><span><i class="telemetry"></i>Evidence</span><span><i class="control"></i>Deployment control</span></div><span>{reducedMotion ? 'Reduced motion' : 'Arrows indicate direction'}</span></div>
-          <div class="graph-context"><strong>{currentScenario.title}</strong><span>{managed?'Helix-managed OpenShell preview':currentScenario.id==='photography'?'Standalone OpenShell · no Helix':'Standalone OpenShell preview · no Helix'} · {routing==='switchyard'?'Switchyard with LiteLLM':'Fixed model via LiteLLM'} · {harness==='deepagents'?'Fabric + Deep Agents':'Fabric + Hermes'}</span></div>
+          <div class="graph-context"><strong>{currentScenario.title}</strong><span>{managed?'Helix-managed OpenShell preview':hasDemo?'Standalone OpenShell · no Helix':'Standalone OpenShell preview · no Helix'} · {routing==='switchyard'?'Switchyard with LiteLLM':'Fixed model via LiteLLM'} · {harness==='deepagents'?'Fabric + Deep Agents':'Fabric + Hermes'}</span></div>
         </div>
         <PanelDivider value={panelWidth} min={panelMin} max={panelMax} onresize={width=>preferredPanelWidth=width} onreset={()=>preferredPanelWidth=null} />
         <aside id="request-inspector" class="inspector trace-inspector" aria-label="Request trace and component inspector">
-          <div class="trace-heading"><strong>{liveMode?'Simulate a Session':'Trace a Request'}</strong><span class="tag">{liveMode?'EXPLICIT LIVE RUN':currentScenario.id==='photography'?'CURATED DEMO':'PLANNED'}</span></div>
+          <div class="trace-heading"><strong>{liveMode?'Simulate a Session':'Trace a Request'}</strong><span class="tag">{liveMode?'EXPLICIT LIVE RUN':hasDemo?'CURATED DEMO':'PLANNED'}</span></div>
           <div class="scenario-setup-body"><label>Scenario<select aria-label="Scenario" bind:value={scenarioId} onchange={scenarioChanged}>{#each scenarios as scenario}<option value={scenario.id}>{scenario.title}</option>{/each}</select></label></div>
           <details class="scenario-setup" bind:open={setupOpen}>
             <summary aria-label="Toggle scenario summary"><span class="setup-summary">Scenario summary</span><span class="setup-action">{setupOpen?'Hide summary':'Show summary'}</span></summary>
             <div class="scenario-setup-body">
               <p class="preset-summary">{harness==='deepagents'?'Fabric + LangChain Deep Agents':'Fabric + Hermes'} · {currentScenario.preset.baseline}</p>
               <p class="preset-constraints">{currentScenario.preset.constraints}</p>
-              <p class="preset-allocation">{currentScenario.turns.length} public {currentScenario.turns.length===1?'turn':'turns'} · {designer?'Designer scenario':'Designer enrichment skipped'} · {routing==='switchyard'?'Routing comparison planned':'Fixed routing'} · {nativeGuards?'Native Guardrails planned':'Native Guardrails omitted'} · {managed?'Helix-managed OpenShell planned':currentScenario.id==='photography'?'Standalone OpenShell verified · Helix omitted':'Standalone OpenShell planned · Helix omitted'}</p>
+              <p class="preset-allocation">{currentScenario.turns.length} public {currentScenario.turns.length===1?'turn':'turns'} · {designer?'Designer scenario':'Designer enrichment skipped'} · {routing==='switchyard'?'Routing comparison planned':'Fixed routing'} · {nativeGuards?(hasDemo?'Native Guardrails recorded':'Native Guardrails planned'):'Native Guardrails omitted'} · {managed?'Helix-managed OpenShell planned':hasDemo?'Standalone OpenShell verified · Helix omitted':'Standalone OpenShell planned · Helix omitted'}</p>
             </div>
           </details>
           <div class="inspector-content" data-testid="trace-content">
             {#if liveMode}
-              <LiveSessionPanel bind:runId={liveRunId} bind:source={personaSource} bind:persona={lockedPersona} />
+              <LiveSessionPanel {scenarioId} bind:runId={liveRunId} bind:source={personaSource} bind:persona={lockedPersona} />
             {:else}
               <JourneyPanel {scenarioId} stageId={stage.id} {detailed} component={selected||''} operation={operationId} {focused} bind:turnIndex oninspect={inspect} onback={returnToPlayer} onfollow={()=>chooseStage(stageIndex)} onlesson={chooseStage} />
             {/if}

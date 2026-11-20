@@ -2,11 +2,17 @@
 
 **Building Citizen Apps with NeMo** is the guide's display name, with the subtitle **NeMo Stack Integration Guide · Singapore**. Repository paths and integration identifiers retain their existing names.
 
+## Scenario 2 extension · 21 November 2026
+
+One `JourneyService` selects a closed scenario preset. Both harnesses use the same `FabricConfig → plan/doctor → start_runtime → invoke(RunRequest) → RunResult` call sites. Board games selects the maintained Hermes adapter in an isolated Python 3.14 environment; UserSim remains in Python 3.12. The reusable `citizen-learning-advisor:0.4.0` image contains both compatible environments and an isolated Guardrails 0.24.1 worker, without persona data or credentials.
+
+For this three-tool application, the supported Hermes managed configuration disables deferred `tool_search` wrappers. The host gateway exposes only the three `mcp__catalogue__…` functions and rejects other returned calls. Native Guardrails `LLMRails.check_async` surrounds public advisor input/output **inside OpenShell**; custom Colang actions implement narrow deterministic credential/assurance patterns. They make no model calls and are not a general safety classifier. The separate blocked probe is not a learner turn. UserSim's custom follow-up and relevance hooks preserve the two-turn clarification; native quality judges remain enabled.
+
 ## Current implementation review
 
 The [North Star](project-goals.md) is unchanged: teach the whole citizen application through understandable behaviour, integration code and evidence. The user authorised the [shared foundation and photography gate](../PLAN.md) after the isolated wireframe.
 
-The guide has Why NeMo Stack, Integration Map, Q&A and Datasets in repository `web/`. It uses one curated demo per scenario, with explicit missing/planned states and no latest-run fallback. **Simulate a Session** opens prerequisite-checked photography execution; start is separate from playback. Board games and dream-job learning stay illustrative. Selected scenario/lesson/operation/turn and layout preferences survive reload; the curated recording supplies its actual configuration. Live workload ownership is independent of inspection.
+The guide has Why NeMo Stack, Integration Map, Q&A and Datasets in repository `web/`. It uses one curated demo per scenario, with explicit missing/planned states and no latest-run fallback. **Simulate a Session** opens prerequisite-checked photography or board-games execution; start is separate from playback. Board games now uses its own Hermes/Guardrails recording; retail learning is the next implementation gate. Selected scenario/lesson/operation/turn and layout preferences survive reload; the curated recording supplies its actual configuration. Live workload ownership is independent of inspection.
 
 SvelteKit, Svelte Flow and the existing persistent Python worker are retained. A restricted `--guide-only` worker owns `JourneyService` without initializing legacy `LabService` recovery. Metadata/playback reads start no workload. CLI and host-only developer MCP call the same guide service; older APIs remain compatible.
 
@@ -17,7 +23,7 @@ flowchart LR
     J --> U
     U -->|Public message only| F
     subgraph S[Native OpenShell boundary]
-        F[Persistent Fabric + Deep Agents] --> M[Read-only course MCP]
+        F[Persistent Fabric + selected harness] --> M[Read-only course MCP]
         M --> C[Frozen course snapshot]
         F --> B[In-sandbox model bridge]
     end

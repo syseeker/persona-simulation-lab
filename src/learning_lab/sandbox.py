@@ -18,9 +18,10 @@ from .evidence import sanitize, save_evidence
 from .runtime_profiles import openshell_binary
 from .settings import ROOT
 
-IMAGE = 'citizen-learning-advisor:0.3.0'
+IMAGE = 'citizen-learning-advisor:0.4.0'
 EXPORT_FILES = {'fabric-config.json', 'fabric-plan.json', 'fabric-doctor.json',
-                'fabric-lifecycle.jsonl', 'reply-outcomes.jsonl', 'relay.jsonl'}
+                'fabric-lifecycle.jsonl', 'reply-outcomes.jsonl', 'relay.jsonl',
+                'guardrails-config.json', 'guardrails-decisions.jsonl'}
 
 
 def native_environment() -> dict:
@@ -78,10 +79,16 @@ async def native_readiness() -> dict:
 
 
 class NativeSandbox:
-    def __init__(self, run_id: str, folder: Path, gateway, *, catalogue: Path):
+    def __init__(self, run_id: str, folder: Path, gateway, *, catalogue: Path,
+                 scenario_id='photography', harness='deepagents', model_route='fixed'):
         if str(uuid.UUID(run_id)) != run_id:
             raise ValueError('A canonical run identity is required')
         self.run_id, self.folder, self.gateway, self.catalogue = run_id, folder, gateway, catalogue
+        if (scenario_id, harness) not in {('photography', 'deepagents'), ('boardgames', 'hermes'), ('dreamjob', 'deepagents')}:
+            raise ValueError('Choose an implemented scenario/harness preset')
+        if model_route not in {'fixed', 'switchyard'}:
+            raise ValueError('Unknown model route')
+        self.scenario_id, self.harness, self.model_route = scenario_id, harness, model_route
         # OpenShell 0.1.6 permits at most 19 characters. Full identity remains
         # in the mandatory ownership label and persisted receipt.
         self.name = 'cl-' + uuid.UUID(run_id).hex[:16]
@@ -158,12 +165,16 @@ class NativeSandbox:
             raw_catalogue = self.catalogue.read_text()
             from .settings import model_id
             receipt = await self.request('init', catalogue=raw_catalogue,
-                        catalogue_sha256=hashlib.sha256(raw_catalogue.encode()).hexdigest(), model=model_id())
+                        catalogue_sha256=hashlib.sha256(raw_catalogue.encode()).hexdigest(), model=model_id(),
+                        scenario_id=self.scenario_id, harness=self.harness, model_route=self.model_route)
             manifest = receipt.get('image_manifest', {})
             required = ['src/learning_lab/' + name for name in (
                 'fabric_target.py', 'sandbox_runtime.py', 'inference.py', 'course_mcp.py',
                 'catalogue.py', 'target.py', 'evidence.py', 'settings.py')]
             required += ['uv.lock', 'runtime-skills/course-advisor/SKILL.md']
+            if self.scenario_id != 'photography':
+                required += ['src/learning_lab/behavioural_safeguards.py', 'integrations/guardrails/runner.py',
+                             'integrations/guardrails/config.yml', 'integrations/guardrails/rails.co']
             if manifest.get('version') != 1 or any(
                 manifest.get('files', {}).get(relative) != hashlib.sha256((ROOT / relative).read_bytes()).hexdigest()
                 for relative in required
@@ -177,6 +188,11 @@ class NativeSandbox:
         except BaseException:
             await self.close()
             raise
+
+    async def probe_safeguards(self):
+        if self.scenario_id == 'photography':
+            raise ValueError('Native Guardrails is not part of photography')
+        return await self.request('guardrails-probe')
 
     async def send(self, value):
         if not self.process or self.process.returncode is not None:

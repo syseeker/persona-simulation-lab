@@ -1,6 +1,6 @@
 # Application Contracts
 
-The repository-hosted guide adds the strict journey contract below while retaining existing service APIs. Three-preset metadata does not replace the retained backend story enum. Only photography is executable through the guide; board games and retail learning remain illustrative. See the [current plan](../PLAN.md) and [frozen v0.2 record](history/v0.2/INDEX.md).
+The repository-hosted guide adds the strict journey contract below while retaining existing service APIs. Three-preset metadata does not replace the retained backend story enum. Photography and board games are executable through the guide; retail learning is the next implementation gate. See the [current plan](../PLAN.md) and [frozen v0.2 record](history/v0.2/INDEX.md).
 
 ## Integration Guide journey contract
 
@@ -8,7 +8,7 @@ The repository-hosted guide adds the strict journey contract below while retaini
 
 GET actions are `presets`, `readiness`, `list`, `get`, `trace`, `source`, `artifacts`, `artifact`, `lesson` and `demo-persona`. Queries reject unknown/repeated fields and values above 200 characters. POST actions are `sample`, `start`, `cancel` and `recover`; bodies are bounded at 16,000 characters, must be objects, cannot override `action` and reject a mismatching Origin. Responses disable caching. Reads do not initialize native execution or infer.
 
-`start` accepts only `spec` with `scenario_id: photography`, source (`ngc` or `hf-profile-only`), selected source ID and original SHA-256. It resolves and revalidates the original, then creates fresh run/condition/episode IDs. Extra harness, routing, execution or budget fields are rejected. The preset fixes one public turn, Fabric/Deep Agents, fixed LiteLLM, standalone OpenShell, 120 total calls, 1,024 output tokens and four advisor tool rounds. No Designer, Switchyard, native Guardrails or Helix operation occurs. Exact private UserSim input stays local and is not an allowlisted browser log.
+`start` accepts only `spec` with `scenario_id: photography|boardgames`, source (`ngc` or `hf-profile-only`), selected source ID and original SHA-256. It resolves and revalidates the original, then creates fresh run/condition/episode IDs. Extra harness, routing, execution or budget fields are rejected. Photography fixes one public turn and Fabric/Deep Agents; board games fixes two turns and Fabric/Hermes with native Guardrails. Both use fixed LiteLLM, standalone OpenShell, 120 calls, 1,024 output tokens and four advisor tool rounds. Designer, Switchyard and Helix are omitted. Board-games constraints retain only the original publicly stated goal across the follow-up; private preferences are discarded. Native Guardrails errors fail closed, and its separate probe must retain a native decision. Exact private UserSim input stays local and is not an allowlisted browser log.
 
 The simulator receives the locked profile plus authored situation. The advisor receives only its latest public message and constraints extracted from that message, never the private preamble/preferences. One native Fabric runtime/thread persists through the condition. Native exec carries the in-sandbox model bridge to the host budget gateway, keeping provider keys outside the agent image. Image source hashes are verified before model admission.
 

@@ -53,7 +53,7 @@ async def test_public_target_discards_private_preferences(tmp_path):
 
 
 @pytest.mark.parametrize('fields', [
-    {'scenario_id': 'boardgames'}, {'model_route': 'switchyard'}, {'source': 'generated'},
+    {'scenario_id': 'unknown'}, {'model_route': 'switchyard'}, {'source': 'generated'},
     {'turns': 3}, {'execution': 'local'}, {'budget': 100000}, {'original_sha256': 'invalid'},
 ])
 def test_preset_cannot_be_expanded_by_browser_fields(fields):

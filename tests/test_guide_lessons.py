@@ -45,6 +45,7 @@ def test_missing_or_changed_original_never_samples_a_substitute(tmp_path, monkey
 
 @pytest.mark.parametrize('scenario', ['boardgames', 'dreamjob'])
 async def test_planned_context_never_discovers_private_runs_or_photography_evidence(tmp_path, monkeypatch, scenario):
+    monkeypatch.setitem(guide.CANONICAL_DEMOS, scenario, None)
     monkeypatch.setattr(recordings, 'trace', lambda *_: pytest.fail('Must not load a recording for a planned scenario'))
     service = JourneyService(tmp_path / 'not-created')
     context = await service.dispatch({'action': 'lesson', 'scenario_id': scenario})
@@ -118,12 +119,13 @@ def test_exact_operation_links_resolve_committed_symbols_and_compare_captured_ha
     assert 'content' not in links['fabric.invoke']
 
 
-def test_published_companion_excludes_private_rows_prompts_and_reasoning():
-    folder = guide.CONTEXT_ROOT / 'photography' / guide.CANONICAL_DEMOS['photography']
+@pytest.mark.parametrize('scenario', ['photography', 'boardgames'])
+def test_published_companion_excludes_private_rows_prompts_and_reasoning(scenario):
+    folder = guide.CONTEXT_ROOT / scenario / guide.CANONICAL_DEMOS[scenario]
     values = [json.loads(p.read_text()) for p in folder.glob('*.json') if p.name != 'manifest.json']
     serialized = json.dumps(values)
     for forbidden in ['behavioral_profile', 'persona_text', 'source_id', 'api_key', 'reasoning_content', '/home/']:
         assert forbidden not in serialized
-    result = guide.lesson_context()
+    result = guide.lesson_context(scenario)
     assert result['state'] == 'recorded'
     assert result['context']['fabric-invocations.json'][0]['output']['response'] in [m['content'] for m in result['trace']['conversation']]

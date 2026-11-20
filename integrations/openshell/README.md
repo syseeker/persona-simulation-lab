@@ -1,9 +1,11 @@
-# Standalone photography runtime
+# Standalone application runtime
 
 Scenario 1 runs one persistent Fabric/Deep Agents application and its read-only
 course MCP inside native OpenShell. UserSim and the budget gateway run on the
 developer host. Helix SDK/Platform, native Guardrails, Designer generation and
 Switchyard routing are not required by this preset.
+
+Scenario 2 selects Fabric/Hermes for two public turns. The same image contains isolated Python 3.12 application/Guardrails environments and the pinned Hermes source with Python 3.14.0. Run `python integrations/hermes/bootstrap.py` first to install/verify the pinned public checkout used by the image builder. The build includes only its tracked official source files, never the host Hermes environment or session memory. Native Guardrails validates public input/output inside OpenShell and runs a separate blocked probe.
 
 ## Setup
 
@@ -33,7 +35,7 @@ Rebuild after changing packaged code, the skill or dependencies. The native
 runtime's returned image-manifest hashes must match before inference is admitted.
 
 Optional server-only settings: `LAB_OPENSHELL_IMAGE` (default
-`citizen-learning-advisor:0.3.0`), `LAB_OPENSHELL_WORKSPACE` (default `default`),
+`citizen-learning-advisor:0.4.0`), `LAB_OPENSHELL_WORKSPACE` (default `default`),
 `LAB_OPENSHELL_STATE_DIR` (the existing local store root), and
 `LAB_REPOSITORY_URL` (a repository URL override for source links).
 Existing native operator configuration is respected; these settings do not

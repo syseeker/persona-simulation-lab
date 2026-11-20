@@ -33,6 +33,10 @@ def answer_outcome(content) -> dict:
             "reason": "The model returned error text as its answer. This is not proof of a local runtime exception.",
         }
     pseudo_tool = bool(re.search(r"<(?:tool_call|function[= >]|parameter[= >])", text, re.IGNORECASE))
+    # A bare Python-like invocation is still an unexecuted tool request. This
+    # occurred in the first native Hermes condition when no schemas survived.
+    pseudo_tool = pseudo_tool or bool(re.fullmatch(
+        r'`*(?:(?:mcp__catalogue__)?(?:search_courses|get_course_details|compare_courses))\s*\([\s\S]*\)\s*`*', text))
     try:
         payload = json.loads(text)
         pseudo_tool = (

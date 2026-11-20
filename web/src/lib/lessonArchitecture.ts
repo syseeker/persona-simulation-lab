@@ -262,11 +262,11 @@ export const components: Component[] = [
     architecture:'https://docs.nvidia.com/nemo/guardrails/latest/about-nemo-guardrails-library/how-it-works',
     workflow:'https://docs.nvidia.com/nemo/guardrails/latest/reference/guardrails-sequence-diagrams',
     operations:[
-      {id:'guardrails.check',title:'Load policy, check and return a decision',owner:'Planned native integration · not implemented',
+      {id:'guardrails.check',title:'Load policy, check and return a decision',owner:'Application → native LLMRails.check_async',
         concept:'Allow a legitimate learning request; demonstrate a credential-disclosure refusal in a separate negative condition.',
         input:'Selected policy and public input/output.',output:'Native allow/change/reject decision or a visible checker error.',
-        config:'Scenario-specific native input/output rails; no application adapter is connected yet.',
-        check:'Require effective configuration, the real integration call and native decision records. Instructions and tool restrictions are not native Guardrails.',proof:['guardrails-configuration.json','guardrails-decisions.json']},
+        config:'Pinned Guardrails 0.24.1 in an isolated process inside OpenShell. Custom Colang input/output flows use deterministic credential and assurance rules without model generation.',
+        check:'Compare the native status, blocking rail, executed action, configuration hashes and purpose. These narrow custom rules do not establish general safety coverage.',proof:['guardrails-config.json','guardrails-decisions.jsonl','guardrails-probe.json'],call:'guardrails.check',configCall:'guardrails.config'},
     ] },
   { id:'platform', title:'Helix managed operations', simple:'Managed operations', kind:'deployment',
     purpose:'Manage registration, deployment, sessions and cleanup outside the advisor process.',
@@ -322,6 +322,7 @@ export function architectureUrl(id:string,scenario:string) {
   return id==='harness' && preset(scenario).harness==='hermes' ? 'https://hermes-agent.nousresearch.com/docs/' : componentById[id]?.architecture;
 }
 export function sourceId(id:string,scenario:string) {
+  if(id==='checks.evaluate'&&scenario==='boardgames')return 'checks.boardgames';
   return id==='harness.context' && preset(scenario).harness==='hermes' ? 'hermes.environment' : operationById[id]?.call;
 }
 export function resolveComponent(id:string) {
@@ -335,7 +336,7 @@ export function lessonFor(scenario:string,id:string):Lesson {
   const lessons:Record<LessonId,Omit<Lesson,'id'>> = {
     persona:{why:'Choose the person whose needs we want to test.',input:'An original Singapore synthetic profile from the chosen distribution.',
       action:'Inspect the selected person, then preserve the distribution, revision and original content hash.',
-      output:photo?'The exact original selected for this photography run, if its installed source can be verified.':'A locked original will be shown after this scenario has its own execution.',
+      output:'The exact original selected for this scenario, when its installed source can be verified.',
       design:'Selection and hashing are application-owned. UserSim has not run; no learner message or advisor call is needed to choose a person.',
       checks:['Compare name/background with the original row and match its recorded hash.','A missing source must stay unavailable; do not substitute a plausible person.'],operations:['persona.source','persona.select','persona.lock']},
     situation:{why:'Give that person a concrete reason to talk to the advisor.',
@@ -353,7 +354,7 @@ export function lessonFor(scenario:string,id:string):Lesson {
       operations:['fabric.config','fabric.plan','fabric.start','harness.context','relay.configure','models.alias']},
     run:{why:'See the learner’s request become a source-linked answer.',input:`${scenarios.find(s=>s.id===scenario)!.turns.length} public ${photo?'turn':'turns'}; the advisor receives public messages, not the private persona.`,
       action:'UserSim generates/checks a message → Fabric invokes the selected harness → the harness calls model/tools → Fabric returns a normalized result → UserSim judges and continues or stops.',
-      output:photo?'The saved learner request and actual photography reply.':retail?'A planned three-turn conversation: explore learning, disclose salary, then state budget and schedule.':'A planned two-turn conversation that preserves an honest no-match.',
+      output:photo?'The saved learner request and actual photography reply.':retail?'A three-turn conversation: explore learning, disclose salary, then state budget and schedule.':'Two public turns that preserve an honest no-match and distinguish playing games from designing them.',
       design:'Follow-ups are generated after earlier replies. Keep a persistent harness thread. Native stop judges are not the saved-response evaluation in Step 6.',
       checks:[retail?'Salary stays private until public turn 2; the explicit spending limit arrives in turn 3.':'Check the actual public constraints, returned course facts and final answer.','Compare RunRequest/public input, invocation ID, RunResult and the public reply.'],
       operations:['usersim.loop','fabric.invoke','harness.loop','models.admit','models.request','models.alias','mcp.search','catalogue.freeze','fabric.result','usersim.finalize',...(p.guardrails?['guardrails.check']:[])]},
@@ -375,7 +376,7 @@ export function lessonFor(scenario:string,id:string):Lesson {
       action:p.guardrails?'Load native input/output policy, run configured checks and record their decisions.':'Apply the existing instructions and tool restrictions; native Guardrails is omitted.',
       output:p.guardrails?'Native check decisions or explicit errors; the legitimate conversation remains a separate condition.':'Application restrictions, without a native Guardrails decision.',
       design:'Behavioural checks, Relay instrumentation and OpenShell operational access are different boundaries. Explain later does not mean apply later: enabled checks surround execution from the start.',
-      checks:[p.guardrails?'The native adapter is not implemented yet. Require its real call, effective policy and decisions before claiming coverage.':'Inspect enabled tools and the actual provider-bound tool surface.','A no-match is normal learning advice, not a blocked policy request.'],
+      checks:[p.guardrails?'Require the native API call, effective configuration, executed actions and matching decisions; unavailable evidence does not count as coverage.':'Inspect enabled tools and the actual provider-bound tool surface.','A no-match is normal learning advice, not a blocked policy request.'],
       operations:p.guardrails?['guardrails.check','harness.context','records.read']:['harness.context','models.admit'],notUsed:p.guardrails?undefined:'Native Guardrails is intentionally not used in photography.'},
     deploy:{why:'Understand where the advisor runs and what it can access.',input:'Reusable application image, selected harness, course tools and an explicit operational policy.',
       action:p.helix?'Register/deploy through Helix, create a new session, then verify its OpenShell boundary and cleanup.':'Create standalone OpenShell, run the persistent advisor/tools inside and verify allowed/denied operations and cleanup.',

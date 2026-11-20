@@ -1,0 +1,36 @@
+{
+  "projection": "Allowlisted native fields; not a byte-for-byte original.",
+  "ready": true,
+  "thread_id": "13e0f72b-55e9-466a-a9e0-532ab52b2e57",
+  "image_manifest": {
+    "version": 1,
+    "files": {
+      "catalogue/courses.json": "a0fec3e3c5e358f0e2913ad89d4c06dc17625d3724114eb9adc12940e53d66af",
+      "integrations/guardrails/config.yml": "ecaf851d591fa88a8d4c50856e9a73d50b384cc1d8de5bf053605c942a52a592",
+      "integrations/guardrails/pyproject.toml": "6a02a78a8efe9d5623eb80a727d33169f563fe47d45101d27f12161a8058c85e",
+      "integrations/guardrails/rails.co": "3b4b0209c47e9bc9dbfb5b44c02a604f82fd36f85429c94696d49d32c3303bab",
+      "integrations/guardrails/runner.py": "be8a17530fc9da5b0617fe9b1334cdf606d259b935d9364637388c4a9e3cf21e",
+      "integrations/guardrails/uv.lock": "dd5dca8686d419ddd80ce2b50645aa2db276cd183e3849218ad187d99179d6ab",
+      "integrations/hermes/managed/config.yaml": "0163cb6c4070e4d74408a63c388c896d989114849b7efb241547e5d4ce965cc0",
+      "integrations/openshell/Dockerfile": "cd3cc537fc93ddd667056eb118cc1148a6ca2ae9886507541d5c337a90373094",
+      "integrations/platform/install_hermes.py": "46457c805b1339ed48322b089c5f8a5994c3ecc81b6ef382feb2afd23bb2c6b4",
+      "pyproject.toml": "efc61a5dd7aa5723faef929a4fc12f42faf492214c0eb8cd32df5a333061d2d9",
+      "runtime-skills/course-advisor/SKILL.md": "f76a9075da2696b4d328eaae4e92320083827ca85acb09472462032efbbbf1dc",
+      "src/learning_lab/__init__.py": "6cb556fcb1446d4ef6754c82580c713be0a75043e060d377699276acf0c81fd8",
+      "src/learning_lab/behavioural_safeguards.py": "d168f8fb26f78a67d00cea10480b7836fd378e25af357e6af39a3ad25b4f561d",
+      "src/learning_lab/catalogue.py": "455b62d9841901ec3a317aed1b83cbed7633d09c54504b92d1132bb357443c5b",
+      "src/learning_lab/course_mcp.py": "11dbf0f448883ae5a563d3c0ffa9719a41b130cd5b452fceb9e615a1b8fa2a6b",
+      "src/learning_lab/evidence.py": "9871b499ba4f4bb966155a9b1edf8c52c39fe3ce21567cfd0cb37ff726176874",
+      "src/learning_lab/fabric_target.py": "8f691b1e035a095dc93dbc31915a625f2dcff83d9f30f983608a9a4c24076835",
+      "src/learning_lab/inference.py": "cb9b56decfd9d3170b4db715f1a73e508e8333bd08bd505314b7b32c53800803",
+      "src/learning_lab/outcomes.py": "833aaa47d71db199a52761f8974075ad276e720d145743b24db7a41e6ee04b3c",
+      "src/learning_lab/runtime_profiles.py": "41ba8e9155e89084538781e6a032fb927682a7d51f623a2cf2ff2ceabc3c480a",
+      "src/learning_lab/sandbox_runtime.py": "94565ac6f3dbb6b31395bc1642a145a82d417125f974ea3617bb495fd2b293fc",
+      "src/learning_lab/settings.py": "2f938000cce64f7b21e4e52ec5ddd553ab12424d3a1ec845dcf935cab4b431a0",
+      "src/learning_lab/target.py": "5a43f9439ceca1cfc5d0259e175e56ca00a3ae40556ebcc4daa25a3490572453",
+      "uv.lock": "b82f24dbfa319920994635ff6bfd7b8e4f5df2a02fa72bd8a4833bbaf22772b5"
+    },
+    "contains_personas": false,
+    "hermes_commit": "b200f5bc60e31588ba2cb60e288029c4a54ba5fa"
+  }
+}

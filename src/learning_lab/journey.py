@@ -1,8 +1,8 @@
 """Shared Integration Guide service: explicit runs, frozen inputs and local evidence.
 
 The UI, CLI and developer MCP use this boundary. Reads never initialize native
-execution or recover another worker's workloads. Only photography is live here;
-the other presets remain authored explanations until their implementation gates.
+execution or recover another worker's workloads. Presets become executable only
+when their integrations exist; curated recordings are a separate review gate.
 """
 from __future__ import annotations
 
@@ -40,6 +40,7 @@ ARTIFACT_NAMES = {
     'requested-policy.yaml', 'effective-policy.yaml', 'effective-policy.json', 'boundary-probes.json',
     'cleanup.json', 'runtime-receipt.json', 'sandbox-stderr.log', 'fabric-config.json', 'fabric-plan.json',
     'fabric-doctor.json', 'fabric-lifecycle.jsonl', 'reply-outcomes.jsonl', 'relay.jsonl',
+    'guardrails-config.json', 'guardrails-decisions.jsonl', 'guardrails-probe.json',
 }
 
 
@@ -76,7 +77,7 @@ def public_photography_preferences(message: str) -> Preferences:
 
 
 class JourneySpec(StrictModel):
-    scenario_id: Literal['photography'] = 'photography'
+    scenario_id: Literal['photography', 'boardgames'] = 'photography'
     source: Literal['hf-profile-only', 'ngc'] = 'ngc'
     source_id: str = Field(min_length=1, max_length=200)
     original_sha256: str = Field(pattern=r'^[a-f0-9]{64}$')
@@ -84,14 +85,24 @@ class JourneySpec(StrictModel):
 
 class PublicTarget:
     """Adapter sees the latest public turn, not the private UserSim preamble."""
-    def __init__(self, native, folder):
+    def __init__(self, native, folder, scenario_id='photography'):
         self.native, self.folder = native, folder
+        self.scenario_id, self.public_turns = scenario_id, 0
 
     async def reply(self, message, _private_preferences=None):
-        prefs = public_photography_preferences(message)
+        if self.scenario_id == 'photography':
+            prefs = public_photography_preferences(message)
+        elif self.scenario_id == 'boardgames':
+            if self.public_turns == 0 and not re.search(r'\bboard[ -]?games?\b', message, re.I):
+                raise ValueError('The public opening did not express a board-games goal')
+            # Follow-up pronouns refer to the goal already stated publicly.
+            prefs = Preferences(goal='board games')
+        else:
+            raise ValueError('Unknown public scenario boundary')
+        self.public_turns += 1
         save_evidence(self.folder / 'public-constraints.jsonl',
                       {'basis': 'public learner message only', 'message_sha256': hashlib.sha256(message.encode()).hexdigest(),
-                       'preferences': prefs.model_dump(mode='json')}, append=True)
+                       'turn': self.public_turns, 'preferences': prefs.model_dump(mode='json')}, append=True)
         return await self.native.reply(message, prefs)
 
 
@@ -217,7 +228,7 @@ class JourneyService:
             raise ValueError('This scenario is still illustrative')
         ready = await self.readiness()
         if not ready['ready']:
-            raise ValueError('Photography prerequisites are not ready; inspect readiness. No model call was started.')
+            raise ValueError('Scenario prerequisites are not ready; inspect readiness. No model call was started.')
         lock = lock_personas(spec.source, [spec.source_id])
         if lock['records'][0]['original_profile_sha256'] != spec.original_sha256:
             raise ValueError('The original persona changed; inspect and select it again')
@@ -226,11 +237,11 @@ class JourneyService:
         folder = self.folder(run_id)
         folder.mkdir()
         state = {'schema': 'citizen-journey/v1', 'run_id': run_id, 'condition_id': str(uuid.uuid4()),
-                 'episode_id': episode_id, 'scenario_id': 'photography', 'kind': 'live', 'status': 'queued',
+                 'episode_id': episode_id, 'scenario_id': spec.scenario_id, 'kind': 'live', 'status': 'queued',
                  'created_at': now(), 'owner_pid': os.getpid(), 'stage': 'persona',
                  'spec': spec.model_dump(), 'configuration': {'harness': preset.harness, 'fabric': True,
                  'route': preset.route, 'proxy': 'LiteLLM', 'execution': preset.deployment,
-                 'designer': False, 'guardrails': False, 'helix': False, 'turn_limit': preset.public_turns,
+                 'designer': False, 'guardrails': spec.scenario_id == 'boardgames', 'helix': False, 'turn_limit': preset.public_turns,
                  'model_call_limit': 120, 'output_tokens': 1024}, 'calls': 0, 'cleanup_confirmed': False}
         sources = {component: source_excerpt(component) for component in SOURCES if '/' not in component}
         state['source_revision'] = next((r.get('revision') for r in sources.values() if r.get('revision')), None)
@@ -280,9 +291,12 @@ class JourneyService:
                        'source_url': CATALOGUE_URL if source['source'] == 'ngc' else 'https://huggingface.co/datasets/nvidia/Nemotron-Personas-Singapore/viewer',
                        'conditioning': 'Original synthetic OCEAN fields' if source['source'] == 'ngc' else 'Profile-only; no OCEAN fields'})
             state['catalogue_sha256'] = freeze_catalogue(catalogue)
-            write_json(folder / 'situation.json', {'kind': 'authored situation; Designer intentionally skipped',
-                       'goal': 'beginner photography', 'day': 'Saturday', 'budget_sgd': 50,
-                       'disclosure': 'The advisor receives only what the public user message states.'})
+            situation = ({'goal': 'beginner photography', 'day': 'Saturday', 'budget_sgd': 50}
+                         if state['scenario_id'] == 'photography' else
+                         {'goal': 'learn to play board games', 'followup': 'Is video-game design the same as playing board games?',
+                          'expected': 'Honest no-match in this frozen catalogue; no design-course substitution.'})
+            write_json(folder / 'situation.json', {'kind': 'authored situation; Designer intentionally skipped', **situation,
+                       'disclosure': 'The advisor receives only what the public user messages state.'})
             # Exact resolved native UserSim input stays private; not an advisor input.
             preset = PRESETS[state['scenario_id']]
             rows = prepare_rows(state['spec']['source'], 1, preset.public_turns, source_ids=[source['source_id']],
@@ -290,12 +304,14 @@ class JourneyService:
             write_json(folder / 'resolved-inputs.json', rows)
             persist('build')
             from .course_mcp import TOOL_NAMES
-            async with Gateway(budget, mode='live', model_route='fixed', allowed_tool_names=TOOL_NAMES).serving() as gateway:
-                native = NativeSandbox(run_id, folder / state['episode_id'], gateway, catalogue=catalogue)
+            allowed_tools = TOOL_NAMES if preset.harness == 'deepagents' else [f'mcp__catalogue__{name}' for name in TOOL_NAMES]
+            async with Gateway(budget, mode='live', model_route='fixed', allowed_tool_names=allowed_tools).serving() as gateway:
+                native = NativeSandbox(run_id, folder / state['episode_id'], gateway, catalogue=catalogue,
+                                       scenario_id=state['scenario_id'], harness=preset.harness)
                 async with native:
                     state['native_thread_id'] = native.thread_id
                     persist('run')
-                    result = await hosted_episode(rows[0], gateway, PublicTarget(native, folder), event,
+                    result = await hosted_episode(rows[0], gateway, PublicTarget(native, folder, state['scenario_id']), event,
                                                    on_activation=activation)
                     write_json(folder / 'usersim-result.json', result)
                     outcome = result.get('simulation_outcome', {})
@@ -304,11 +320,14 @@ class JourneyService:
                     state['usersim_outcome'] = outcome
                     if outcome.get('status', 'ok') not in {'ok', 'max_turns_reached'}:
                         state['usersim_notice'] = 'Inspect the native UserSim outcome; transport completion is separate.'
+                    if state['scenario_id'] == 'boardgames':
+                        write_json(folder / 'guardrails-probe.json', await native.probe_safeguards())
             persist('evaluate')
-            from .journey_checks import evaluate_photography
+            from .journey_checks import evaluate_boardgames, evaluate_photography
             tools = native_tool_records(folder / state['episode_id'] / 'native')
-            evaluation = evaluate_photography(conversation, catalogue, tools,
-                                             json.loads((folder / 'source-lock.json').read_text()))
+            evaluator = evaluate_photography if state['scenario_id'] == 'photography' else evaluate_boardgames
+            evaluation = evaluator(conversation, catalogue, tools,
+                                   json.loads((folder / 'source-lock.json').read_text()))
             write_json(folder / 'evaluation.json', evaluation)
             state.update(status='completed' if all(r['status'] == 'pass' for r in evaluation['rows']) else 'failed',
                          evaluation_passed=evaluation['passed'], evaluation_total=evaluation['total'])
@@ -371,7 +390,8 @@ class JourneyService:
 
     def artifacts(self, run_id):
         if recordings.load(run_id) is not None:
-            return {'run_id':run_id, 'scenario_id':'photography', 'directory':f'recordings/photography/{run_id}',
+            scenario_id = recordings.load(run_id)['scenario_id']
+            return {'run_id':run_id, 'scenario_id':scenario_id, 'directory':f'recordings/{scenario_id}/{run_id}',
                     'artifacts':recordings.artifacts(run_id)}
         state, folder = self.get(run_id), self.folder(run_id)
         records = []

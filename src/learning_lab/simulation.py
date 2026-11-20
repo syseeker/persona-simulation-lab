@@ -64,7 +64,7 @@ def prepare_rows(
         max_assistant_attempts=1,
         context_compression=False,
         persona_grounding_ratio=1,
-        probe_options={"learning_advisor": {"profile_only": source != "ngc"}},
+        probe_options={"learning_advisor": {"profile_only": source != "ngc", "story_id": story_id}},
     )
     rows = []
     for i, person in enumerate(chosen):

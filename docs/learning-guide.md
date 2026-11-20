@@ -2,9 +2,15 @@
 
 ## What is available now
 
-The guide now runs inside this checkout's SvelteKit application. **Photography is executable; board games and retail learning remain illustrative.** Trace reads one tagged photography demo; a missing or corrupt pack stays unavailable and never falls back to a different run. Explore profiles retains the read-only connection to installed originals. Launch the guide using the [README instructions](../README.md#run-locally); actual execution also needs [native runtime setup](../integrations/openshell/README.md).
+The guide now runs inside this checkout's SvelteKit application. **Photography and board games are executable; retail learning is the next implementation gate.** Trace reads one tagged demo per implemented scenario; a missing or corrupt pack stays unavailable and never falls back to a different run. Explore profiles retains the read-only connection to installed originals. Launch the guide using the [README instructions](../README.md#run-locally); actual execution also needs [native runtime setup](../integrations/openshell/README.md).
 
-The current [review gate](../PLAN.md#implementation-gates) covers the shared foundation and photography through all nine stages. Scenarios 2/3 are future implementation gates; their presence in the UI does not establish execution. The [canonical goals](project-goals.md) remain unchanged.
+The current [review gate](../PLAN.md#implementation-gates) covers the shared foundation and photography through all nine stages. Board games has its own executed recording; retail learning remains the next implementation gate. The [canonical goals](project-goals.md) remain unchanged.
+
+## Review the board-games integration
+
+Select **Learn to play board games**. Step 1 resolves its recorded original; Step 2 separates the authored goal/follow-up from generated UserSim wording. Step 3 shows the Hermes adapter while retaining the same Fabric interface. Step 4 has two actual public pairs in one persistent runtime. Step 5 links the real empty MCP search and native Relay records; the follow-up can reuse earlier facts without another search. Step 6 shows 11 application assertions alongside the retained native UserSim quality flag. Step 7 explains the fixed route. Step 8 shows four allowed public-boundary checks and a separate blocked credential-disclosure probe. Step 9 shows the loaded OpenShell policy, denied operations and cleanup.
+
+Use Application call and Configuration to review the exact committed symbol; Scenario log opens this board-games run, never photography. Guardrails uses native Colang execution with application-owned pattern rules, not a learned safety model. One useful variation is to change the authored goal in a new condition while retaining the same source person; a different story is not a harness-quality benchmark.
 
 ## Four tabs, one selected story
 

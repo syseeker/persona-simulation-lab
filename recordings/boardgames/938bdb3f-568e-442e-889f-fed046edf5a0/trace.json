@@ -1,0 +1,759 @@
+{
+  "run": {
+    "schema": "citizen-journey/v1",
+    "run_id": "938bdb3f-568e-442e-889f-fed046edf5a0",
+    "condition_id": "1355f135-da2f-42a8-b46e-6c61b22059cb",
+    "episode_id": "2d74081a-126d-4960-b71d-52b2a9a4cacc",
+    "scenario_id": "boardgames",
+    "status": "completed",
+    "created_at": "2026-11-20T16:52:05.466272+00:00",
+    "started_at": "2026-11-20T16:52:05.547928+00:00",
+    "ended_at": "2026-11-20T16:52:32.523789+00:00",
+    "stage": "deploy",
+    "calls": 10,
+    "cleanup_confirmed": true,
+    "configuration": {
+      "harness": "hermes",
+      "fabric": true,
+      "route": "fixed",
+      "proxy": "LiteLLM",
+      "execution": "standalone OpenShell",
+      "designer": false,
+      "guardrails": true,
+      "helix": false,
+      "turn_limit": 2,
+      "model_call_limit": 120,
+      "output_tokens": 1024
+    },
+    "source_revision": "630f8a8e71ff865eb7997a43da8ecd71ed82a20d",
+    "source_hashes": {
+      "src/learning_lab/journey.py": "a963a21f86b434603bd5a4d25ff11ee2b72415d50c17b617081ecd59eca509da",
+      "src/learning_lab/datasets.py": "0f9f7af968f29b16e5c84998d80858945d12ff2e470ab194f429e9b53378703a",
+      "src/learning_lab/stories.py": "ed9a1100a220b3e42204e11c6d90e96e149c4d66da78066c70efcb406d09c320",
+      "src/learning_lab/simulation.py": "d1d300f6d30b4758be2355b5df8adf6f6215598b1ab0a742727c44d392f0d9a0",
+      "src/learning_lab/fabric_target.py": "8f691b1e035a095dc93dbc31915a625f2dcff83d9f30f983608a9a4c24076835",
+      "src/learning_lab/course_mcp.py": "11dbf0f448883ae5a563d3c0ffa9719a41b130cd5b452fceb9e615a1b8fa2a6b",
+      "src/learning_lab/catalogue.py": "455b62d9841901ec3a317aed1b83cbed7633d09c54504b92d1132bb357443c5b",
+      "src/learning_lab/inference.py": "cb9b56decfd9d3170b4db715f1a73e508e8333bd08bd505314b7b32c53800803",
+      "integrations/proxy/litellm.yaml": "432feebd4bdcaafc11aa6e202c7e359b3c2b71fdd5645717cdd8b9f8e48520fb",
+      "src/learning_lab/settings.py": "2f938000cce64f7b21e4e52ec5ddd553ab12424d3a1ec845dcf935cab4b431a0",
+      "src/learning_lab/journey_checks.py": "a0bcfcd0ba6d63b4a571cb3c6263216cb2d4e1d35c7c0f708d61d09c32e5c8c5",
+      "src/learning_lab/sandbox.py": "15da0d8f172589ecf33fae0513e1b5aedc24b2b7a6c7f5ab7afefc951856bafd",
+      "src/learning_lab/sandbox_runtime.py": "94565ac6f3dbb6b31395bc1642a145a82d417125f974ea3617bb495fd2b293fc",
+      "src/learning_lab/behavioural_safeguards.py": "d168f8fb26f78a67d00cea10480b7836fd378e25af357e6af39a3ad25b4f561d"
+    },
+    "catalogue_sha256": "a0fec3e3c5e358f0e2913ad89d4c06dc17625d3724114eb9adc12940e53d66af",
+    "native_thread_id": "13e0f72b-55e9-466a-a9e0-532ab52b2e57",
+    "evaluation_passed": 11,
+    "evaluation_total": 11
+  },
+  "conversation": [
+    {
+      "turn": 1,
+      "role": "user",
+      "content": "Hi, I'm interested in learning how to play board games—could you help me find a suitable class or community session?"
+    },
+    {
+      "turn": 1,
+      "role": "assistant",
+      "content": "The current catalogue snapshot (as of 2026‑11‑20) contains no courses matching “board games.” If you’re open to a different topic—such as game design, strategy thinking, or a related hobby—let me know and I can search again.",
+      "outcome": {
+        "status": "valid",
+        "code": "public_answer",
+        "reason": "A nonempty public answer was saved; factual checks are separate."
+      },
+      "thread_id": "13e0f72b-55e9-466a-a9e0-532ab52b2e57",
+      "preferences": {
+        "goal": "board games",
+        "budget_sgd": null,
+        "days": null,
+        "planning_area": null,
+        "known_skills": null,
+        "kind": null
+      }
+    },
+    {
+      "turn": 2,
+      "role": "user",
+      "content": "Oh, I see—no board‑games class. Is learning video‑game design the same as learning to play board games?"
+    },
+    {
+      "turn": 2,
+      "role": "assistant",
+      "content": "No, learning video‑game design focuses on coding, mechanics, graphics and software tools—very different from the social, tactile experience of playing board games. The catalogue has no board‑games offering, and a design class wouldn’t teach you how to play them.\n\nWould you like me to search for a related topic (e.g., strategy games, game night facilitation, or another hobby)? Or are you happy to explore something else?",
+      "outcome": {
+        "status": "valid",
+        "code": "public_answer",
+        "reason": "A nonempty public answer was saved; factual checks are separate."
+      },
+      "thread_id": "13e0f72b-55e9-466a-a9e0-532ab52b2e57",
+      "preferences": {
+        "goal": "board games",
+        "budget_sgd": null,
+        "days": null,
+        "planning_area": null,
+        "known_skills": null,
+        "kind": null
+      }
+    }
+  ],
+  "source_lock": {
+    "source": "ngc",
+    "source_revision": "0.0.1",
+    "original_sha256": "0ef70355417745611d26f1469d35728c1430454f8f10936a34682e38726451dc",
+    "kind": "immutable original",
+    "source_url": "https://catalog.ngc.nvidia.com/orgs/nvidia/teams/nemotron-personas/resources/nemotron-personas-dataset-en_sg",
+    "conditioning": "Original synthetic OCEAN fields"
+  },
+  "situation": {
+    "kind": "authored situation; Designer intentionally skipped",
+    "goal": "learn to play board games",
+    "followup": "Is video-game design the same as playing board games?",
+    "expected": "Honest no-match in this frozen catalogue; no design-course substitution.",
+    "disclosure": "The advisor receives only what the public user messages state."
+  },
+  "usage": {
+    "calls": 10,
+    "records": [
+      {
+        "call": 1,
+        "role": "user",
+        "mode": "live",
+        "status": "completed",
+        "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "provider_route": "litellm",
+        "requested_model": "lab-support",
+        "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "usage": {
+          "completion_tokens": 27,
+          "prompt_tokens": 1839,
+          "total_tokens": 1866,
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 1792
+          }
+        },
+        "latency_ms": 579
+      },
+      {
+        "call": 2,
+        "role": "judge",
+        "mode": "live",
+        "status": "completed",
+        "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "provider_route": "litellm",
+        "requested_model": "lab-support",
+        "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "usage": {
+          "completion_tokens": 74,
+          "prompt_tokens": 216,
+          "total_tokens": 290,
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "latency_ms": 976
+      },
+      {
+        "call": 3,
+        "role": "assistant",
+        "mode": "live",
+        "status": "completed",
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "provider_route": "litellm",
+        "requested_model": "lab-advisor-fixed",
+        "selected_model": "openai/nvidia/nemotron-3.5-lightning-30b-a3b",
+        "usage": {
+          "completion_tokens": 49,
+          "prompt_tokens": 2277,
+          "total_tokens": 2326,
+          "completion_tokens_details": {
+            "reasoning_tokens": 16
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "latency_ms": 670,
+        "tool_surface": {
+          "source": "application_allowlist",
+          "received": [
+            "mcp__catalogue__compare_courses",
+            "mcp__catalogue__get_course_details",
+            "mcp__catalogue__get_prompt",
+            "mcp__catalogue__list_prompts",
+            "mcp__catalogue__list_resources",
+            "mcp__catalogue__read_resource",
+            "mcp__catalogue__search_courses"
+          ],
+          "exposed": [
+            "mcp__catalogue__compare_courses",
+            "mcp__catalogue__get_course_details",
+            "mcp__catalogue__search_courses"
+          ],
+          "withheld": [
+            "mcp__catalogue__get_prompt",
+            "mcp__catalogue__list_prompts",
+            "mcp__catalogue__list_resources",
+            "mcp__catalogue__read_resource"
+          ]
+        },
+        "control_request_id": "5531223d-3201-4381-b9f9-b7f8e91fc7d8",
+        "thread_id": "13e0f72b-55e9-466a-a9e0-532ab52b2e57",
+        "transport": "openshell-native-exec"
+      },
+      {
+        "call": 4,
+        "role": "assistant",
+        "mode": "live",
+        "status": "completed",
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "provider_route": "litellm",
+        "requested_model": "lab-advisor-fixed",
+        "selected_model": "openai/nvidia/nemotron-3.5-lightning-30b-a3b",
+        "usage": {
+          "completion_tokens": 198,
+          "prompt_tokens": 2488,
+          "total_tokens": 2686,
+          "completion_tokens_details": {
+            "reasoning_tokens": 137
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 2112
+          }
+        },
+        "latency_ms": 2802,
+        "tool_surface": {
+          "source": "application_allowlist",
+          "received": [
+            "mcp__catalogue__compare_courses",
+            "mcp__catalogue__get_course_details",
+            "mcp__catalogue__get_prompt",
+            "mcp__catalogue__list_prompts",
+            "mcp__catalogue__list_resources",
+            "mcp__catalogue__read_resource",
+            "mcp__catalogue__search_courses"
+          ],
+          "exposed": [
+            "mcp__catalogue__compare_courses",
+            "mcp__catalogue__get_course_details",
+            "mcp__catalogue__search_courses"
+          ],
+          "withheld": [
+            "mcp__catalogue__get_prompt",
+            "mcp__catalogue__list_prompts",
+            "mcp__catalogue__list_resources",
+            "mcp__catalogue__read_resource"
+          ]
+        },
+        "control_request_id": "d9e15f2b-fe7a-4f5b-853f-197e378c2fbe",
+        "thread_id": "13e0f72b-55e9-466a-a9e0-532ab52b2e57",
+        "transport": "openshell-native-exec"
+      },
+      {
+        "call": 5,
+        "role": "judge",
+        "mode": "live",
+        "status": "completed",
+        "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "provider_route": "litellm",
+        "requested_model": "lab-support",
+        "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "usage": {
+          "completion_tokens": 111,
+          "prompt_tokens": 289,
+          "total_tokens": 400,
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "latency_ms": 1174
+      },
+      {
+        "call": 6,
+        "role": "user",
+        "mode": "live",
+        "status": "completed",
+        "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "provider_route": "litellm",
+        "requested_model": "lab-support",
+        "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "usage": {
+          "completion_tokens": 28,
+          "prompt_tokens": 2127,
+          "total_tokens": 2155,
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "latency_ms": 658
+      },
+      {
+        "call": 7,
+        "role": "judge",
+        "mode": "live",
+        "status": "completed",
+        "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "provider_route": "litellm",
+        "requested_model": "lab-support",
+        "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "usage": {
+          "completion_tokens": 68,
+          "prompt_tokens": 302,
+          "total_tokens": 370,
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "latency_ms": 1068
+      },
+      {
+        "call": 8,
+        "role": "summary",
+        "mode": "live",
+        "status": "completed",
+        "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "provider_route": "litellm",
+        "requested_model": "lab-support",
+        "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "usage": {
+          "completion_tokens": 3,
+          "prompt_tokens": 123,
+          "total_tokens": 126,
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "latency_ms": 446
+      },
+      {
+        "call": 9,
+        "role": "assistant",
+        "mode": "live",
+        "status": "completed",
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "provider_route": "litellm",
+        "requested_model": "lab-advisor-fixed",
+        "selected_model": "openai/nvidia/nemotron-3.5-lightning-30b-a3b",
+        "usage": {
+          "completion_tokens": 167,
+          "prompt_tokens": 2598,
+          "total_tokens": 2765,
+          "completion_tokens_details": {
+            "reasoning_tokens": 77
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 2112
+          }
+        },
+        "latency_ms": 1473,
+        "tool_surface": {
+          "source": "application_allowlist",
+          "received": [
+            "mcp__catalogue__compare_courses",
+            "mcp__catalogue__get_course_details",
+            "mcp__catalogue__get_prompt",
+            "mcp__catalogue__list_prompts",
+            "mcp__catalogue__list_resources",
+            "mcp__catalogue__read_resource",
+            "mcp__catalogue__search_courses"
+          ],
+          "exposed": [
+            "mcp__catalogue__compare_courses",
+            "mcp__catalogue__get_course_details",
+            "mcp__catalogue__search_courses"
+          ],
+          "withheld": [
+            "mcp__catalogue__get_prompt",
+            "mcp__catalogue__list_prompts",
+            "mcp__catalogue__list_resources",
+            "mcp__catalogue__read_resource"
+          ]
+        },
+        "control_request_id": "1a618271-bd15-4e50-9fe5-b1bbf10eccf2",
+        "thread_id": "13e0f72b-55e9-466a-a9e0-532ab52b2e57",
+        "transport": "openshell-native-exec"
+      },
+      {
+        "call": 10,
+        "role": "judge",
+        "mode": "live",
+        "status": "completed",
+        "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "provider_route": "litellm",
+        "requested_model": "lab-support",
+        "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "usage": {
+          "completion_tokens": 119,
+          "prompt_tokens": 407,
+          "total_tokens": 526,
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "latency_ms": 1588
+      }
+    ]
+  },
+  "evaluation": {
+    "kind": "application assertions",
+    "rows": [
+      {
+        "id": "two-turns",
+        "criterion": "Two public learner/advisor pairs were completed",
+        "expected": [
+          2,
+          2
+        ],
+        "actual": [
+          2,
+          2
+        ],
+        "status": "pass",
+        "reason": "An early stop or missing reply remains incomplete, rather than being padded with a transcript.",
+        "evidence": [
+          "public-conversation.json"
+        ],
+        "implementation": "application assertion; no model judge"
+      },
+      {
+        "id": "valid-answers",
+        "criterion": "Both replies are valid public answers",
+        "expected": true,
+        "actual": true,
+        "status": "pass",
+        "reason": "Checks empty/error/pseudo-tool output independently of transport success.",
+        "evidence": [
+          "public-conversation.json"
+        ],
+        "implementation": "application assertion; no model judge"
+      },
+      {
+        "id": "source-lock",
+        "criterion": "Original identity and revision are preserved",
+        "expected": true,
+        "actual": true,
+        "status": "pass",
+        "reason": "Saved provenance does not establish population coverage.",
+        "evidence": [
+          "source-lock.json"
+        ],
+        "implementation": "application assertion; no model judge"
+      },
+      {
+        "id": "followup",
+        "criterion": "The follow-up asks about game design",
+        "expected": true,
+        "actual": true,
+        "status": "pass",
+        "reason": "The actual UserSim follow-up must exercise the intended distinction.",
+        "evidence": [
+          "public-conversation.json"
+        ],
+        "implementation": "application assertion; no model judge"
+      },
+      {
+        "id": "catalogue-no-match",
+        "criterion": "The frozen catalogue has no board-game playing class",
+        "expected": [],
+        "actual": [],
+        "status": "pass",
+        "reason": "This is a dated catalogue result, not a claim about every provider.",
+        "evidence": [
+          "catalogue-snapshot.json"
+        ],
+        "implementation": "application assertion; no model judge"
+      },
+      {
+        "id": "honest-no-match",
+        "criterion": "The first reply acknowledges a catalogue limit",
+        "expected": true,
+        "actual": true,
+        "status": "pass",
+        "reason": "A narrow phrase check; review the linked reply for nuance.",
+        "evidence": [
+          "public-conversation.json"
+        ],
+        "implementation": "application assertion; no model judge"
+      },
+      {
+        "id": "no-invented-id-0",
+        "criterion": "Any cited course IDs exist in the snapshot",
+        "expected": true,
+        "actual": true,
+        "status": "pass",
+        "reason": "Does not certify unsupported claims without a course identifier.",
+        "evidence": [
+          "public-conversation.json",
+          "catalogue-snapshot.json"
+        ],
+        "implementation": "application assertion; no model judge"
+      },
+      {
+        "id": "distinguish-design",
+        "criterion": "Playing and designing games are distinguished",
+        "expected": true,
+        "actual": true,
+        "status": "pass",
+        "reason": "Checks an explicit distinction, not its complete pedagogical quality.",
+        "evidence": [
+          "public-conversation.json"
+        ],
+        "implementation": "application assertion; no model judge"
+      },
+      {
+        "id": "no-invented-id-1",
+        "criterion": "Any cited course IDs exist in the snapshot",
+        "expected": true,
+        "actual": true,
+        "status": "pass",
+        "reason": "Does not certify unsupported claims without a course identifier.",
+        "evidence": [
+          "public-conversation.json",
+          "catalogue-snapshot.json"
+        ],
+        "implementation": "application assertion; no model judge"
+      },
+      {
+        "id": "one-thread",
+        "criterion": "Both replies use the same persistent native thread",
+        "expected": true,
+        "actual": true,
+        "status": "pass",
+        "reason": "Same-thread identity plus the follow-up checks persistence; it is not proof of cross-session memory.",
+        "evidence": [
+          "public-conversation.json"
+        ],
+        "implementation": "application assertion; no model judge"
+      },
+      {
+        "id": "native-tools",
+        "criterion": "A completed native catalogue search is attributable",
+        "expected": true,
+        "actual": true,
+        "status": "pass",
+        "reason": "Application intent logs cannot replace native tool execution.",
+        "evidence": [
+          "native-tools.json"
+        ],
+        "implementation": "application assertion; no model judge"
+      }
+    ],
+    "passed": 11,
+    "total": 11,
+    "coverage": "Two public pairs, explicit no-match/design distinction, valid answers, known IDs, same native thread and actual tool evidence. Semantic recommendation quality still requires review.",
+    "inference_calls": 0,
+    "helix_used": false
+  },
+  "relay": {
+    "scopes": [
+      {
+        "id": "51e1b93f38767b366798246a:01a1f9df-8d1c-7d33-b461-364ac060f006",
+        "uuid": "01a1f9df-8d1c-7d33-b461-364ac060f006",
+        "parent_uuid": "01a1f9df-8d1c-7d33-b461-3621588620c4",
+        "parent_id": "51e1b93f38767b366798246a:01a1f9df-8d1c-7d33-b461-3621588620c4",
+        "category": "agent",
+        "name": "hermes.session",
+        "status": "completed",
+        "started_at": "2026-11-20T16:52:19.868554606+00:00",
+        "ended_at": "2026-11-20T16:52:24.274412380+00:00",
+        "duration_ms": 4405.858,
+        "parent_available": false
+      },
+      {
+        "id": "51e1b93f38767b366798246a:01a1f9df-8d1d-7ff0-b00c-35fba9f5b632",
+        "uuid": "01a1f9df-8d1d-7ff0-b00c-35fba9f5b632",
+        "parent_uuid": "01a1f9df-8d1c-7d33-b461-364ac060f006",
+        "parent_id": "51e1b93f38767b366798246a:01a1f9df-8d1c-7d33-b461-364ac060f006",
+        "category": "function",
+        "name": "hermes.turn",
+        "status": "completed",
+        "started_at": "2026-11-20T16:52:19.869711563+00:00",
+        "ended_at": "2026-11-20T16:52:24.270061644+00:00",
+        "duration_ms": 4400.35,
+        "parent_available": true
+      },
+      {
+        "id": "51e1b93f38767b366798246a:01a1f9df-8e24-7333-90a4-0820a58989f7",
+        "uuid": "01a1f9df-8e24-7333-90a4-0820a58989f7",
+        "parent_uuid": "01a1f9df-8d1d-7ff0-b00c-35fba9f5b632",
+        "parent_id": "51e1b93f38767b366798246a:01a1f9df-8d1d-7ff0-b00c-35fba9f5b632",
+        "category": "function",
+        "name": "hermes.logical_llm_call",
+        "status": "completed",
+        "started_at": "2026-11-20T16:52:20.132890160+00:00",
+        "ended_at": "2026-11-20T16:52:21.345494123+00:00",
+        "duration_ms": 1212.604,
+        "parent_available": true
+      },
+      {
+        "id": "51e1b93f38767b366798246a:01a1f9df-8e26-7d10-908b-f94760a2f2af",
+        "uuid": "01a1f9df-8e26-7d10-908b-f94760a2f2af",
+        "parent_uuid": "01a1f9df-8e24-7333-90a4-0820a58989f7",
+        "parent_id": "51e1b93f38767b366798246a:01a1f9df-8e24-7333-90a4-0820a58989f7",
+        "category": "llm",
+        "name": "openai.chat_completions",
+        "status": "completed",
+        "started_at": "2026-11-20T16:52:20.134721957+00:00",
+        "ended_at": "2026-11-20T16:52:21.338512829+00:00",
+        "duration_ms": 1203.791,
+        "parent_available": true
+      },
+      {
+        "id": "51e1b93f38767b366798246a:01a1f9df-9310-7c41-9c97-41fcd5dd316e",
+        "uuid": "01a1f9df-9310-7c41-9c97-41fcd5dd316e",
+        "parent_uuid": "01a1f9df-8d1d-7ff0-b00c-35fba9f5b632",
+        "parent_id": "51e1b93f38767b366798246a:01a1f9df-8d1d-7ff0-b00c-35fba9f5b632",
+        "category": "tool",
+        "name": "mcp__catalogue__search_courses",
+        "status": "completed",
+        "started_at": "2026-11-20T16:52:21.392848259+00:00",
+        "ended_at": "2026-11-20T16:52:21.408097774+00:00",
+        "duration_ms": 15.249,
+        "parent_available": true
+      },
+      {
+        "id": "51e1b93f38767b366798246a:01a1f9df-932b-7961-8322-9a3c44ad7b14",
+        "uuid": "01a1f9df-932b-7961-8322-9a3c44ad7b14",
+        "parent_uuid": "01a1f9df-8d1d-7ff0-b00c-35fba9f5b632",
+        "parent_id": "51e1b93f38767b366798246a:01a1f9df-8d1d-7ff0-b00c-35fba9f5b632",
+        "category": "function",
+        "name": "hermes.logical_llm_call",
+        "status": "completed",
+        "started_at": "2026-11-20T16:52:21.419352329+00:00",
+        "ended_at": "2026-11-20T16:52:24.243584474+00:00",
+        "duration_ms": 2824.232,
+        "parent_available": true
+      },
+      {
+        "id": "51e1b93f38767b366798246a:01a1f9df-932c-71d0-9d23-6d36e3b20aee",
+        "uuid": "01a1f9df-932c-71d0-9d23-6d36e3b20aee",
+        "parent_uuid": "01a1f9df-932b-7961-8322-9a3c44ad7b14",
+        "parent_id": "51e1b93f38767b366798246a:01a1f9df-932b-7961-8322-9a3c44ad7b14",
+        "category": "llm",
+        "name": "openai.chat_completions",
+        "status": "completed",
+        "started_at": "2026-11-20T16:52:21.420299605+00:00",
+        "ended_at": "2026-11-20T16:52:24.235517176+00:00",
+        "duration_ms": 2815.218,
+        "parent_available": true
+      },
+      {
+        "id": "51e1b93f38767b366798246a:01a1f9df-aba9-7b82-b5b3-7ca3130f2aaa",
+        "uuid": "01a1f9df-aba9-7b82-b5b3-7ca3130f2aaa",
+        "parent_uuid": "01a1f9df-aba9-7b82-b5b3-7c9ea9fa9549",
+        "parent_id": "51e1b93f38767b366798246a:01a1f9df-aba9-7b82-b5b3-7c9ea9fa9549",
+        "category": "agent",
+        "name": "hermes.session",
+        "status": "completed",
+        "started_at": "2026-11-20T16:52:27.689894357+00:00",
+        "ended_at": "2026-11-20T16:52:29.217550241+00:00",
+        "duration_ms": 1527.656,
+        "parent_available": false
+      },
+      {
+        "id": "51e1b93f38767b366798246a:01a1f9df-abaa-7442-b147-9652267a7008",
+        "uuid": "01a1f9df-abaa-7442-b147-9652267a7008",
+        "parent_uuid": "01a1f9df-aba9-7b82-b5b3-7ca3130f2aaa",
+        "parent_id": "51e1b93f38767b366798246a:01a1f9df-aba9-7b82-b5b3-7ca3130f2aaa",
+        "category": "function",
+        "name": "hermes.turn",
+        "status": "completed",
+        "started_at": "2026-11-20T16:52:27.690030045+00:00",
+        "ended_at": "2026-11-20T16:52:29.213426658+00:00",
+        "duration_ms": 1523.396,
+        "parent_available": true
+      },
+      {
+        "id": "51e1b93f38767b366798246a:01a1f9df-abb8-7f60-8ffd-1b5c6e3d88d6",
+        "uuid": "01a1f9df-abb8-7f60-8ffd-1b5c6e3d88d6",
+        "parent_uuid": "01a1f9df-abaa-7442-b147-9652267a7008",
+        "parent_id": "51e1b93f38767b366798246a:01a1f9df-abaa-7442-b147-9652267a7008",
+        "category": "function",
+        "name": "hermes.logical_llm_call",
+        "status": "completed",
+        "started_at": "2026-11-20T16:52:27.704052696+00:00",
+        "ended_at": "2026-11-20T16:52:29.194928126+00:00",
+        "duration_ms": 1490.876,
+        "parent_available": true
+      },
+      {
+        "id": "51e1b93f38767b366798246a:01a1f9df-abb8-7f60-8ffd-1b6bfc710479",
+        "uuid": "01a1f9df-abb8-7f60-8ffd-1b6bfc710479",
+        "parent_uuid": "01a1f9df-abb8-7f60-8ffd-1b5c6e3d88d6",
+        "parent_id": "51e1b93f38767b366798246a:01a1f9df-abb8-7f60-8ffd-1b5c6e3d88d6",
+        "category": "llm",
+        "name": "openai.chat_completions",
+        "status": "completed",
+        "started_at": "2026-11-20T16:52:27.704717157+00:00",
+        "ended_at": "2026-11-20T16:52:29.186463471+00:00",
+        "duration_ms": 1481.746,
+        "parent_available": true
+      }
+    ],
+    "notices": [
+      "Sanitized native projection: payloads/private prompts/local paths omitted; native IDs/parents/status unchanged.",
+      "Gateway calls and native model scopes have no verified automatic span join."
+    ]
+  },
+  "tools": [
+    {
+      "name": "mcp__catalogue__search_courses",
+      "arguments": {
+        "goal": "board games"
+      },
+      "result": {
+        "snapshot_date": "2026-11-10",
+        "as_of": "2026-11-20",
+        "matches": [],
+        "excluded": [],
+        "notice": "Curated snapshot. Check the official listing before acting; individual eligibility is unknown."
+      },
+      "scope_uuid": "01a1f9df-9310-7c41-9c97-41fcd5dd316e",
+      "status": "completed",
+      "evidence_origin": "native_relay"
+    }
+  ],
+  "developer_review": {
+    "summary": "Two public turns and 11 application assertions passed. Native UserSim retained one assistant-quality flag; this does not disappear when application checks pass.",
+    "native_judge_flags": [],
+    "limitations": [
+      "Pattern-based assertions and Guardrails custom actions have narrow coverage.",
+      "The no-match applies only to the frozen catalogue.",
+      "Gateway model calls are not automatically joined to native Relay model spans."
+    ],
+    "prior_conditions": [
+      {
+        "run_id": "82f513ef-e009-4cd0-9f4a-c59f49bdd18a",
+        "status": "failed",
+        "finding": "Hermes tool-discovery wrappers were withheld by the course-only gateway; no native search ran. Bare function-call text is now rejected."
+      },
+      {
+        "run_id": "563047fd-a2c2-4284-bde4-ba219a11807d",
+        "status": "failed",
+        "finding": "A real no-match search ran, but the native UserSim gate rejected the intended design-versus-play clarification as off topic. The custom probe now supplies that relevance rule."
+      }
+    ],
+    "private_evidence_retained": true
+  }
+}

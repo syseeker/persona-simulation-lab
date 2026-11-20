@@ -1,7 +1,7 @@
 version: 1
 filesystem_policy:
   include_workdir: false
-  read_only: [/bin, /lib, /lib64, /usr, /opt/lab, /etc, /proc/self, /dev/urandom]
+  read_only: [/bin, /lib, /lib64, /usr, /opt/lab, /opt/hermes, /opt/python, /etc, /proc/self, /dev/urandom]
   read_write: [/workspace, /tmp, /dev/null]
 landlock:
   compatibility: best_effort
@@ -20,3 +20,4 @@ network_policies:
           - allow: {method: POST, path: /v1/chat/completions}
     binaries:
       - {path: /usr/local/bin/python3.12}
+      - {path: /opt/python/cpython-3.14.0-linux-x86_64-gnu/bin/python3.14}

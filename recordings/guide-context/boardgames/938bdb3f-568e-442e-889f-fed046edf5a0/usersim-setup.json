@@ -1,0 +1,46 @@
+{
+  "probe": "learning_advisor",
+  "configuration": {
+    "locale": "en_SG",
+    "max_turns": 2,
+    "max_steps": 10,
+    "max_query_attempts": 1,
+    "max_assistant_attempts": 1,
+    "enforce_user_language": true,
+    "context_compression": false,
+    "persona_grounding_ratio": 1.0,
+    "probe_options": {
+      "learning_advisor": {
+        "profile_only": false,
+        "story_id": "boardgames"
+      }
+    }
+  },
+  "outcome": {
+    "status": "ok",
+    "failure_class": null,
+    "failure_attribution": null,
+    "n_turns": 2,
+    "n_tool_calls": 0,
+    "n_user_query_attempts": 1,
+    "n_user_followup_retries": 0,
+    "n_assistant_inline_failures": 1,
+    "n_assistant_retries": 0,
+    "n_api_response_rerolls": 0,
+    "n_fourth_wall_triggers": 0,
+    "n_user_role_violations": 0,
+    "n_user_language_violations": 0,
+    "early_stop": false,
+    "per_model_calls": {
+      "user_model": 2,
+      "judge_model": 4,
+      "assistant_model": 2,
+      "summary_model": 1
+    },
+    "warning_count": 0
+  },
+  "behaviour_basis": "Original NGC Extended behavioural fields interpreted by the native UserSim preamble.",
+  "private_context_published": false,
+  "counting_notice": "One UserSim assistant activation delegates a whole Fabric agent turn. UserSim simulated-tool counts do not count the advisor's real MCP calls.",
+  "evaluation_notice": "Native in-loop judges ran. The optional post-loop UserSim eval/report commands were not invoked."
+}
