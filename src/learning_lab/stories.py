@@ -22,6 +22,13 @@ STORIES = {
         "lesson": "An honest no-match response is useful application behaviour.",
         "expected": "Explain that this snapshot has no board-game class; do not substitute game design or invent one.",
     },
+    'dreamjob': {
+        'id': 'dreamjob', 'title': 'Learn retail analysis with staged disclosure',
+        'question': "In this hypothetical situation you work in retail and want sales/inventory-analysis skills. Ask about SMU Academy's SCTP Advanced Certificate in Data Communications and Visualisation for Business Analyst: its content, duration and full fee. Do not disclose salary, spending budget or weekend constraint in the opening.",
+        'preferences': {'goal': 'retail sales inventory data analytics visualisation Excel'},
+        'lesson': 'Separate original traits, Designer hypotheses, public disclosure, controlled routing and managed operations.',
+        'expected': 'Use published facts; salary is not a budget or funding proof. Preserve unknown timetable/eligibility and avoid employer endorsement or job guarantees.',
+    },
     "profile-goal": {
         "id": "profile-goal", "title": "Explore the selected learner's goal",
         "question": None, "preferences": None,

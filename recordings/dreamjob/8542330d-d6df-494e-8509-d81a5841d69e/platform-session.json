@@ -1,0 +1,49 @@
+{
+  "projection": "Allowlisted native/public configuration fields.",
+  "session": {
+    "name": "citizen-retail-68a30de7aab0-review",
+    "workspace": "persona-lab",
+    "project": null,
+    "id": "agent-session-MZHC6GZ8Lg1s4ADnThHN54",
+    "entity_id": "agent-session-MZHC6GZ8Lg1s4ADnThHN54",
+    "parent": null,
+    "created_at": "2026-11-20T19:09:08.679350",
+    "created_by": "service:platform",
+    "updated_at": "2026-11-20T19:09:08.679355",
+    "updated_by": "service:platform",
+    "db_version": 1,
+    "session_uuid": "a6788d52-201c-452f-93ed-9db968a61a5f",
+    "deployment_id": "agent-deployment-HZfutw7aq8YeaunaY3B6Nb",
+    "status": "active",
+    "first_active_at": null,
+    "last_active_at": null,
+    "expires_at": null
+  },
+  "session_identity": {
+    "resource_name": "citizen-retail-68a30de7aab0-review",
+    "entity_id": "agent-session-MZHC6GZ8Lg1s4ADnThHN54",
+    "session_uuid": "a6788d52-201c-452f-93ed-9db968a61a5f",
+    "header_identity": "a6788d52-201c-452f-93ed-9db968a61a5f"
+  },
+  "deployment": {
+    "id": "agent-deployment-HZfutw7aq8YeaunaY3B6Nb",
+    "name": "citizen-retail-68a30de7aab0",
+    "agent": "citizen-retail-68a30de7aab0-agent",
+    "harness": "deepagents",
+    "harness_kind": "deepagents",
+    "adapter_id": null,
+    "preferences_mode": "frozen-public-preset",
+    "frozen_preferences": {
+      "goal": "retail sales inventory data analytics visualisation Excel",
+      "budget_sgd": 3000,
+      "days": [
+        5,
+        6
+      ],
+      "planning_area": null,
+      "known_skills": null,
+      "kind": null
+    },
+    "preferences_sha256": "9dd3fd7b655c8201074cac85a529012c13521b956e132a83974fb25c4aa82888"
+  }
+}

@@ -54,15 +54,15 @@ def guide_sample(source: str = 'ngc'):
 
 
 @guide_app.command('start')
-def guide_start(source_id: str, original_sha256: str, source: str = 'ngc'):
-    """Run one actual bounded photography condition, await evidence and cleanup."""
-    _guide_command('start', {'spec': {'scenario_id': 'photography', 'source': source,
+def guide_start(source_id: str, original_sha256: str, source: str = 'ngc', scenario: str = 'photography'):
+    """Run one selected closed scenario preset, await evidence and cleanup."""
+    _guide_command('start', {'spec': {'scenario_id': scenario, 'source': source,
                                     'source_id': source_id, 'original_sha256': original_sha256}})
 
 
 @guide_app.command('runs')
-def guide_runs():
-    _guide_command('list', {'scenario_id': 'photography'})
+def guide_runs(scenario: str = 'photography'):
+    _guide_command('list', {'scenario_id': scenario})
 
 
 @guide_app.command('trace')

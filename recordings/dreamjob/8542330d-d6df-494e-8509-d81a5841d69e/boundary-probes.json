@@ -1,0 +1,16 @@
+{
+  "projection": "Allowlisted native fields; not a byte-for-byte original.",
+  "probes": [
+    {
+      "probe": "world-readable-file-outside-policy",
+      "denied": true,
+      "errno": 13
+    },
+    {
+      "probe": "unlisted-network-egress",
+      "denied": true,
+      "errno": 13,
+      "error_type": "PermissionError"
+    }
+  ]
+}

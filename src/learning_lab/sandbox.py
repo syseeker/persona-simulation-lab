@@ -18,7 +18,7 @@ from .evidence import sanitize, save_evidence
 from .runtime_profiles import openshell_binary
 from .settings import ROOT
 
-IMAGE = 'citizen-learning-advisor:0.4.0'
+IMAGE = 'citizen-learning-advisor:0.8.0'
 EXPORT_FILES = {'fabric-config.json', 'fabric-plan.json', 'fabric-doctor.json',
                 'fabric-lifecycle.jsonl', 'reply-outcomes.jsonl', 'relay.jsonl',
                 'guardrails-config.json', 'guardrails-decisions.jsonl'}
@@ -80,7 +80,7 @@ async def native_readiness() -> dict:
 
 class NativeSandbox:
     def __init__(self, run_id: str, folder: Path, gateway, *, catalogue: Path,
-                 scenario_id='photography', harness='deepagents', model_route='fixed'):
+                 scenario_id='photography', harness='deepagents', model_route='fixed', model=None):
         if str(uuid.UUID(run_id)) != run_id:
             raise ValueError('A canonical run identity is required')
         self.run_id, self.folder, self.gateway, self.catalogue = run_id, folder, gateway, catalogue
@@ -89,6 +89,7 @@ class NativeSandbox:
         if model_route not in {'fixed', 'switchyard'}:
             raise ValueError('Unknown model route')
         self.scenario_id, self.harness, self.model_route = scenario_id, harness, model_route
+        self.requested_model = model
         # OpenShell 0.1.6 permits at most 19 characters. Full identity remains
         # in the mandatory ownership label and persisted receipt.
         self.name = 'cl-' + uuid.UUID(run_id).hex[:16]
@@ -157,7 +158,7 @@ class NativeSandbox:
             await self.probe_boundary()
             self.stderr = (self.folder / 'sandbox-stderr.log').open('ab')
             self.process = await asyncio.create_subprocess_exec(str(self.binary), 'sandbox', 'exec', self.name,
-                '--no-tty', '--no-login-shell', '--timeout', '900', '--',
+                '--no-tty', '--no-login-shell', '--timeout', '3600' if self.scenario_id == 'dreamjob' else '900', '--',
                 '/opt/lab/.venv/bin/python', '-u', '-m', 'learning_lab.sandbox_runtime',
                 env=self.env, stdin=asyncio.subprocess.PIPE, stdout=asyncio.subprocess.PIPE,
                 stderr=self.stderr, limit=4 * 1024 * 1024)
@@ -165,7 +166,7 @@ class NativeSandbox:
             raw_catalogue = self.catalogue.read_text()
             from .settings import model_id
             receipt = await self.request('init', catalogue=raw_catalogue,
-                        catalogue_sha256=hashlib.sha256(raw_catalogue.encode()).hexdigest(), model=model_id(),
+                        catalogue_sha256=hashlib.sha256(raw_catalogue.encode()).hexdigest(), model=self.requested_model or model_id(),
                         scenario_id=self.scenario_id, harness=self.harness, model_route=self.model_route)
             manifest = receipt.get('image_manifest', {})
             required = ['src/learning_lab/' + name for name in (
@@ -175,6 +176,8 @@ class NativeSandbox:
             if self.scenario_id != 'photography':
                 required += ['src/learning_lab/behavioural_safeguards.py', 'integrations/guardrails/runner.py',
                              'integrations/guardrails/config.yml', 'integrations/guardrails/rails.co']
+            if self.scenario_id == 'dreamjob':
+                required.append('src/learning_lab/retail_policy.py')
             if manifest.get('version') != 1 or any(
                 manifest.get('files', {}).get(relative) != hashlib.sha256((ROOT / relative).read_bytes()).hexdigest()
                 for relative in required
@@ -206,7 +209,7 @@ class NativeSandbox:
         self.pending[key] = future
         try:
             await self.send({'id': key, 'method': method, **params})
-            return await asyncio.wait_for(future, 150 if method == 'invoke' else 90)
+            return await asyncio.wait_for(future, (650 if self.scenario_id == 'dreamjob' else 150) if method == 'invoke' else 90)
         finally:
             self.pending.pop(key, None)
 
@@ -220,7 +223,7 @@ class NativeSandbox:
             await self.send({'type': 'model_result', 'id': message['id'], 'result': result})
         except Exception as exc:
             await self.send({'type': 'model_result', 'id': message['id'],
-                             'error': str(sanitize(str(exc)))[:800]})
+                             'error': str(sanitize(type(exc).__name__ + ': ' + (str(exc) or 'Model call failed')))[:800]})
 
     def artifact(self, message):
         relative = message['path']
@@ -280,7 +283,7 @@ class NativeSandbox:
         self.gateway.tool_rounds = 0
         return await self.request('invoke', message=message, preferences=preferences.model_dump(mode='json'))
 
-    async def probe_boundary(self):
+    async def probe_boundary(self, python='/opt/lab/.venv/bin/python'):
         script = '''import json,errno,socket
 results=[]
 try:
@@ -291,7 +294,7 @@ try:
 except OSError as e: results.append({'probe':'unlisted-network-egress','denied':e.errno in (errno.EACCES,errno.EPERM),'errno':e.errno,'error_type':type(e).__name__})
 print(json.dumps({'probes':results}))'''
         result = json.loads(await self.cli('sandbox', 'exec', self.name, '--no-login-shell', '--timeout', '10',
-                            '--', '/opt/lab/.venv/bin/python', '-c', script, timeout=15))
+                            '--', python, '-c', script, timeout=15))
         save_evidence(self.folder / 'boundary-probes.json', result)
         if not all(row['denied'] for row in result['probes']):
             raise RuntimeError('Native policy-denial probes did not establish both boundaries; inspect the saved evidence')

@@ -1,0 +1,48 @@
+{
+  "projection": "Allowlisted native/public configuration fields.",
+  "condition_id": "68a30de7-aab0-4ff5-9c19-7b9b92faf193",
+  "parent_run_id": "8542330d-d6df-494e-8509-d81a5841d69e",
+  "status": "completed",
+  "fresh_session": true,
+  "public_preferences": {
+    "goal": "retail sales inventory data analytics visualisation Excel",
+    "budget_sgd": 3000.0,
+    "days": [
+      5,
+      6
+    ],
+    "planning_area": null,
+    "known_skills": null,
+    "kind": null
+  },
+  "private_persona_in_image": false,
+  "local_memory_resumed": false,
+  "cleanup_confirmed": true,
+  "image": "citizen-retail-helix:0.4.0",
+  "input_kind": "developer-selected public constraints for a new managed condition; not a new UserSim turn",
+  "guardrails_location": "host caller boundary for this managed condition; local baseline rails execute inside its own sandbox",
+  "agent": "citizen-retail-68a30de7aab0-agent",
+  "deployment_name": "citizen-retail-68a30de7aab0",
+  "stage": "cleanup",
+  "resource_creation_attempted": true,
+  "registration_created": true,
+  "session_id": "citizen-retail-68a30de7aab0-review",
+  "sandbox": {
+    "id": "323c69f0-df7b-42e7-a7f8-d11c8850903f",
+    "name": "nhx-4d56049bf35a1c",
+    "labels": {
+      "managed-by": "nemo-deployments",
+      "nemo.agents/deployment": "citizen-retail-68a30de7aab0",
+      "nemo.agents/mode": "openshell",
+      "nemo.agents/runtime": "fabric",
+      "nemo.nvidia.com/backoff-limit": "6",
+      "nemo.nvidia.com/deployment-config": "citizen-retail-68a30de7aab0",
+      "nemo.nvidia.com/deployment-name": "citizen-retail-68a30de7aab0",
+      "nemo.nvidia.com/deployment-workspace": "persona-lab",
+      "nemo.nvidia.com/resource-scope": "default",
+      "nemo.nvidia.com/restart-policy": "Always"
+    }
+  },
+  "reply": "**Retail sales & inventory analysis – weekend‑only, S$3,000 budget**\n\n| Course | ID | Provider | Focus | Published fee | Duration | Weekend fit |\n|---|---|---|---|---|---|---|\n| **Fundamentals of Data Analytics & Visualization using Python** | SF‑003 | NUS | Python data prep, descriptive stats, visualisation | *Fee not verified* – confirm with NUS | *Duration not stated* – confirm with NUS | Unknown; schedule note says “Confirm the next intake and timetable.” |\n| **IT Literacy – Basic Microsoft Excel** | SF‑006 | ITE | Foundational spreadsheet & Excel skills | *Fee not verified* – confirm with ITE | 7 hours (short) | Unknown; schedule note says “Confirm the next intake and timetable.” |\n| **Data Analytics Begins With Me** | SF‑002 | NUS | Introductory data‑analytics concepts | *Fee not verified* – confirm with NUS | *Duration not stated* – confirm with NUS | Unknown; schedule note says “Confirm the next intake and timetable.” |\n\n**What still needs confirmation**\n\n- **Total published fee** for each programme (all three list “fee not verified”).\n- **Actual calendar duration** (hours or months) – only SF‑006 lists 7 hours; the others have no duration field.\n- **Weekend class schedule** and next intake dates – all three have “Confirm the next intake and timetable.”\n- **Personal funding eligibility** (SkillsFuture Credit, subsidies) – each course notes that individual subsidy/credit eligibility requires official confirmation.\n\n**Recommendations (at most three, all facts‑based)**  \n\n1. **SF‑006 – ITE Excel** – shortest known duration (7 hours). Ideal for quick spreadsheet foundations; fee and weekend timetable must be confirmed.  \n2. **SF‑003 – NUS Python visualisation** – covers analytics and visualisation tools useful for inventory reporting; fee, duration and weekend intake need confirmation.  \n3. **SF‑002 – NUS intro data analytics** – broad introductory survey; fee, duration and weekend intake need confirmation.\n\n*No course promises a job outcome or funding eligibility. All fees, timetables and intake dates must be verified directly with the provider before any spending decision.*",
+  "cleanup_errors": []
+}

@@ -41,6 +41,12 @@ ARTIFACT_NAMES = {
     'cleanup.json', 'runtime-receipt.json', 'sandbox-stderr.log', 'fabric-config.json', 'fabric-plan.json',
     'fabric-doctor.json', 'fabric-lifecycle.jsonl', 'reply-outcomes.jsonl', 'relay.jsonl',
     'guardrails-config.json', 'guardrails-decisions.jsonl', 'guardrails-probe.json',
+    'designer-configuration.json', 'designer-output.json', 'designer-generation.json', 'designer-lineage.json',
+    'disclosure-audit.jsonl', 'helix-criteria.json', 'helix-evaluation.json', 'helix-job.json',
+    'routing-comparison.json', 'condition.json', 'platform-condition.json', 'platform-package.json',
+    'platform-setup.json', 'platform-registration.json', 'platform-deployment.json', 'platform-session.json',
+    'platform-invocation.json', 'platform-effective-policy.yaml', 'platform-effective-policy.json',
+    'platform-boundary-probes.json', 'platform-session-close.json', 'platform-cleanup.json',
 }
 
 
@@ -77,7 +83,7 @@ def public_photography_preferences(message: str) -> Preferences:
 
 
 class JourneySpec(StrictModel):
-    scenario_id: Literal['photography', 'boardgames'] = 'photography'
+    scenario_id: Literal['photography', 'boardgames', 'dreamjob'] = 'photography'
     source: Literal['hf-profile-only', 'ngc'] = 'ngc'
     source_id: str = Field(min_length=1, max_length=200)
     original_sha256: str = Field(pattern=r'^[a-f0-9]{64}$')
@@ -85,9 +91,10 @@ class JourneySpec(StrictModel):
 
 class PublicTarget:
     """Adapter sees the latest public turn, not the private UserSim preamble."""
-    def __init__(self, native, folder, scenario_id='photography'):
+    def __init__(self, native, folder, scenario_id='photography', retail_context=None):
         self.native, self.folder = native, folder
         self.scenario_id, self.public_turns = scenario_id, 0
+        self.retail_context = retail_context
 
     async def reply(self, message, _private_preferences=None):
         if self.scenario_id == 'photography':
@@ -97,6 +104,10 @@ class PublicTarget:
                 raise ValueError('The public opening did not express a board-games goal')
             # Follow-up pronouns refer to the goal already stated publicly.
             prefs = Preferences(goal='board games')
+        elif self.scenario_id == 'dreamjob':
+            if self.retail_context is None:
+                raise ValueError('Retail execution requires its public-context boundary')
+            return await self.native.reply(message, self.retail_context.accept(message))
         else:
             raise ValueError('Unknown public scenario boundary')
         self.public_turns += 1
@@ -240,12 +251,22 @@ class JourneyService:
                  'episode_id': episode_id, 'scenario_id': spec.scenario_id, 'kind': 'live', 'status': 'queued',
                  'created_at': now(), 'owner_pid': os.getpid(), 'stage': 'persona',
                  'spec': spec.model_dump(), 'configuration': {'harness': preset.harness, 'fabric': True,
-                 'route': preset.route, 'proxy': 'LiteLLM', 'execution': preset.deployment,
-                 'designer': False, 'guardrails': spec.scenario_id == 'boardgames', 'helix': False, 'turn_limit': preset.public_turns,
+                 'route': 'fixed', 'proxy': 'LiteLLM', 'execution': preset.deployment if spec.scenario_id != 'dreamjob' else 'standalone baseline + separate Helix-managed condition',
+                 'designer': spec.scenario_id == 'dreamjob', 'guardrails': spec.scenario_id != 'photography',
+                 'helix': spec.scenario_id == 'dreamjob', 'turn_limit': preset.public_turns,
                  'model_call_limit': 120, 'output_tokens': 1024}, 'calls': 0, 'cleanup_confirmed': False}
         sources = {component: source_excerpt(component) for component in SOURCES if '/' not in component}
         state['source_revision'] = next((r.get('revision') for r in sources.values() if r.get('revision')), None)
         state['source_hashes'] = {r['path']: r['sha256'] for r in sources.values() if r.get('available')}
+        if spec.scenario_id == 'dreamjob':
+            for relative in ['src/learning_lab/retail.py', 'src/learning_lab/retail_checks.py',
+                'src/learning_lab/retail_experiments.py', 'src/learning_lab/retail_managed.py',
+                'src/learning_lab/probe.py', 'integrations/designer/retail_situation.py',
+                'integrations/platform/retail_resources.py', 'integrations/platform/retail_evaluate.py',
+                'integrations/platform/package_agent.py', 'integrations/helix/evaluate.py',
+                'src/learning_lab/retail_policy.py', 'integrations/proxy/retail-litellm.yaml',
+                'integrations/proxy/lab_routing.py']:
+                state['source_hashes'][relative] = hashlib.sha256((ROOT / relative).read_bytes()).hexdigest()
         write_json(folder / 'run.json', state)
         self.tasks[run_id] = asyncio.create_task(self._execute(state, lock))
         return self.get(run_id)
@@ -283,6 +304,7 @@ class JourneyService:
 
         try:
             state.update(status='running', started_at=now())
+            retail = state['scenario_id'] == 'dreamjob'
             source = lock['records'][0]
             from .ngc_personas import CATALOGUE_URL
             write_json(folder / 'source-lock.json', {'source': source['source'], 'source_id': source['source_id'],
@@ -290,28 +312,38 @@ class JourneyService:
                        'lock_sha256': lock['lock_sha256'], 'kind': 'immutable original',
                        'source_url': CATALOGUE_URL if source['source'] == 'ngc' else 'https://huggingface.co/datasets/nvidia/Nemotron-Personas-Singapore/viewer',
                        'conditioning': 'Original synthetic OCEAN fields' if source['source'] == 'ngc' else 'Profile-only; no OCEAN fields'})
-            state['catalogue_sha256'] = freeze_catalogue(catalogue)
+            if retail:
+                from .retail import RetailPublicContext, create_retail_situation, freeze_retail_catalogue
+                state['catalogue_sha256'] = freeze_retail_catalogue(catalogue)
+            else:
+                state['catalogue_sha256'] = freeze_catalogue(catalogue)
             situation = ({'goal': 'beginner photography', 'day': 'Saturday', 'budget_sgd': 50}
                          if state['scenario_id'] == 'photography' else
+                         {'goal': 'retail sales/inventory analysis; explore the SMU programme, then shorter options',
+                          'salary_disclosure': 'hypothetical S$2500–3499 monthly range only in public turn 2',
+                          'budget_disclosure': 'S$3000 total training limit and weekends only in public turn 3'} if retail else
                          {'goal': 'learn to play board games', 'followup': 'Is video-game design the same as playing board games?',
                           'expected': 'Honest no-match in this frozen catalogue; no design-course substitution.'})
-            write_json(folder / 'situation.json', {'kind': 'authored situation; Designer intentionally skipped', **situation,
+            write_json(folder / 'situation.json', {'kind': 'source-seeded Designer overlay with authored disclosure protocol' if retail else 'authored situation; Designer intentionally skipped', **situation,
                        'disclosure': 'The advisor receives only what the public user messages state.'})
             # Exact resolved native UserSim input stays private; not an advisor input.
             preset = PRESETS[state['scenario_id']]
-            rows = prepare_rows(state['spec']['source'], 1, preset.public_turns, source_ids=[source['source_id']],
-                                story_id=state['scenario_id'], profiles_selection=lock)
-            write_json(folder / 'resolved-inputs.json', rows)
             persist('build')
             from .course_mcp import TOOL_NAMES
             allowed_tools = TOOL_NAMES if preset.harness == 'deepagents' else [f'mcp__catalogue__{name}' for name in TOOL_NAMES]
-            async with Gateway(budget, mode='live', model_route='fixed', allowed_tool_names=allowed_tools).serving() as gateway:
+            public_context = RetailPublicContext(folder) if retail else None
+            async with Gateway(budget, mode='live', model_route='fixed', allowed_tool_names=allowed_tools,
+                               on_request=public_context.audit if public_context else None).serving() as gateway:
+                selected = await create_retail_situation(lock, folder, gateway) if retail else lock
+                rows = prepare_rows(state['spec']['source'], 1, preset.public_turns, source_ids=[source['source_id']],
+                                    story_id=state['scenario_id'], profiles_selection=selected)
+                write_json(folder / 'resolved-inputs.json', rows)
                 native = NativeSandbox(run_id, folder / state['episode_id'], gateway, catalogue=catalogue,
                                        scenario_id=state['scenario_id'], harness=preset.harness)
                 async with native:
                     state['native_thread_id'] = native.thread_id
                     persist('run')
-                    result = await hosted_episode(rows[0], gateway, PublicTarget(native, folder, state['scenario_id']), event,
+                    result = await hosted_episode(rows[0], gateway, PublicTarget(native, folder, state['scenario_id'], public_context), event,
                                                    on_activation=activation)
                     write_json(folder / 'usersim-result.json', result)
                     outcome = result.get('simulation_outcome', {})
@@ -320,17 +352,48 @@ class JourneyService:
                     state['usersim_outcome'] = outcome
                     if outcome.get('status', 'ok') not in {'ok', 'max_turns_reached'}:
                         state['usersim_notice'] = 'Inspect the native UserSim outcome; transport completion is separate.'
-                    if state['scenario_id'] == 'boardgames':
-                        write_json(folder / 'guardrails-probe.json', await native.probe_safeguards())
+                    if state['scenario_id'] != 'photography':
+                        probe = await native.probe_safeguards()
+                        write_json(folder / 'guardrails-probe.json', probe)
+                        if probe['native_result']['status'] != 'blocked':
+                            raise RuntimeError('The separate native Guardrails negative probe was not blocked')
             persist('evaluate')
             from .journey_checks import evaluate_boardgames, evaluate_photography
             tools = native_tool_records(folder / state['episode_id'] / 'native')
-            evaluator = evaluate_photography if state['scenario_id'] == 'photography' else evaluate_boardgames
-            evaluation = evaluator(conversation, catalogue, tools,
-                                   json.loads((folder / 'source-lock.json').read_text()))
+            if retail:
+                from .retail_checks import evaluate_retail
+                from .retail_experiments import score_with_helix, durable_evaluation, compare_routing
+                from .retail_managed import run_managed_retail
+                evaluation = await score_with_helix(evaluate_retail(conversation, catalogue, tools,
+                    json.loads((folder / 'source-lock.json').read_text()), folder), folder)
+                write_json(folder / 'evaluation.json', evaluation)
+                # Saved scoring, routing and managed execution each retain their
+                # own condition/evidence. A failure never becomes a mock pass.
+                state['verification'] = {}
+                for key, operation in [('helix_job', lambda: durable_evaluation(folder)),
+                    ('routing', lambda: compare_routing(state, folder, budget, conversation, catalogue)),
+                    ('managed', lambda: run_managed_retail(state, folder, budget, catalogue))]:
+                    persist('routing' if key == 'routing' else 'deploy' if key == 'managed' else 'evaluate')
+                    try:
+                        evidence = await operation()
+                        state['verification'][key] = {'verified': evidence.get('verified', evidence.get('status') == 'completed'),
+                                                       'status': evidence.get('status', 'recorded'),
+                                                       **{name: evidence[name] for name in ['diagnostic_verified', 'provider_notice'] if name in evidence}}
+                    except Exception as exc:
+                        state['verification'][key] = {'verified': False, 'error_type': type(exc).__name__,
+                                                       'error': str(sanitize(str(exc)))[:1000]}
+                        if key in {'routing', 'managed'} and not self._auxiliary_cleanup(state, folder):
+                            raise
+                    persist()
+            else:
+                evaluator = evaluate_photography if state['scenario_id'] == 'photography' else evaluate_boardgames
+                evaluation = evaluator(conversation, catalogue, tools,
+                                       json.loads((folder / 'source-lock.json').read_text()))
             write_json(folder / 'evaluation.json', evaluation)
             state.update(status='completed' if all(r['status'] == 'pass' for r in evaluation['rows']) else 'failed',
                          evaluation_passed=evaluation['passed'], evaluation_total=evaluation['total'])
+            if retail and not all(result.get('verified') for result in state.get('verification', {}).values()):
+                state['status'] = 'failed'
         except asyncio.CancelledError:
             state.update(status='cancelled', error='Cancelled explicitly; partial evidence is preserved.')
         except Exception as exc:
@@ -343,11 +406,29 @@ class JourneyService:
             confirmed = bool(cleanup.is_file() and json.loads(cleanup.read_text()).get('native_absence_confirmed'))
             if native is None:
                 confirmed = True  # No native creation was attempted.
+            confirmed = confirmed and self._auxiliary_cleanup(state, folder)
             state.update(cleanup_confirmed=confirmed, ended_at=now())
             if not confirmed:
                 state.update(status='failed', recovery_required=True)
             persist('deploy')
             self._release(run_id, confirmed)
+
+    @staticmethod
+    def _auxiliary_cleanup(state, folder):
+        for identity in state.get('comparison_conditions', []):
+            work = folder / 'comparisons' / str(uuid.UUID(identity)) / 'runtime'
+            if (work / 'sandbox-identity.json').exists():
+                cleanup = work / 'cleanup.json'
+                if not cleanup.is_file() or not json.loads(cleanup.read_text()).get('native_absence_confirmed'):
+                    return False
+        managed = state.get('managed_condition_id')
+        if managed:
+            work = folder / 'managed' / str(uuid.UUID(managed)) / 'condition.json'
+            if work.is_file():
+                receipt = json.loads(work.read_text())
+                if receipt.get('resource_creation_attempted') and not receipt.get('cleanup_confirmed'):
+                    return False
+        return True
 
     async def cancel(self, run_id):
         state = self.get(run_id)
@@ -381,6 +462,16 @@ class JourneyService:
             if native.identity.get('name'):
                 native.name = native.identity['name']
         await native.cleanup_native()
+        for other_id in state.get('comparison_conditions', []):
+            other = NativeSandbox(other_id, self.folder(run_id) / 'comparisons' / str(uuid.UUID(other_id)) / 'runtime', None,
+                                  catalogue=self.folder(run_id) / 'catalogue-snapshot.json', scenario_id='dreamjob')
+            record = other.folder / 'sandbox-identity.json'
+            if record.is_file():
+                other.identity = json.loads(record.read_text())
+                other.name = other.identity.get('name', other.name)
+                await other.cleanup_native()
+        if not self._auxiliary_cleanup(state, self.folder(run_id)):
+            raise ValueError('The managed condition still needs its recorded Helix session/deployment recovery; ownership is retained')
         state.update(status='interrupted' if state['status'] not in TERMINAL else state['status'],
                      cleanup_confirmed=True, recovery_required=False, recovered_at=now())
         state.pop('owned_by_this_worker', None)
@@ -399,6 +490,8 @@ class JourneyService:
             if not path.is_file() or path.is_symlink() or path.name not in ARTIFACT_NAMES:
                 continue
             relative = path.relative_to(folder).as_posix()
+            if 'designer-private' in path.relative_to(folder).parts:
+                continue
             if any(parent.is_symlink() for parent in path.parents if parent.is_relative_to(folder)):
                 continue
             artifact_id = hashlib.sha256((run_id + ':' + relative).encode()).hexdigest()[:24]

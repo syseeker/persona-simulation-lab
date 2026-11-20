@@ -71,11 +71,14 @@
       const used=members.some(m=>componentUsed(m,options.scenario));
       const text=`${title} ${members.map(m=>componentTitle(m,options.scenario)).join(' ')} ${operations.map(o=>o.title).join(' ')}`.toLocaleLowerCase();
       let badge='';
-      const recorded=['photography','boardgames'].includes(options.scenario);
+      const recorded=['photography','boardgames','dreamjob'].includes(options.scenario);
       if(!used)badge='Not used in this preset';
       else if(!recorded&&['designer','routing','guardrails','helix','platform'].includes(node.id))badge='Planned · no scenario evidence';
       else if(node.id==='guardrails')badge='Native checks recorded';
-      else if(node.id==='openshell')badge=recorded?'Verified standalone boundary':preset(options.scenario).helix?'Planned managed boundary':'Planned standalone boundary';
+      else if(node.id==='openshell')badge=recorded?(preset(options.scenario).helix?'Standalone + managed verified':'Verified standalone boundary'):preset(options.scenario).helix?'Planned managed boundary':'Planned standalone boundary';
+      else if(node.id==='routing'&&options.scenario==='dreamjob')badge='Native diagnostic · requested pool incomplete';
+      else if(node.id==='helix'&&options.scenario==='dreamjob')badge='Local scores + durable job recorded';
+      else if(node.id==='platform'&&options.scenario==='dreamjob')badge='Managed session + cleanup verified';
       else if(node.id==='harness')badge='Selected harness';
       return {...node,data:{title,kind:simple?.kind||component.kind,subtitle:simple?.purpose,
         modules,active:options.focus&&isActive,dim:(!!query&&!text.includes(query))||(options.focus&&!isActive),
@@ -92,7 +95,7 @@
       else grouped.set(id,{source,target,label:options.detail?e.label:({
         'person-situation':'Same person + learning goal','situation-learner':'Private test context',
         'learner-advisor':'Public learner message','advisor-learner':'Public advisor reply',
-        'harness-tools':'Course lookup / facts','harness-model':'Model request / response',
+        'harness-tools':'Course tool connection / facts','harness-model':'Model connection / calls',
         'harness-relay':'Observed execution','supervisor-workload':'Enforced access',
       } as Record<string,string>)[e.id]||e.label,kind:e.kind,ops:[...e.operations]});
     }

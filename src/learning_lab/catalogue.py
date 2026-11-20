@@ -40,6 +40,7 @@ class Course(StrictModel):
     weekdays: list[int] | None = None
     schedule_note: str = "Confirm the next intake and timetable."
     duration_hours: float | None = None
+    duration_months: int | None = Field(default=None, ge=1)
     prerequisites: list[str] = Field(default_factory=list)
     prerequisite_note: str = "Confirm entry requirements with the provider."
     languages: list[str] | None = None
@@ -170,7 +171,7 @@ def search_courses(
         )
     matches.sort(key=lambda m: (-m["score"], m["course"]["id"]))
     return {
-        "snapshot_date": "2026-11-10",
+        "snapshot_date": max(c.captured_on for c in all_courses(catalogue_path)).isoformat(),
         "as_of": today.isoformat(),
         "matches": matches[: max(1, min(limit, 5))],
         "excluded": excluded,

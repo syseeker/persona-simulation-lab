@@ -1,0 +1,10 @@
+{
+  "original_sha256": "0ef70355417745611d26f1469d35728c1430454f8f10936a34682e38726451dc",
+  "source": "ngc",
+  "source_revision": "0.0.1",
+  "overlay_id": "c924d331-37d8-4067-a019-c5ddbf6cde44",
+  "derived_sha256": "27f314ca93117bda487e0f0c83576fdd03e6cc895c3e6b74d6eac3a029c8155c",
+  "original_preserved": true,
+  "explicit_selection": true,
+  "private_context_is_not_advisor_input": true
+}

@@ -1,0 +1,879 @@
+{
+  "source": "native-helix-intake",
+  "status": "observed",
+  "session_identity": {
+    "resource_name": "citizen-retail-68a30de7aab0-review",
+    "entity_id": "agent-session-MZHC6GZ8Lg1s4ADnThHN54",
+    "session_uuid": "a6788d52-201c-452f-93ed-9db968a61a5f",
+    "header_identity": "a6788d52-201c-452f-93ed-9db968a61a5f"
+  },
+  "spans": [
+    {
+      "span_id": "span-7192977825844d43bba7c3b977c5728e",
+      "parent_span_id": "span-8778acdcfeaa468de53cc8b5b74aa4a1",
+      "trace_id": "trace-522ac74b5fc2f40c08df6adcfeb62cef",
+      "kind": "LLM",
+      "name": "citizen-retail-68a30de7aab0-agent",
+      "source": "atif",
+      "status": "success",
+      "error_type": null,
+      "started_at": "2026-11-20T19:09:24.443000",
+      "ended_at": "2026-11-20T19:09:27.394000",
+      "provider": null,
+      "model": "lab-advisor-fixed",
+      "tool_name": null,
+      "input_tokens": 6333,
+      "output_tokens": 511,
+      "total_tokens": 6844
+    },
+    {
+      "span_id": "span-36fc24f73b427e1eeb558931f09805c3",
+      "parent_span_id": "span-8778acdcfeaa468de53cc8b5b74aa4a1",
+      "trace_id": "trace-522ac74b5fc2f40c08df6adcfeb62cef",
+      "kind": "LLM",
+      "name": "citizen-retail-68a30de7aab0-agent",
+      "source": "atif",
+      "status": "success",
+      "error_type": null,
+      "started_at": "2026-11-20T19:09:22.382000",
+      "ended_at": "2026-11-20T19:09:23.076000",
+      "provider": null,
+      "model": "lab-advisor-fixed",
+      "tool_name": null,
+      "input_tokens": 6309,
+      "output_tokens": 39,
+      "total_tokens": 6348
+    },
+    {
+      "span_id": "span-0d4236503bd8c4d6d46ec9583ef94fd7",
+      "parent_span_id": "span-36fc24f73b427e1eeb558931f09805c3",
+      "trace_id": "trace-522ac74b5fc2f40c08df6adcfeb62cef",
+      "kind": "TOOL",
+      "name": "compare_courses",
+      "source": "atif",
+      "status": "success",
+      "error_type": null,
+      "started_at": "2026-11-20T19:09:22.382000",
+      "ended_at": null,
+      "provider": null,
+      "model": "lab-advisor-fixed",
+      "tool_name": "compare_courses",
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null
+    },
+    {
+      "span_id": "span-357855cc5cb716708b741694a78dd6cc",
+      "parent_span_id": "span-8778acdcfeaa468de53cc8b5b74aa4a1",
+      "trace_id": "trace-522ac74b5fc2f40c08df6adcfeb62cef",
+      "kind": "LLM",
+      "name": "citizen-retail-68a30de7aab0-agent",
+      "source": "atif",
+      "status": "success",
+      "error_type": null,
+      "started_at": "2026-11-20T19:09:20.348000",
+      "ended_at": "2026-11-20T19:09:21.091000",
+      "provider": null,
+      "model": "lab-advisor-fixed",
+      "tool_name": null,
+      "input_tokens": 4783,
+      "output_tokens": 72,
+      "total_tokens": 4855
+    },
+    {
+      "span_id": "span-d13d11cb7ceea0500b88c8f48415dd2c",
+      "parent_span_id": "span-357855cc5cb716708b741694a78dd6cc",
+      "trace_id": "trace-522ac74b5fc2f40c08df6adcfeb62cef",
+      "kind": "TOOL",
+      "name": "search_courses",
+      "source": "atif",
+      "status": "success",
+      "error_type": null,
+      "started_at": "2026-11-20T19:09:20.348000",
+      "ended_at": null,
+      "provider": null,
+      "model": "lab-advisor-fixed",
+      "tool_name": "search_courses",
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null
+    },
+    {
+      "span_id": "span-f9c6f5d1c561605701eca6729f50c93a",
+      "parent_span_id": "span-8778acdcfeaa468de53cc8b5b74aa4a1",
+      "trace_id": "trace-522ac74b5fc2f40c08df6adcfeb62cef",
+      "kind": "LLM",
+      "name": "citizen-retail-68a30de7aab0-agent",
+      "source": "atif",
+      "status": "success",
+      "error_type": null,
+      "started_at": "2026-11-20T19:09:18.372000",
+      "ended_at": "2026-11-20T19:09:19.045000",
+      "provider": null,
+      "model": "lab-advisor-fixed",
+      "tool_name": null,
+      "input_tokens": 3258,
+      "output_tokens": 71,
+      "total_tokens": 3329
+    },
+    {
+      "span_id": "span-6367f7fd194c3174799bb8a1c8412a45",
+      "parent_span_id": "span-f9c6f5d1c561605701eca6729f50c93a",
+      "trace_id": "trace-522ac74b5fc2f40c08df6adcfeb62cef",
+      "kind": "TOOL",
+      "name": "search_courses",
+      "source": "atif",
+      "status": "success",
+      "error_type": null,
+      "started_at": "2026-11-20T19:09:18.372000",
+      "ended_at": null,
+      "provider": null,
+      "model": "lab-advisor-fixed",
+      "tool_name": "search_courses",
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null
+    },
+    {
+      "span_id": "span-bd5dd0d780a35495c671041e0aad2f3a",
+      "parent_span_id": "span-8778acdcfeaa468de53cc8b5b74aa4a1",
+      "trace_id": "trace-522ac74b5fc2f40c08df6adcfeb62cef",
+      "kind": "AGENT",
+      "name": "user-1",
+      "source": "atif",
+      "status": "success",
+      "error_type": null,
+      "started_at": "2026-11-20T19:09:16.365317",
+      "ended_at": null,
+      "provider": null,
+      "model": "citizen-retail-advisor",
+      "tool_name": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null
+    },
+    {
+      "span_id": "span-44c6f19cb9a9fc4845b35ef0b9dcfd57",
+      "parent_span_id": "span-8778acdcfeaa468de53cc8b5b74aa4a1",
+      "trace_id": "trace-522ac74b5fc2f40c08df6adcfeb62cef",
+      "kind": "LLM",
+      "name": "citizen-retail-68a30de7aab0-agent",
+      "source": "atif",
+      "status": "success",
+      "error_type": null,
+      "started_at": "2026-11-20T19:09:16.365000",
+      "ended_at": "2026-11-20T19:09:17.061000",
+      "provider": null,
+      "model": "lab-advisor-fixed",
+      "tool_name": null,
+      "input_tokens": 1733,
+      "output_tokens": 71,
+      "total_tokens": 1804
+    },
+    {
+      "span_id": "span-806baedd23bd3963b05359ccc85468b7",
+      "parent_span_id": "span-44c6f19cb9a9fc4845b35ef0b9dcfd57",
+      "trace_id": "trace-522ac74b5fc2f40c08df6adcfeb62cef",
+      "kind": "TOOL",
+      "name": "search_courses",
+      "source": "atif",
+      "status": "success",
+      "error_type": null,
+      "started_at": "2026-11-20T19:09:16.365000",
+      "ended_at": null,
+      "provider": null,
+      "model": "lab-advisor-fixed",
+      "tool_name": "search_courses",
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null
+    },
+    {
+      "span_id": "span-8778acdcfeaa468de53cc8b5b74aa4a1",
+      "parent_span_id": "span-6835599ac902c1e5497d1e479f2cbc39",
+      "trace_id": "trace-522ac74b5fc2f40c08df6adcfeb62cef",
+      "kind": "AGENT",
+      "name": "citizen-retail-68a30de7aab0-agent",
+      "source": "atif",
+      "status": "success",
+      "error_type": null,
+      "started_at": "2026-11-20T19:09:16.365000",
+      "ended_at": "2026-11-20T19:09:27.394001",
+      "provider": null,
+      "model": "citizen-retail-advisor",
+      "tool_name": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null
+    },
+    {
+      "span_id": "span-6835599ac902c1e5497d1e479f2cbc39",
+      "parent_span_id": "span-7e8904992c2585f8b063a47259e0e899",
+      "trace_id": "trace-522ac74b5fc2f40c08df6adcfeb62cef",
+      "kind": "LLM",
+      "name": "citizen-retail-68a30de7aab0-agent",
+      "source": "atif",
+      "status": "success",
+      "error_type": null,
+      "started_at": "2026-11-20T19:09:16.346902",
+      "ended_at": null,
+      "provider": null,
+      "model": "citizen-retail-advisor",
+      "tool_name": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null
+    },
+    {
+      "span_id": "span-2fb9f84e30a879d4ebf268dec7dda3f5",
+      "parent_span_id": "span-6835599ac902c1e5497d1e479f2cbc39",
+      "trace_id": "trace-522ac74b5fc2f40c08df6adcfeb62cef",
+      "kind": "TOOL",
+      "name": "DeepAgent",
+      "source": "atif",
+      "status": "success",
+      "error_type": null,
+      "started_at": "2026-11-20T19:09:16.346902",
+      "ended_at": null,
+      "provider": null,
+      "model": "citizen-retail-advisor",
+      "tool_name": "DeepAgent",
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null
+    },
+    {
+      "span_id": "span-7e8904992c2585f8b063a47259e0e899",
+      "parent_span_id": null,
+      "trace_id": "trace-522ac74b5fc2f40c08df6adcfeb62cef",
+      "kind": "AGENT",
+      "name": "citizen-retail-68a30de7aab0-agent",
+      "source": "atif",
+      "status": "success",
+      "error_type": null,
+      "started_at": "2026-11-20T19:09:16.346902",
+      "ended_at": "2026-11-20T19:09:27.394001",
+      "provider": null,
+      "model": "citizen-retail-advisor",
+      "tool_name": null,
+      "input_tokens": null,
+      "output_tokens": null,
+      "total_tokens": null
+    }
+  ],
+  "tools": [
+    {
+      "name": "compare_courses",
+      "source_span_id": "span-0d4236503bd8c4d6d46ec9583ef94fd7",
+      "native_status": "success",
+      "arguments": {
+        "course_ids": [
+          "SF-003",
+          "SF-006"
+        ]
+      },
+      "result": {
+        "id": "SF-003",
+        "title": "Fundamentals of Data Analytics & Visualization using Python",
+        "provider": "National University of Singapore",
+        "kind": "skillsfuture",
+        "summary": "Practise Python data preparation, descriptive statistics and visualisation.",
+        "tags": [
+          "python",
+          "data",
+          "analytics",
+          "visualisation",
+          "coding"
+        ],
+        "source_url": "https://www.stat.nus.edu.sg/fundamentals-of-data-analytics-visualization-using-python/",
+        "captured_on": "2026-11-10",
+        "venue": null,
+        "planning_area": null,
+        "price_min_sgd": null,
+        "price_max_sgd": null,
+        "extra_cost_sgd": null,
+        "cost_note": "Total unsubsidised fee has not been verified; confirm with the provider.",
+        "start_date": null,
+        "end_date": null,
+        "registration_closes": null,
+        "weekdays": null,
+        "schedule_note": "Confirm the next intake and timetable.",
+        "duration_hours": null,
+        "duration_months": null,
+        "prerequisites": [],
+        "prerequisite_note": "Confirm entry requirements with the provider.",
+        "languages": null,
+        "funding_note": "NUS lists SSG funding. Individual subsidy and credit eligibility require official confirmation.",
+        "availability": "unknown",
+        "constraint_notes": []
+      },
+      "evidence_origin": "native_helix_intake",
+      "result_state": "returned"
+    },
+    {
+      "name": "search_courses",
+      "source_span_id": "span-d13d11cb7ceea0500b88c8f48415dd2c",
+      "native_status": "success",
+      "arguments": {
+        "budget_sgd": 3000,
+        "days": [
+          5,
+          6
+        ],
+        "goal": "retail sales and inventory analysis",
+        "kind": "skillsfuture"
+      },
+      "result": {
+        "snapshot_date": "2026-11-21",
+        "as_of": "2026-11-20",
+        "matches": [
+          {
+            "course": {
+              "id": "SF-006",
+              "title": "IT Literacy - Basic Microsoft Excel",
+              "provider": "Institute of Technical Education",
+              "kind": "skillsfuture",
+              "summary": "Develop foundational spreadsheet and Excel skills.",
+              "tags": [
+                "excel",
+                "spreadsheet",
+                "computer",
+                "digital",
+                "office",
+                "data"
+              ],
+              "source_url": "https://www.aic.sg/Age-Well/Learning-and-Volunteerism/Learning-Opportunities/Computer-Skills",
+              "captured_on": "2026-11-10",
+              "venue": null,
+              "planning_area": null,
+              "price_min_sgd": null,
+              "price_max_sgd": null,
+              "extra_cost_sgd": null,
+              "cost_note": "Total unsubsidised fee has not been verified; confirm with the provider.",
+              "start_date": null,
+              "end_date": null,
+              "registration_closes": null,
+              "weekdays": null,
+              "schedule_note": "Confirm the next intake and timetable.",
+              "duration_hours": 7.0,
+              "duration_months": null,
+              "prerequisites": [],
+              "prerequisite_note": "AIC Age Well directory listing; confirm provider age, entry and intake requirements.",
+              "languages": null,
+              "funding_note": "AIC lists SkillsFuture Credit eligibility. Its published subsidised fee does not establish this learner’s entitlement.",
+              "availability": "unknown"
+            },
+            "score": 40,
+            "matched_terms": [
+              "data",
+              "excel",
+              "office",
+              "spreadsheet"
+            ],
+            "confirm": [
+              "Confirm a place is still available",
+              "Confirm personal funding eligibility",
+              "Next intake is unknown",
+              "Total fee is unknown; budget fit is unconfirmed",
+              "Timetable fit is unconfirmed"
+            ]
+          },
+          {
+            "course": {
+              "id": "SF-003",
+              "title": "Fundamentals of Data Analytics & Visualization using Python",
+              "provider": "National University of Singapore",
+              "kind": "skillsfuture",
+              "summary": "Practise Python data preparation, descriptive statistics and visualisation.",
+              "tags": [
+                "python",
+                "data",
+                "analytics",
+                "visualisation",
+                "coding"
+              ],
+              "source_url": "https://www.stat.nus.edu.sg/fundamentals-of-data-analytics-visualization-using-python/",
+              "captured_on": "2026-11-10",
+              "venue": null,
+              "planning_area": null,
+              "price_min_sgd": null,
+              "price_max_sgd": null,
+              "extra_cost_sgd": null,
+              "cost_note": "Total unsubsidised fee has not been verified; confirm with the provider.",
+              "start_date": null,
+              "end_date": null,
+              "registration_closes": null,
+              "weekdays": null,
+              "schedule_note": "Confirm the next intake and timetable.",
+              "duration_hours": null,
+              "duration_months": null,
+              "prerequisites": [],
+              "prerequisite_note": "Confirm entry requirements with the provider.",
+              "languages": null,
+              "funding_note": "NUS lists SSG funding. Individual subsidy and credit eligibility require official confirmation.",
+              "availability": "unknown"
+            },
+            "score": 30,
+            "matched_terms": [
+              "analytics",
+              "data",
+              "visualisation"
+            ],
+            "confirm": [
+              "Confirm a place is still available",
+              "Confirm personal funding eligibility",
+              "Next intake is unknown",
+              "Total fee is unknown; budget fit is unconfirmed",
+              "Timetable fit is unconfirmed"
+            ]
+          },
+          {
+            "course": {
+              "id": "SF-002",
+              "title": "Data Analytics Begins With Me",
+              "provider": "National University of Singapore",
+              "kind": "skillsfuture",
+              "summary": "Build an introductory understanding of data analytics.",
+              "tags": [
+                "data",
+                "analytics",
+                "business",
+                "workplace"
+              ],
+              "source_url": "https://www.stat.nus.edu.sg/education/cet/short-course/",
+              "captured_on": "2026-11-10",
+              "venue": null,
+              "planning_area": null,
+              "price_min_sgd": null,
+              "price_max_sgd": null,
+              "extra_cost_sgd": null,
+              "cost_note": "Total unsubsidised fee has not been verified; confirm with the provider.",
+              "start_date": null,
+              "end_date": null,
+              "registration_closes": null,
+              "weekdays": null,
+              "schedule_note": "Confirm the next intake and timetable.",
+              "duration_hours": null,
+              "duration_months": null,
+              "prerequisites": [],
+              "prerequisite_note": "Confirm entry requirements with the provider.",
+              "languages": null,
+              "funding_note": "NUS lists SSG funding. Individual subsidy and credit eligibility require official confirmation.",
+              "availability": "unknown"
+            },
+            "score": 20,
+            "matched_terms": [
+              "analytics",
+              "data"
+            ],
+            "confirm": [
+              "Confirm a place is still available",
+              "Confirm personal funding eligibility",
+              "Next intake is unknown",
+              "Total fee is unknown; budget fit is unconfirmed",
+              "Timetable fit is unconfirmed"
+            ]
+          }
+        ],
+        "excluded": [
+          {
+            "id": "CC-002",
+            "reason": "Published class days conflict with availability"
+          },
+          {
+            "id": "CC-004",
+            "reason": "Published class days conflict with availability"
+          },
+          {
+            "id": "CC-006",
+            "reason": "Published class days conflict with availability"
+          },
+          {
+            "id": "SF-007",
+            "reason": "Published upper fee including known extras exceeds the budget"
+          }
+        ],
+        "notice": "Curated snapshot. Check the official listing before acting; individual eligibility is unknown."
+      },
+      "evidence_origin": "native_helix_intake",
+      "result_state": "returned"
+    },
+    {
+      "name": "search_courses",
+      "source_span_id": "span-6367f7fd194c3174799bb8a1c8412a45",
+      "native_status": "success",
+      "arguments": {
+        "budget_sgd": 3000,
+        "days": [
+          5,
+          6
+        ],
+        "goal": "retail sales and inventory analysis",
+        "kind": null
+      },
+      "result": {
+        "snapshot_date": "2026-11-21",
+        "as_of": "2026-11-20",
+        "matches": [
+          {
+            "course": {
+              "id": "SF-006",
+              "title": "IT Literacy - Basic Microsoft Excel",
+              "provider": "Institute of Technical Education",
+              "kind": "skillsfuture",
+              "summary": "Develop foundational spreadsheet and Excel skills.",
+              "tags": [
+                "excel",
+                "spreadsheet",
+                "computer",
+                "digital",
+                "office",
+                "data"
+              ],
+              "source_url": "https://www.aic.sg/Age-Well/Learning-and-Volunteerism/Learning-Opportunities/Computer-Skills",
+              "captured_on": "2026-11-10",
+              "venue": null,
+              "planning_area": null,
+              "price_min_sgd": null,
+              "price_max_sgd": null,
+              "extra_cost_sgd": null,
+              "cost_note": "Total unsubsidised fee has not been verified; confirm with the provider.",
+              "start_date": null,
+              "end_date": null,
+              "registration_closes": null,
+              "weekdays": null,
+              "schedule_note": "Confirm the next intake and timetable.",
+              "duration_hours": 7.0,
+              "duration_months": null,
+              "prerequisites": [],
+              "prerequisite_note": "AIC Age Well directory listing; confirm provider age, entry and intake requirements.",
+              "languages": null,
+              "funding_note": "AIC lists SkillsFuture Credit eligibility. Its published subsidised fee does not establish this learner’s entitlement.",
+              "availability": "unknown"
+            },
+            "score": 40,
+            "matched_terms": [
+              "data",
+              "excel",
+              "office",
+              "spreadsheet"
+            ],
+            "confirm": [
+              "Confirm a place is still available",
+              "Confirm personal funding eligibility",
+              "Next intake is unknown",
+              "Total fee is unknown; budget fit is unconfirmed",
+              "Timetable fit is unconfirmed"
+            ]
+          },
+          {
+            "course": {
+              "id": "SF-003",
+              "title": "Fundamentals of Data Analytics & Visualization using Python",
+              "provider": "National University of Singapore",
+              "kind": "skillsfuture",
+              "summary": "Practise Python data preparation, descriptive statistics and visualisation.",
+              "tags": [
+                "python",
+                "data",
+                "analytics",
+                "visualisation",
+                "coding"
+              ],
+              "source_url": "https://www.stat.nus.edu.sg/fundamentals-of-data-analytics-visualization-using-python/",
+              "captured_on": "2026-11-10",
+              "venue": null,
+              "planning_area": null,
+              "price_min_sgd": null,
+              "price_max_sgd": null,
+              "extra_cost_sgd": null,
+              "cost_note": "Total unsubsidised fee has not been verified; confirm with the provider.",
+              "start_date": null,
+              "end_date": null,
+              "registration_closes": null,
+              "weekdays": null,
+              "schedule_note": "Confirm the next intake and timetable.",
+              "duration_hours": null,
+              "duration_months": null,
+              "prerequisites": [],
+              "prerequisite_note": "Confirm entry requirements with the provider.",
+              "languages": null,
+              "funding_note": "NUS lists SSG funding. Individual subsidy and credit eligibility require official confirmation.",
+              "availability": "unknown"
+            },
+            "score": 30,
+            "matched_terms": [
+              "analytics",
+              "data",
+              "visualisation"
+            ],
+            "confirm": [
+              "Confirm a place is still available",
+              "Confirm personal funding eligibility",
+              "Next intake is unknown",
+              "Total fee is unknown; budget fit is unconfirmed",
+              "Timetable fit is unconfirmed"
+            ]
+          },
+          {
+            "course": {
+              "id": "SF-002",
+              "title": "Data Analytics Begins With Me",
+              "provider": "National University of Singapore",
+              "kind": "skillsfuture",
+              "summary": "Build an introductory understanding of data analytics.",
+              "tags": [
+                "data",
+                "analytics",
+                "business",
+                "workplace"
+              ],
+              "source_url": "https://www.stat.nus.edu.sg/education/cet/short-course/",
+              "captured_on": "2026-11-10",
+              "venue": null,
+              "planning_area": null,
+              "price_min_sgd": null,
+              "price_max_sgd": null,
+              "extra_cost_sgd": null,
+              "cost_note": "Total unsubsidised fee has not been verified; confirm with the provider.",
+              "start_date": null,
+              "end_date": null,
+              "registration_closes": null,
+              "weekdays": null,
+              "schedule_note": "Confirm the next intake and timetable.",
+              "duration_hours": null,
+              "duration_months": null,
+              "prerequisites": [],
+              "prerequisite_note": "Confirm entry requirements with the provider.",
+              "languages": null,
+              "funding_note": "NUS lists SSG funding. Individual subsidy and credit eligibility require official confirmation.",
+              "availability": "unknown"
+            },
+            "score": 20,
+            "matched_terms": [
+              "analytics",
+              "data"
+            ],
+            "confirm": [
+              "Confirm a place is still available",
+              "Confirm personal funding eligibility",
+              "Next intake is unknown",
+              "Total fee is unknown; budget fit is unconfirmed",
+              "Timetable fit is unconfirmed"
+            ]
+          }
+        ],
+        "excluded": [
+          {
+            "id": "CC-002",
+            "reason": "Published class days conflict with availability"
+          },
+          {
+            "id": "CC-004",
+            "reason": "Published class days conflict with availability"
+          },
+          {
+            "id": "CC-006",
+            "reason": "Published class days conflict with availability"
+          },
+          {
+            "id": "SF-007",
+            "reason": "Published upper fee including known extras exceeds the budget"
+          }
+        ],
+        "notice": "Curated snapshot. Check the official listing before acting; individual eligibility is unknown."
+      },
+      "evidence_origin": "native_helix_intake",
+      "result_state": "returned"
+    },
+    {
+      "name": "search_courses",
+      "source_span_id": "span-806baedd23bd3963b05359ccc85468b7",
+      "native_status": "success",
+      "arguments": {
+        "budget_sgd": 3000,
+        "days": [
+          5,
+          6
+        ],
+        "goal": "retail sales and inventory analysis",
+        "kind": "community"
+      },
+      "result": {
+        "snapshot_date": "2026-11-21",
+        "as_of": "2026-11-20",
+        "matches": [
+          {
+            "course": {
+              "id": "SF-006",
+              "title": "IT Literacy - Basic Microsoft Excel",
+              "provider": "Institute of Technical Education",
+              "kind": "skillsfuture",
+              "summary": "Develop foundational spreadsheet and Excel skills.",
+              "tags": [
+                "excel",
+                "spreadsheet",
+                "computer",
+                "digital",
+                "office",
+                "data"
+              ],
+              "source_url": "https://www.aic.sg/Age-Well/Learning-and-Volunteerism/Learning-Opportunities/Computer-Skills",
+              "captured_on": "2026-11-10",
+              "venue": null,
+              "planning_area": null,
+              "price_min_sgd": null,
+              "price_max_sgd": null,
+              "extra_cost_sgd": null,
+              "cost_note": "Total unsubsidised fee has not been verified; confirm with the provider.",
+              "start_date": null,
+              "end_date": null,
+              "registration_closes": null,
+              "weekdays": null,
+              "schedule_note": "Confirm the next intake and timetable.",
+              "duration_hours": 7.0,
+              "duration_months": null,
+              "prerequisites": [],
+              "prerequisite_note": "AIC Age Well directory listing; confirm provider age, entry and intake requirements.",
+              "languages": null,
+              "funding_note": "AIC lists SkillsFuture Credit eligibility. Its published subsidised fee does not establish this learner’s entitlement.",
+              "availability": "unknown"
+            },
+            "score": 40,
+            "matched_terms": [
+              "data",
+              "excel",
+              "office",
+              "spreadsheet"
+            ],
+            "confirm": [
+              "Confirm a place is still available",
+              "Confirm personal funding eligibility",
+              "Next intake is unknown",
+              "Total fee is unknown; budget fit is unconfirmed",
+              "Timetable fit is unconfirmed"
+            ]
+          },
+          {
+            "course": {
+              "id": "SF-003",
+              "title": "Fundamentals of Data Analytics & Visualization using Python",
+              "provider": "National University of Singapore",
+              "kind": "skillsfuture",
+              "summary": "Practise Python data preparation, descriptive statistics and visualisation.",
+              "tags": [
+                "python",
+                "data",
+                "analytics",
+                "visualisation",
+                "coding"
+              ],
+              "source_url": "https://www.stat.nus.edu.sg/fundamentals-of-data-analytics-visualization-using-python/",
+              "captured_on": "2026-11-10",
+              "venue": null,
+              "planning_area": null,
+              "price_min_sgd": null,
+              "price_max_sgd": null,
+              "extra_cost_sgd": null,
+              "cost_note": "Total unsubsidised fee has not been verified; confirm with the provider.",
+              "start_date": null,
+              "end_date": null,
+              "registration_closes": null,
+              "weekdays": null,
+              "schedule_note": "Confirm the next intake and timetable.",
+              "duration_hours": null,
+              "duration_months": null,
+              "prerequisites": [],
+              "prerequisite_note": "Confirm entry requirements with the provider.",
+              "languages": null,
+              "funding_note": "NUS lists SSG funding. Individual subsidy and credit eligibility require official confirmation.",
+              "availability": "unknown"
+            },
+            "score": 30,
+            "matched_terms": [
+              "analytics",
+              "data",
+              "visualisation"
+            ],
+            "confirm": [
+              "Confirm a place is still available",
+              "Confirm personal funding eligibility",
+              "Next intake is unknown",
+              "Total fee is unknown; budget fit is unconfirmed",
+              "Timetable fit is unconfirmed"
+            ]
+          },
+          {
+            "course": {
+              "id": "SF-002",
+              "title": "Data Analytics Begins With Me",
+              "provider": "National University of Singapore",
+              "kind": "skillsfuture",
+              "summary": "Build an introductory understanding of data analytics.",
+              "tags": [
+                "data",
+                "analytics",
+                "business",
+                "workplace"
+              ],
+              "source_url": "https://www.stat.nus.edu.sg/education/cet/short-course/",
+              "captured_on": "2026-11-10",
+              "venue": null,
+              "planning_area": null,
+              "price_min_sgd": null,
+              "price_max_sgd": null,
+              "extra_cost_sgd": null,
+              "cost_note": "Total unsubsidised fee has not been verified; confirm with the provider.",
+              "start_date": null,
+              "end_date": null,
+              "registration_closes": null,
+              "weekdays": null,
+              "schedule_note": "Confirm the next intake and timetable.",
+              "duration_hours": null,
+              "duration_months": null,
+              "prerequisites": [],
+              "prerequisite_note": "Confirm entry requirements with the provider.",
+              "languages": null,
+              "funding_note": "NUS lists SSG funding. Individual subsidy and credit eligibility require official confirmation.",
+              "availability": "unknown"
+            },
+            "score": 20,
+            "matched_terms": [
+              "analytics",
+              "data"
+            ],
+            "confirm": [
+              "Confirm a place is still available",
+              "Confirm personal funding eligibility",
+              "Next intake is unknown",
+              "Total fee is unknown; budget fit is unconfirmed",
+              "Timetable fit is unconfirmed"
+            ]
+          }
+        ],
+        "excluded": [
+          {
+            "id": "CC-002",
+            "reason": "Published class days conflict with availability"
+          },
+          {
+            "id": "CC-004",
+            "reason": "Published class days conflict with availability"
+          },
+          {
+            "id": "CC-006",
+            "reason": "Published class days conflict with availability"
+          },
+          {
+            "id": "SF-007",
+            "reason": "Published upper fee including known extras exceeds the budget"
+          }
+        ],
+        "notice": "Curated snapshot. Check the official listing before acting; individual eligibility is unknown."
+      },
+      "evidence_origin": "native_helix_intake",
+      "result_state": "returned"
+    }
+  ],
+  "notice": "Native Intake IDs/parents/status retained. Model prompts/reasoning and arbitrary payloads omitted. A successful span alone does not prove a valid tool result; gateway calls have separate identities."
+}

@@ -1,0 +1,317 @@
+{
+  "kind": "Helix Evals SDK · application-defined criteria",
+  "rows": [
+    {
+      "id": "three-turns",
+      "criterion": "Three public learner/advisor pairs completed",
+      "expected": [
+        3,
+        3
+      ],
+      "actual": [
+        3,
+        3
+      ],
+      "status": "pass",
+      "reason": "Native early stops and incomplete replies are preserved rather than filled in.",
+      "evidence": [
+        "public-conversation.json"
+      ],
+      "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+      "helix_row_index": 0,
+      "helix_score": 1
+    },
+    {
+      "id": "valid-answers",
+      "criterion": "All three replies contain valid public answers",
+      "expected": true,
+      "actual": true,
+      "status": "pass",
+      "reason": "Transport success alone cannot satisfy this criterion.",
+      "evidence": [
+        "public-conversation.json"
+      ],
+      "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+      "helix_row_index": 1,
+      "helix_score": 1
+    },
+    {
+      "id": "original-lock",
+      "criterion": "Source identity/revision/hash are retained",
+      "expected": true,
+      "actual": true,
+      "status": "pass",
+      "reason": "This checks provenance, not demographic coverage or personal entitlement.",
+      "evidence": [
+        "source-lock.json"
+      ],
+      "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+      "helix_row_index": 2,
+      "helix_score": 1
+    },
+    {
+      "id": "salary-disclosure",
+      "criterion": "The salary band first appears in public turn 2",
+      "expected": 2,
+      "actual": 2,
+      "status": "pass",
+      "reason": "The fixed hypothetical band is simulator context until the learner actually discloses it.",
+      "evidence": [
+        "public-conversation.json"
+      ],
+      "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+      "helix_row_index": 3,
+      "helix_score": 1
+    },
+    {
+      "id": "salary-request-boundary",
+      "criterion": "Actual advisor requests respect public disclosure",
+      "expected": true,
+      "actual": true,
+      "status": "pass",
+      "reason": "Actual request bodies are checked before dispatch for the selected hidden salary values; this is not a universal privacy classifier.",
+      "evidence": [
+        "disclosure-audit.jsonl"
+      ],
+      "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+      "helix_row_index": 4,
+      "helix_score": 1
+    },
+    {
+      "id": "salary-not-budget",
+      "criterion": "No training budget is inferred from salary in turn 2",
+      "expected": null,
+      "actual": null,
+      "status": "pass",
+      "reason": "Only an explicit public spending limit can set the tool budget.",
+      "evidence": [
+        "public-constraints.jsonl"
+      ],
+      "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+      "helix_row_index": 5,
+      "helix_score": 1
+    },
+    {
+      "id": "explicit-final-constraints",
+      "criterion": "Turn 3 binds the explicit spending and weekend limit",
+      "expected": {
+        "budget_sgd": 3000.0,
+        "days": [
+          5,
+          6
+        ]
+      },
+      "actual": {
+        "budget_sgd": 3000.0,
+        "days": [
+          5,
+          6
+        ]
+      },
+      "status": "pass",
+      "reason": "Income, provider full fees and explicit training budget are different values.",
+      "evidence": [
+        "public-constraints.jsonl"
+      ],
+      "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+      "helix_row_index": 6,
+      "helix_score": 1
+    },
+    {
+      "id": "published-full-fee",
+      "criterion": "The opening reports the sourced full programme fee",
+      "expected": true,
+      "actual": true,
+      "status": "pass",
+      "reason": "Frozen provider fact: S$20,928. Conditional funding is separate.",
+      "evidence": [
+        "public-conversation.json",
+        "catalogue-snapshot.json"
+      ],
+      "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+      "helix_row_index": 7,
+      "helix_score": 1
+    },
+    {
+      "id": "published-duration",
+      "criterion": "The opening preserves the actual three-month duration",
+      "expected": true,
+      "actual": true,
+      "status": "pass",
+      "reason": "Frozen fact: 3 months / 330 hours. A hypothetical six months cannot replace it.",
+      "evidence": [
+        "public-conversation.json",
+        "catalogue-snapshot.json"
+      ],
+      "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+      "helix_row_index": 8,
+      "helix_score": 1
+    },
+    {
+      "id": "persistent-thread",
+      "criterion": "The three turns use one persistent native thread",
+      "expected": true,
+      "actual": true,
+      "status": "pass",
+      "reason": "This checks the local three-turn condition; managed execution starts a new session.",
+      "evidence": [
+        "public-conversation.json"
+      ],
+      "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+      "helix_row_index": 9,
+      "helix_score": 1
+    },
+    {
+      "id": "sources-1",
+      "criterion": "Turn 1 cited links/IDs belong to the snapshot",
+      "expected": true,
+      "actual": true,
+      "status": "pass",
+      "reason": "Checks exact links and identifiers; uncited natural-language claims still require review.",
+      "evidence": [
+        "public-conversation.json",
+        "catalogue-snapshot.json"
+      ],
+      "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+      "helix_row_index": 10,
+      "helix_score": 1
+    },
+    {
+      "id": "assurances-1",
+      "criterion": "Turn 1 makes no selected outcome/eligibility assurance",
+      "expected": false,
+      "actual": false,
+      "status": "pass",
+      "reason": "Narrow phrase coverage; no blanket certification of financial, employment or endorsement statements.",
+      "evidence": [
+        "public-conversation.json"
+      ],
+      "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+      "helix_row_index": 11,
+      "helix_score": 1
+    },
+    {
+      "id": "sources-2",
+      "criterion": "Turn 2 cited links/IDs belong to the snapshot",
+      "expected": true,
+      "actual": true,
+      "status": "pass",
+      "reason": "Checks exact links and identifiers; uncited natural-language claims still require review.",
+      "evidence": [
+        "public-conversation.json",
+        "catalogue-snapshot.json"
+      ],
+      "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+      "helix_row_index": 12,
+      "helix_score": 1
+    },
+    {
+      "id": "assurances-2",
+      "criterion": "Turn 2 makes no selected outcome/eligibility assurance",
+      "expected": false,
+      "actual": false,
+      "status": "pass",
+      "reason": "Narrow phrase coverage; no blanket certification of financial, employment or endorsement statements.",
+      "evidence": [
+        "public-conversation.json"
+      ],
+      "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+      "helix_row_index": 13,
+      "helix_score": 1
+    },
+    {
+      "id": "sources-3",
+      "criterion": "Turn 3 cited links/IDs belong to the snapshot",
+      "expected": true,
+      "actual": true,
+      "status": "pass",
+      "reason": "Checks exact links and identifiers; uncited natural-language claims still require review.",
+      "evidence": [
+        "public-conversation.json",
+        "catalogue-snapshot.json"
+      ],
+      "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+      "helix_row_index": 14,
+      "helix_score": 1
+    },
+    {
+      "id": "assurances-3",
+      "criterion": "Turn 3 makes no selected outcome/eligibility assurance",
+      "expected": false,
+      "actual": false,
+      "status": "pass",
+      "reason": "Narrow phrase coverage; no blanket certification of financial, employment or endorsement statements.",
+      "evidence": [
+        "public-conversation.json"
+      ],
+      "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+      "helix_row_index": 15,
+      "helix_score": 1
+    },
+    {
+      "id": "unpublished-funding-figures",
+      "criterion": "No unlisted numerical funding rates or annual credit amount",
+      "expected": [],
+      "actual": [],
+      "status": "pass",
+      "reason": "This frozen catalogue publishes no subsidy percentages or annual credit cap. Narrow numerical-claim coverage; other claims need review.",
+      "evidence": [
+        "public-conversation.json",
+        "catalogue-snapshot.json"
+      ],
+      "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+      "helix_row_index": 16,
+      "helix_score": 1
+    },
+    {
+      "id": "output-completion",
+      "criterion": "Advisor model outputs did not exhaust their token ceiling",
+      "expected": true,
+      "actual": true,
+      "status": "pass",
+      "reason": "Native finish reasons distinguish a completed answer/tool call from token truncation. Missing completion evidence is not a pass.",
+      "evidence": [
+        "usage.json"
+      ],
+      "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+      "helix_row_index": 17,
+      "helix_score": 1
+    },
+    {
+      "id": "unknowns-retained",
+      "criterion": "The final reply retains an explicit confirmation/unknown boundary",
+      "expected": true,
+      "actual": true,
+      "status": "pass",
+      "reason": "An unknown fee or timetable is not proof that an alternative fits the budget/weekends.",
+      "evidence": [
+        "public-conversation.json"
+      ],
+      "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+      "helix_row_index": 18,
+      "helix_score": 1
+    },
+    {
+      "id": "native-course-search",
+      "criterion": "A completed actual MCP search is attributable",
+      "expected": true,
+      "actual": true,
+      "status": "pass",
+      "reason": "The frozen catalogue and an application intent log alone are insufficient.",
+      "evidence": [
+        "native-tools.json"
+      ],
+      "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+      "helix_row_index": 19,
+      "helix_score": 1
+    }
+  ],
+  "passed": 20,
+  "total": 20,
+  "coverage": "Saved public pairs, source provenance, actual salary-request audit, explicit constraints, full fee/duration, exact cited sources, selected assurance phrases, uncertainty and native tools. Other semantics and personal eligibility require review.",
+  "inference_calls": 0,
+  "helix_used": true,
+  "native_result": "helix-evaluation.json",
+  "sdk_version": "0.9.1",
+  "metric": "ExactMatchMetric over explicit application-defined values"
+}

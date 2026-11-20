@@ -1,6 +1,7 @@
 """Local Helix SDK scoring, using exact comparisons for transparent boolean criteria."""
 
 import json
+from importlib.metadata import version
 from pathlib import Path
 import sys
 
@@ -31,7 +32,8 @@ def main():
             "criteria": len(selected),
             "passed": sum(r["output"] == r["expected"] for r in selected),
         }
-    print(json.dumps({"engine": "NeMo Helix Evals SDK", "summary": summary, "result_file": str(destination)}))
+    print(json.dumps({"engine": "NeMo Helix Evals SDK", "version": version('nemo-helix'),
+                      "summary": summary, "result_file": str(destination)}))
 
 
 if __name__ == "__main__":

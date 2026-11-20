@@ -1,0 +1,14 @@
+{
+  "engine": "NeMo Data Designer",
+  "version": "0.10.0",
+  "model_calls": 1,
+  "native_output_sha256": "9c69e3a1700ac2bb7f3b0a09c495254078e21bc6b37854dd2994342680b9aae9",
+  "warnings": [
+    {
+      "stage": "profiling",
+      "type": "DataDesignerProfilingError",
+      "error": "🛑 Error profiling dataset: float() argument must be a string or a real number, not 'NAType'"
+    }
+  ],
+  "record_count": 1
+}

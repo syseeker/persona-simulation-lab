@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 RUNTIME_FILES = ('__init__.py', 'settings.py', 'catalogue.py', 'course_mcp.py', 'target.py',
                  'fabric_target.py', 'inference.py', 'outcomes.py', 'evidence.py',
-                 'runtime_profiles.py', 'sandbox_runtime.py', 'behavioural_safeguards.py')
+                 'runtime_profiles.py', 'sandbox_runtime.py', 'behavioural_safeguards.py', 'retail_policy.py')
 
 
 def source_manifest() -> dict:
@@ -67,6 +67,6 @@ def build(image: str) -> dict:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--image", default="citizen-learning-advisor:0.4.0")
+    parser.add_argument("--image", default="citizen-learning-advisor:0.8.0")
     args = parser.parse_args()
     print(json.dumps(build(args.image)))

@@ -4,6 +4,20 @@ This environment is separate from UserSim, Data Designer, local Evals and the
 Hermes adapter. Its exact Helix `0.10.0`, Fabric `0.6.1` and Relay `0.11.0`
 versions are recorded in `uv.lock`. No Platform starts merely by opening the UI.
 
+The current retail preset uses a **new condition-owned** provider, public-preset
+environment, registration, deployment and session. It packages
+`citizen-retail-helix:0.4.0` with public S$3,000/weekend constraints, invokes it
+through the admission gateway and verifies removal of every owned resource.
+It does not replace older registrations or resume the local UserSim memory.
+See [retail integration](../../docs/retail-integration.md) for the executed path,
+native Intake projection, Guardrails location and remaining routing limits.
+
+`retail_evaluate.py` also submits saved criteria as an actual durable Helix job;
+it performs no response generation. `build_evals_image.py` supplies the local
+development task image from this environment's frozen dependencies when the
+configured placeholder is absent. It refuses to replace an unowned image.
+Use the release-matched official task image in other installations.
+
 ```bash
 uv sync --project integrations/platform --locked --python 3.12
 integrations/platform/.venv/bin/python integrations/platform/contract_check.py

@@ -1,20 +1,31 @@
 """Read-only MCP surface shared by the direct and Fabric targets."""
 
 from mcp.server.fastmcp import FastMCP
-from typing import Literal
+from typing import Annotated
 import hashlib
 import os
 from pathlib import Path
 import re
 import httpx
+from pydantic import Field
 from .catalogue import Preferences, get_course, search_courses as match
 
 mcp = FastMCP("Singapore learning catalogue")
 TOOL_NAMES = ["search_courses", "get_course_details", "compare_courses"]
 
 
-def normalize_days(days: list[int] | str | None) -> list[int] | None:
+def normalize_days(days: list[int | str] | str | None) -> list[int] | None:
     """Accept readable weekdays without treating an invalid value as unrestricted."""
+    if isinstance(days, list):
+        normalized = []
+        for day in days:
+            if isinstance(day, str):
+                normalized.extend(normalize_days(day))
+            elif isinstance(day, int) and not isinstance(day, bool) and day in range(7):
+                normalized.append(day)
+            else:
+                raise ValueError('Days must be weekday names or Monday=0 through Sunday=6')
+        return list(dict.fromkeys(normalized))
     if not isinstance(days, str):
         return days
     names = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
@@ -76,33 +87,34 @@ def bound_preferences(values: dict) -> Preferences:
 def search_courses(
     goal: str,
     budget_sgd: float | None = None,
-    days: list[int] | str | None = None,
+    days: list[int | str] | str | None = None,
     planning_area: str | None = None,
     known_skills: list[str] | None = None,
-    kind: Literal["skillsfuture", "community"] | None = None,
+    kind: Annotated[str | None, Field(json_schema_extra={'enum': ['skillsfuture', 'community', None]})] = None,
 ) -> dict:
     """Find up to five sourced courses; preserve unknown fees, schedules and eligibility.
 
     days uses Monday=0 through Sunday=6, e.g. [5] for Saturday. Weekday names such
     as "Saturday" or "Saturday, Sunday" are also accepted and normalized.
+    kind accepts "skillsfuture", "community" or JSON null, never the string
+    "none". Invalid domain input returns an explicit error, not a no-match.
     """
     try:
+        # Validate domain values inside the tool so maintained harnesses can
+        # inspect a structured error and repair a model argument. Do not coerce
+        # "none" into an unrestricted search, even with a trusted preset.
+        normalized = Preferences(goal=goal, budget_sgd=budget_sgd, days=normalize_days(days),
+                                 planning_area=planning_area, known_skills=known_skills, kind=kind)
         return match(
             bound_preferences(
-                dict(
-                    goal=goal,
-                    budget_sgd=budget_sgd,
-                    days=normalize_days(days),
-                    planning_area=planning_area,
-                    known_skills=known_skills,
-                    kind=kind,
-                )
+                normalized.model_dump(mode='json')
             )
         )
     except ValueError as exc:
         return {
             "error": str(exc),
-            "hint": "Use Monday=0 through Sunday=6. Correct invalid inputs before retrying.",
+            "hint": "Correct invalid inputs before retrying: days use Monday=0 through Sunday=6; kind is skillsfuture, community or JSON null. This error is not a catalogue no-match.",
+            "error_kind": "invalid_input",
             "matches": [],
         }
 

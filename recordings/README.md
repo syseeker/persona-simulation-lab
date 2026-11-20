@@ -28,7 +28,7 @@ The [review companion](guide-context/photography/7863c607-cb99-4a31-b60c-381bf20
 
 ## Retail learning
 
-No executed recording is installed yet. Its UI remains planned until this implementation gate has its own verified pack.
+[Curated recording](dreamjob/8542330d-d6df-494e-8509-d81a5841d69e/manifest.json) and [teaching companion](guide-context/dreamjob/8542330d-d6df-494e-8509-d81a5841d69e/manifest.json): source-seeded Designer overlay, three public UserSim turns, salary-disclosure audits, fixed Fabric/Deep Agents baseline, 20/20 native Helix-scored criteria, a completed durable job, native Guardrails and a separate cleaned-up Helix/OpenShell session. Overall status remains **failed** because both requested Gemma/GLM comparison conditions timed out. The separate reachable-Nemotron comparison completed with 20/20 checks per condition and six native Switchyard decisions. Its success does not verify the requested pool. Small successful endpoint probes do not establish full-context completion. Native Intake projections retain actual IDs/statuses and decoded public tool facts; arbitrary prompts/reasoning remain private.
 
 ## Publication boundary
 
@@ -41,7 +41,7 @@ ownership and arbitrary native payloads are excluded. Dataset distribution links
 and original hashes identify the source without redistributing its rows.
 
 Use `uv run python scripts/export_guide_recording.py RUN_ID --note 'Review reason'`
-only for a terminal, cleaned-up photography condition. The exporter refuses to
+only for a terminal, cleaned-up scenario condition. The exporter refuses to
 overwrite an existing pack. Review the output and scan for secrets/private data
 before staging. Run `uv run python scripts/check_docs.py`, the recording tests
 and the regular application checks before publishing to `dev`.

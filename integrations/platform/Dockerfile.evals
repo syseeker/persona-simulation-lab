@@ -1,0 +1,10 @@
+# Native Helix tasks use the same pinned 0.10.0 SDK as the managed agent.
+# This image contains only public application code/facts, never a test persona.
+FROM citizen-retail-helix:0.1.0
+LABEL citizen.lab.role="retail-evaluation-tasks" citizen.lab.owner="persona-simulation-lab"
+USER root
+COPY requirements.txt /tmp/retail-evaluation-requirements.txt
+RUN --mount=type=cache,id=uv_cache,target=/root/.cache/uv,sharing=locked \
+    uv pip install --python /workspace/.venv/bin/python --require-hashes \
+    -r /tmp/retail-evaluation-requirements.txt
+ENTRYPOINT ["python", "-m", "nemo_evals.tasks.evaluate"]

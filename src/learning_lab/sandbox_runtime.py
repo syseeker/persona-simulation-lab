@@ -27,6 +27,7 @@ class ControlChannel:
     def __init__(self, output):
         self.output = output
         self.pending = {}
+        self.model_timeout = 65
 
     def emit(self, value):
         self.output.write(json.dumps(value, default=str) + '\n')
@@ -38,7 +39,7 @@ class ControlChannel:
         self.pending[key] = future
         self.emit({'type': 'model_call', 'id': key, 'payload': payload})
         try:
-            return await asyncio.wait_for(future, 65)
+            return await asyncio.wait_for(future, self.model_timeout)
         finally:
             self.pending.pop(key, None)
 
@@ -110,6 +111,18 @@ async def serve():
                         target = FabricTarget(gateway, RUN / 'workspace', request['model'],
                                               catalogue_path=RUN / 'catalogue-snapshot.json',
                                               harness=harness, relay=True, model_route=route, base_dir=RUN)
+                        if scenario == 'dreamjob':
+                            target.config.runtime.timeout_seconds = 600
+                            channel.model_timeout = 185
+                            if request['model'] in {'lab-advisor-candidate', 'lab-advisor-routed'}:
+                                # The comparison pool includes GLM, whose public
+                                # API accepts low/high/max rather than "none".
+                                # Apply the same supported adapter setting to
+                                # both comparison conditions and retain it in
+                                # the native Fabric configuration receipt.
+                                target.config.harness.settings['reasoning_effort'] = 'low'
+                                target.config.models['default'].max_tokens = 384
+                                channel.model_timeout = 305
                         if scenario != 'photography':
                             from .behavioural_safeguards import BehaviouralSafeguards
                             safeguards = await BehaviouralSafeguards(RUN).__aenter__()
@@ -129,6 +142,9 @@ async def serve():
                                 'is different from learning to play board games; do not substitute a design class. '
                                 'A no-match means this dated snapshot has no supported listing, not that no class exists anywhere.'
                             )
+                        else:
+                            from .retail_policy import instructions
+                            target.config.instructions.system.content += instructions()
                         await target.__aenter__()
                         manifest = json.loads(Path('/opt/lab/image-manifest.json').read_text())
                         channel.emit({'id': key, 'result': {'ready': True, 'thread_id': target.thread_id,

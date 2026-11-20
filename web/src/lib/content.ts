@@ -395,21 +395,21 @@ export const scenarios: Scenario[] = [
       guardrails: true,
       helix: true,
       execution: 'managed',
-      baseline: 'Switchyard via LiteLLM · illustrative Gemma / GLM candidates; no native decision',
+      baseline: 'Fixed Nemotron baseline · separate Switchyard comparisons via LiteLLM',
       constraints: 'Salary band private until turn 2 · S$3,000 training budget and weekends stated in turn 3',
       lesson: 'Keep generated context private until disclosure and compare routing without changing the learner or harness.',
     },
     turns: [
       {
-        learner: 'My dream is to work at UNIQLO or Decathlon. I want to learn skills for retail sales and inventory analysis. Would a data programme lasting about six months and costing S$20,000 be a good learning path?',
-        advisor: 'I can help you investigate learning options, but I cannot verify vacancies or those employers’ requirements from this course catalogue. Treat six months and S$20,000 as a hypothetical example, not a verified provider listing. What skills do you want to build? If useful, share a budget or a monthly income band that you are comfortable disclosing.',
+        learner: 'I want to learn retail sales and inventory analysis, using brands such as UNIQLO or Decathlon as familiar examples. What does the SMU data communications and visualisation programme cover, how long is it, and what is its full fee?',
+        advisor: 'The dated provider snapshot lists S$20,928 over three months, with 330 learning hours. It covers data preparation, visualisation and dashboards. Personal funding eligibility and the next intake require confirmation. These learning interests establish no employer endorsement or hiring outcome.',
       },
       {
         learner: 'My hypothetical gross monthly salary band is S$2,500–3,499. I want to start with spreadsheets for sales and inventory, and I have not decided my training budget.',
-        advisor: 'That helps explain your context, but salary is not a spending limit. The hypothetical S$20,000 fee divided over six months is about S$3,333 per month; that is only arithmetic, not a quoted payment plan or an affordability judgement. What total training budget and study time can you actually commit?',
+        advisor: 'Salary explains your concern but is not a training budget or proof of funding eligibility. What total amount and study schedule would you like me to use when comparing shorter options?',
       },
       {
-        learner: 'My total training budget is S$3,000. I can study on weekends and would prefer shorter options rather than commit to the illustrative six-month, S$20,000 programme.',
+        learner: 'My total training budget is S$3,000. I can study on weekends only and would prefer shorter options.',
         advisor: 'Use S$3,000, weekend availability and shorter study as your stated constraints. Investigate sourced beginner spreadsheet or sales-analysis options and inspect their prerequisites, fees and schedules before recommending one. If the catalogue has no supported match, say so. A course is not a guarantee of a job, a pay rise or employer endorsement.',
       },
     ],
@@ -511,39 +511,39 @@ export const scenarioDetails: Record<ScenarioId, Partial<Record<StageId, Scenari
   },
   dreamjob: {
     persona: {
-      input: 'An authored aspiring retail learner; hypothetical brand interests and salary are simulator context.',
+      input: 'A locked original Singapore persona; derived brand interests and salary remain simulator context.',
       output: 'A stable learning persona with private additions separated from original source facts.',
       description: 'The goal is to learn selected skills towards a dream job. Do not infer actual employer requirements, vacancies or outcomes from brand interests. The advisor must not receive the hidden salary band before public turn 2.',
     },
     situation: {
-      input: 'Retail skill interests; a hypothetical six-month/S$20,000 option; staged salary and budget disclosure.',
+      input: 'Retail skill interests; the sourced SMU programme; staged salary and budget disclosure.',
       output: 'The only preset with Designer preparation: hypothetical brand/salary columns and retained lineage.',
-      description: 'Designer would add brand preferences and the S$2,500–3,499 gross monthly salary band as labelled hypotheses. Salary stays private until turn 2; the S$3,000 budget is explicit only in turn 3. Programme duration/fee are teaching assumptions, not provider facts. This wireframe performs no generation.',
+      description: 'Designer generates labelled brand, salary-band and learning-task hypotheses in a separate derived record. The salary band is a controlled experimental value, not inferred income. Salary stays private until turn 2; the S$3,000 budget is explicit only in turn 3. Generation records and lineage remain distinct from the original persona.',
     },
     run: {
       input: 'Three public turns: ambition/skills → salary band → S$3,000 budget, weekends and shorter options.',
-      output: 'An authored learning conversation that distinguishes salary, budget and unverified employment claims.',
-      description: 'The preset uses Fabric + Deep Agents and illustrates Switchyard through LiteLLM with Gemma/GLM candidates; it contains no actual model decision. The course tools support learning discovery, not job search. Hidden salary must not enter advisor messages before public turn 2.',
+      output: 'A generated learning conversation that distinguishes salary, budget and unverified employment claims.',
+      description: 'The baseline uses Fabric + Deep Agents and fixed Nemotron through LiteLLM. Separate named conditions replay its saved public inputs for routing comparisons. The course tools support learning discovery. Hidden salary must not enter advisor messages before public turn 2.',
     },
     investigate: {
-      input: 'The selected public turn, Designer lineage and attributable model/tool records when implemented.',
+      input: 'The selected public turn, Designer lineage and attributable model/tool records.',
       output: 'A provenance check of salary disclosure, budget origin, model access and any sourced course claim.',
-      description: 'Inspect advisor inputs before and after turn 2. A model must not know the private band early or treat it as a spending limit. Inspect routing separately from Designer preparation; neither candidate labels nor generated context prove a native decision. No transcript or span is observed here.',
+      description: 'Inspect the actual request audit before and after turn 2, native tool results and Relay records. A model must not receive the private band early or treat it as a spending limit. Inspect routing separately from Designer preparation; candidate labels and generated context do not establish a native routing decision.',
     },
     routing: {
       input: 'Frozen retail-learning inputs and Deep Agents harness for an explicit fixed-versus-Switchyard comparison.',
-      output: 'Illustrative candidates: Gemma and GLM. Native decision: null. No selected model or saving is observed.',
-      description: 'Only this story illustrates policy routing through LiteLLM. Keep the scenario, disclosure sequence, catalogue and harness fixed across the named conditions. A real receipt must record the requested alias, actual candidate/selection and native decision. Candidate names here do not imply a complexity heuristic ran or a model was chosen.',
+      output: 'Native model decisions, completed and failed conditions, actual usage and explicit availability limits.',
+      description: 'Within each inventory, fixed and Switchyard conditions use identical public inputs, catalogue, harness and output limit. The requested Gemma/GLM pool and a separate available-Nemotron diagnostic keep independent results. Inspect native metadata and actual responses; a configured candidate or a selected model alone does not establish an improvement.',
     },
     evaluate: {
-      input: 'Saved public turns, hypothetical programme labels and the explicitly disclosed training constraints.',
-      output: 'Planned checks for disclosure timing, supported learning suggestions and no guarantees.',
-      description: 'Check that salary is not leaked before turn 2; salary alone does not establish affordability; and S$3,000/weekends guide the later answer. Flag invented requirements, job placement, endorsement, funding or salary promises. No evaluation passes are supplied here.',
+      input: 'Saved public turns, frozen provider facts, request audit and explicitly disclosed constraints.',
+      output: 'Native Helix row scores, application-defined reasons/coverage and a separate durable job.',
+      description: 'Check disclosure timing, actual fee/duration, explicit budget/weekends, numerical funding claims and truncation. Local SDK scoring and the Platform job read saved criteria without regenerating replies. Narrow exact-match checks do not certify every sentence; native UserSim judges remain separate.',
     },
     deploy: {
       input: 'The reusable application bundle and Helix-managed OpenShell session; private salary stays outside the image.',
-      output: 'A proposed fresh managed conversation with salary entering through public turns only.',
-      description: 'Helix manages registration, deployment, sessions and explicit evaluation jobs. One OpenShell-contained Fabric harness remains alive for all three public turns. Use public context at runtime instead of a scenario-specific image; historical photography records cannot verify this lifecycle.',
+      output: 'A new managed session with selected public budget/weekend constraints, native enforcement evidence and cleanup.',
+      description: 'The local baseline keeps one OpenShell-contained Fabric runtime for its three turns. Helix creates a separate registration/deployment/session using a public preset and fresh memory. It does not resume that local thread or package private persona/salary data. Native policy, Intake and cleanup records identify the new condition.',
     },
   },
 };
@@ -621,13 +621,13 @@ export const faqs: FAQ[] = [
   },
   {
     id: 'routing-receipt', group: 'Execution and evidence', stage: 'routing', component: 'routing',
-    question: 'Did Switchyard actually choose Gemma or GLM in this wireframe?',
-    answer: 'No. Gemma and GLM are illustrative candidates in the dream-job routing lesson. A preview can show a requested alias and candidate pool, but native_decision must remain null with no claimed selected model. Only actual native decision metadata and attributable calls can establish an observed route; no complexity heuristic executes here.',
+    question: 'How do I verify which model Switchyard chose?',
+    answer: 'Open retail learning’s routing lesson and compare the native decision metadata with the returned provider model, usage, reply and evaluation. The requested Gemma/GLM pool and separate available-Nemotron diagnostic retain independent results. Endpoint probes do not establish a completed multi-turn comparison; failures and unknown usage remain visible. A configured pool or an unchanged selected model does not establish an improvement.',
   },
   {
     id: 'app-code', group: 'Execution and evidence', stage: 'investigate', component: 'records',
     question: 'What should each internal module’s code and log links show?',
-    answer: 'The actual pinned SDK call or honestly labelled application-owned logic, plus a repository-relative source reference. A scenario log must belong to its selected condition. This wireframe’s static source excerpts explain ownership but do not prove these authored conversations ran.',
+    answer: 'Open the exact committed application call or configuration in this repository, then the selected scenario’s fixed recording. Each operation explains what to compare and whether the code hash matches the recording. Application-owned selection and validation remain labelled; missing logs never inherit another scenario’s evidence.',
   },
   {
     id: 'sourced-not-complete', group: 'Evaluation and boundaries', stage: 'evaluate', component: 'catalogue',

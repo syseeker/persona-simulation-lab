@@ -82,6 +82,8 @@ def prepare_rows(
             "theme": theme,
             "persona_grounding": True,
         }
+        if story_id == 'dreamjob':
+            data['disclosure_style'] = 'incremental'
         if source != "ngc":
             data.update(behavioral_profile={}, user_interaction_style="neutral")
         overlay = selection.get("overlays", {}).get(person.get("uuid"))

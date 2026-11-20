@@ -1,0 +1,18 @@
+{
+  "id": "c924d331-37d8-4067-a019-c5ddbf6cde44",
+  "hypothesis": true,
+  "fields": {
+    "preferred_brands": [
+      "UNIQLO",
+      "Decathlon"
+    ],
+    "monthly_salary_range_sgd": "2500-3499",
+    "learning_situation": "Analyze retail sales data for a familiar brand, identify inventory trends, and create visual dashboards to support decision-making."
+  },
+  "original_profile_sha256": "0ef70355417745611d26f1469d35728c1430454f8f10936a34682e38726451dc",
+  "selected_as_input": true,
+  "disclosure": {
+    "salary": "public turn 2",
+    "budget_and_schedule": "public turn 3"
+  }
+}

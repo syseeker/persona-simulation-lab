@@ -240,7 +240,7 @@ async def test_unverified_sandbox_cannot_call_provider(tmp_path):
     assert 'unverified' in responses[0]['error']
 
 
-@pytest.mark.parametrize('variant,passes', [('exact-link', True), ('unknown-link', False), ('wrong-day', False), ('fabricated-native', False), ('missing-budget', False), ('invented-area', False), ('correct-area', True), ('wrong-fee', False), ('correct-fee', True), ('wrong-area-field', False), ('correct-area-field', True)])
+@pytest.mark.parametrize('variant,passes', [('exact-link', True), ('unknown-link', False), ('wrong-day', False), ('fabricated-native', False), ('missing-budget', False), ('invented-area', False), ('correct-area', True), ('wrong-fee', False), ('correct-fee', True), ('wrong-area-field', False), ('correct-area-field', True), ('unicode-area-field', True)])
 def test_saved_response_assertions_follow_facts_and_native_provenance(tmp_path, variant, passes):
     from learning_lab.catalogue import freeze_catalogue, search_courses
     from learning_lab.journey_checks import evaluate_photography
@@ -270,6 +270,8 @@ def test_saved_response_assertions_follow_facts_and_native_provenance(tmp_path, 
         reply += '\n**Planning area:** Bukit Timah'
     if variant == 'correct-area-field':
         reply += '\n**Planning area:** Toa Payoh'
+    if variant == 'unicode-area-field':
+        reply += '\nVenue: Toa Payoh West CC (planning area: Toa\u202fPayoh)\n**Fee:** S$10'
     result = evaluate_photography([{'role':'user','content':question}, {'role':'assistant','content':reply}], catalogue, [tool],
                                  {'original_sha256': 'a' * 64, 'source_revision': 'fixture'})
     assert all(row['status'] == 'pass' for row in result['rows']) == passes

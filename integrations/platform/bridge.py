@@ -124,6 +124,9 @@ async def execute(client, operation: str, args: dict) -> dict:
         from configure import configure
 
         return await configure(client, args)
+    if operation in {'retail_setup', 'retail_cleanup'}:
+        from retail_resources import setup, cleanup
+        return await (setup if operation == 'retail_setup' else cleanup)(client, args)
 
     if operation == "package":
         harness, image = args.get("harness"), args.get("image")
@@ -143,6 +146,10 @@ async def execute(client, operation: str, args: dict) -> dict:
         ]
         if args.get("build"):
             command.append("--build")
+        scenario_id = args.get('scenario_id', 'photography')
+        if scenario_id not in {'photography', 'dreamjob'}:
+            raise ValueError('Unknown managed scenario preset')
+        command += ['--scenario', scenario_id]
         process = await asyncio.create_subprocess_exec(
             *command, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
         )
@@ -158,7 +165,7 @@ async def execute(client, operation: str, args: dict) -> dict:
                 "Agent image preparation failed: " + clean(stderr.decode(errors="replace")[-1200:])
             )
         output = json.loads(stdout.decode().strip().splitlines()[-1])
-        bundle = ROOT / "integrations/platform/.bundle" / harness
+        bundle = ROOT / 'integrations/platform/.bundle' / (harness if scenario_id == 'photography' else 'dreamjob-' + harness)
         output["manifest"] = json.loads((bundle / "source-manifest.json").read_text())
         output["agent_config"] = str(bundle / "agent.yaml")
         output["image"] = image
@@ -195,7 +202,10 @@ async def execute(client, operation: str, args: dict) -> dict:
         if harness not in {"deepagents", "hermes"}:
             raise ValueError("Choose the previously packaged deepagents or hermes bundle")
         name = name_of(args) if args.get("name") else f"singapore-learning-advisor-{harness}"
-        config_path = ROOT / "integrations/platform/.bundle" / harness / "agent.yaml"
+        scenario_id = args.get('scenario_id', 'photography')
+        if scenario_id not in {'photography', 'dreamjob'}:
+            raise ValueError('Unknown managed scenario preset')
+        config_path = ROOT / 'integrations/platform/.bundle' / (harness if scenario_id == 'photography' else 'dreamjob-' + harness) / 'agent.yaml'
         if not config_path.is_file():
             raise ValueError("Package the selected agent bundle before registration")
         import yaml
@@ -209,6 +219,13 @@ async def execute(client, operation: str, args: dict) -> dict:
         from nemo_helix_plugin.client.errors import NotFoundError
 
         config = yaml.safe_load(config_path.read_text())
+        if scenario_id == 'dreamjob':
+            import uuid
+            identity = str(uuid.UUID(args['run_id']))
+            if identity != args['run_id'] or name != 'citizen-retail-' + uuid.UUID(identity).hex[:12] + '-agent':
+                raise ValueError('Retail registration names must belong to their canonical condition')
+            config['name'] = name
+            config['description'] = 'Retail review owned by condition ' + identity
         if config.get("name") != name:
             raise ValueError("The explicit registration name must match agent.yaml")
         selected = AgentConfig.model_validate(config)
@@ -245,6 +262,8 @@ async def execute(client, operation: str, args: dict) -> dict:
             if not source.is_file() or source.is_symlink() or source.stat().st_size > 128 * 1024:
                 raise ValueError("Packaged source must contain bounded regular allowlisted text files")
             source_contents[relative] = source.read_bytes()
+        if scenario_id == 'dreamjob':
+            source_contents['agent.yaml'] = yaml.safe_dump(config, sort_keys=False).encode()
         try:
             observed = (await client.get_agent(name=name)).data()
         except NotFoundError:

@@ -1,0 +1,28 @@
+{"at": "2026-11-20T18:55:51.685128+00:00", "phase": "requested", "activation_id": "activation-000001", "role": "user", "message_count": 2, "tools_enabled": false, "continues_turn": false}
+{"at": "2026-11-20T18:55:52.424841+00:00", "phase": "answered", "activation_id": "activation-000001", "role": "user", "response_role": "assistant", "usage": {"input_tokens": 2183, "output_tokens": 51}}
+{"at": "2026-11-20T18:55:52.426338+00:00", "phase": "requested", "activation_id": "activation-000002", "role": "judge", "message_count": 2, "tools_enabled": false, "continues_turn": false}
+{"at": "2026-11-20T18:55:53.590274+00:00", "phase": "answered", "activation_id": "activation-000002", "role": "judge", "response_role": "assistant", "usage": {"input_tokens": 232, "output_tokens": 125}}
+{"at": "2026-11-20T18:55:53.592607+00:00", "phase": "requested", "activation_id": "activation-000003", "role": "assistant", "message_count": 1, "tools_enabled": false, "continues_turn": false}
+{"at": "2026-11-20T18:55:58.342586+00:00", "phase": "answered", "activation_id": "activation-000003", "role": "assistant", "response_role": "assistant", "usage": {"input_tokens": 6353, "output_tokens": 341}}
+{"at": "2026-11-20T18:55:58.343773+00:00", "phase": "requested", "activation_id": "activation-000004", "role": "judge", "message_count": 2, "tools_enabled": false, "continues_turn": false}
+{"at": "2026-11-20T18:55:59.584200+00:00", "phase": "answered", "activation_id": "activation-000004", "role": "judge", "response_role": "assistant", "usage": {"input_tokens": 550, "output_tokens": 112}}
+{"at": "2026-11-20T18:55:59.585620+00:00", "phase": "requested", "activation_id": "activation-000005", "role": "user", "message_count": 2, "tools_enabled": false, "continues_turn": false}
+{"at": "2026-11-20T18:56:00.278501+00:00", "phase": "answered", "activation_id": "activation-000005", "role": "user", "response_role": "assistant", "usage": {"input_tokens": 2731, "output_tokens": 46}}
+{"at": "2026-11-20T18:56:00.280571+00:00", "phase": "requested", "activation_id": "activation-000006", "role": "judge", "message_count": 2, "tools_enabled": false, "continues_turn": false}
+{"at": "2026-11-20T18:56:01.350341+00:00", "phase": "answered", "activation_id": "activation-000006", "role": "judge", "response_role": "assistant", "usage": {"input_tokens": 573, "output_tokens": 101}}
+{"at": "2026-11-20T18:56:01.351781+00:00", "phase": "requested", "activation_id": "activation-000007", "role": "summary", "message_count": 1, "tools_enabled": false, "continues_turn": false}
+{"at": "2026-11-20T18:56:01.757159+00:00", "phase": "answered", "activation_id": "activation-000007", "role": "summary", "response_role": "assistant", "usage": {"input_tokens": 141, "output_tokens": 3}}
+{"at": "2026-11-20T18:56:01.759204+00:00", "phase": "requested", "activation_id": "activation-000008", "role": "assistant", "message_count": 3, "tools_enabled": false, "continues_turn": false}
+{"at": "2026-11-20T18:56:10.282489+00:00", "phase": "answered", "activation_id": "activation-000008", "role": "assistant", "response_role": "assistant", "usage": {"input_tokens": 16022, "output_tokens": 565}}
+{"at": "2026-11-20T18:56:10.283901+00:00", "phase": "requested", "activation_id": "activation-000009", "role": "judge", "message_count": 2, "tools_enabled": false, "continues_turn": false}
+{"at": "2026-11-20T18:56:12.315207+00:00", "phase": "answered", "activation_id": "activation-000009", "role": "judge", "response_role": "assistant", "usage": {"input_tokens": 1041, "output_tokens": 129}}
+{"at": "2026-11-20T18:56:12.317676+00:00", "phase": "requested", "activation_id": "activation-000010", "role": "user", "message_count": 2, "tools_enabled": false, "continues_turn": false}
+{"at": "2026-11-20T18:56:13.194385+00:00", "phase": "answered", "activation_id": "activation-000010", "role": "user", "response_role": "assistant", "usage": {"input_tokens": 3233, "output_tokens": 36}}
+{"at": "2026-11-20T18:56:13.196371+00:00", "phase": "requested", "activation_id": "activation-000011", "role": "judge", "message_count": 2, "tools_enabled": false, "continues_turn": false}
+{"at": "2026-11-20T18:56:14.182468+00:00", "phase": "answered", "activation_id": "activation-000011", "role": "judge", "response_role": "assistant", "usage": {"input_tokens": 1054, "output_tokens": 78}}
+{"at": "2026-11-20T18:56:14.184380+00:00", "phase": "requested", "activation_id": "activation-000012", "role": "summary", "message_count": 1, "tools_enabled": false, "continues_turn": false}
+{"at": "2026-11-20T18:56:14.578886+00:00", "phase": "answered", "activation_id": "activation-000012", "role": "summary", "response_role": "assistant", "usage": {"input_tokens": 131, "output_tokens": 3}}
+{"at": "2026-11-20T18:56:14.582063+00:00", "phase": "requested", "activation_id": "activation-000013", "role": "assistant", "message_count": 5, "tools_enabled": false, "continues_turn": false}
+{"at": "2026-11-20T18:56:21.887916+00:00", "phase": "answered", "activation_id": "activation-000013", "role": "assistant", "response_role": "assistant", "usage": {"input_tokens": 15184, "output_tokens": 618}}
+{"at": "2026-11-20T18:56:21.889773+00:00", "phase": "requested", "activation_id": "activation-000014", "role": "judge", "message_count": 2, "tools_enabled": false, "continues_turn": false}
+{"at": "2026-11-20T18:56:23.378030+00:00", "phase": "answered", "activation_id": "activation-000014", "role": "judge", "response_role": "assistant", "usage": {"input_tokens": 1621, "output_tokens": 138}}

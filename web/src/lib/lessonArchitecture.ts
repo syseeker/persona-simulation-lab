@@ -62,7 +62,7 @@ export const components: Component[] = [
         'Use a separate compatible SDK environment and retain generation failures and warnings.',
         'Seed data and column configuration.','Generated overlay plus native generation records.',
         'Explicit model, bounded batch and requested columns.','A saved overlay alone does not prove the SDK generated it.', ['designer-output.json','designer-generation.json']),
-      op('designer.lineage','Validate and retain lineage','Application · validate_generated_payload',
+      op('designer.lineage','Validate and retain lineage','Application · validate the selected overlay',
         'Validate the generated result and save it separately from its original parent.',
         'Generated fields, schema and parent hash.','Validated derived input, or a visible failure.',
         'Closed values, parent identity and salary disclosure rule.','Check parent hash, original preservation and explicit overlay selection.', ['designer-lineage.json']),
@@ -141,6 +141,11 @@ export const components: Component[] = [
     purpose:'Let the advisor retrieve course information through application-owned read-only tools.',
     architecture:'https://modelcontextprotocol.io/docs/learn/architecture',
     operations:[
+      op('mcp.connect','Connect and discover course tools','Application → Fabric MCP connection',
+        'Connect the read-only server and expose its schemas before the conversation. Tool discovery is different from searching for courses.',
+        'Named stdio server and allowed tool configuration.','The selected harness can discover the three course tools.',
+        'catalogue server; stdio executable; public constraint channel; frozen catalogue path.',
+        'Compare server setup, Doctor/startup and enabled schemas. No business tool call is claimed merely from this configuration.', ['framework-config.json','fabric-plan.json','fabric-doctor.json'], 'mcp.connect','fabric.config'),
       op('mcp.search','Search using public constraints','Application tool · FastMCP',
         'A real tool result connects the recommendation to catalogue facts. Unknown costs stay unknown.',
         'Requested subject, budget and schedule.','Matching dated course records, or an honest no-match.',
@@ -203,7 +208,7 @@ export const components: Component[] = [
         'The selected candidate may stay the same across requests. Actual native decisions, not installation, demonstrate routing.',
         'Unchanged public request and candidate inventory.','Selected deployment, response and decision metadata.',
         'Keep harness, public inputs and catalogue controlled.',
-        'Compare native decision, actual provider model, usage and evaluation. Inventory changes are a separate variable.', ['routing-decisions.json','usage.json'], 'routing.decision','routing.policy'),
+        'Compare native decision, actual provider model, usage and evaluation. Inventory changes are a separate variable.', ['routing-comparison.json','routing-decisions.json','routing-configuration.json'], 'routing.decision','routing.policy'),
     ] },
   { id:'relay', title:'NeMo Relay', simple:'Execution records and checks', kind:'evidence',
     purpose:'Instrument the harness and export native agent/model/tool relationships.',
@@ -252,10 +257,15 @@ export const components: Component[] = [
     workflow:'https://docs.nvidia.com/nemo-helix/v0.9/documentation/evaluate-models',
     operations:[
       op('helix.evaluate','Define, run and inspect evaluation','Application → Helix Evals SDK',
-        'Helix evaluation is one part of a broader platform. Retained SDK reference code does not establish a retail-learning result.',
+        'Helix evaluation is one part of a broader platform. Score explicit saved criterion values without regenerating the conversation.',
         'Saved replies, frozen facts and explicit evaluation criteria.','Native evaluation results, execution errors and criterion coverage.',
         'Evaluator definition and compatible local SDK environment; managed jobs only when explicitly selected.',
-        'Require actual criterion-level results for this scenario. A narrow exact-match example cannot certify a whole response.', ['helix-evaluation.json']),
+        'Require actual criterion-level results for this scenario. Narrow exact-match criteria cannot certify a whole response.', ['helix-evaluation.json','evaluation.json']),
+      op('helix.job','Submit and inspect a durable evaluation job','Application → Helix Platform Evaluator',
+        'Run saved criteria in a native managed job, keeping its status, result and failures separate from local SDK scoring.',
+        'The same saved expected/observed criterion rows.','Native job identity, terminal status and persisted results.',
+        'Pinned Helix 0.10 task image; bounded wait; no generation target.',
+        'Match the submitted rows and job identity. A submitted job is not a completed evaluation.', ['helix-job.json','helix-criteria.json']),
     ] },
   { id:'guardrails', title:'NeMo Guardrails · input / output', simple:'Behavioural safeguards', kind:'runtime',
     purpose:'Apply configured behavioural checks at the advisor’s public input/output boundaries.',
@@ -282,7 +292,7 @@ export const components: Component[] = [
         'A managed condition starts new memory. It cannot pretend to resume a local conversation’s private state.',
         'Deployment identity and explicitly selected public constraints.','Session replies and confirmed resource cleanup.',
         'Session ownership; invocation input; exact deployment cleanup.',
-        'Match agent/deployment/session IDs and cleanup. Closing an inspector must not terminate a session.', ['platform-session.json','platform-cleanup.json'], 'platform.session','platform.deploy'),
+        'Match agent/deployment/session IDs and cleanup. Closing an inspector must not terminate a session.', ['platform-session.json','platform-invocation.json','platform-condition.json','platform-trace.json','platform-cleanup.json'], 'platform.session','platform.deploy'),
     ] },
   { id:'openshell', title:'OpenShell · trusted supervisor', simple:'Controlled execution', kind:'deployment',
     purpose:'Enforce file, process and network access around the untrusted advisor, harness and course tools.',
@@ -323,6 +333,10 @@ export function architectureUrl(id:string,scenario:string) {
 }
 export function sourceId(id:string,scenario:string) {
   if(id==='checks.evaluate'&&scenario==='boardgames')return 'checks.boardgames';
+  if(scenario==='dreamjob'){
+    const retail:Record<string,string>={'designer.schema':'retail.designer.schema','designer.generate':'retail.designer.generate','designer.lineage':'retail.designer.lineage','catalogue.freeze':'retail.catalogue','checks.evaluate':'retail.criteria','checks.coverage':'retail.criteria','models.alias':'retail.alias','platform.deploy':'retail.package'};
+    if(retail[id])return retail[id];
+  }
   return id==='harness.context' && preset(scenario).harness==='hermes' ? 'hermes.environment' : operationById[id]?.call;
 }
 export function resolveComponent(id:string) {
@@ -351,7 +365,7 @@ export function lessonFor(scenario:string,id:string):Lesson {
       action:'Build FabricConfig, inspect the plan and Doctor result, then start one persistent selected runtime.',output:'A configured adapter, runtime/thread identity and connected course-tool surface.',
       design:'Fabric is the common application interface. Adapter configuration differs by harness; the application invokes the same runtime contract.',
       checks:['Compare adapter_id, model connection, input/output schemas, tool allowlist and timeout.','Match the plan, Doctor outcome and startup identity. A plan alone is not an execution.'],
-      operations:['fabric.config','fabric.plan','fabric.start','harness.context','relay.configure','models.alias']},
+      operations:['fabric.config','fabric.plan','fabric.start','harness.context','mcp.connect','relay.configure','models.alias']},
     run:{why:'See the learner’s request become a source-linked answer.',input:`${scenarios.find(s=>s.id===scenario)!.turns.length} public ${photo?'turn':'turns'}; the advisor receives public messages, not the private persona.`,
       action:'UserSim generates/checks a message → Fabric invokes the selected harness → the harness calls model/tools → Fabric returns a normalized result → UserSim judges and continues or stops.',
       output:photo?'The saved learner request and actual photography reply.':retail?'A three-turn conversation: explore learning, disclose salary, then state budget and schedule.':'Two public turns that preserve an honest no-match and distinguish playing games from designing them.',
@@ -364,7 +378,7 @@ export function lessonFor(scenario:string,id:string):Lesson {
     evaluate:{why:'Check whether the advice respected the request and available evidence.',input:'Saved public conversation + frozen course facts + execution evidence.',action:retail?'Run explicit criteria through Helix evaluation and retain native results.':'Run application-owned assertions over saved outputs; no new advisor or model call.',
       output:'Expected and observed values, reasons, failures and coverage for each criterion.',design:'UserSim’s in-loop judges, optional post-loop UserSim eval/report and our saved-response evaluation are distinct mechanisms. Helix also supports managed operations; it is not just a scorer.',
       checks:['Read each criterion and its limits; a completed response or high aggregate score is insufficient.',retail?'Require a scenario-specific Helix call/configuration and native criterion results.':'These application assertions do not establish proximity, seats or personal funding eligibility.'],
-      operations:['records.read','catalogue.freeze',retail?'helix.evaluate':'checks.evaluate'],notUsed:retail?undefined:'Helix and optional post-loop UserSim evaluation are not used in this preset.'},
+      operations:['records.read','catalogue.freeze',...(retail?['helix.evaluate','helix.job']:['checks.evaluate'])],notUsed:retail?undefined:'Helix and optional post-loop UserSim evaluation are not used in this preset.'},
     routing:{why:retail?'Compare model strategies without rebuilding the advisor.':'Understand the fixed model route used by this baseline.',
       input:retail?'Identical public inputs, catalogue and harness; an explicit candidate inventory.':'The fixed advisor alias and configured provider model.',
       action:retail?'Load the Switchyard policy in LiteLLM, inspect the actual decision and compare replies/usage/evaluation.':'LiteLLM resolves the fixed alias. No optimization experiment was performed.',
@@ -412,9 +426,9 @@ export const architectureEdges:ArchitectureEdge[]=[
   edge('learner-advisor','usersim','fabric','Public message → RunRequest','request',['usersim.loop','fabric.invoke']),
   edge('advisor-learner','fabric','usersim','RunResult → public reply','request',['fabric.result','usersim.finalize']),
   edge('fabric-harness','fabric','harness','Configure / invoke adapter','prep',['fabric.config','fabric.plan','fabric.start','harness.context','harness.loop','fabric.invoke','fabric.result']),
-  edge('harness-tools','harness','mcp','Tool request / result','request',['harness.loop','mcp.search','mcp.details','mcp.compare']),
+  edge('harness-tools','harness','mcp','Tool connection / calls','request',['mcp.connect','harness.loop','mcp.search','mcp.details','mcp.compare']),
   edge('tools-facts','mcp','catalogue','Read frozen facts','request',['mcp.search','mcp.details','mcp.compare','catalogue.freeze']),
-  edge('harness-model','harness','gateway','Advisor model calls','request',['harness.loop','models.admit','models.request']),
+  edge('harness-model','harness','gateway','Model connection / calls','request',['models.alias','harness.loop','models.admit','models.request']),
   edge('learner-model','usersim','gateway','Simulator / judge calls','request',['usersim.loop','models.request']),
   edge('gateway-proxy','gateway','litellm','Requested alias','request',['models.request','models.alias']),
   edge('proxy-routing','litellm','routing','Policy → selected candidate','request',['routing.policy','routing.decision'],{routed:true}),

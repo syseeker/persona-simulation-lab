@@ -119,7 +119,7 @@ def test_exact_operation_links_resolve_committed_symbols_and_compare_captured_ha
     assert 'content' not in links['fabric.invoke']
 
 
-@pytest.mark.parametrize('scenario', ['photography', 'boardgames'])
+@pytest.mark.parametrize('scenario', ['photography', 'boardgames', 'dreamjob'])
 def test_published_companion_excludes_private_rows_prompts_and_reasoning(scenario):
     folder = guide.CONTEXT_ROOT / scenario / guide.CANONICAL_DEMOS[scenario]
     values = [json.loads(p.read_text()) for p in folder.glob('*.json') if p.name != 'manifest.json']

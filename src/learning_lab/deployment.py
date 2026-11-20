@@ -40,6 +40,7 @@ OPERATIONS = frozenset(
         "delete_agent",
         "package",
         "configure",
+        'retail_setup', 'retail_cleanup',
     }
 )
 
@@ -113,12 +114,13 @@ class PlatformBridge:
         # Restrict credentials sent to this child to the selected Platform token;
         # inference-provider credentials are held by LiteLLM, not this SDK bridge.
         env = {k: v for k, v in os.environ.items() if not re.search(r"(?:TOKEN|KEY|SECRET|PASSWORD)", k)}
+        env['PYTHONDONTWRITEBYTECODE'] = '1'
         # Executor configuration belongs to the selected Platform connection.
         # A remote recovery must never discover a host-local gateway implicitly.
         env.pop("NHX_CONFIG_FILE_PATH", None)
         if self.spec.token_env and self.spec.token_env in os.environ:
             env[self.spec.token_env] = os.environ[self.spec.token_env]
-        if operation == "configure":
+        if operation in {'configure', 'retail_setup'}:
             for name in ("LAB_DEPLOYMENT_GATEWAY_KEY", "LAB_DEPLOYMENT_PREFERENCES_TOKEN"):
                 if name in os.environ:
                     env[name] = os.environ[name]
@@ -223,7 +225,7 @@ class DeploymentInferenceBridge:
     the managed agent. This bridge offers no routing decisions of its own.
     """
 
-    def __init__(self, key: str | None = None, prefs_key: str | None = None):
+    def __init__(self, key: str | None = None, prefs_key: str | None = None, model_aliases=None):
         self.key = key or os.getenv("LAB_DEPLOYMENT_GATEWAY_KEY")
         self.prefs_key = prefs_key or os.getenv("LAB_DEPLOYMENT_PREFERENCES_TOKEN")
         self.lease = AdmissionLease()
@@ -231,6 +233,7 @@ class DeploymentInferenceBridge:
         self.preferences: dict | None = None
         self._requests: set[asyncio.Task] = set()
         self.url: str | None = None
+        self.model_aliases = tuple(model_aliases or ('lab-advisor-fixed', 'lab-advisor-routed', 'lab-support'))
 
     async def activate(self, run_id: str, gateway, preferences: dict | None = None) -> None:
         from .catalogue import Preferences
@@ -267,7 +270,7 @@ class DeploymentInferenceBridge:
                 "object": "list",
                 "data": [
                     {"id": name, "object": "model", "owned_by": "learning-lab"}
-                    for name in ("lab-advisor-fixed", "lab-advisor-routed", "lab-support")
+                    for name in self.model_aliases
                 ],
             }
         )

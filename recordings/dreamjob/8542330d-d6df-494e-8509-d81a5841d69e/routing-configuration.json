@@ -1,0 +1,99 @@
+{
+  "inventories": {
+    "citizen-retail-proxy-v1": {
+      "container_id": "8d8c5b6ecf78d88042b14e683e621eab3f83ce585560d3349a7cf28d568dc029",
+      "image_id": "sha256:e8b4d47d51ffedc8a88dd234c7ca8b8c6155d83e9c6925e1671146c31f338f01",
+      "models": {
+        "FIXED": "openai/nvidia/nemotron-3.5-lightning-30b-a3b",
+        "SUPPORT": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "EFFICIENT": "openai/google/gemma-4-31b-it",
+        "CAPABLE": "openai/z-ai/glm-5.3-flash"
+      }
+    },
+    "proxy-litellm-1": {
+      "container_id": "6d4b67c6707062e6830ae9b6c23dbefd489611fe217902bbf048feefa1c55e3d",
+      "image_id": "sha256:e8b4d47d51ffedc8a88dd234c7ca8b8c6155d83e9c6925e1671146c31f338f01",
+      "models": {
+        "FIXED": "openai/nvidia/nemotron-3.5-lightning-30b-a3b",
+        "SUPPORT": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "EFFICIENT": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "CAPABLE": "openai/nvidia/nemotron-3.5-lightning-30b-a3b"
+      }
+    }
+  },
+  "policy": {
+    "picker": "efficient_first",
+    "confidence_threshold": 0.5,
+    "recent_window": 3,
+    "only_on_wrong_signal_escalation": true
+  },
+  "source_sha256": {
+    "integrations/proxy/retail-litellm.yaml": "a1039299ddcaa31350d126d731674675669ce1ad66adb253733bcb97f6c609af",
+    "integrations/proxy/litellm.yaml": "432feebd4bdcaafc11aa6e202c7e359b3c2b71fdd5645717cdd8b9f8e48520fb",
+    "integrations/proxy/lab_routing.py": "460b2e5b54fb36c20488664428c41eb32ade8688bf13d547c4bde205a243c89f"
+  },
+  "notice": "Declared inventory and policy are configuration. Completed calls/native decisions separately establish observed behaviour.",
+  "endpoint_probe": {
+    "inference_requests": 2,
+    "results": [
+      {
+        "model": "google/gemma-4-31b-it",
+        "max_tokens": 64,
+        "reasoning_effort": "low",
+        "kind": "explicit endpoint tool-capability probe; not a scenario conversation",
+        "status": "unavailable",
+        "error_type": "ReadTimeout",
+        "usage": null,
+        "latency_ms": 180350
+      },
+      {
+        "model": "z-ai/glm-5.3-flash",
+        "max_tokens": 64,
+        "reasoning_effort": "low",
+        "kind": "explicit endpoint tool-capability probe; not a scenario conversation",
+        "status": "unavailable",
+        "error_type": "ReadTimeout",
+        "usage": null,
+        "latency_ms": 180306
+      }
+    ]
+  },
+  "later_glm_tool_recheck": {
+    "inference_requests": 1,
+    "results": [
+      {
+        "model": "z-ai/glm-5.3-flash",
+        "max_tokens": 64,
+        "reasoning_effort": "low",
+        "kind": "explicit endpoint tool-capability probe; not a scenario conversation",
+        "http_status": 200,
+        "status": "completed",
+        "actual_model": "z-ai/glm-5.3-flash",
+        "usage": {
+          "prompt_tokens": 172,
+          "completion_tokens": 12,
+          "total_tokens": 184,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "finish_reason": "tool_calls",
+        "tool_calls": [
+          {
+            "id": "10031cc9-fa0b-4e0c-a628-f5c336a99cc5",
+            "type": "function",
+            "function": {
+              "name": "search_courses",
+              "arguments": "{\"goal\": \"Excel\"}"
+            }
+          }
+        ],
+        "content": null,
+        "latency_ms": 89801
+      }
+    ]
+  }
+}

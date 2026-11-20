@@ -3,17 +3,21 @@ import {readFileSync,readdirSync} from 'node:fs';
 import {resolve} from 'node:path';
 
 const run='7863c607-cb99-4a31-b60c-381bf2099f0e';
+const demoRuns:Record<string,string>={photography:run,boardgames:'938bdb3f-568e-442e-889f-fed046edf5a0',dreamjob:'8542330d-d6df-494e-8509-d81a5841d69e'};
 const repo='https://github.com/syseeker/persona-simulation-lab';
 const read=(path:string)=>JSON.parse(readFileSync(resolve('..',path),'utf8'));
 function context(scenario:string){
-  if(scenario!=='photography')return {state:'planned',scenario_id:scenario,trace:null,context:{},artifacts:[],sources:{},notice:'No execution recorded for this scenario.'};
-  const folder=`recordings/photography/${run}`,companion=`recordings/guide-context/photography/${run}`;
+  const identity=demoRuns[scenario];
+  const folder=`recordings/${scenario}/${identity}`,companion=`recordings/guide-context/${scenario}/${identity}`;
   const trace=read(`${folder}/trace.json`),extra:Record<string,unknown>={};
   for(const name of readdirSync(resolve('..',companion)).filter(n=>n.endsWith('.json')&&n!=='manifest.json'))extra[name]=read(`${companion}/${name}`);
-  for(const name of ['fabric-plan.json','fabric-doctor.json','boundary-probes.json','cleanup.json','effective-policy.json'])extra[name]=read(`${folder}/${name}`);
+  for(const name of Object.keys(read(`${folder}/manifest.json`).files)){
+    if(name.endsWith('.json'))extra[name]=read(`${folder}/${name}`);
+    else if(name.endsWith('.jsonl'))extra[name]=readFileSync(resolve('..',`${folder}/${name}`),'utf8').trim().split('\n').filter(Boolean).map(line=>JSON.parse(line));
+  }
   const artifacts=[...Object.keys(read(`${folder}/manifest.json`).files).map(path=>({path,url:`${repo}/blob/recorded-commit/${folder}/${path}`})),...Object.keys(read(`${companion}/manifest.json`).files).map(path=>({path,url:`${repo}/blob/context-commit/${companion}/${path}`}))];
   const link={available:true,path:'src/learning_lab/fabric_target.py',symbol:'def build_config',url:`${repo}/blob/source-commit/src/learning_lab/fabric_target.py#L25`,recording_match:'matched',notice:'Committed code matches the recorded source hash.'};
-  return {state:'recorded',scenario_id:scenario,run_id:run,trace,context:extra,artifacts,sources:{'fabric.config':link,'fabric.invoke':{...link,symbol:'self.runtime.invoke'},'fabric.result':link,'fabric.plan':link,'fabric.start':link}};
+  return {state:'recorded',scenario_id:scenario,run_id:identity,trace,context:extra,artifacts,sources:{'fabric.config':link,'fabric.invoke':{...link,symbol:'self.runtime.invoke'},'fabric.result':link,'fabric.plan':link,'fabric.start':link}};
 }
 test.beforeEach(async({page})=>{
   await page.route('**/api/journey/**',async route=>{
@@ -37,14 +41,31 @@ test('all 27 scenario lessons teach concepts, inputs/results and verification wi
       await expect(panel.locator('pre')).toHaveCount(0);
       await expect(page.getByLabel('Photography evidence',{exact:true})).toHaveCount(0);
       await expect(panel.getByText('All files in this run',{exact:true})).toHaveCount(0);
-      if(scenario!=='photography'){
-        await expect(panel.getByTestId('record-state')).toContainText('Planned scenario');
-        await expect(panel.locator('a[href*="recordings/photography"]')).toHaveCount(0);
-      }
+      await expect(panel.getByTestId('record-state')).toContainText(demoRuns[scenario].slice(0,8));
+      for(const other of Object.keys(demoRuns).filter(id=>id!==scenario))await expect(panel.locator(`a[href*="recordings/${other}/"], a[href*="recordings/guide-context/${other}/"]`)).toHaveCount(0);
       if(step<9)await page.getByRole('button',{name:'Next →',exact:true}).click();
     }
   }
   expect(errors).toEqual([]);
+});
+
+test('switching scenarios keeps live ownership separate and never starts or cancels a workload',async({page})=>{
+  const live='11111111-1111-4111-8111-111111111111',methods:string[]=[];
+  page.on('request',request=>{if(request.url().includes('/api/journey/'))methods.push(request.method());});
+  await page.addInitScript(({live})=>localStorage.setItem('persona-lab-guide-wireframe:selection:v4',JSON.stringify({version:4,page:'map',scenarioId:'photography',liveRuns:{photography:live}})),{live});
+  await page.route('**/api/journey/readiness*',route=>route.fulfill({json:{ready:false,native:{gateway:true,image:true},proxy:{fixed_alias_available:true,support_alias_available:true},active:{run_id:live}}}));
+  await page.route('**/api/journey/trace*',route=>route.fulfill({json:{run:{run_id:live,scenario_id:'photography',status:'running',stage:'run',calls:3,cleanup_confirmed:false},conversation:[{role:'user',content:'Public photography live fixture'}]}}));
+  await page.goto('/');
+  await page.getByRole('button',{name:'Simulate a Session',exact:true}).click();
+  await expect(page.getByTestId('live-session')).toContainText('Public photography live fixture');
+  await page.getByLabel('Scenario',{exact:true}).selectOption('boardgames');
+  await page.getByRole('button',{name:'Simulate a Session',exact:true}).click();
+  await expect(page.getByTestId('live-session')).not.toContainText('Public photography live fixture');
+  await expect(page.getByTestId('live-session')).toContainText('NEW BOARD-GAMES CONDITION');
+  await page.getByLabel('Scenario',{exact:true}).selectOption('photography');
+  await page.getByRole('button',{name:'Simulate a Session',exact:true}).click();
+  await expect(page.getByTestId('live-session')).toContainText('Public photography live fixture');
+  expect(methods.every(method=>method==='GET')).toBe(true);
 });
 
 test('overview shows everything; explicit persona focus does not activate UserSim',async({page})=>{

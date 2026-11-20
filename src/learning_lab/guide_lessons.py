@@ -20,7 +20,8 @@ from .guide_sources import _git, operation_links, repository_url
 from .settings import ROOT
 
 CANONICAL_DEMOS = {'photography': '7863c607-cb99-4a31-b60c-381bf2099f0e',
-                   'boardgames': '938bdb3f-568e-442e-889f-fed046edf5a0', 'dreamjob': None}
+                   'boardgames': '938bdb3f-568e-442e-889f-fed046edf5a0',
+                   'dreamjob': '8542330d-d6df-494e-8509-d81a5841d69e'}
 CONTEXT_ROOT = ROOT / 'recordings/guide-context'
 INDEX_PATH = ROOT / '.private/cache/guide-original-index.json'
 
@@ -81,12 +82,21 @@ def lesson_context(scenario_id='photography') -> dict:
             context = dict(extra['data'])
             for name in ['fabric-plan.json', 'fabric-doctor.json', 'effective-policy.json',
                          'boundary-probes.json', 'cleanup.json', 'runtime-receipt.json',
-                         'guardrails-config.json', 'guardrails-probe.json']:
+                         'guardrails-config.json', 'guardrails-probe.json',
+                         'designer-configuration.json', 'designer-output.json', 'designer-generation.json', 'designer-lineage.json',
+                         'helix-criteria.json', 'helix-evaluation.json', 'helix-job.json',
+                         'routing-configuration.json', 'routing-comparison.json',
+                         'platform-package.json', 'platform-registration.json', 'platform-deployment.json',
+                         'platform-session.json', 'platform-invocation.json', 'platform-condition.json',
+                         'platform-cleanup.json', 'platform-boundary-probes.json', 'platform-effective-policy.json', 'platform-trace.json']:
                 if name in recordings.load(run_id)['files']:
                     context[name] = json.loads(recordings.read(run_id, name))
             if 'guardrails-decisions.jsonl' in recordings.load(run_id)['files']:
                 context['guardrails-decisions.jsonl'] = [json.loads(line) for line in
                     recordings.read(run_id, 'guardrails-decisions.jsonl').splitlines() if line.strip()]
+            for name in ['public-constraints.jsonl', 'disclosure-audit.jsonl']:
+                if name in recordings.load(run_id)['files']:
+                    context[name] = [json.loads(line) for line in recordings.read(run_id, name).splitlines() if line.strip()]
             result.update(state='recorded', trace=trace, context=context,
                           artifacts=trace['artifacts'] + extra['artifacts'],
                           notice=extra['notice'])

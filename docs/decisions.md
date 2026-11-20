@@ -1,5 +1,15 @@
 # Architecture Decisions
 
+## 21 November 2026: Retail disclosure, comparisons and managed ownership
+
+Keep one fixed-Nemotron baseline and separate fresh-memory comparison conditions. Designer generates a closed hypothetical overlay from the locked source; free text cannot redefine the salary/budget protocol or copy a source name. UserSim generates three public turns after preceding replies; actual advisor dispatches are audited for hidden salary before disclosure. Public salary never becomes a budget. Use actual SMU fee/duration facts from the separately dated supplement.
+
+Local Helix scores explicit application-extracted values; a durable Platform job consumes the same saved criteria without inference. The requested Gemma/GLM pair timed out. Publish that failed state alongside the separately labelled successful native-routing diagnostic, without substituting one inventory for another. Native MCP transport success must include a valid domain result before it counts as a successful search; invalid optional kinds return a structured error and weekday names normalize to validated indices.
+
+Managed execution is a new public-context condition, with native registration, deployment, session/invocation, Intake, enforcement probes and confirmed cleanup. It owns its provider/environment/secret/fileset and never changes older deployments. Cancellation records identities before cleanup; unresolved cleanup keeps the guard. The managed reply is deployment evidence, not a replay of the baseline multi-turn evaluation. Guardrails placement differs explicitly: inside baseline OpenShell versus at the managed host caller.
+
+Preserve all failed development runs privately. A later photography regression exposed narrow-space place-name parsing; normalize horizontal whitespace without merging field lines, retain the original 8/9 result and verify a new condition rather than rewriting it.
+
 ## 21 November 2026: Continue implementation through Scenarios 2 and 3
 
 The user authorised finishing the redesigned guide, then implementing board games and retail learning without waiting for an intermediate reply. Keep verified rounds on `dev`, with `main` unchanged. Photography remains the regression baseline.

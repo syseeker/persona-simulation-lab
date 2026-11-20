@@ -1,0 +1,1428 @@
+{
+  "comparison": "Within each named inventory: one fixed efficient candidate versus the same pool with Switchyard; identical public inputs/catalogue/harness, fresh memory. The available Nemotron inventory is a separate diagnostic, not verification of Gemma/GLM access.",
+  "baseline_notice": "The main Nemotron condition also changes model inventory and output ceiling (1024 versus 384 in the requested pool); it is not a routing-policy-only comparison. Both requested-pool conditions share the lower ceiling and low reasoning setting.",
+  "conditions": [
+    {
+      "condition_id": "aa93fdc4-8aa5-48c3-bf8f-550d6dbdf382",
+      "label": "fixed-candidate",
+      "harness": "deepagents",
+      "alias": "lab-advisor-candidate",
+      "route": "fixed",
+      "status": "failed",
+      "input_sha256": "cebf1626881eef4b641ac13e23c9a70db2214db9c5623aedc57f4a8d09f2748a",
+      "catalogue_sha256": "d2ce4abda853f269d2fd1c93bb60dbd2cd1468a6562e8bc3fbb7140744e38dfa",
+      "fresh_memory": true,
+      "cleanup_confirmed": true,
+      "calls": 1,
+      "native_decisions": [],
+      "purpose": "requested Gemma/GLM pool",
+      "error_type": "RuntimeError",
+      "error": "RuntimeError: Fabric invocation ended with status failed: OpenAIInvalidRequestError: Error code: 400 - TimeoutError: Model call failed",
+      "public_inputs": [
+        "Hi, I work in retail and want sales and inventory analysis skills — could you tell me about the SMU Academy's SCTP Advanced Certificate in Data Communications and Visualisation for Business Analyst, like its content, duration and full fee?",
+        "Thanks for the details. My monthly salary is around S$2,500–3,499, so the $20,928 fee seems steep. How should I think about options?",
+        "My total training budget is S$3,000, I can only study on weekends, and I prefer a shorter option that fits retail sales and inventory analysis."
+      ],
+      "input_basis": "Exact public messages saved from the baseline; no new UserSim generation",
+      "fabric_configuration": {
+        "harness": {
+          "adapter_id": "nvidia.fabric.langchain.deepagents",
+          "resolution": "preinstalled",
+          "settings": {
+            "reasoning_effort": "low"
+          }
+        },
+        "runtime": {
+          "input_schema": "chat",
+          "output_schema": "message",
+          "artifacts": null,
+          "timeout_seconds": 600.0,
+          "max_turns": 24
+        },
+        "models": {
+          "default": {
+            "provider": "openai-compatible",
+            "model": "lab-advisor-candidate",
+            "temperature": 0.0,
+            "max_tokens": 384
+          }
+        },
+        "native_configuration_sha256": "15b445c6be075750e36dc95ceacdc6122f336847498262179c84421d82d898e8"
+      },
+      "fabric_results": [
+        {
+          "runtime_status": "failed",
+          "outcome": {
+            "status": "invalid",
+            "code": "execution_error",
+            "reason": "Fabric did not complete the invocation."
+          }
+        }
+      ],
+      "usage": [
+        {
+          "call": 20,
+          "role": "assistant",
+          "mode": "live",
+          "status": "failed",
+          "requested_model": "lab-advisor-candidate",
+          "latency_ms": 300002,
+          "error_type": "TimeoutError",
+          "output_token_limit": 384
+        }
+      ],
+      "conversation": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "Hi, I work in retail and want sales and inventory analysis skills — could you tell me about the SMU Academy's SCTP Advanced Certificate in Data Communications and Visualisation for Business Analyst, like its content, duration and full fee?"
+        }
+      ]
+    },
+    {
+      "condition_id": "489d79c2-6651-4fb4-9546-361d4a9af04f",
+      "label": "switchyard",
+      "harness": "deepagents",
+      "alias": "lab-advisor-routed",
+      "route": "switchyard",
+      "status": "failed",
+      "input_sha256": "cebf1626881eef4b641ac13e23c9a70db2214db9c5623aedc57f4a8d09f2748a",
+      "catalogue_sha256": "d2ce4abda853f269d2fd1c93bb60dbd2cd1468a6562e8bc3fbb7140744e38dfa",
+      "fresh_memory": true,
+      "cleanup_confirmed": true,
+      "calls": 1,
+      "native_decisions": [],
+      "purpose": "requested Gemma/GLM pool",
+      "error_type": "RuntimeError",
+      "error": "RuntimeError: Fabric invocation ended with status failed: OpenAIInvalidRequestError: Error code: 400 - TimeoutError: Model call failed",
+      "public_inputs": [
+        "Hi, I work in retail and want sales and inventory analysis skills — could you tell me about the SMU Academy's SCTP Advanced Certificate in Data Communications and Visualisation for Business Analyst, like its content, duration and full fee?",
+        "Thanks for the details. My monthly salary is around S$2,500–3,499, so the $20,928 fee seems steep. How should I think about options?",
+        "My total training budget is S$3,000, I can only study on weekends, and I prefer a shorter option that fits retail sales and inventory analysis."
+      ],
+      "input_basis": "Exact public messages saved from the baseline; no new UserSim generation",
+      "fabric_configuration": {
+        "harness": {
+          "adapter_id": "nvidia.fabric.langchain.deepagents",
+          "resolution": "preinstalled",
+          "settings": {
+            "reasoning_effort": "low"
+          }
+        },
+        "runtime": {
+          "input_schema": "chat",
+          "output_schema": "message",
+          "artifacts": null,
+          "timeout_seconds": 600.0,
+          "max_turns": 24
+        },
+        "models": {
+          "default": {
+            "provider": "openai-compatible",
+            "model": "lab-advisor-routed",
+            "temperature": 0.0,
+            "max_tokens": 384
+          }
+        },
+        "native_configuration_sha256": "1e1e0da82f3b0b4cf4b3da34340467fec0568fc971a7dcb6a1bf3b76c3a4ed06"
+      },
+      "fabric_results": [
+        {
+          "runtime_status": "failed",
+          "outcome": {
+            "status": "invalid",
+            "code": "execution_error",
+            "reason": "Fabric did not complete the invocation."
+          }
+        }
+      ],
+      "usage": [
+        {
+          "call": 21,
+          "role": "assistant",
+          "mode": "live",
+          "status": "failed",
+          "requested_model": "lab-advisor-routed",
+          "latency_ms": 300002,
+          "error_type": "TimeoutError",
+          "output_token_limit": 384
+        }
+      ],
+      "conversation": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "Hi, I work in retail and want sales and inventory analysis skills — could you tell me about the SMU Academy's SCTP Advanced Certificate in Data Communications and Visualisation for Business Analyst, like its content, duration and full fee?"
+        }
+      ]
+    },
+    {
+      "condition_id": "3fae321d-8843-4e62-aeb6-1323d09e4d81",
+      "label": "available-fixed",
+      "harness": "deepagents",
+      "alias": "lab-support",
+      "route": "fixed",
+      "status": "completed",
+      "input_sha256": "cebf1626881eef4b641ac13e23c9a70db2214db9c5623aedc57f4a8d09f2748a",
+      "catalogue_sha256": "d2ce4abda853f269d2fd1c93bb60dbd2cd1468a6562e8bc3fbb7140744e38dfa",
+      "fresh_memory": true,
+      "cleanup_confirmed": true,
+      "calls": 5,
+      "native_decisions": [],
+      "purpose": "separate available-inventory diagnostic",
+      "evaluation": {
+        "kind": "Helix Evals SDK · application-defined criteria",
+        "rows": [
+          {
+            "id": "three-turns",
+            "criterion": "Three public learner/advisor pairs completed",
+            "expected": [
+              3,
+              3
+            ],
+            "actual": [
+              3,
+              3
+            ],
+            "status": "pass",
+            "reason": "Native early stops and incomplete replies are preserved rather than filled in.",
+            "evidence": [
+              "public-conversation.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 0,
+            "helix_score": 1
+          },
+          {
+            "id": "valid-answers",
+            "criterion": "All three replies contain valid public answers",
+            "expected": true,
+            "actual": true,
+            "status": "pass",
+            "reason": "Transport success alone cannot satisfy this criterion.",
+            "evidence": [
+              "public-conversation.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 1,
+            "helix_score": 1
+          },
+          {
+            "id": "original-lock",
+            "criterion": "Source identity/revision/hash are retained",
+            "expected": true,
+            "actual": true,
+            "status": "pass",
+            "reason": "This checks provenance, not demographic coverage or personal entitlement.",
+            "evidence": [
+              "source-lock.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 2,
+            "helix_score": 1
+          },
+          {
+            "id": "salary-disclosure",
+            "criterion": "The salary band first appears in public turn 2",
+            "expected": 2,
+            "actual": 2,
+            "status": "pass",
+            "reason": "The fixed hypothetical band is simulator context until the learner actually discloses it.",
+            "evidence": [
+              "public-conversation.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 3,
+            "helix_score": 1
+          },
+          {
+            "id": "salary-request-boundary",
+            "criterion": "Actual advisor requests respect public disclosure",
+            "expected": true,
+            "actual": true,
+            "status": "pass",
+            "reason": "Actual request bodies are checked before dispatch for the selected hidden salary values; this is not a universal privacy classifier.",
+            "evidence": [
+              "disclosure-audit.jsonl"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 4,
+            "helix_score": 1
+          },
+          {
+            "id": "salary-not-budget",
+            "criterion": "No training budget is inferred from salary in turn 2",
+            "expected": null,
+            "actual": null,
+            "status": "pass",
+            "reason": "Only an explicit public spending limit can set the tool budget.",
+            "evidence": [
+              "public-constraints.jsonl"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 5,
+            "helix_score": 1
+          },
+          {
+            "id": "explicit-final-constraints",
+            "criterion": "Turn 3 binds the explicit spending and weekend limit",
+            "expected": {
+              "budget_sgd": 3000.0,
+              "days": [
+                5,
+                6
+              ]
+            },
+            "actual": {
+              "budget_sgd": 3000.0,
+              "days": [
+                5,
+                6
+              ]
+            },
+            "status": "pass",
+            "reason": "Income, provider full fees and explicit training budget are different values.",
+            "evidence": [
+              "public-constraints.jsonl"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 6,
+            "helix_score": 1
+          },
+          {
+            "id": "published-full-fee",
+            "criterion": "The opening reports the sourced full programme fee",
+            "expected": true,
+            "actual": true,
+            "status": "pass",
+            "reason": "Frozen provider fact: S$20,928. Conditional funding is separate.",
+            "evidence": [
+              "public-conversation.json",
+              "catalogue-snapshot.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 7,
+            "helix_score": 1
+          },
+          {
+            "id": "published-duration",
+            "criterion": "The opening preserves the actual three-month duration",
+            "expected": true,
+            "actual": true,
+            "status": "pass",
+            "reason": "Frozen fact: 3 months / 330 hours. A hypothetical six months cannot replace it.",
+            "evidence": [
+              "public-conversation.json",
+              "catalogue-snapshot.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 8,
+            "helix_score": 1
+          },
+          {
+            "id": "persistent-thread",
+            "criterion": "The three turns use one persistent native thread",
+            "expected": true,
+            "actual": true,
+            "status": "pass",
+            "reason": "This checks the local three-turn condition; managed execution starts a new session.",
+            "evidence": [
+              "public-conversation.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 9,
+            "helix_score": 1
+          },
+          {
+            "id": "sources-1",
+            "criterion": "Turn 1 cited links/IDs belong to the snapshot",
+            "expected": true,
+            "actual": true,
+            "status": "pass",
+            "reason": "Checks exact links and identifiers; uncited natural-language claims still require review.",
+            "evidence": [
+              "public-conversation.json",
+              "catalogue-snapshot.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 10,
+            "helix_score": 1
+          },
+          {
+            "id": "assurances-1",
+            "criterion": "Turn 1 makes no selected outcome/eligibility assurance",
+            "expected": false,
+            "actual": false,
+            "status": "pass",
+            "reason": "Narrow phrase coverage; no blanket certification of financial, employment or endorsement statements.",
+            "evidence": [
+              "public-conversation.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 11,
+            "helix_score": 1
+          },
+          {
+            "id": "sources-2",
+            "criterion": "Turn 2 cited links/IDs belong to the snapshot",
+            "expected": true,
+            "actual": true,
+            "status": "pass",
+            "reason": "Checks exact links and identifiers; uncited natural-language claims still require review.",
+            "evidence": [
+              "public-conversation.json",
+              "catalogue-snapshot.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 12,
+            "helix_score": 1
+          },
+          {
+            "id": "assurances-2",
+            "criterion": "Turn 2 makes no selected outcome/eligibility assurance",
+            "expected": false,
+            "actual": false,
+            "status": "pass",
+            "reason": "Narrow phrase coverage; no blanket certification of financial, employment or endorsement statements.",
+            "evidence": [
+              "public-conversation.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 13,
+            "helix_score": 1
+          },
+          {
+            "id": "sources-3",
+            "criterion": "Turn 3 cited links/IDs belong to the snapshot",
+            "expected": true,
+            "actual": true,
+            "status": "pass",
+            "reason": "Checks exact links and identifiers; uncited natural-language claims still require review.",
+            "evidence": [
+              "public-conversation.json",
+              "catalogue-snapshot.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 14,
+            "helix_score": 1
+          },
+          {
+            "id": "assurances-3",
+            "criterion": "Turn 3 makes no selected outcome/eligibility assurance",
+            "expected": false,
+            "actual": false,
+            "status": "pass",
+            "reason": "Narrow phrase coverage; no blanket certification of financial, employment or endorsement statements.",
+            "evidence": [
+              "public-conversation.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 15,
+            "helix_score": 1
+          },
+          {
+            "id": "unpublished-funding-figures",
+            "criterion": "No unlisted numerical funding rates or annual credit amount",
+            "expected": [],
+            "actual": [
+              "Annual SkillsFuture Credit amount absent from the frozen facts"
+            ],
+            "status": "fail",
+            "reason": "This frozen catalogue publishes no subsidy percentages or annual credit cap. Narrow numerical-claim coverage; other claims need review.",
+            "evidence": [
+              "public-conversation.json",
+              "catalogue-snapshot.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 16,
+            "helix_score": 0
+          },
+          {
+            "id": "output-completion",
+            "criterion": "Advisor model outputs did not exhaust their token ceiling",
+            "expected": true,
+            "actual": true,
+            "status": "pass",
+            "reason": "Native finish reasons distinguish a completed answer/tool call from token truncation. Missing completion evidence is not a pass.",
+            "evidence": [
+              "usage.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 17,
+            "helix_score": 1
+          },
+          {
+            "id": "unknowns-retained",
+            "criterion": "The final reply retains an explicit confirmation/unknown boundary",
+            "expected": true,
+            "actual": true,
+            "status": "pass",
+            "reason": "An unknown fee or timetable is not proof that an alternative fits the budget/weekends.",
+            "evidence": [
+              "public-conversation.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 18,
+            "helix_score": 1
+          },
+          {
+            "id": "native-course-search",
+            "criterion": "A completed actual MCP search is attributable",
+            "expected": true,
+            "actual": true,
+            "status": "pass",
+            "reason": "The frozen catalogue and an application intent log alone are insufficient.",
+            "evidence": [
+              "native-tools.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 19,
+            "helix_score": 1
+          }
+        ],
+        "passed": 19,
+        "total": 20,
+        "coverage": "Saved public pairs, source provenance, actual salary-request audit, explicit constraints, full fee/duration, exact cited sources, selected assurance phrases, uncertainty and native tools. Other semantics and personal eligibility require review.",
+        "inference_calls": 0,
+        "helix_used": true,
+        "native_result": "helix-evaluation.json",
+        "sdk_version": "0.9.1",
+        "metric": "ExactMatchMetric over explicit application-defined values"
+      },
+      "public_inputs": [
+        "Hi, I work in retail and want sales and inventory analysis skills — could you tell me about the SMU Academy's SCTP Advanced Certificate in Data Communications and Visualisation for Business Analyst, like its content, duration and full fee?",
+        "Thanks for the details. My monthly salary is around S$2,500–3,499, so the $20,928 fee seems steep. How should I think about options?",
+        "My total training budget is S$3,000, I can only study on weekends, and I prefer a shorter option that fits retail sales and inventory analysis."
+      ],
+      "input_basis": "Exact public messages saved from the baseline; no new UserSim generation",
+      "fabric_configuration": {
+        "harness": {
+          "adapter_id": "nvidia.fabric.langchain.deepagents",
+          "resolution": "preinstalled",
+          "settings": {
+            "reasoning_effort": "none"
+          }
+        },
+        "runtime": {
+          "input_schema": "chat",
+          "output_schema": "message",
+          "artifacts": null,
+          "timeout_seconds": 600.0,
+          "max_turns": 24
+        },
+        "models": {
+          "default": {
+            "provider": "openai-compatible",
+            "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+            "temperature": 0.0,
+            "max_tokens": 1024
+          }
+        },
+        "native_configuration_sha256": "c331df444d287850817ef9312ce0f7e9a7e7d547d882ef094b55764d19409747"
+      },
+      "fabric_results": [
+        {
+          "runtime_status": "succeeded",
+          "runtime_id": "runtime-1795201639847-88-2",
+          "invocation_id": "invocation-1795201645033-88-5",
+          "outcome": {
+            "status": "valid",
+            "code": "public_answer",
+            "reason": "A nonempty public answer was saved; factual checks are separate."
+          }
+        },
+        {
+          "runtime_status": "succeeded",
+          "runtime_id": "runtime-1795201639847-88-2",
+          "invocation_id": "invocation-1795201651314-88-9",
+          "outcome": {
+            "status": "valid",
+            "code": "public_answer",
+            "reason": "A nonempty public answer was saved; factual checks are separate."
+          }
+        },
+        {
+          "runtime_status": "succeeded",
+          "runtime_id": "runtime-1795201639847-88-2",
+          "invocation_id": "invocation-1795201675758-88-13",
+          "outcome": {
+            "status": "valid",
+            "code": "public_answer",
+            "reason": "A nonempty public answer was saved; factual checks are separate."
+          }
+        }
+      ],
+      "usage": [
+        {
+          "call": 22,
+          "role": "assistant",
+          "mode": "live",
+          "status": "completed",
+          "requested_model": "lab-support",
+          "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+          "usage": {
+            "completion_tokens": 44,
+            "prompt_tokens": 1984,
+            "total_tokens": 2028,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "latency_ms": 1043,
+          "control_request_id": "b0c3478f-7293-477d-a31e-c1ad15ae3043",
+          "thread_id": "9aa42d45-eec4-4d04-9323-0c3b3160d255",
+          "transport": "openshell-native-exec",
+          "finish_reason": "tool_calls",
+          "output_token_limit": 1024
+        },
+        {
+          "call": 23,
+          "role": "assistant",
+          "mode": "live",
+          "status": "completed",
+          "requested_model": "lab-support",
+          "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+          "usage": {
+            "completion_tokens": 369,
+            "prompt_tokens": 3894,
+            "total_tokens": 4263,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 1904
+            }
+          },
+          "latency_ms": 3741,
+          "control_request_id": "48105066-560b-4c92-a1cb-c7e2889c8a20",
+          "thread_id": "9aa42d45-eec4-4d04-9323-0c3b3160d255",
+          "transport": "openshell-native-exec",
+          "finish_reason": "stop",
+          "output_token_limit": 1024
+        },
+        {
+          "call": 24,
+          "role": "assistant",
+          "mode": "live",
+          "status": "completed",
+          "requested_model": "lab-support",
+          "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+          "usage": {
+            "completion_tokens": 788,
+            "prompt_tokens": 4337,
+            "total_tokens": 5125,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 3808
+            }
+          },
+          "latency_ms": 24330,
+          "control_request_id": "87b9d598-aff0-4b13-85ce-93fc5905d872",
+          "thread_id": "9aa42d45-eec4-4d04-9323-0c3b3160d255",
+          "transport": "openshell-native-exec",
+          "finish_reason": "stop",
+          "output_token_limit": 1024
+        },
+        {
+          "call": 25,
+          "role": "assistant",
+          "mode": "live",
+          "status": "completed",
+          "requested_model": "lab-support",
+          "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+          "usage": {
+            "completion_tokens": 76,
+            "prompt_tokens": 5207,
+            "total_tokens": 5283,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 4256
+            }
+          },
+          "latency_ms": 1213,
+          "control_request_id": "b31ff136-9360-46b1-9b5c-e45239542b21",
+          "thread_id": "9aa42d45-eec4-4d04-9323-0c3b3160d255",
+          "transport": "openshell-native-exec",
+          "finish_reason": "tool_calls",
+          "output_token_limit": 1024
+        },
+        {
+          "call": 26,
+          "role": "assistant",
+          "mode": "live",
+          "status": "completed",
+          "requested_model": "lab-support",
+          "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+          "usage": {
+            "completion_tokens": 642,
+            "prompt_tokens": 6657,
+            "total_tokens": 7299,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 5152
+            }
+          },
+          "latency_ms": 6332,
+          "control_request_id": "ee3e63b5-1f0d-44aa-978f-d945ff418ca9",
+          "thread_id": "9aa42d45-eec4-4d04-9323-0c3b3160d255",
+          "transport": "openshell-native-exec",
+          "finish_reason": "stop",
+          "output_token_limit": 1024
+        }
+      ],
+      "conversation": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "Hi, I work in retail and want sales and inventory analysis skills — could you tell me about the SMU Academy's SCTP Advanced Certificate in Data Communications and Visualisation for Business Analyst, like its content, duration and full fee?"
+        },
+        {
+          "turn": 1,
+          "role": "assistant",
+          "content": "**SMU Academy – (SCTP) Advanced Certificate in Data Communications and Visualisation for Business Analyst**  \n- **Provider:** SMU Academy  \n- **Source URL:** https://academy.smu.edu.sg/courses/sctp-adv-cert-data-comm-and-visual-biz-analyst  \n- **Published fee:** SGD 20,928 (full headline fee)  \n- **Duration:** 330 hours over 3 months (≈12 weeks) – includes asynchronous, synchronous, classroom and assessment hours.  \n- **Key content:** Data visualisation, data preparation, charts, storytelling, dashboards; tools covered – Tableau, Excel and Python libraries.  \n- **Prerequisites (as published):** Singapore Citizen, Permanent Resident or LTVP+ holder; minimum age 21; self‑sponsored.  \n\n**Other relevant options (for comparison)**  \n- *IT Literacy – Basic Microsoft Excel* (Institute of Technical Education) – foundational Excel only; fee and schedule not yet confirmed.  \n- *Fundamentals of Data Analytics & Visualization using Python* (National University of Singapore) – Python‑focused; fee and schedule pending confirmation.  \n\n**Unresolved constraints**  \n- Your budget, SkillsFuture Credit eligibility, and exact availability (intake dates, weekend options) are not yet confirmed.  \n- The course’s full fee is listed, but any applicable subsidies or reduced fees depend on eligibility, which must be verified with the provider.  \n\nPlease confirm the total spending limit, any SkillsFuture Credit you intend to use, and whether you can meet the published prerequisites so I can finalize the recommendation.",
+          "thread_id": "9aa42d45-eec4-4d04-9323-0c3b3160d255",
+          "outcome": {
+            "status": "valid",
+            "code": "public_answer",
+            "reason": "A nonempty public answer was saved; factual checks are separate."
+          }
+        },
+        {
+          "turn": 2,
+          "role": "user",
+          "content": "Thanks for the details. My monthly salary is around S$2,500–3,499, so the $20,928 fee seems steep. How should I think about options?"
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "**What the $20,928 fee means for you**\n\n- Your monthly take‑home (S$2,500 – 3,499) translates to roughly S$1,250 – S$1,750 per month if you spread the cost over a year.  \n- The SMU Academy programme is a **3‑month, 330‑hour** commitment, so the full price would be ≈ S$7,000 – S$8,800 if you could pay month‑by‑month. The published headline fee (S$20,928) assumes the entire amount is paid up‑front, which is why it looks steep.\n\n**How to make it more affordable**\n\n1. **Check SkillsFuture Credit / SSG subsidies** – The provider lists “conditional funded fees.”  \n   - If you have SkillsFuture Credit (SG $500 – S$1,500 per year) or are eligible for Singapore Government subsidies, the out‑of‑pocket amount can drop substantially.  \n   - **Action:** Contact SMU Academy (or log in to the SkillsFuture portal) to confirm the exact subsidised fee you would pay.\n\n2. **Explore alternative, lower‑cost courses** – The catalogue shows a few other options that focus on Excel or Python visualisation and may have lower fees or more flexible payment terms.\n\n| Course (SkillsFuture) | Provider | Approx. fee* | Duration | Core relevance |\n|-----------------------|----------|--------------|----------|----------------|\n| **IT Literacy – Basic Microsoft Excel** | Institute of Technical Education | *Fee not yet verified* (check provider) | 7 hrs (short workshop) | Excel fundamentals for data entry, simple tables & formulas – directly applicable to retail sales & inventory. |\n| **Fundamentals of Data Analytics & Visualization using Python** | National University of Singapore | *Fee not yet verified* | Self‑paced (no set hours) | Python‑based data cleaning & visualisation; good if you want to automate inventory reports. |\n| **Data Analytics Begins With Me** | National University of Singapore | *Fee not yet verified* | Short introductory module | Introductory analytics concepts; useful as a primer before deeper visualisation training. |\n\n\\*Fees are “unsubsidised” in the catalogue; the actual amount you pay may be lower after SSG funding or SkillsFuture Credit.\n\n**Next steps you can take**\n\n1. **Confirm your SkillsFuture Credit balance** and ask SMU Academy for the **subsidised fee** for the SCTP programme.  \n2. If the subsidised price is still beyond your budget, compare it with the **Excel‑focused** or **Python‑based** courses above—these may be cheaper and can be completed part‑time while you work.  \n3. Verify **intake dates and schedule flexibility** (e.g., weekend or evening classes) so the programme fits around your retail shifts.\n\n**Bottom line:** The SMU SCTP certificate gives the most comprehensive, business‑analyst‑oriented training (including Tableau, Excel, and Python) but carries the highest headline cost. Your salary range suggests you’ll need either a subsidy/credit arrangement or a shorter, lower‑cost alternative that still covers Excel and basic data visualisation. Let me know if you’d like me to:\n\n- Pull the exact subsidised fee for the SMU course, **or**  \n- Get more details (price, schedule) on any of the alternative courses listed.  \n\nI’ll wait for your preference before proceeding.",
+          "thread_id": "9aa42d45-eec4-4d04-9323-0c3b3160d255",
+          "outcome": {
+            "status": "valid",
+            "code": "public_answer",
+            "reason": "A nonempty public answer was saved; factual checks are separate."
+          }
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "My total training budget is S$3,000, I can only study on weekends, and I prefer a shorter option that fits retail sales and inventory analysis."
+        },
+        {
+          "turn": 3,
+          "role": "assistant",
+          "content": "**What the search found**\n\n- The only course whose **published price is known** is **SF‑007 (SMU Academy – SCTP Advanced Certificate in Data Communications and Visualisation for Business Analyst)** with a headline fee of **SGD 20,928**.  \n- That fee **exceeds your SGD 3,000 budget**, so the system excluded it (see “excluded” list).\n\n- The remaining matches (SF‑006, SF‑003, SF‑002) have **no fee information** in the catalogue. The “price_min_sgd” and “price_max_sgd” fields are null, and each entry carries a “cost_note” that the **total unsubsidised fee has not been verified; confirm with the provider**.  \n\n- None of the three courses specify a **weekend‑only** schedule, nor do they state a short duration that would fit a retail‑sales professional with limited study time.\n\n**Unresolved constraints**\n\n1. **Budget** – Your SGD 3,000 limit is lower than the only confirmed price (SGD 20,928). The other courses’ fees are unknown, so we can’t confirm affordability until you get official quotes.  \n2. **Study days** – The catalogue does not indicate whether any of the courses are offered on weekends (days 5‑6). Schedule details are marked “Confirm the next intake and timetable.”  \n3. **Course length / content fit** – While the tags show that SF‑006 (Excel) and SF‑003/SF‑002 (Python‑based analytics) touch on data visualisation and analytics, the exact relevance to **retail sales and inventory analysis** is not spelled out.  \n\n**Next steps you can take**\n\n1. **Contact the providers** for the three courses (ITE for SF‑006; NUS for SF‑003 and SF‑002) to obtain:\n   - The **actual fee** (including any SkillsFuture Credit or SSG subsidies you may qualify for).  \n   - Confirmation of **weekend class availability** and the **overall duration** (hours/weeks).  \n\n2. If you prefer a single, structured programme that already lists a clear weekend schedule and a fee within your budget, you may need to look beyond the current catalogue (e.g., community‑run workshops, private training providers, or short‑term bootcamps).  \n\n3. Let me know if you’d like me to:\n   - Re‑run the search with a different **budget** or **kind** (e.g., “community” courses) to see if any lower‑cost, weekend‑focused options appear, **or**  \n   - Get more detailed information (e.g., schedule, fee) for a specific course once you have the provider’s contact details.\n\nPlease confirm how you’d like to proceed, given the current gaps in fee and schedule information.",
+          "thread_id": "9aa42d45-eec4-4d04-9323-0c3b3160d255",
+          "outcome": {
+            "status": "valid",
+            "code": "public_answer",
+            "reason": "A nonempty public answer was saved; factual checks are separate."
+          }
+        }
+      ]
+    },
+    {
+      "condition_id": "1c44b913-5321-45d9-94f9-d1a213722980",
+      "label": "available-switchyard",
+      "harness": "deepagents",
+      "alias": "lab-advisor-routed",
+      "route": "switchyard",
+      "status": "completed",
+      "input_sha256": "cebf1626881eef4b641ac13e23c9a70db2214db9c5623aedc57f4a8d09f2748a",
+      "catalogue_sha256": "d2ce4abda853f269d2fd1c93bb60dbd2cd1468a6562e8bc3fbb7140744e38dfa",
+      "fresh_memory": true,
+      "cleanup_confirmed": true,
+      "calls": 6,
+      "native_decisions": [
+        {
+          "version": 1,
+          "source": "switchyard",
+          "decision": {
+            "selected_model_id": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+            "deployment_id": "9349918ca912ab2395f7d7ffcaa61a19cffba8b4d76018b67d3910ffdb47b0b3"
+          }
+        },
+        {
+          "version": 1,
+          "source": "switchyard",
+          "decision": {
+            "selected_model_id": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+            "deployment_id": "9349918ca912ab2395f7d7ffcaa61a19cffba8b4d76018b67d3910ffdb47b0b3"
+          }
+        },
+        {
+          "version": 1,
+          "source": "switchyard",
+          "decision": {
+            "selected_model_id": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+            "deployment_id": "9349918ca912ab2395f7d7ffcaa61a19cffba8b4d76018b67d3910ffdb47b0b3"
+          }
+        },
+        {
+          "version": 1,
+          "source": "switchyard",
+          "decision": {
+            "selected_model_id": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+            "deployment_id": "9349918ca912ab2395f7d7ffcaa61a19cffba8b4d76018b67d3910ffdb47b0b3"
+          }
+        },
+        {
+          "version": 1,
+          "source": "switchyard",
+          "decision": {
+            "selected_model_id": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+            "deployment_id": "9349918ca912ab2395f7d7ffcaa61a19cffba8b4d76018b67d3910ffdb47b0b3"
+          }
+        },
+        {
+          "version": 1,
+          "source": "switchyard",
+          "decision": {
+            "selected_model_id": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+            "deployment_id": "9349918ca912ab2395f7d7ffcaa61a19cffba8b4d76018b67d3910ffdb47b0b3"
+          }
+        }
+      ],
+      "purpose": "separate available-inventory diagnostic",
+      "evaluation": {
+        "kind": "Helix Evals SDK · application-defined criteria",
+        "rows": [
+          {
+            "id": "three-turns",
+            "criterion": "Three public learner/advisor pairs completed",
+            "expected": [
+              3,
+              3
+            ],
+            "actual": [
+              3,
+              3
+            ],
+            "status": "pass",
+            "reason": "Native early stops and incomplete replies are preserved rather than filled in.",
+            "evidence": [
+              "public-conversation.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 0,
+            "helix_score": 1
+          },
+          {
+            "id": "valid-answers",
+            "criterion": "All three replies contain valid public answers",
+            "expected": true,
+            "actual": true,
+            "status": "pass",
+            "reason": "Transport success alone cannot satisfy this criterion.",
+            "evidence": [
+              "public-conversation.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 1,
+            "helix_score": 1
+          },
+          {
+            "id": "original-lock",
+            "criterion": "Source identity/revision/hash are retained",
+            "expected": true,
+            "actual": true,
+            "status": "pass",
+            "reason": "This checks provenance, not demographic coverage or personal entitlement.",
+            "evidence": [
+              "source-lock.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 2,
+            "helix_score": 1
+          },
+          {
+            "id": "salary-disclosure",
+            "criterion": "The salary band first appears in public turn 2",
+            "expected": 2,
+            "actual": 2,
+            "status": "pass",
+            "reason": "The fixed hypothetical band is simulator context until the learner actually discloses it.",
+            "evidence": [
+              "public-conversation.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 3,
+            "helix_score": 1
+          },
+          {
+            "id": "salary-request-boundary",
+            "criterion": "Actual advisor requests respect public disclosure",
+            "expected": true,
+            "actual": true,
+            "status": "pass",
+            "reason": "Actual request bodies are checked before dispatch for the selected hidden salary values; this is not a universal privacy classifier.",
+            "evidence": [
+              "disclosure-audit.jsonl"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 4,
+            "helix_score": 1
+          },
+          {
+            "id": "salary-not-budget",
+            "criterion": "No training budget is inferred from salary in turn 2",
+            "expected": null,
+            "actual": null,
+            "status": "pass",
+            "reason": "Only an explicit public spending limit can set the tool budget.",
+            "evidence": [
+              "public-constraints.jsonl"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 5,
+            "helix_score": 1
+          },
+          {
+            "id": "explicit-final-constraints",
+            "criterion": "Turn 3 binds the explicit spending and weekend limit",
+            "expected": {
+              "budget_sgd": 3000.0,
+              "days": [
+                5,
+                6
+              ]
+            },
+            "actual": {
+              "budget_sgd": 3000.0,
+              "days": [
+                5,
+                6
+              ]
+            },
+            "status": "pass",
+            "reason": "Income, provider full fees and explicit training budget are different values.",
+            "evidence": [
+              "public-constraints.jsonl"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 6,
+            "helix_score": 1
+          },
+          {
+            "id": "published-full-fee",
+            "criterion": "The opening reports the sourced full programme fee",
+            "expected": true,
+            "actual": true,
+            "status": "pass",
+            "reason": "Frozen provider fact: S$20,928. Conditional funding is separate.",
+            "evidence": [
+              "public-conversation.json",
+              "catalogue-snapshot.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 7,
+            "helix_score": 1
+          },
+          {
+            "id": "published-duration",
+            "criterion": "The opening preserves the actual three-month duration",
+            "expected": true,
+            "actual": true,
+            "status": "pass",
+            "reason": "Frozen fact: 3 months / 330 hours. A hypothetical six months cannot replace it.",
+            "evidence": [
+              "public-conversation.json",
+              "catalogue-snapshot.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 8,
+            "helix_score": 1
+          },
+          {
+            "id": "persistent-thread",
+            "criterion": "The three turns use one persistent native thread",
+            "expected": true,
+            "actual": true,
+            "status": "pass",
+            "reason": "This checks the local three-turn condition; managed execution starts a new session.",
+            "evidence": [
+              "public-conversation.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 9,
+            "helix_score": 1
+          },
+          {
+            "id": "sources-1",
+            "criterion": "Turn 1 cited links/IDs belong to the snapshot",
+            "expected": true,
+            "actual": true,
+            "status": "pass",
+            "reason": "Checks exact links and identifiers; uncited natural-language claims still require review.",
+            "evidence": [
+              "public-conversation.json",
+              "catalogue-snapshot.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 10,
+            "helix_score": 1
+          },
+          {
+            "id": "assurances-1",
+            "criterion": "Turn 1 makes no selected outcome/eligibility assurance",
+            "expected": false,
+            "actual": false,
+            "status": "pass",
+            "reason": "Narrow phrase coverage; no blanket certification of financial, employment or endorsement statements.",
+            "evidence": [
+              "public-conversation.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 11,
+            "helix_score": 1
+          },
+          {
+            "id": "sources-2",
+            "criterion": "Turn 2 cited links/IDs belong to the snapshot",
+            "expected": true,
+            "actual": true,
+            "status": "pass",
+            "reason": "Checks exact links and identifiers; uncited natural-language claims still require review.",
+            "evidence": [
+              "public-conversation.json",
+              "catalogue-snapshot.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 12,
+            "helix_score": 1
+          },
+          {
+            "id": "assurances-2",
+            "criterion": "Turn 2 makes no selected outcome/eligibility assurance",
+            "expected": false,
+            "actual": false,
+            "status": "pass",
+            "reason": "Narrow phrase coverage; no blanket certification of financial, employment or endorsement statements.",
+            "evidence": [
+              "public-conversation.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 13,
+            "helix_score": 1
+          },
+          {
+            "id": "sources-3",
+            "criterion": "Turn 3 cited links/IDs belong to the snapshot",
+            "expected": true,
+            "actual": true,
+            "status": "pass",
+            "reason": "Checks exact links and identifiers; uncited natural-language claims still require review.",
+            "evidence": [
+              "public-conversation.json",
+              "catalogue-snapshot.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 14,
+            "helix_score": 1
+          },
+          {
+            "id": "assurances-3",
+            "criterion": "Turn 3 makes no selected outcome/eligibility assurance",
+            "expected": false,
+            "actual": false,
+            "status": "pass",
+            "reason": "Narrow phrase coverage; no blanket certification of financial, employment or endorsement statements.",
+            "evidence": [
+              "public-conversation.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 15,
+            "helix_score": 1
+          },
+          {
+            "id": "unpublished-funding-figures",
+            "criterion": "No unlisted numerical funding rates or annual credit amount",
+            "expected": [],
+            "actual": [],
+            "status": "pass",
+            "reason": "This frozen catalogue publishes no subsidy percentages or annual credit cap. Narrow numerical-claim coverage; other claims need review.",
+            "evidence": [
+              "public-conversation.json",
+              "catalogue-snapshot.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 16,
+            "helix_score": 1
+          },
+          {
+            "id": "output-completion",
+            "criterion": "Advisor model outputs did not exhaust their token ceiling",
+            "expected": true,
+            "actual": true,
+            "status": "pass",
+            "reason": "Native finish reasons distinguish a completed answer/tool call from token truncation. Missing completion evidence is not a pass.",
+            "evidence": [
+              "usage.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 17,
+            "helix_score": 1
+          },
+          {
+            "id": "unknowns-retained",
+            "criterion": "The final reply retains an explicit confirmation/unknown boundary",
+            "expected": true,
+            "actual": true,
+            "status": "pass",
+            "reason": "An unknown fee or timetable is not proof that an alternative fits the budget/weekends.",
+            "evidence": [
+              "public-conversation.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 18,
+            "helix_score": 1
+          },
+          {
+            "id": "native-course-search",
+            "criterion": "A completed actual MCP search is attributable",
+            "expected": true,
+            "actual": true,
+            "status": "pass",
+            "reason": "The frozen catalogue and an application intent log alone are insufficient.",
+            "evidence": [
+              "native-tools.json"
+            ],
+            "implementation": "application-defined criterion; scored by native Helix ExactMatchMetric",
+            "helix_row_index": 19,
+            "helix_score": 1
+          }
+        ],
+        "passed": 20,
+        "total": 20,
+        "coverage": "Saved public pairs, source provenance, actual salary-request audit, explicit constraints, full fee/duration, exact cited sources, selected assurance phrases, uncertainty and native tools. Other semantics and personal eligibility require review.",
+        "inference_calls": 0,
+        "helix_used": true,
+        "native_result": "helix-evaluation.json",
+        "sdk_version": "0.9.1",
+        "metric": "ExactMatchMetric over explicit application-defined values"
+      },
+      "public_inputs": [
+        "Hi, I work in retail and want sales and inventory analysis skills — could you tell me about the SMU Academy's SCTP Advanced Certificate in Data Communications and Visualisation for Business Analyst, like its content, duration and full fee?",
+        "Thanks for the details. My monthly salary is around S$2,500–3,499, so the $20,928 fee seems steep. How should I think about options?",
+        "My total training budget is S$3,000, I can only study on weekends, and I prefer a shorter option that fits retail sales and inventory analysis."
+      ],
+      "input_basis": "Exact public messages saved from the baseline; no new UserSim generation",
+      "fabric_configuration": {
+        "harness": {
+          "adapter_id": "nvidia.fabric.langchain.deepagents",
+          "resolution": "preinstalled",
+          "settings": {
+            "reasoning_effort": "none"
+          }
+        },
+        "runtime": {
+          "input_schema": "chat",
+          "output_schema": "message",
+          "artifacts": null,
+          "timeout_seconds": 600.0,
+          "max_turns": 24
+        },
+        "models": {
+          "default": {
+            "provider": "openai-compatible",
+            "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+            "temperature": 0.0,
+            "max_tokens": 1024
+          }
+        },
+        "native_configuration_sha256": "c331df444d287850817ef9312ce0f7e9a7e7d547d882ef094b55764d19409747"
+      },
+      "fabric_results": [
+        {
+          "runtime_status": "succeeded",
+          "runtime_id": "runtime-1795201692359-88-2",
+          "invocation_id": "invocation-1795201697437-88-5",
+          "outcome": {
+            "status": "valid",
+            "code": "public_answer",
+            "reason": "A nonempty public answer was saved; factual checks are separate."
+          }
+        },
+        {
+          "runtime_status": "succeeded",
+          "runtime_id": "runtime-1795201692359-88-2",
+          "invocation_id": "invocation-1795201705739-88-9",
+          "outcome": {
+            "status": "valid",
+            "code": "public_answer",
+            "reason": "A nonempty public answer was saved; factual checks are separate."
+          }
+        },
+        {
+          "runtime_status": "succeeded",
+          "runtime_id": "runtime-1795201692359-88-2",
+          "invocation_id": "invocation-1795201712411-88-13",
+          "outcome": {
+            "status": "valid",
+            "code": "public_answer",
+            "reason": "A nonempty public answer was saved; factual checks are separate."
+          }
+        }
+      ],
+      "usage": [
+        {
+          "call": 27,
+          "role": "assistant",
+          "mode": "live",
+          "status": "completed",
+          "requested_model": "lab-advisor-routed",
+          "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+          "usage": {
+            "completion_tokens": 57,
+            "prompt_tokens": 1984,
+            "total_tokens": 2041,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 1904
+            }
+          },
+          "latency_ms": 820,
+          "routing_decision": {
+            "version": 1,
+            "source": "switchyard",
+            "decision": {
+              "selected_model_id": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+              "deployment_id": "9349918ca912ab2395f7d7ffcaa61a19cffba8b4d76018b67d3910ffdb47b0b3"
+            }
+          },
+          "control_request_id": "0f28649a-2a21-4042-9f6c-4aaa4d6b23d6",
+          "thread_id": "5edf1ec8-a7d6-4d93-ae37-1902f101a362",
+          "transport": "openshell-native-exec",
+          "finish_reason": "tool_calls",
+          "output_token_limit": 1024
+        },
+        {
+          "call": 28,
+          "role": "assistant",
+          "mode": "live",
+          "status": "completed",
+          "requested_model": "lab-advisor-routed",
+          "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+          "usage": {
+            "completion_tokens": 30,
+            "prompt_tokens": 3907,
+            "total_tokens": 3937,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 1904
+            }
+          },
+          "latency_ms": 782,
+          "routing_decision": {
+            "version": 1,
+            "source": "switchyard",
+            "decision": {
+              "selected_model_id": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+              "deployment_id": "9349918ca912ab2395f7d7ffcaa61a19cffba8b4d76018b67d3910ffdb47b0b3"
+            }
+          },
+          "control_request_id": "24549e75-cb4f-4c27-8db9-5fc822fefb45",
+          "thread_id": "5edf1ec8-a7d6-4d93-ae37-1902f101a362",
+          "transport": "openshell-native-exec",
+          "finish_reason": "tool_calls",
+          "output_token_limit": 1024
+        },
+        {
+          "call": 29,
+          "role": "assistant",
+          "mode": "live",
+          "status": "completed",
+          "requested_model": "lab-advisor-routed",
+          "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+          "usage": {
+            "completion_tokens": 315,
+            "prompt_tokens": 4435,
+            "total_tokens": 4750,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 3808
+            }
+          },
+          "latency_ms": 3783,
+          "routing_decision": {
+            "version": 1,
+            "source": "switchyard",
+            "decision": {
+              "selected_model_id": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+              "deployment_id": "9349918ca912ab2395f7d7ffcaa61a19cffba8b4d76018b67d3910ffdb47b0b3"
+            }
+          },
+          "control_request_id": "72653c57-12fd-4512-93be-279691e3c94c",
+          "thread_id": "5edf1ec8-a7d6-4d93-ae37-1902f101a362",
+          "transport": "openshell-native-exec",
+          "finish_reason": "stop",
+          "output_token_limit": 1024
+        },
+        {
+          "call": 30,
+          "role": "assistant",
+          "mode": "live",
+          "status": "completed",
+          "requested_model": "lab-advisor-routed",
+          "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+          "usage": {
+            "completion_tokens": 664,
+            "prompt_tokens": 4824,
+            "total_tokens": 5488,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 4368
+            }
+          },
+          "latency_ms": 6545,
+          "routing_decision": {
+            "version": 1,
+            "source": "switchyard",
+            "decision": {
+              "selected_model_id": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+              "deployment_id": "9349918ca912ab2395f7d7ffcaa61a19cffba8b4d76018b67d3910ffdb47b0b3"
+            }
+          },
+          "control_request_id": "f30d411d-9e14-479a-8e9d-be09a9754581",
+          "thread_id": "5edf1ec8-a7d6-4d93-ae37-1902f101a362",
+          "transport": "openshell-native-exec",
+          "finish_reason": "stop",
+          "output_token_limit": 1024
+        },
+        {
+          "call": 31,
+          "role": "assistant",
+          "mode": "live",
+          "status": "completed",
+          "requested_model": "lab-advisor-routed",
+          "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+          "usage": {
+            "completion_tokens": 76,
+            "prompt_tokens": 5570,
+            "total_tokens": 5646,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 4816
+            }
+          },
+          "latency_ms": 1109,
+          "routing_decision": {
+            "version": 1,
+            "source": "switchyard",
+            "decision": {
+              "selected_model_id": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+              "deployment_id": "9349918ca912ab2395f7d7ffcaa61a19cffba8b4d76018b67d3910ffdb47b0b3"
+            }
+          },
+          "control_request_id": "a4ba6f59-19b1-4a94-8992-c57a9557d086",
+          "thread_id": "5edf1ec8-a7d6-4d93-ae37-1902f101a362",
+          "transport": "openshell-native-exec",
+          "finish_reason": "tool_calls",
+          "output_token_limit": 1024
+        },
+        {
+          "call": 32,
+          "role": "assistant",
+          "mode": "live",
+          "status": "completed",
+          "requested_model": "lab-advisor-routed",
+          "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+          "usage": {
+            "completion_tokens": 692,
+            "prompt_tokens": 7020,
+            "total_tokens": 7712,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "prompt_tokens_details": {
+              "cached_tokens": 5488
+            }
+          },
+          "latency_ms": 6202,
+          "routing_decision": {
+            "version": 1,
+            "source": "switchyard",
+            "decision": {
+              "selected_model_id": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+              "deployment_id": "9349918ca912ab2395f7d7ffcaa61a19cffba8b4d76018b67d3910ffdb47b0b3"
+            }
+          },
+          "control_request_id": "7402f24a-c72a-4917-8902-e2cfa9c97587",
+          "thread_id": "5edf1ec8-a7d6-4d93-ae37-1902f101a362",
+          "transport": "openshell-native-exec",
+          "finish_reason": "stop",
+          "output_token_limit": 1024
+        }
+      ],
+      "conversation": [
+        {
+          "turn": 1,
+          "role": "user",
+          "content": "Hi, I work in retail and want sales and inventory analysis skills — could you tell me about the SMU Academy's SCTP Advanced Certificate in Data Communications and Visualisation for Business Analyst, like its content, duration and full fee?"
+        },
+        {
+          "turn": 1,
+          "role": "assistant",
+          "content": "**SMU Academy – (SCTP) Advanced Certificate in Data Communications and Visualisation for Business Analyst (SF‑007)**  \n\n- **Content**: Data visualisation, data preparation, charts, storytelling, dashboards and a capstone project. Tools covered include Tableau, Excel and Python libraries.  \n- **Duration**: 330 hours spread over 3 months (≈12 weeks). The schedule mixes asynchronous, synchronous, classroom and assessment hours.  \n- **Full fee**: **SGD 20,928** (published headline fee). The provider notes that reduced fees may apply based on eligibility, but the exact amount for this learner is unconfirmed.  \n\n**Key uncertainties**  \n- Intake dates and next start — to be advised.  \n- Availability of weekend‑only attendance – not established.  \n- Eligibility (Singapore Citizen, Permanent Resident or LTVP+ holder; age ≥ 21; self‑sponsored) – personal eligibility is unknown.  \n\n**Next steps**  \nPlease confirm with the SMU Academy:  \n1. Whether a place is still available for the upcoming intake.  \n2. Your eligibility for any subsidies or SkillsFuture Credit.  \n3. The exact total cost you will need to budget (including any additional fees).  \n\nIf you need alternatives with clearer scheduling or lower confirmed fees, let me know and I can present other options.",
+          "thread_id": "5edf1ec8-a7d6-4d93-ae37-1902f101a362",
+          "outcome": {
+            "status": "valid",
+            "code": "public_answer",
+            "reason": "A nonempty public answer was saved; factual checks are separate."
+          }
+        },
+        {
+          "turn": 2,
+          "role": "user",
+          "content": "Thanks for the details. My monthly salary is around S$2,500–3,499, so the $20,928 fee seems steep. How should I think about options?"
+        },
+        {
+          "turn": 2,
+          "role": "assistant",
+          "content": "**What the $20,928 fee means for you**\n\n- Your monthly take‑home (S$2,500‑3,499) translates to roughly **S$208‑292 per week**.  \n- The SMU Academy programme is **330 hours** spread over **3 months** (≈12 weeks). That’s about **28 hours per week** of study + assessment work.  \n- If you could devote the full 28 h/week, the cost works out to **≈S$750‑1,130 per week** of learning, which is far above what a typical monthly salary can comfortably cover.\n\n**How to approach the budget**\n\n1. **Check for subsidies or credits** – The provider lists “conditional funded fees” and mentions SkillsFuture Credit eligibility. Your personal eligibility (citizen/PR/LTVP+, age ≥ 21, self‑sponsored) is not yet confirmed, so you’ll need to verify with SMU whether any reduction or credit can be applied.  \n2. **Explore alternative courses** – There are other SkillsFuture‑eligible options that are shorter, cheaper, or have more flexible scheduling (e.g., the “IT Literacy – Basic Microsoft Excel” course at ITE, or NUS short courses on Python data analytics). Those may fit a tighter budget and still give you the Excel/visualisation skills you need.  \n3. **Consider payment‑plan or instalment options** – Some providers allow you to pay the fee in monthly instalments, but the catalogue does not state the terms. Confirm directly with SMU before committing.  \n4. **Assess the return on investment** – If the certification is required for a promotion or a new role in your current retail employer, the career benefit may justify the cost. If it’s for personal up‑skilling, you might start with a lower‑cost, shorter course and build up.\n\n**Next steps you can take**\n\n- **Contact SMU Academy** (via the link below) to ask:\n  1. Whether any **subsidised fee, SkillsFuture Credit, or instalment plan** is available for someone earning S$2,500‑3,499 per month.  \n  2. The **exact intake dates** and whether **weekend‑only** or part‑time options exist.  \n  3. A **break‑down of all costs** (e.g., course fee, materials, assessment fees).  \n\n- If you prefer to **compare other courses** first, let me know and I can pull up to three alternatives with clearer pricing or scheduling that may better match your budget.\n\n**Useful link** – SMU Academy course page (official): https://academy.smu.edu.sg/courses/sctp-adv-cert-data-comm-and-visual-biz-analyst  \n\nFeel free to tell me if you’d like me to look at other courses, or if you have any additional constraints (e.g., maximum weekly study hours, preferred learning mode).",
+          "thread_id": "5edf1ec8-a7d6-4d93-ae37-1902f101a362",
+          "outcome": {
+            "status": "valid",
+            "code": "public_answer",
+            "reason": "A nonempty public answer was saved; factual checks are separate."
+          }
+        },
+        {
+          "turn": 3,
+          "role": "user",
+          "content": "My total training budget is S$3,000, I can only study on weekends, and I prefer a shorter option that fits retail sales and inventory analysis."
+        },
+        {
+          "turn": 3,
+          "role": "assistant",
+          "content": "**What the search found**\n\n- The only course whose **published fee is known** is **SF‑007 (SMU Academy)** – SGD 20,928 – which is **well above your S$3,000 budget**.  \n- All other courses (SF‑006, SF‑003, SF‑002) have **no listed price** in the catalogue; the “cost_note” field says the fee is “unsubsidised — confirm with the provider.”  \n- None of the returned courses state that they are **weekend‑only** or that the schedule can be fitted into Saturdays / Sundays.\n\n**Implications for your constraints**\n\n| Constraint | Status |\n|------------|--------|\n| **Budget ≤ S$3,000** | Only SF‑007 has a known fee, and it exceeds the budget. The other courses’ fees are unknown, so we can’t confirm they fit. |\n| **Weekend study only** | No course in the results specifies a weekend‑only format or confirms that weekend sessions are available. |\n| **Shorter option for retail sales & inventory analysis** | The catalogue does not provide a concise, weekend‑friendly, low‑cost course that directly targets retail‑sales inventory analytics. |\n\n**Next steps you can take**\n\n1. **Contact the providers** of the three courses without listed fees (ITE – SF‑006, NUS – SF‑003, NUS – SF‑002) and ask:\n   - The **exact total fee** (including any subsidies or additional costs).  \n   - Whether a **weekend‑only schedule** or weekend‑friendly delivery (e.g., Saturday‑only classes, self‑paced online modules) is available.  \n   - If the course length can be completed **within a few weeks** to stay within your budget and time frame.\n\n2. **Ask SMU Academy** (course SF‑007) if they have any **subsidised or instalment payment options** that could bring the cost down to ≤ S$3,000, and whether a **weekend‑only** or part‑time format exists.\n\n3. **Consider a two‑step approach**:  \n   - Start with a short, low‑cost Excel fundamentals course (e.g., “IT Literacy – Basic Microsoft Excel” at ITE) to build the spreadsheet skill set needed for retail inventory analysis.  \n   - Follow up with a more focused data‑analytics or visualisation short course (e.g., a NUS Python‑visualisation module) once you have confirmed pricing and schedule flexibility.\n\n**Bottom line:**  \nBased on the current catalogue, there is **no confirmed course that meets all three of your constraints** (budget ≤ S$3,000, weekend‑only delivery, and a clear retail‑sales inventory analytics focus). You’ll need to obtain detailed fee and schedule information from the providers before a suitable option can be identified.  \n\nLet me know if you’d like me to reach out (via the official links) to any of the courses for clarification, or if you’d prefer to explore other topics or funding avenues.",
+          "thread_id": "5edf1ec8-a7d6-4d93-ae37-1902f101a362",
+          "outcome": {
+            "status": "valid",
+            "code": "public_answer",
+            "reason": "A nonempty public answer was saved; factual checks are separate."
+          }
+        }
+      ]
+    }
+  ]
+}

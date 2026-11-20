@@ -11,7 +11,8 @@
   import {lessonFor,componentById,operationById,resolveComponent} from '#lib/lessonArchitecture.ts';
   import '../style.css';
   type Page='why'|'map'|'qa'|'datasets';
-  let page=$state<Page>('map'),scenarioId=$state('photography'),liveMode=$state(false),liveRunId=$state<string|null>(null);
+  let page=$state<Page>('map'),scenarioId=$state('photography'),liveMode=$state(false);
+  let liveRuns=$state<Record<string,string|null>>({photography:null,boardgames:null,dreamjob:null});
   let personaSource=$state('ngc'),lockedPersona=$state<Record<string,any>|null>(null);
   let setupOpen=$state(true),detailed=$state(false),stageIndex=$state(0),turnIndex=$state(0),focused=$state(false);
   let search=$state(''),qaSearch=$state(''),qaGroup=$state('all'),labels=$state(true);
@@ -25,7 +26,7 @@
   const storageKey='persona-lab-guide-wireframe:selection:v4';
   const currentScenario=$derived(scenarios.find(s=>s.id===scenarioId)||scenarios[0]);
   const harness=$derived(currentScenario.preset.harness),designer=$derived(currentScenario.preset.designer),routing=$derived(currentScenario.preset.routing);
-  const hasDemo=$derived(['photography','boardgames'].includes(scenarioId));
+  const hasDemo=$derived(['photography','boardgames','dreamjob'].includes(scenarioId));
   const nativeGuards=$derived(currentScenario.preset.guardrails),managed=$derived(currentScenario.preset.helix);
   const lastStage=stages.length-1,faqGroups=[...new Set(faqs.map(f=>f.group))];
   const stage=$derived(stages[stageIndex]);
@@ -62,7 +63,10 @@
           focused=saved.focused===true;
           if(componentById[saved.selected])selected=saved.selected;
           if(operationById[saved.operationId]?.component===selected)operationId=saved.operationId;
-          if(typeof saved.liveRunId==='string'&&/^[a-f0-9-]{36}$/.test(saved.liveRunId))liveRunId=saved.liveRunId;
+          if(saved.liveRuns&&typeof saved.liveRuns==='object')for(const candidate of scenarios){
+            const id=saved.liveRuns[candidate.id];if(typeof id==='string'&&/^[a-f0-9-]{36}$/.test(id))liveRuns[candidate.id]=id;
+          }
+          if(!liveRuns[scenarioId]&&typeof saved.liveRunId==='string'&&/^[a-f0-9-]{36}$/.test(saved.liveRunId))liveRuns[scenarioId]=saved.liveRunId;
         }
       }
       // Obsolete selections may contain raw source identifiers; retain only the new safe preferences.
@@ -70,7 +74,7 @@
     }catch{/* Browser preferences are optional. */}
     restored=true;
   });
-  $effect(()=>{const snapshot={version:4,page,scenarioId,setupOpen,stageId:stage.id,turnIndex,detailed,selected,operationId,focused,liveRunId};if(restored)try{localStorage.setItem(storageKey,JSON.stringify(snapshot));}catch{/* Optional preference. */}});
+  $effect(()=>{const snapshot={version:4,page,scenarioId,setupOpen,stageId:stage.id,turnIndex,detailed,selected,operationId,focused,liveRunId:liveRuns[scenarioId]||null,liveRuns};if(restored)try{localStorage.setItem(storageKey,JSON.stringify(snapshot));}catch{/* Optional preference. */}});
   $effect(()=>{const width=preferredPanelWidth;if(restored)try{if(width===null)localStorage.removeItem(panelWidthKey);else localStorage.setItem(panelWidthKey,JSON.stringify(width));}catch{/* Optional preference. */}});
   $effect(()=>{if(!playing||page!=='map')return;const position=stageIndex;const timer=window.setTimeout(()=>{if(position<lastStage){stageIndex=position+1;selected=null;operationId='';scrollInspectorTop();}else playing=false;},4200);return()=>window.clearTimeout(timer);});
 </script>
@@ -83,7 +87,7 @@
       <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
       <span><strong>Building Citizen Apps with NeMo</strong><small>NeMo Stack Integration Guide · Singapore</small></span>
     </button>
-    <div class="header-note"><span class="status-pill">INTEGRATION GUIDE</span><span class="header-caption">{page === 'datasets' ? 'Schema reference · local profile reader · no inference' : 'Photography and board games recorded · retail learning planned'}</span></div>
+    <div class="header-note"><span class="status-pill">INTEGRATION GUIDE</span><span class="header-caption">{page === 'datasets' ? 'Schema reference · local profile reader · no inference' : 'Three scenario recordings · routing comparison limits retained'}</span></div>
   </header>
 
   <nav class="main-nav" aria-label="Main sections">
@@ -129,11 +133,11 @@
 
       <section class="editorial-section">
         <h2>Know what you are looking at.</h2>
-        <div class="availability-grid"><div><span class="tag">TRACE WALKTHROUGH</span><h3>Follow one request</h3><p>Choose a simple scenario and advance through nine stages. Authored examples explain the flow; no observed execution is implied.</p></div><div><span class="tag muted-tag">CODE AND LOGS</span><h3>Open the relevant detail</h3><p>Application code and scenario log links stay beside the map. Source links identify the repository. Local logs identify the selected photography run; absent evidence remains explicit.</p></div><div><span class="tag muted-tag">LIVE PHOTOGRAPHY</span><h3>Run a real interaction</h3><p>Simulate a Session opens explicit photography execution. Check prerequisites, lock one test persona, then start a new saved condition.</p></div></div>
-        <details class="disclosure"><summary>Prerequisites and integration limits</summary><p>The actual lab needs local persona data and configured model endpoints. Designer, Helix evaluation and Platform adapters retain their separately compatible environments. NGC scope is Singapore Nemotron Personas Extended only.</p><p>The repository retains historical photography/S$50/Saturday sandbox evidence. Historical records do not establish current live readiness. A selected new photography run supplies its own native evidence. Other scenarios need their own reviewed presets and verification. The separate dynamic Docker profile retains its recorded host-ingress limitation.</p><p>The guide reads installed originals and saved photography runs. Other scenarios remain illustrative; no source or log inspection starts inference.</p></details>
+        <div class="availability-grid"><div><span class="tag">TRACE WALKTHROUGH</span><h3>Follow one request</h3><p>Choose a scenario and advance through nine stages. Explanatory flows connect its recorded inputs, actual operations and results.</p></div><div><span class="tag muted-tag">CODE AND LOGS</span><h3>Open the relevant detail</h3><p>Application calls and configuration link to committed repository symbols. Scenario logs open the matching fixed recording; missing evidence and failed comparisons stay explicit.</p></div><div><span class="tag muted-tag">EXPLICIT LIVE RUN</span><h3>Run a real interaction</h3><p>Simulate a Session opens separate execution controls. Check prerequisites, lock one test persona, then start a new saved condition.</p></div></div>
+        <details class="disclosure"><summary>Prerequisites and integration limits</summary><p>The actual lab needs local persona data and configured model endpoints. Designer, Helix evaluation and Platform adapters retain their separately compatible environments. NGC scope is Singapore Nemotron Personas Extended only.</p><p>Each scenario supplies its own recorded native evidence. Historical records do not establish current live readiness. Retail's requested Gemma/GLM comparison timed out; the separate native-routing diagnostic does not replace it. The dynamic Docker profile retains its recorded host-ingress limitation.</p><p>The guide reads installed originals and curated scenario packs. Source/log inspection and playback start no inference.</p></details>
         <button class="primary large" onclick={() => locate(0)}>Explore the Integration Map <span aria-hidden="true">→</span></button>
       </section>
-      <footer class="editorial-footer">Current code and selected-run evidence are distinct. Scenarios 2 and 3 remain illustrative.</footer>
+      <footer class="editorial-footer">Current code and selected-run evidence are distinct. Each scenario has its own recording; failed comparisons remain visible.</footer>
     </main>
   {:else if page === 'map'}
     <section class="map-page" aria-label="Integration workspace">
@@ -149,7 +153,7 @@
           <div class="canvas-caption"><span>{focused?'Highlighted paths explain the selected lesson or operation; logs establish what actually ran.':'Whole architecture · select a lesson or operation to follow its information flow.'}</span><span class="illustration-label">{hasDemo?'Curated scenario recording':'Planned scenario · no execution evidence'}</span></div>
           <div class="graph-host"><IntegrationGraph bind:this={graph} {detailed} {scenarioId} active={activeOperations} {focused} {search} {labels} {selected} oninspect={inspect} /></div>
           <div class="graph-footer"><div class="flow-legend"><span><i class="prep"></i>Preparation</span><span><i class="request"></i>Request / response</span><span><i class="telemetry"></i>Evidence</span><span><i class="control"></i>Deployment control</span></div><span>{reducedMotion ? 'Reduced motion' : 'Arrows indicate direction'}</span></div>
-          <div class="graph-context"><strong>{currentScenario.title}</strong><span>{managed?'Helix-managed OpenShell preview':hasDemo?'Standalone OpenShell · no Helix':'Standalone OpenShell preview · no Helix'} · {routing==='switchyard'?'Switchyard with LiteLLM':'Fixed model via LiteLLM'} · {harness==='deepagents'?'Fabric + Deep Agents':'Fabric + Hermes'}</span></div>
+          <div class="graph-context"><strong>{currentScenario.title}</strong><span>{managed?'Standalone baseline + separate Helix-managed OpenShell session':hasDemo?'Standalone OpenShell · no Helix':'Standalone OpenShell preview · no Helix'} · {routing==='switchyard'?'Fixed baseline + Switchyard comparisons':'Fixed model via LiteLLM'} · {harness==='deepagents'?'Fabric + Deep Agents':'Fabric + Hermes'}</span></div>
         </div>
         <PanelDivider value={panelWidth} min={panelMin} max={panelMax} onresize={width=>preferredPanelWidth=width} onreset={()=>preferredPanelWidth=null} />
         <aside id="request-inspector" class="inspector trace-inspector" aria-label="Request trace and component inspector">
@@ -160,12 +164,12 @@
             <div class="scenario-setup-body">
               <p class="preset-summary">{harness==='deepagents'?'Fabric + LangChain Deep Agents':'Fabric + Hermes'} · {currentScenario.preset.baseline}</p>
               <p class="preset-constraints">{currentScenario.preset.constraints}</p>
-              <p class="preset-allocation">{currentScenario.turns.length} public {currentScenario.turns.length===1?'turn':'turns'} · {designer?'Designer scenario':'Designer enrichment skipped'} · {routing==='switchyard'?'Routing comparison planned':'Fixed routing'} · {nativeGuards?(hasDemo?'Native Guardrails recorded':'Native Guardrails planned'):'Native Guardrails omitted'} · {managed?'Helix-managed OpenShell planned':hasDemo?'Standalone OpenShell verified · Helix omitted':'Standalone OpenShell planned · Helix omitted'}</p>
+              <p class="preset-allocation">{currentScenario.turns.length} public {currentScenario.turns.length===1?'turn':'turns'} · {designer?'Designer overlay recorded':'Designer enrichment skipped'} · {routing==='switchyard'?'Routing diagnostic recorded · requested pool incomplete':'Fixed routing'} · {nativeGuards?(hasDemo?'Native Guardrails recorded':'Native Guardrails planned'):'Native Guardrails omitted'} · {managed?'Helix evaluation, job and managed session recorded':hasDemo?'Standalone OpenShell verified · Helix omitted':'Standalone OpenShell planned · Helix omitted'}</p>
             </div>
           </details>
           <div class="inspector-content" data-testid="trace-content">
             {#if liveMode}
-              <LiveSessionPanel {scenarioId} bind:runId={liveRunId} bind:source={personaSource} bind:persona={lockedPersona} />
+              <LiveSessionPanel {scenarioId} bind:runId={liveRuns[scenarioId]} bind:source={personaSource} bind:persona={lockedPersona} />
             {:else}
               <JourneyPanel {scenarioId} stageId={stage.id} {detailed} component={selected||''} operation={operationId} {focused} bind:turnIndex oninspect={inspect} onback={returnToPlayer} onfollow={()=>chooseStage(stageIndex)} onlesson={chooseStage} />
             {/if}

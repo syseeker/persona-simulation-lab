@@ -1,0 +1,23 @@
+{
+  "projection": "Allowlisted native/public configuration fields.",
+  "run_id": "68a30de7-aab0-4ff5-9c19-7b9b92faf193",
+  "provider": "citizen-retail-68a30de7aab0-model",
+  "environment": "citizen-retail-68a30de7aab0-preset",
+  "provider_status": "ModelProviderStatus.READY",
+  "model_alias": "citizen-retail-advisor",
+  "public_preset": {
+    "preferences_mode": "frozen-public-preset",
+    "frozen_preferences": {
+      "goal": "retail sales inventory data analytics visualisation Excel",
+      "budget_sgd": 3000,
+      "days": [
+        5,
+        6
+      ],
+      "planning_area": null,
+      "known_skills": null,
+      "kind": null
+    },
+    "preferences_sha256": "9dd3fd7b655c8201074cac85a529012c13521b956e132a83974fb25c4aa82888"
+  }
+}

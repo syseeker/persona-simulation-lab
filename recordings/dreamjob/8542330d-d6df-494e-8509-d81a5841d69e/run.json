@@ -1,0 +1,77 @@
+{
+  "schema": "citizen-journey/v1",
+  "run_id": "8542330d-d6df-494e-8509-d81a5841d69e",
+  "condition_id": "cf081c0d-c4fc-4e42-a9e5-a20348ac734f",
+  "episode_id": "0e833dc9-3549-40bb-8a91-e18071888e09",
+  "scenario_id": "dreamjob",
+  "status": "failed",
+  "created_at": "2026-11-20T18:55:29.460016+00:00",
+  "started_at": "2026-11-20T18:55:29.562158+00:00",
+  "ended_at": "2026-11-20T19:09:44.032466+00:00",
+  "stage": "deploy",
+  "calls": 37,
+  "cleanup_confirmed": true,
+  "configuration": {
+    "harness": "deepagents",
+    "fabric": true,
+    "route": "fixed",
+    "proxy": "LiteLLM",
+    "execution": "standalone baseline + separate Helix-managed condition",
+    "designer": true,
+    "guardrails": true,
+    "helix": true,
+    "turn_limit": 3,
+    "model_call_limit": 120,
+    "output_tokens": 1024
+  },
+  "source_revision": "16f114b2baa9aca44811b1b941814b663544514a",
+  "source_hashes": {
+    "src/learning_lab/journey.py": "596e5805c67536b1e517eeeca2a51753f7536bc6de54ee6a7171cfaf6e0de58c",
+    "src/learning_lab/datasets.py": "0f9f7af968f29b16e5c84998d80858945d12ff2e470ab194f429e9b53378703a",
+    "src/learning_lab/stories.py": "61be8b8c87aee42a843044f8a5eac2842d9af74b203a82d9a2faa643a97f94d0",
+    "src/learning_lab/simulation.py": "d951b2e541b0f3e592b87e5e70d203dbe7f7c95bcb98a0b828129b5e96babfce",
+    "src/learning_lab/fabric_target.py": "8f691b1e035a095dc93dbc31915a625f2dcff83d9f30f983608a9a4c24076835",
+    "src/learning_lab/course_mcp.py": "76db2be0023eb6e9a4546f82cc346dfe591bc2c60afa055e4ff3f7ca4e1e7700",
+    "src/learning_lab/catalogue.py": "db256e366d50addce67242e5ef9c16b225ab88b8f5e11bd8c72a9be51ed84280",
+    "src/learning_lab/inference.py": "c70214ed09e13c03e9824c87da2d142cc338647704394d495c9b9a897ed36158",
+    "integrations/proxy/litellm.yaml": "432feebd4bdcaafc11aa6e202c7e359b3c2b71fdd5645717cdd8b9f8e48520fb",
+    "src/learning_lab/settings.py": "2f938000cce64f7b21e4e52ec5ddd553ab12424d3a1ec845dcf935cab4b431a0",
+    "src/learning_lab/journey_checks.py": "8680d3891bff4a9630294fec5bbacaee3db0c8493f425b14a1367384c3a97552",
+    "src/learning_lab/sandbox.py": "958dcdb59af21ecdd6fce9514d6fb7e6896afde9ef0869fbdcec1ede44e9ec54",
+    "src/learning_lab/sandbox_runtime.py": "0e6351289515a28ea93bd633f59dc4174127680155f14930d393fccaf875cb52",
+    "src/learning_lab/behavioural_safeguards.py": "3bd7e9ffef6224077f0a9419a7c532ae8565a11a34dac8ead2565a5cb231bf87",
+    "src/learning_lab/retail.py": "94a45d4ef6e3341adee6ca9e1637e457f39a5f5dc384403fdc3e7e0ddf7b7d6c",
+    "src/learning_lab/retail_checks.py": "6b85e6e0d687c66fee3c99c6b711c876491a371296d682dccfca177fd6195582",
+    "src/learning_lab/retail_experiments.py": "fa794a56ad59ddb533134bf7554db440eb638514957e7d38a3b6860ff7d18aa3",
+    "src/learning_lab/retail_managed.py": "4b5720ed5419ecb37b25377c2e1247115bcdac4105f98ed8b1d2a6fc580dca56",
+    "src/learning_lab/probe.py": "f6912b9f4432e6c7cd1b8feb41a8f1a5aebf25ff0b8c6554b5c00c8a8b107cdd",
+    "integrations/designer/retail_situation.py": "52fb1f53d5d9a2760950ab3d52f06933adcf0106f444e8d1b4a8c95888485238",
+    "integrations/platform/retail_resources.py": "3473fca6b0c4cc4e2cd00b2cd9f35f9951b0662792d3e0bb64a6defa084f764e",
+    "integrations/platform/retail_evaluate.py": "886b7ca445f2c043b71142d94293922ea38060342c33bdf535b82e39ac11ca0e",
+    "integrations/platform/package_agent.py": "bad6d94ab354623b796224b505ff827f51b2f557fbad9dee0632fe09e3ac028c",
+    "integrations/helix/evaluate.py": "c65279c7425961c88c9347193180820cc47a68612b63a4396b04a0a5b7591939",
+    "src/learning_lab/retail_policy.py": "d2e4e41768d5c045684ddb91dd8d569626ae25de17b7fa3f0ec2c278b5e2f911",
+    "integrations/proxy/retail-litellm.yaml": "a1039299ddcaa31350d126d731674675669ce1ad66adb253733bcb97f6c609af",
+    "integrations/proxy/lab_routing.py": "460b2e5b54fb36c20488664428c41eb32ade8688bf13d547c4bde205a243c89f"
+  },
+  "catalogue_sha256": "d2ce4abda853f269d2fd1c93bb60dbd2cd1468a6562e8bc3fbb7140744e38dfa",
+  "native_thread_id": "2084cc1e-e983-4797-8d37-c135571e0775",
+  "evaluation_passed": 20,
+  "evaluation_total": 20,
+  "verification": {
+    "helix_job": {
+      "verified": true,
+      "status": "completed"
+    },
+    "routing": {
+      "verified": false,
+      "status": "recorded",
+      "diagnostic_verified": true,
+      "provider_notice": "Gemma/GLM access and the separate available-inventory diagnostic retain independent verification states."
+    },
+    "managed": {
+      "verified": true,
+      "status": "completed"
+    }
+  }
+}

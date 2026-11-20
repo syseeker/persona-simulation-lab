@@ -20,7 +20,7 @@ PRESETS = {
                                  'application assertions', 'application restrictions', 'standalone OpenShell'),
     'boardgames': ScenarioPreset('boardgames', True, 2, 'hermes', 'authored', 'fixed',
                                 'application assertions', 'native Guardrails', 'standalone OpenShell'),
-    'dreamjob': ScenarioPreset('dreamjob', False, 3, 'deepagents', 'Data Designer overlay', 'switchyard',
+    'dreamjob': ScenarioPreset('dreamjob', True, 3, 'deepagents', 'Data Designer overlay', 'switchyard',
                               'Helix Evals and jobs', 'native Guardrails', 'Helix-managed OpenShell'),
 }
 

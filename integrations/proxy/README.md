@@ -4,6 +4,16 @@ The application owns its inference budget. LiteLLM owns the model proxy and
 provider credentials; the pinned experimental Switchyard plugin owns routing.
 No model or proxy starts at application import.
 
+Scenario 3's requested Gemma/GLM inventory runs separately on loopback port
+4001 using `retail-litellm.yaml` and `start_retail.py`. The helper verifies its
+container ownership/configuration hash and preserves the existing port-4000
+proxy. Fixed `lab-advisor-candidate` and routed `lab-advisor-routed` share that
+inventory, request ceiling and reasoning setting. Current full-context calls
+timed out despite separate successful small endpoint probes; configuration
+alone does not establish availability. A second, explicitly labelled comparison
+on the existing reachable Nemotron inventory has real native decisions.
+See [retail integration](../../docs/retail-integration.md).
+
 The upstream source is fixed at `9e8408c9e06baf146b63cecda14959a30c34697b`,
 with LiteLLM `1.102.0`. It must be built from source because the published
 Switchyard package does not contain this example's decision-only API.

@@ -35,7 +35,7 @@ Rebuild after changing packaged code, the skill or dependencies. The native
 runtime's returned image-manifest hashes must match before inference is admitted.
 
 Optional server-only settings: `LAB_OPENSHELL_IMAGE` (default
-`citizen-learning-advisor:0.4.0`), `LAB_OPENSHELL_WORKSPACE` (default `default`),
+`citizen-learning-advisor:0.8.0`), `LAB_OPENSHELL_WORKSPACE` (default `default`),
 `LAB_OPENSHELL_STATE_DIR` (the existing local store root), and
 `LAB_REPOSITORY_URL` (a repository URL override for source links).
 Existing native operator configuration is respected; these settings do not

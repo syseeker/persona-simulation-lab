@@ -1,0 +1,23 @@
+{
+  "purpose": "Scenario 3 dated supplement; existing course snapshot stays unchanged.",
+  "courses": [{
+    "id": "SF-007",
+    "title": "(SCTP) Advanced Certificate in Data Communications and Visualisation for Business Analyst",
+    "provider": "SMU Academy",
+    "kind": "skillsfuture",
+    "summary": "Data visualisation, data preparation, charts, storytelling, dashboards and a capstone. Tools include Tableau, Excel and Python libraries. The published duration is 330 hours over three months; this is not the hypothetical six-month programme.",
+    "tags": ["data", "analytics", "visualisation", "visualization", "excel", "python", "dashboards", "storytelling"],
+    "source_url": "https://academy.smu.edu.sg/courses/sctp-adv-cert-data-comm-and-visual-biz-analyst",
+    "captured_on": "2026-11-21",
+    "price_min_sgd": 20928,
+    "price_max_sgd": 20928,
+    "extra_cost_sgd": null,
+    "cost_note": "Published full headline fee. Confirm all costs with the provider; reduced fees depend on eligibility.",
+    "duration_hours": 330,
+    "duration_months": 3,
+    "schedule_note": "330 hours over 3 months (12 weeks), including asynchronous, synchronous, classroom and assessment hours. Next start is to be advised; weekend-only attendance is not established.",
+    "prerequisite_note": "Published application conditions include Singapore Citizen, Permanent Resident or LTVP+ holder; at least 21 years old; self-sponsored. Personal eligibility is not established.",
+    "funding_note": "Provider lists conditional funded fees. Salary, a synthetic persona or a brand ambition does not establish eligibility or entitlement.",
+    "availability": "unknown"
+  }]
+}

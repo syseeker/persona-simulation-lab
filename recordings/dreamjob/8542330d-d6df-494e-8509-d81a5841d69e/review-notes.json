@@ -1,0 +1,11 @@
+{
+  "kind": "developer-review",
+  "summary": "The three-turn fixed-Nemotron baseline passed 20/20 native Helix-scored criteria; its durable job and separate managed OpenShell session completed with cleanup. Overall run status stays failed because both requested Gemma/GLM comparison conditions timed out after one admitted call. The separately labelled reachable-Nemotron diagnostic completed both conditions with 20/20 checks and six native Switchyard decisions. It does not verify the requested pool. Both candidate endpoints have separate successful small probes; full-context availability remains incomplete. The managed reply is deployment evidence, not a second pass of the baseline multi-turn evaluation.",
+  "original_results_unchanged": true,
+  "coverage": "Narrow application-defined criteria, deterministic native behavioural checks, observed tool/policy/lifecycle records. Not a general model-quality or safety certification.",
+  "development_findings": [
+    "Earlier runs preserved unsupported funding figures, whitespace-sensitive duration checks and invalid optional MCP kind/day arguments; fixes were verified in this new condition.",
+    "Native Intake transport status success alone does not establish a valid course-tool result.",
+    "Managed session receives only explicit public budget/weekend constraints in fresh memory; no private persona or salary is packaged."
+  ]
+}

@@ -8,6 +8,13 @@ from .catalogue import Preferences, all_courses, search_courses
 from .outcomes import answer_outcome
 
 
+def valid_native_search(tool: dict) -> bool:
+    result = tool.get('result', tool.get('output'))
+    return bool('search_courses' in tool.get('name', tool.get('tool_name', ''))
+        and tool.get('evidence_origin') == 'native_relay' and tool.get('status') == 'completed'
+        and isinstance(result, dict) and isinstance(result.get('matches'), list) and not result.get('error'))
+
+
 def evaluate_boardgames(conversation: list, catalogue: Path, tools: list, source_lock: dict) -> dict:
     """Check the two-turn negative case against actual saved public/native output."""
     users = [m for m in conversation if m['role'] == 'user']
@@ -52,8 +59,7 @@ def evaluate_boardgames(conversation: list, catalogue: Path, tools: list, source
           len(replies) == 2 and len({r.get('thread_id') for r in replies}) == 1 and bool(replies[0].get('thread_id')),
           'Same-thread identity plus the follow-up checks persistence; it is not proof of cross-session memory.', ['public-conversation.json'])
     check('native-tools', 'A completed native catalogue search is attributable', True,
-          any('search_courses' in t.get('name', '') and t.get('evidence_origin') == 'native_relay'
-              and t.get('status') == 'completed' and t.get('output', t.get('result')) is not None for t in tools),
+          any(valid_native_search(tool) for tool in tools),
           'Application intent logs cannot replace native tool execution.', ['native-tools.json'])
     return {'kind': 'application assertions', 'rows': rows,
             'passed': sum(r['status'] == 'pass' for r in rows), 'total': len(rows),
@@ -87,6 +93,9 @@ def evaluate_photography(conversation: list, catalogue: Path, tools: list, sourc
           ['public-conversation.json', 'situation.json'])
     for index, reply in enumerate(replies):
         text = str(reply.get('content') or '').replace('\u2011', '-').replace('\u2013', '-')
+        # Native replies use narrow/non-breaking spaces in place names too.
+        # Preserve line boundaries so field matching cannot consume the next row.
+        text = re.sub(r'[^\S\r\n]', ' ', text)
         cited = set(re.findall(r'\b(?:CC|SF)-\d{3}\b', text))
         urls = set(re.findall(r'https://[^\s)\]>]+', text))
         known_urls = {str(c.source_url): c.id for c in courses.values()}
@@ -126,9 +135,7 @@ def evaluate_photography(conversation: list, catalogue: Path, tools: list, sourc
               bool(re.search(r'no (?:additional|extra|material) (?:fees|costs)|you (?:are eligible|qualify|will receive)|guaranteed (?:funding|subsidy)', lower)),
               'A narrow phrase check; a pass does not certify every financial statement.', ['public-conversation.json'])
     check('native-tools', 'Native tool evidence includes a completed catalogue request', True,
-          any('search_courses' in str(t.get('name', t.get('tool_name', '')))
-              and t.get('evidence_origin') == 'native_relay' and t.get('status') == 'completed'
-              and t.get('output', t.get('result')) is not None for t in tools),
+          any(valid_native_search(tool) for tool in tools),
           'Native Relay evidence is required; an application log saying “searched” is insufficient.', ['native/fabric-traces/relay.jsonl'])
     return {'kind': 'application assertions', 'rows': rows,
             'passed': sum(r['status'] == 'pass' for r in rows), 'total': len(rows),

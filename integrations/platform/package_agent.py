@@ -11,6 +11,7 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 
 from presets import preset_bytes, preset_metadata
 
@@ -34,16 +35,20 @@ GENERATED_FILES = {
     "src/learning_lab/catalogue.py",
     "src/learning_lab/course_mcp.py",
     "src/learning_lab/settings.py",
+    "src/learning_lab/retail_policy.py",
 }
 
 
-def prepare_bundle(harness: str) -> Path:
+def prepare_bundle(harness: str, scenario_id='photography') -> Path:
     if harness not in {"deepagents", "hermes"}:
         raise ValueError("Choose deepagents or hermes")
-    target = HERE / ".bundle" / harness
+    if scenario_id not in {'photography', 'dreamjob'} or scenario_id == 'dreamjob' and harness != 'deepagents':
+        raise ValueError('Choose the photography or retail Deep Agents managed preset')
+    target = HERE / '.bundle' / (harness if scenario_id == 'photography' else 'dreamjob-' + harness)
     allowed = GENERATED_FILES | (
         {"hermes-managed/config.yaml", "hermes-python.sh"} if harness == "hermes" else set()
     )
+    allowed |= {'scenarios/dreamjob/preferences.json', 'scenarios/dreamjob/preferences.sha256'}
     if target.is_symlink() or target.parent.is_symlink():
         raise ValueError("Generated image bundle paths cannot be symbolic links")
     if target.exists():
@@ -58,20 +63,28 @@ def prepare_bundle(harness: str) -> Path:
     # Copy an explicit allowlist; never copy .env, personas, runs or the root
     # dependency manifest (which would pull UserSim into the Platform image).
     copied = {}
-    for name in ("catalogue.py", "course_mcp.py", "settings.py"):
+    for name in ("catalogue.py", "course_mcp.py", "settings.py", *(['retail_policy.py'] if scenario_id == 'dreamjob' else [])):
         source = ROOT / "src/learning_lab" / name
         shutil.copyfile(source, package / name)
         copied[f"src/learning_lab/{name}"] = hashlib.sha256(source.read_bytes()).hexdigest()
     catalogue = target / "catalogue"
     catalogue.mkdir(exist_ok=True)
     shutil.copyfile(ROOT / "catalogue/courses.json", catalogue / "courses.json")
+    if scenario_id == 'dreamjob':
+        sys.path.insert(0, str(ROOT / 'src'))
+        from learning_lab.catalogue import Course
+        combined = json.loads((catalogue / 'courses.json').read_text())
+        supplement = json.loads((ROOT / 'catalogue/retail-supplement.json').read_text())
+        combined['courses'] += [Course.model_validate(row).model_dump(mode='json') for row in supplement['courses']]
+        combined['notice'] = 'Mixed dated sources: inspect each course captured_on; Scenario 3 adds the verified SMU listing.'
+        (catalogue / 'courses.json').write_text(json.dumps(combined, indent=2) + '\n')
     skill = target / "skills/course-advisor"
     skill.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(ROOT / "runtime-skills/course-advisor/SKILL.md", skill / "SKILL.md")
-    preset = target / "scenarios/photography"
+    preset = target / 'scenarios' / scenario_id
     preset.mkdir(parents=True, exist_ok=True)
-    (preset / "preferences.json").write_bytes(preset_bytes())
-    (preset / "preferences.sha256").write_text(preset_metadata()["preferences_sha256"] + "\n")
+    (preset / "preferences.json").write_bytes(preset_bytes(scenario_id))
+    (preset / "preferences.sha256").write_text(preset_metadata(scenario_id)["preferences_sha256"] + "\n")
     if harness == "hermes":
         managed = target / "hermes-managed"
         managed.mkdir(exist_ok=True)
@@ -107,6 +120,8 @@ packages = ["src/learning_lab"]
 
     config = yaml.safe_load((ROOT / "agents/learning-advisor/agent.yaml").read_text())
     config["name"] = f"singapore-learning-advisor-{harness}"
+    if scenario_id == 'dreamjob':
+        config['name'] = 'citizen-retail-advisor-deepagents-v1'
     config["default_harness"] = harness
     config["harnesses"] = {harness: {"kind": harness}}
     config["models"] = {
@@ -132,6 +147,22 @@ packages = ["src/learning_lab"]
             }
         }
     }
+    if scenario_id == 'dreamjob':
+        from learning_lab.retail_policy import instructions
+        config['harnesses'][harness]['settings'] = {'reasoning_effort': 'none'}
+        config['models']['default']['model'] = 'citizen-retail-advisor'
+        config['instructions']['system']['content'] += instructions() + (
+            '\nThis is a fresh managed retail-learning condition using explicitly selected public constraints. '
+            'Use the full published fee and actual duration. A brand ambition does not establish endorsement '
+            'or a job outcome. Income is not a training budget or evidence of affordability/funding eligibility. '
+            'Respect the explicit S$3000 total training limit and weekend-only availability. Unknown fees '
+            'or schedules remain unconfirmed; never promise that an alternative fits either. '
+            'Compare the SMU programme with shorter analysis/Excel options using returned facts and official links.'
+        )
+        config['mcp']['servers']['catalogue']['env'].update(
+            LAB_PREFERENCES_PRESET_FILE='/workspace/scenarios/dreamjob/preferences.json',
+            LAB_PREFERENCES_PRESET_SHA256=preset_metadata(scenario_id)['preferences_sha256'],
+            LAB_REQUIRE_PREFERENCES='1')
     if harness == "hermes":
         config["harnesses"][harness]["settings"] = {
             "reasoning_config": {"enabled": False, "effort": "none"},
@@ -150,7 +181,9 @@ packages = ["src/learning_lab"]
                 "harness": harness,
                 "sources": copied,
                 "hermes_commit": HERMES_COMMIT,
-                "public_preset": preset_metadata(),
+                "public_preset": preset_metadata(scenario_id),
+                "scenario_id": scenario_id,
+                "catalogue_sha256": hashlib.sha256((catalogue / 'courses.json').read_bytes()).hexdigest(),
                 "stage": "source-prepared",
                 "built": False,
                 "deployed": False,
@@ -161,7 +194,7 @@ packages = ["src/learning_lab"]
     return target
 
 
-def customize_dockerfile(path: Path, harness: str):
+def customize_dockerfile(path: Path, harness: str, scenario_id='photography'):
     text = path.read_text()
     if harness == "hermes":
         old_commit = "bf0203a794a07aac3ff764972ab9087baa4e4f4e"
@@ -195,6 +228,8 @@ def customize_dockerfile(path: Path, harness: str):
     chown root:sandbox /workspace && chmod 1775 /workspace && \\
     usermod -a -G sandbox agent
 """
+    if scenario_id == 'dreamjob':
+        patch += "RUN printf 'public non-secret boundary fixture\\n' > /lab-denied.txt && chmod 0444 /lab-denied.txt\n"
     text = text.replace(marker, patch + marker)
     path.write_text(text)
 
@@ -204,8 +239,9 @@ def main():
     parser.add_argument("--harness", choices=["deepagents", "hermes"], required=True)
     parser.add_argument("--image", required=True)
     parser.add_argument("--build", action="store_true")
+    parser.add_argument('--scenario', choices=['photography', 'dreamjob'], default='photography')
     args = parser.parse_args()
-    bundle = prepare_bundle(args.harness)
+    bundle = prepare_bundle(args.harness, args.scenario)
     nemo = HERE / ".venv/bin/nemo"
     if not nemo.is_file():
         raise RuntimeError(
@@ -231,7 +267,7 @@ def main():
         check=True,
         env={**os.environ, "NEMO_TELEMETRY_ENABLED": "false"},
     )
-    customize_dockerfile(bundle / "Dockerfile", args.harness)
+    customize_dockerfile(bundle / "Dockerfile", args.harness, args.scenario)
     if args.build:
         subprocess.run(["docker", "build", "--tag", args.image, str(bundle)], check=True)
         manifest = json.loads((bundle / "source-manifest.json").read_text())

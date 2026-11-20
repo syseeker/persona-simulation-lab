@@ -25,7 +25,7 @@ def clean(value):
         return {
             key: clean(item)
             for key, item in value.items()
-            if not re.search(r"password|secret|authorization|api.?key|credential", key, re.I)
+            if not re.search(r"password|secret|authorization|api.?key|credential|(?:^|_)token$", key, re.I)
         }
     if isinstance(value, list):
         return [clean(item) for item in value]
@@ -34,6 +34,7 @@ def clean(value):
             if re.search(r"KEY|TOKEN|SECRET|PASSWORD", key) and len(secret) >= 8:
                 value = value.replace(secret, "[REDACTED]")
         value = value.replace(str(ROOT), "[developer-checkout]")
+        value = re.sub(r'\beyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\b', '[REDACTED_NATIVE_TOKEN]', value)
         return re.sub(r'/home/[^/\s"\']+', "[developer-home]", value)
     return value
 
@@ -90,6 +91,7 @@ def export(run_id, *, note, destination=None):
             "evaluation_passed",
             "evaluation_total",
             "usersim_notice",
+            "verification",
             "error",
         ],
     )
@@ -134,6 +136,10 @@ def export(run_id, *, note, destination=None):
                     "provider_route",
                     "requested_model",
                     "selected_model",
+                    "finish_reason",
+                    "output_token_limit",
+                    "routing_decision",
+                    "error_type",
                     "usage",
                     "latency_ms",
                     "tool_surface",
@@ -248,6 +254,9 @@ def export(run_id, *, note, destination=None):
         sources[policy.relative_to(original).as_posix()] = hashlib.sha256(policy.read_bytes()).hexdigest()
     for path in (native / "native").rglob("relay.jsonl"):
         sources[path.relative_to(original).as_posix()] = hashlib.sha256(path.read_bytes()).hexdigest()
+    if scenario_id == 'dreamjob':
+        from scripts.retail_review import project
+        project(original, emit)
     emit("trace.json", result)
     manifest = {
         "schema": "citizen-recording/v1",

@@ -18,6 +18,8 @@ def test_readable_model_weekdays_preserve_constraints_and_invalid_days_fail_clos
         monkeypatch.delenv(key, raising=False)
     assert normalize_days("Saturday and Sunday") == [5, 6]
     assert normalize_days("sat, 5") == [5]
+    assert normalize_days(['Saturday', 'Sunday']) == [5, 6]
+    assert normalize_days([5, 'Saturday', 'sun']) == [5, 6]
     result = search_courses("photography", budget_sgd=50, days="Saturday")
     assert "error" not in result
     assert all(set(row["course"]["weekdays"] or []) <= {5} for row in result["matches"])
@@ -79,6 +81,8 @@ async def test_real_stdio_mcp_keeps_readable_weekdays_and_invalid_input_distinct
             assert {row["id"] for row in payload["excluded"]} == {"MONDAY", "OVER-BUDGET"}
             # Preserve the native text projection as well as structured content.
             assert json.loads(result.content[0].text) == payload
+            readable_list = await session.call_tool('search_courses', {**arguments, 'days': ['Saturday']})
+            assert not readable_list.isError and [row['course']['id'] for row in payload_of(readable_list)['matches']] == ['SATURDAY']
 
             invalid_arguments = {**arguments, "days": "someday"}
             invalid = await session.call_tool("search_courses", invalid_arguments)
@@ -88,6 +92,12 @@ async def test_real_stdio_mcp_keeps_readable_weekdays_and_invalid_input_distinct
             assert invalid_payload["matches"] == []
             assert "weekday" in invalid_payload["error"].lower()
             assert json.loads(invalid.content[0].text) == invalid_payload
+
+            invalid_kind = await session.call_tool('search_courses', {**arguments, 'kind': 'none'})
+            kind_payload = payload_of(invalid_kind)
+            assert invalid_kind.isError is False  # The harness can inspect and repair the domain error.
+            assert kind_payload['error_kind'] == 'invalid_input' and kind_payload['matches'] == []
+            assert 'kind' in kind_payload['error'] and 'not a catalogue no-match' in kind_payload['hint']
 
             no_match = await session.call_tool("search_courses", {**arguments, "goal": "boardgames"})
             assert no_match.isError is False

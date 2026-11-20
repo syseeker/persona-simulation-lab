@@ -1,0 +1,8 @@
+{
+  "projection": "Allowlisted native/public configuration fields.",
+  "condition_id": "68a30de7-aab0-4ff5-9c19-7b9b92faf193",
+  "native_absence_confirmed": true,
+  "errors": [],
+  "deployment_name": "citizen-retail-68a30de7aab0",
+  "session_id": "citizen-retail-68a30de7aab0-review"
+}

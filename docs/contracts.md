@@ -1,6 +1,6 @@
 # Application Contracts
 
-The repository-hosted guide adds the strict journey contract below while retaining existing service APIs. Three-preset metadata does not replace the retained backend story enum. Photography and board games are executable through the guide; retail learning is the next implementation gate. See the [current plan](../PLAN.md) and [frozen v0.2 record](history/v0.2/INDEX.md).
+The repository-hosted guide adds the strict journey contract below while retaining existing service APIs. Three-preset metadata does not replace the retained backend story enum. All three presets execute through the guide's shared service. Retail learning adds separately identified comparison and managed conditions; their failures do not disappear when the baseline passes. See the [current plan](../PLAN.md), [retail integration](retail-integration.md) and [frozen v0.2 record](history/v0.2/INDEX.md).
 
 ## Integration Guide journey contract
 

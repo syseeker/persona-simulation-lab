@@ -11,8 +11,9 @@ from .settings import ROOT
 
 
 class BehaviouralSafeguards:
-    def __init__(self, folder: Path):
+    def __init__(self, folder: Path, *, location='inside the application sandbox'):
         self.folder, self.process = folder, None
+        self.location = location
 
     async def __aenter__(self):
         integration = ROOT / 'integrations/guardrails'
@@ -29,7 +30,7 @@ class BehaviouralSafeguards:
         save_evidence(self.folder / 'guardrails-config.json', {
             'configuration': (integration / 'config.yml').read_text(),
             'colang': (integration / 'rails.co').read_text(),
-            'location': 'inside the application sandbox', 'model_generation': False,
+            'location': self.location, 'model_generation': False,
         })
         return self
 

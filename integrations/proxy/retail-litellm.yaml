@@ -1,0 +1,49 @@
+# Providers, keys and endpoint values are configured by the local operator.
+# LiteLLM format: openai/<model> supports NIM and Brev OpenAI-compatible endpoints.
+# Frontier-specific LiteLLM providers may be selected using their native prefix.
+model_list:
+  - model_name: lab-advisor-fixed
+    litellm_params:
+      model: os.environ/LAB_FIXED_MODEL
+      api_base: os.environ/LAB_FIXED_API_BASE
+      api_key: os.environ/LAB_FIXED_API_KEY
+      num_retries: 0
+  - model_name: lab-support
+    litellm_params:
+      model: os.environ/LAB_SUPPORT_MODEL
+      api_base: os.environ/LAB_SUPPORT_API_BASE
+      api_key: os.environ/LAB_SUPPORT_API_KEY
+      num_retries: 0
+  - model_name: lab-advisor-candidate
+    litellm_params:
+      model: os.environ/LAB_EFFICIENT_MODEL
+      api_base: os.environ/LAB_EFFICIENT_API_BASE
+      api_key: os.environ/LAB_EFFICIENT_API_KEY
+      num_retries: 0
+  # Declaration order is part of the pinned Switchyard Stage adapter contract.
+  - model_name: lab-advisor-routed
+    litellm_params:
+      model: os.environ/LAB_CAPABLE_MODEL
+      api_base: os.environ/LAB_CAPABLE_API_BASE
+      api_key: os.environ/LAB_CAPABLE_API_KEY
+      num_retries: 0
+  - model_name: lab-advisor-routed
+    litellm_params:
+      model: os.environ/LAB_EFFICIENT_MODEL
+      api_base: os.environ/LAB_EFFICIENT_API_BASE
+      api_key: os.environ/LAB_EFFICIENT_API_KEY
+      num_retries: 0
+router_settings:
+  num_retries: 0
+  fallbacks: []
+  context_window_fallbacks: []
+  plugins:
+    - lab_routing.ROUTING_PLUGIN
+litellm_settings:
+  callbacks:
+    - lab_routing.ROUTING_PLUGIN
+  num_retries: 0
+  set_verbose: false
+  turn_off_message_logging: true
+general_settings:
+  master_key: os.environ/LAB_PROXY_API_KEY

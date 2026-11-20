@@ -35,7 +35,10 @@
     const c=operationById[id].component;
     if(!componentUsed(c,scenarioId))return 'Not used in this preset';
     if(context?.state!=='recorded')return 'Planned · no scenario evidence';
-    if(['mcp.details','mcp.compare'].includes(id))return 'Available tool · not called in this recording';
+    if(['mcp.details','mcp.compare'].includes(id)){
+      const name=id==='mcp.details'?'get_course_details':'compare_courses';
+      if(!context?.trace?.tools?.some((tool:Data)=>tool.name?.endsWith(name)))return 'Available tool · not called in this recording';
+    }
     if(id==='persona.select')return 'Locked result recorded · sampling details not captured';
     return operationById[id].proof.some(name=>context?.artifacts?.some((a:Data)=>a.path===name))?'Recorded · inspect the matching proof':'Evidence unavailable';
   }

@@ -155,12 +155,16 @@ def scripted_completion(payload: dict) -> dict:
 
 class Gateway:
     def __init__(self, budget: Budget, mode: str = "live", model_route: str = "fixed",
-                 allowed_tool_names: Iterable[str] | None = None):
+                 allowed_tool_names: Iterable[str] | None = None, *, proxy_url: str | None = None,
+                 assistant_alias: str | None = None, on_request=None, request_timeout: float = 50):
         self.budget = budget
         self.mode = mode
         if model_route not in {"fixed", "switchyard"}:
             raise ValueError("Choose fixed or switchyard model routing")
         self.model_route = model_route
+        if assistant_alias not in {None, 'lab-advisor-fixed', 'lab-advisor-candidate', 'lab-advisor-routed', 'lab-support'}:
+            raise ValueError('Choose an allowlisted advisor alias')
+        self.proxy_url, self.assistant_alias, self.on_request = proxy_url, assistant_alias, on_request
         self.key = secrets.token_urlsafe(24)
         self.url = ""
         self.tool_rounds = 0
@@ -169,13 +173,28 @@ class Gateway:
         if isinstance(allowed_tool_names, str):
             raise ValueError("Supply allowed tool names as a collection, not a string")
         self.allowed_tool_names = frozenset(allowed_tool_names) if allowed_tool_names is not None else None
-        self._client = httpx.AsyncClient(timeout=httpx.Timeout(50, connect=10))
+        if not 1 <= request_timeout <= 300:
+            raise ValueError('Model requests must have a one-to-300-second timeout')
+        self.request_timeout = request_timeout
+        self._client = httpx.AsyncClient(timeout=httpx.Timeout(request_timeout, connect=10))
 
     async def complete(self, payload: dict, role="assistant") -> dict:
         record = await self.budget.admit(role, self.mode)
         record["model"] = payload.get("model")
         started = time.perf_counter()
-        payload = {**payload, "max_tokens": min(int(payload.get("max_tokens", 1024)), 1024), "stream": False}
+        # Fabric's maintained OpenAI adapter supplies max_completion_tokens;
+        # NIM expects max_tokens. Preserve the configured (possibly lower)
+        # limit rather than discarding it while translating the field name.
+        try:
+            limits = [1024, *[int(payload[name]) for name in ('max_tokens', 'max_completion_tokens')
+                             if payload.get(name) is not None]]
+            if min(limits) < 1:
+                raise ValueError('Output token limits must be positive')
+        except (ValueError, TypeError) as exc:
+            record.update(status='failed', error_type='ValueError', latency_ms=0)
+            raise ValueError('Output token limits must be positive integers') from exc
+        payload = {**payload, "max_tokens": min(limits), "stream": False}
+        record['output_token_limit'] = payload['max_tokens']
         # The local gateway is the single admission boundary, including Fabric adapter calls.
         payload.pop("max_completion_tokens", None)
         if role == "assistant" and self.allowed_tool_names is not None:
@@ -214,7 +233,7 @@ class Gateway:
                 result = scripted_completion(payload)
             else:
                 load_environment()
-                proxy = os.getenv("LAB_PROXY_BASE_URL", "").rstrip("/")
+                proxy = (self.proxy_url if self.proxy_url is not None else os.getenv("LAB_PROXY_BASE_URL", "")).rstrip("/")
                 if self.model_route == "switchyard" and not proxy:
                     raise ValueError("Switchyard requires LAB_PROXY_BASE_URL; no direct-provider fallback was used")
                 key = os.getenv("LAB_PROXY_API_KEY") if proxy else os.getenv("NVIDIA_API_KEY")
@@ -224,14 +243,18 @@ class Gateway:
                 record["provider_route"] = "litellm" if proxy else "nim-direct"
                 if proxy:
                     payload["model"] = (
+                        self.assistant_alias if role == 'assistant' and self.assistant_alias else
                         "lab-advisor-routed" if role == "assistant" and self.model_route == "switchyard"
                         else "lab-advisor-fixed" if role == "assistant" else "lab-support"
                     )
                 record["requested_model"] = payload["model"]
-                response = await self._client.post(
-                    endpoint + "/chat/completions", json=payload,
-                    headers={"Authorization": f"Bearer {key}"},
-                )
+                if self.on_request:
+                    await self.on_request(payload, role, record)
+                async with asyncio.timeout(self.request_timeout):
+                    response = await self._client.post(
+                        endpoint + "/chat/completions", json=payload,
+                        headers={"Authorization": f"Bearer {key}"},
+                    )
                 if response.status_code >= 400:
                     from .evidence import sanitize
                     try:
@@ -283,6 +306,7 @@ class Gateway:
                 self.tool_rounds += 1
             record.update(
                 status="completed",
+                finish_reason=result['choices'][0].get('finish_reason'),
                 usage=result.get("usage") if self.mode == "live" else None,
                 latency_ms=round((time.perf_counter() - started) * 1000),
             )
@@ -333,7 +357,7 @@ class Gateway:
             # This workload cannot recover by waiting. A non-retryable response
             # prevents a harness SDK from retrying an exhausted application run.
             return web.json_response({"error": {"message": str(exc), "code": "lab_budget_exhausted"}}, status=400)
-        except (ValueError, RuntimeError, httpx.HTTPError) as exc:
+        except (ValueError, RuntimeError, TimeoutError, httpx.HTTPError) as exc:
             return web.json_response({"error": {"message": str(exc), "code": "lab_call_failed"}}, status=400)
 
     @asynccontextmanager
