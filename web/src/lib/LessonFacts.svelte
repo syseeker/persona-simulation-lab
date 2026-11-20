@@ -37,7 +37,7 @@
     <dl>
       <div><dt>From the original</dt><dd>{persona?.available?`${persona.name} · background, interests and original behaviour traits`:'The locked original; unavailable until its source can be verified.'}</dd></div>
       <div><dt>Supplied by this scenario</dt><dd>{trace?.situation?[trace.situation.goal,trace.situation.day,trace.situation.budget_sgd!==undefined?`under S$${trace.situation.budget_sgd}`:null,trace.situation.followup].filter(Boolean).join(' · '):scenario.preset.constraints}</dd></div>
-      {#if scenarioId==='dreamjob'}<div><dt>{overlay?'Selected Designer overlay':'Planned Designer overlay'}</dt><dd>{overlay?text(overlay.fields):'Hypothetical preferred brands and salary band.'} Salary stays private until public turn 2.</dd></div>{/if}
+      {#if scenarioId==='dreamjob'}<div><dt>{overlay?'Selected Designer hypotheses':'Planned Designer hypotheses'}</dt><dd>{overlay?text(overlay.fields):'Hypothetical preferred brands and salary band.'} These are generated test assumptions, not original profile facts. Salary stays private until public turn 2.</dd></div>{/if}
     </dl>
     {#if opening}<div class="message-fact"><span class="panel-eyebrow">USERSIM WORDING · SAVED OPENING</span><p>“{opening.content}”</p></div><p class="small muted">Generated during Step 4, shown here to connect preparation to its result.</p>
     {:else}<p class="unavailable">No generated opening is recorded for this scenario. The story specifies the situation; it is not a saved learner message.</p>{/if}

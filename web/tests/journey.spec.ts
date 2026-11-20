@@ -43,6 +43,9 @@ test('all 27 scenario lessons teach concepts, inputs/results and verification wi
       await expect(panel.getByText('All files in this run',{exact:true})).toHaveCount(0);
       await expect(panel.getByTestId('record-state')).toContainText(demoRuns[scenario].slice(0,8));
       for(const other of Object.keys(demoRuns).filter(id=>id!==scenario))await expect(panel.locator(`a[href*="recordings/${other}/"], a[href*="recordings/guide-context/${other}/"]`)).toHaveCount(0);
+      if(scenario==='dreamjob'&&step===2)await expect(panel.getByTestId('scenario-facts')).toContainText('generated test assumptions, not original profile facts');
+      if(scenario==='dreamjob'&&step===7){await expect(panel.getByTestId('scenario-facts')).toContainText('fixed-candidate · failed');await expect(panel.getByTestId('scenario-facts')).toContainText('available-switchyard · completed');}
+      if(scenario==='dreamjob'&&step===9)await expect(panel.getByTestId('scenario-facts')).toContainText('14 native Intake spans');
       if(step<9)await page.getByRole('button',{name:'Next →',exact:true}).click();
     }
   }

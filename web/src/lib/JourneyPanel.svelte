@@ -56,7 +56,7 @@
   </div>
   {#if error}<p class="operation-error" role="alert">{error} No recording was substituted.</p>{/if}
   {#if context?.trace?.run?.error}<p class="operation-error" role="alert">Recorded failure: {context.trace.run.error}</p>{/if}
-  {#if context?.trace?.developer_review}<p class="operation-error">Developer review: {context.trace.developer_review.summary} Original results remain unchanged.</p>{/if}
+  {#if context?.trace?.developer_review}{#if scenarioId==='dreamjob'}<details class="operation-error"><summary>{context.trace.run.verification?.routing?.verified===false?'Routing comparison incomplete':'Retail review finding'} · review details</summary><p>{context.trace.developer_review.summary} Original results remain unchanged.</p></details>{:else}<p class="operation-error">Developer review: {context.trace.developer_review.summary} Original results remain unchanged.</p>{/if}{/if}
   {#if !focused}<button class="text-button follow-step" onclick={onfollow}>Follow this step on the map →</button>{/if}
   <section class="teaching-section"><h3>Why this matters</h3><p>{selectedOperation?.concept||selectedComponent?.purpose||lesson.why}</p></section>
   <section class="teaching-section"><h3>In this scenario</h3>
