@@ -1,7 +1,7 @@
 [project]
 name = "persona-simulation-lab"
-version = "0.1.0"
-description = "A Singapore learning advisor and a persona-based agent evaluation lab"
+version = "0.2.0"
+description = "A UI-first citizen application integration lab using Singapore Nemotron Personas and NeMo"
 requires-python = ">=3.12,<3.13"
 dependencies = [
   "pydantic>=2.12,<3",
@@ -27,6 +27,7 @@ dependencies = [
 learning-lab = "learning_lab.cli:main"
 learning-lab-worker = "learning_lab.worker:main"
 learning-lab-courses = "learning_lab.course_mcp:main"
+learning-lab-developer-mcp = "learning_lab.developer_mcp:main"
 
 [project.entry-points."usersim.probes"]
 learning-advisor = "learning_lab.probe:LearningAdvisorProbe"
@@ -45,7 +46,9 @@ packages = ["src/learning_lab"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 testpaths = ["tests"]
+norecursedirs = ["docs/history", ".*", "node_modules", "build", "dist", "venv", "venvs"]
 
 [tool.ruff]
 target-version = "py312"
 line-length = 110
+extend-exclude = ["docs/history"]

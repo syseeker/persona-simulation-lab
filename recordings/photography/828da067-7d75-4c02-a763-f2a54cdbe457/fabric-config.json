@@ -1,0 +1,29 @@
+{
+  "projection": "Allowlisted native fields; not a byte-for-byte original.",
+  "schema_version": "fabric.agent/v1alpha1",
+  "metadata": {
+    "name": "singapore-learning-advisor",
+    "description": null
+  },
+  "harness": {
+    "adapter_id": "nvidia.fabric.langchain.deepagents",
+    "resolution": "preinstalled",
+    "settings": {
+      "reasoning_effort": "none"
+    }
+  },
+  "runtime": {
+    "input_schema": "chat",
+    "output_schema": "message",
+    "artifacts": null,
+    "timeout_seconds": 120.0,
+    "max_turns": 24
+  },
+  "tools": {
+    "enabled": [
+      "search_courses",
+      "get_course_details",
+      "compare_courses"
+    ]
+  }
+}

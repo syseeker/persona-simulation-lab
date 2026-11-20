@@ -1,7 +1,7 @@
 {
   "name": "singapore-learning-advisor",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "imports": {
     "#lib/*": "./src/lib/*"
@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "dompurify": "3.4.17",
-    "marked": "18.2.0"
+    "marked": "18.2.0",
+    "@xyflow/svelte": "2.0.1"
   }
 }

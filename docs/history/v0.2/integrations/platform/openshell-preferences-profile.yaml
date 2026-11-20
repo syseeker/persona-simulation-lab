@@ -1,0 +1,24 @@
+# Render host/port and actual resolved Python paths before importing. This
+# sample does not grant access until the operator imports and approves it.
+# https://docs.nvidia.com/openshell/v0.1.6/how-it-works/providers/profiles/
+id: lab-preferences
+display_name: Lab workload preferences
+description: Read the trusted active workload constraints; no provider credentials
+category: data
+credentials:
+  - name: context_token
+    description: Read-only application context credential
+    env_vars: [LAB_CONTEXT_TOKEN]
+    required: true
+    auth_style: bearer
+    header_name: authorization
+endpoints:
+  - host: REPLACE_WITH_SANDBOX_REACHABLE_CALLBACK_HOST
+    port: 8766
+    path: /v1/lab/preferences
+    protocol: rest
+    enforcement: enforce
+    rules:
+      - allow: {method: GET, path: /v1/lab/preferences}
+binaries:
+  - /opt/uv/python/*/bin/python3*

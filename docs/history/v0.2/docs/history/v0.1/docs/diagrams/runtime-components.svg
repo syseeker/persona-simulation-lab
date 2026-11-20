@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="1050" viewBox="0 0 1500 1050">
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9" fill="none" stroke="#738879" stroke-width="1.3"/></marker></defs>
+<rect width="100%" height="100%" fill="#f8faf6"/>
+<g font-family="Arial, sans-serif">
+<text x="55" y="65" font-size="31" font-weight="700" fill="#193e31">02 / Runtime Components</text>
+<text x="55" y="102" font-size="17" fill="#62766a">One application service shared by the web worker and CLI</text>
+<polyline points="355,218 525,218" fill="none" stroke="#738879" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="391" y="196" font-size="15" fill="#62766a">JSON-lines</text>
+<polyline points="1145,218 975,218" fill="none" stroke="#738879" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="998" y="196" font-size="15" fill="#62766a">Python calls</text>
+<polyline points="675,280 675,420" fill="none" stroke="#738879" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="698" y="350" font-size="15" fill="#62766a">Own lifecycle</text>
+<polyline points="525,250 420,250 420,385 205,385 205,435" fill="none" stroke="#738879" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="238" y="364" font-size="15" fill="#62766a">Simulate</text>
+<polyline points="975,515 1145,515" fill="none" stroke="#738879" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="1009" y="494" font-size="15" fill="#62766a">MCP stdio</text>
+<polyline points="750,610 750,765" fill="none" stroke="#738879" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="774" y="700" font-size="15" fill="#62766a">Target requests</text>
+<polyline points="205,605 205,683 525,683 525,815" fill="none" stroke="#738879" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="265" y="661" font-size="15" fill="#62766a">Other role requests</text>
+<polyline points="975,838 1145,838" fill="none" stroke="#738879" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="998" y="815" font-size="15" fill="#62766a">Bounded HTTPS</text>
+<rect x="55" y="155" width="300" height="125" rx="14" fill="#ffffff" stroke="#d5e1d0" stroke-width="1.5"/>
+<text x="77" y="191" font-size="21" font-weight="700" fill="#1b4937">SvelteKit</text>
+<text x="77" y="224" font-size="16" fill="#52695b">Browser UI and Node server routes</text>
+<text x="77" y="249" font-size="16" fill="#52695b">Lazy persistent child worker</text>
+<rect x="525" y="155" width="450" height="125" rx="14" fill="#eaf3e5" stroke="#d5e1d0" stroke-width="1.5"/>
+<text x="547" y="191" font-size="21" font-weight="700" fill="#1b4937">Python LabService</text>
+<text x="547" y="224" font-size="16" fill="#52695b">Versioned JSON-lines messages with IDs</text>
+<text x="547" y="249" font-size="16" fill="#52695b">Workload lock, cancellation and run state</text>
+<rect x="1145" y="155" width="300" height="125" rx="14" fill="#ffffff" stroke="#d5e1d0" stroke-width="1.5"/>
+<text x="1167" y="191" font-size="21" font-weight="700" fill="#1b4937">CLI</text>
+<text x="1167" y="224" font-size="16" fill="#52695b">Same application service</text>
+<text x="1167" y="249" font-size="16" fill="#52695b">Explicit offline / live modes</text>
+<rect x="55" y="435" width="300" height="170" rx="14" fill="#ffffff" stroke="#d5e1d0" stroke-width="1.5"/>
+<text x="77" y="471" font-size="21" font-weight="700" fill="#1b4937">UserSim External Runtime</text>
+<text x="77" y="504" font-size="16" fill="#52695b">Immutable resolved profile input</text>
+<text x="77" y="529" font-size="16" fill="#52695b">User / assistant / judge activations</text>
+<text x="77" y="554" font-size="16" fill="#52695b">Native outcomes and warnings</text>
+<rect x="525" y="420" width="450" height="190" rx="14" fill="#eaf3e5" stroke="#d5e1d0" stroke-width="1.5"/>
+<text x="547" y="456" font-size="21" font-weight="700" fill="#1b4937">Advisor Target</text>
+<text x="547" y="489" font-size="16" fill="#52695b">Direct Deep Agents or Fabric adapter</text>
+<text x="547" y="514" font-size="16" fill="#52695b">One conversation per memory workspace</text>
+<text x="547" y="539" font-size="16" fill="#52695b">Read-only tools and runtime skill</text>
+<text x="547" y="564" font-size="16" fill="#52695b">Native Relay instrumentation</text>
+<rect x="1145" y="435" width="300" height="170" rx="14" fill="#ffffff" stroke="#d5e1d0" stroke-width="1.5"/>
+<text x="1167" y="471" font-size="21" font-weight="700" fill="#1b4937">Course MCP</text>
+<text x="1167" y="504" font-size="16" fill="#52695b">Search / details / compare</text>
+<text x="1167" y="529" font-size="16" fill="#52695b">Explicit constraints bound by host</text>
+<text x="1167" y="554" font-size="16" fill="#52695b">Frozen official catalogue</text>
+<rect x="55" y="765" width="300" height="150" rx="14" fill="#ffffff" stroke="#d5e1d0" stroke-width="1.5"/>
+<text x="77" y="801" font-size="21" font-weight="700" fill="#1b4937">Isolated SDK Environments</text>
+<text x="77" y="834" font-size="16" fill="#52695b">Helix: exact-match local evaluation</text>
+<text x="77" y="859" font-size="16" fill="#52695b">Data Designer 0.10: overlays</text>
+<text x="77" y="884" font-size="16" fill="#52695b">Separate locks for compatibility</text>
+<rect x="525" y="765" width="450" height="150" rx="14" fill="#eaf3e5" stroke="#d5e1d0" stroke-width="1.5"/>
+<text x="547" y="801" font-size="21" font-weight="700" fill="#1b4937">Inference Gateway</text>
+<text x="547" y="834" font-size="16" fill="#52695b">Counts all roles, judges and failures</text>
+<text x="547" y="859" font-size="16" fill="#52695b">1,024 output tokens; retries disabled</text>
+<text x="547" y="884" font-size="16" fill="#52695b">NVIDIA key remains server-side</text>
+<rect x="1145" y="765" width="300" height="150" rx="14" fill="#ffffff" stroke="#d5e1d0" stroke-width="1.5"/>
+<text x="1167" y="801" font-size="21" font-weight="700" fill="#1b4937">Hosted NIM</text>
+<text x="1167" y="834" font-size="16" fill="#52695b">OpenAI-compatible endpoint</text>
+<text x="1167" y="859" font-size="16" fill="#52695b">Configured model per role</text>
+<text x="1167" y="884" font-size="16" fill="#52695b">Measured provider usage</text>
+<text x="55" y="1010" font-size="16" fill="#687d6e">Relay observes advisor work. The gateway ledger counts the complete experiment.</text></g></svg>

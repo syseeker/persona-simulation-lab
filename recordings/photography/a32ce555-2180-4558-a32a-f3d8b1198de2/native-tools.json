@@ -1,0 +1,92 @@
+[
+  {
+    "name": "search_courses",
+    "arguments": {
+      "budget_sgd": 50,
+      "days": [
+        5
+      ],
+      "goal": "photography"
+    },
+    "result": {
+      "snapshot_date": "2026-11-10",
+      "as_of": "2026-11-20",
+      "matches": [
+        {
+          "course": {
+            "id": "CC-001",
+            "title": "Photography and Photo Enhancement with AI (AI30)",
+            "provider": "Toa Payoh West CC",
+            "kind": "community",
+            "summary": "Learn smartphone photo capture and AI-assisted editing.",
+            "tags": [
+              "photography",
+              "photo",
+              "smartphone",
+              "ai",
+              "creative"
+            ],
+            "source_url": "https://www.onepa.gov.sg/courses/photography-and-photo-enhancement-with-ai-ai30-c027245625",
+            "captured_on": "2026-11-10",
+            "venue": "Toa Payoh West CC",
+            "planning_area": "Toa Payoh",
+            "price_min_sgd": 10.0,
+            "price_max_sgd": 10.0,
+            "extra_cost_sgd": null,
+            "cost_note": "Published course-fee range; add the stated material fee. Other checkout costs are unconfirmed.",
+            "start_date": "2026-12-12",
+            "end_date": "2026-12-12",
+            "registration_closes": "2026-12-12",
+            "weekdays": [
+              5
+            ],
+            "schedule_note": "14:00-17:00; one session.",
+            "duration_hours": 3.0,
+            "prerequisites": [],
+            "prerequisite_note": "Access to Gemini on a smartphone or browser is required.",
+            "languages": null,
+            "funding_note": "Personal eligibility is unverified; check the official course listing and provider.",
+            "availability": "listed"
+          },
+          "score": 30,
+          "matched_terms": [
+            "photo",
+            "photography",
+            "smartphone"
+          ],
+          "confirm": [
+            "Confirm a place is still available",
+            "Confirm personal funding eligibility",
+            "Additional costs are unconfirmed"
+          ]
+        }
+      ],
+      "excluded": [
+        {
+          "id": "CC-002",
+          "reason": "Published class days conflict with availability"
+        },
+        {
+          "id": "CC-003",
+          "reason": "Published upper fee including known extras exceeds the budget"
+        },
+        {
+          "id": "CC-004",
+          "reason": "Published class days conflict with availability"
+        },
+        {
+          "id": "CC-005",
+          "reason": "Published class days conflict with availability"
+        },
+        {
+          "id": "CC-006",
+          "reason": "Published class days conflict with availability"
+        }
+      ],
+      "notice": "Curated snapshot. Check the official listing before acting; individual eligibility is unknown."
+    },
+    "scope_uuid": "01a1f7b9-0eaf-7773-adc8-62104a9f155e",
+    "status": "completed",
+    "evidence_origin": "native_relay"
+  }
+]

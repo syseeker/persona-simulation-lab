@@ -1,0 +1,22 @@
+version: 1
+filesystem_policy:
+  include_workdir: false
+  read_only: [/bin, /lib, /lib64, /usr, /opt/lab, /etc, /proc/self, /dev/urandom]
+  read_write: [/workspace, /tmp, /dev/null]
+landlock:
+  compatibility: best_effort
+# Model requests go over the authenticated native exec control channel. Only
+# the private, in-sandbox OpenAI-compatible bridge listens on this loopback port.
+# The host budget gateway alone talks to the configured LiteLLM proxy.
+network_policies:
+  model_bridge:
+    name: in-sandbox-model-bridge
+    endpoints:
+      - host: 127.0.0.1
+        port: 18476
+        protocol: rest
+        enforcement: enforce
+        rules:
+          - allow: {method: POST, path: /v1/chat/completions}
+    binaries:
+      - {path: /usr/local/bin/python3.12}

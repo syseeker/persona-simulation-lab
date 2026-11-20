@@ -1,37 +1,57 @@
 # Architecture Decisions
 
-## Contents
+## 20 November 2026: Publish completed rounds and fixed review evidence on dev
 
-- [Application And Harness](#application-and-harness)
-- [Data And Evaluation](#data-and-evaluation)
-- [Compatibility](#compatibility)
+The user requested a `dev` branch from `main` in the existing GitHub repository, then a commit/push after each completed round so direct code links resolve. Keep `main` unchanged. Publish fixed sanitized scenario recordings with manifest hashes, GitHub log permalinks and verified in-app previews. Raw private runs/datasets/prompts/credentials stay ignored. Preserve earlier failed/reviewed photography attempts instead of replacing them with a success-only pack. Scenarios 2/3 remain illustrative until separately executed. Future live-log linking is deferred.
 
-## Application And Harness
+## 20 November 2026: Shared foundation and photography implementation
 
-Use SvelteKit 3 and TypeScript for UI and server routes, with a persistent Python worker for NVIDIA SDKs. A versioned JSON-lines transport keeps the local application simple and avoids another web service framework.
+The user authorised implementation after the wireframe and requested a non-scrolling process chart. Migrate the accepted guide into repository `web/`, keeping its typography, styles, panel resizing and dataset browser. The latest requested chart uses an alternating numbered timeline with three phase bands and a vertical narrow-screen layout. A restricted guide worker, CLI and developer MCP share a versioned `JourneyService` alongside retained APIs. Photography is live; the other two scenarios stay illustrative.
 
-Use Deep Agents as the target harness because a maintained Fabric adapter and native Relay integration exist. Keep its model-visible tools limited to the course catalogue. UserSim owns simulated conversation dynamics; the application owns orchestration, budgets and target isolation.
+Use standalone OpenShell 0.1.6 with one persistent Fabric/Deep Agents runtime and read-only course MCP. Build a reusable image from an allowlisted context with no profiles or credentials. Deliver only public learner context at invocation. The native exec control channel carries model requests to the host budget gateway; no broad host-ingress workaround, Helix service, external credential driver or per-persona image is introduced. Preserve pinned API/interpreter/Relay-path workarounds. Fabric's optional runtime base directory defaults unchanged for retained callers and uses writable `/workspace` in the sandbox.
 
-Attach Relay before Fabric for learning clarity. The Fabric path uses the adapter's native instrumentation once. Helix evaluates saved replies locally before any Platform deployment. The legacy NeMo Agent Toolkit library is migration context and is not a baseline dependency.
+Keep explicit source locking, per-condition identity, cross-process lease/guard, cancellation and exact-label/native-ID cleanup. Cancellation waits for creation to settle; ambiguous creation needs explicit recovery. Playback/source/log reads never execute models. Saved native bytes retain checksums; JavaScript projections preserve uint64 revisions as strings. Code links derive the user's repository and committed reference; unpublished code is labelled. Log links bind opaque artifacts to the selected local run. Explanatory stage flows and attributable saved requests are distinct.
 
-## Data And Evaluation
+The first real reply correctly cited the catalogue URL but omitted the internal course ID. An overly strict application assertion failed it. Preserve that run; correct the validator to accept exact catalogue URLs, add positive/negative regression cases and explicitly rerun the same locked input as a new condition. No historical result is rewritten. Response assertions use no Helix or judge inference; UserSim's native stop judges remain separately accounted for. See [verification](verification.md).
 
-Study the real Singapore dataset before selecting course scenarios. Use an explicit HF profile-only mode for the publicly available records and keep the documented NGC path distinct. The public profiles support career goals, skills and interests, but do not establish OCEAN scores or individual eligibility.
+## 20 November 2026: Nine-stage wireframe and progressive presets
 
-Use verified snapshots for course facts. Bind explicit user constraints inside the trusted tools. Preserve uncertainty in model responses and evaluate unsupported assertions rather than assuming model compliance.
+The accepted plan replaces the earlier seven-stage/all-components gate with nine generic journey stages and progressive capability presets. Keep one Simplified and one Detailed map; highlight relevant modules without changing the graph layout per scenario. Preserve unrelated styling and content. Stable stage IDs migrate the earlier seven saved meanings, including the separated build/run and safeguards stages.
 
-Data Designer is Phase 5's authored enrichment pipeline. Its earlier presence as a UserSim dependency does not mean that pipeline was already implemented. Use labelled categorical scenario hypotheses for the first enrichment experiment; this makes the intervention auditable and requires zero generation calls.
+Photography uses authored inputs, Deep Agents, fixed-model LiteLLM, Relay, application assertions and standalone OpenShell, with no Designer, Switchyard, native Guardrails or Helix. Board games adds Hermes, two-turn no-match persistence and a separate native Guardrails demonstration, still without Designer/routing/Helix. Retail learning adds Designer, routing comparison, Helix Evals and managed lifecycle/jobs over three public turns. Helix is a broader control plane, not an evaluation-only product.
 
-## Compatibility
+At that wireframe gate, standalone launch and Guardrails were unimplemented and simulation was disabled. The subsequent implementation decision above adds standalone photography; Guardrails and the other scenario lifecycles remain future gates. Do not require Helix services for simpler presets or bake personas into images.
 
-The root environment combines UserSim 0.3.0, Data Designer 0.9.7, Deep Agents 0.7.35, Relay 0.11.1, Fabric 0.6.1 and MCP 1.30. Data Designer 0.10 requires a separate environment. Helix 0.9.1 selects its own older compatible Fabric/Relay set in another environment.
+The user also authorised output housekeeping. Verify owning-host processes and open files, preserve live/unknown ownership, archive historical output with paths/hashes and recovery checks, then remove verified stale originals. Preserve source archives, datasets and environments. See [output policy](output-housekeeping.md); prior dated evidence is not relabelled.
 
-The installed Fabric 0.6.1 descriptor lacks per-server MCP filters, so the app uses its supported global tool allowlist. The wheel also needs an explicit generated Relay configuration path. The app derives that file from the typed config and sets the adapter interpreter explicitly.
+## 20 November 2026: Freeze unrelated content and presentation
 
-SvelteKit 3 moved configuration into the Vite plugin, changed the built-in TypeScript config and uses package imports. TypeScript 6 is pinned because the installed Svelte checker does not support TypeScript 7. The Node-compatible DOM test version is pinned separately.
+At the user's explicit request, each new change starts from the preceding version as a frozen baseline. Modify only the requested items and strictly necessary supporting code, tests and documentation. Preserve unrelated wording, fonts, colours, spacing, layout, navigation and behaviour; do not include unsolicited corrections or improvements. Separate visible content/design changes require agreement. Retain a recoverable baseline and review the final diff for scope.
 
-A live run showed that two tool rounds were too restrictive for multi-course comparison. The limit is four rounds while the total 120-call cap remains unchanged. The earlier failed conditions are retained locally.
+The naming update keeps **Building Citizen Apps with NeMo**, its requested subtitle, the requested step labels and dataset/documentation link changes. Its additional header styling, prerequisites rewrite and unrelated explanatory additions were reverted. Restore UserSim documentation coverage rather than dropping the component because it publishes documentation in its upstream repository.
 
-The advisor defaults to Nemotron 3.5 Lightning after a real course-tool check succeeded on an input that caused repeated calls with Nano Omni. UserSim user, judge and summary roles keep Nano Omni. This is an explicit configuration choice; no runtime fallback silently changes models. The final paired run still contains one tool-limit failure, so the model change does not establish universal reliability.
+## Guide identity and learning links
 
-The clarification-first candidate scored below the concise baseline on the frozen diagnostic cases. Keep the concise strategy as the interactive default and preserve both sets of results for the learning exercise.
+Use **Building Citizen Apps with NeMo** and **NeMo Stack Integration Guide · Singapore**. The nine current stage names and scenario allocations are defined in the [plan](../PLAN.md); do not keep a competing seven-stage specification in active documentation.
+
+Keep **Locate in the Map** as internal navigation. Adjacent learning links open actual dataset distributions or current official package documentation. The UserSim link uses its upstream README. Pinned API/source references remain in the code inspector and compatibility record; current documentation is not evidence of an adapter upgrade. Historical archives, package identifiers and saved browser keys keep their identities.
+
+## 19 November 2026: Inspect schemas and installed original profiles separately
+
+At the user's request, Datasets has **Data schema** and **Explore profiles** subtabs. Preserve the existing schema/audit content, adding human labels and groups ordered as names/identity, personal details, location, education/work, skills/interests, narratives and OCEAN. This changes presentation, not physical column names, types or original values.
+
+Explore profiles is an authorised exception to the otherwise illustrative guide: it reads installed originals through the retained worker/shared Python dataset services. Keep the connection narrow and read-only, with source-aware geography, text/age/education filtering, source-wide facet counts, bounded pages and original row/revision/hash inspection. Load neither a bundled full corpus nor invented fallback rows. Store filters/subtab choice, not raw profiles, in browser preferences. Display a clear unavailable state when configuration/source readiness fails. Operator `LAB_ROOT` configuration stays server-only; browser queries cannot choose paths or worker methods. No model, Designer, simulation or deployment operation follows from browsing.
+
+## Retained runtime and evidence boundaries
+
+The checkout retains SvelteKit, persistent Python workers, shared CLI/developer-MCP services and compatible isolated SDK environments. The accepted guide now replaces the inert landing page; the superseded dashboard remains archived. Photography connects the new restricted guide boundary; the dataset reader remains independently read-only.
+
+Application assertions, native Relay observations, role-labelled gateway accounting, Helix Evals, behavioural Guardrails and native OpenShell enforcement are distinct evidence. Missing correlations, failed answers and unknown usage remain visible. Current source excerpts do not establish the code revision of a recording. See [contracts](contracts.md) and [compatibility](sources.md) before adapter changes.
+
+HF and Singapore NGC Extended remain separate distributions. Preserve immutable originals, exact source identities/hashes and traceable derived rows; generated salary/brand hypotheses never establish behaviour, citizenship or eligibility. Harness comparisons keep the model fixed; routing comparisons keep the harness and public inputs fixed with an explicitly controlled candidate pool.
+
+Preserve the tested Fabric tool-schema boundary, generated Relay path and interpreter setup. Keep UserSim, Designer, Hermes, local Helix and Platform environments separate. Do not enable the unsupported historical external-credential-driver callback or install the rejected research adapter. The official OpenShell credential store, native-policy evidence and historical Docker ingress limitation remain separate reference paths. See [pinned workarounds](sources.md#compatibility-workarounds).
+
+## Historical decisions
+
+The [consolidated 19–20 November review journal](history/guide-reviews-2026-11-19-20.md) preserves the earlier seven-stage plan, naming/freeze changes and dated dataset/verification decisions. It is superseded for current journey sequencing. The immutable [v0.2](history/v0.2/INDEX.md) and [v0.1](history/v0.1/INDEX.md) archives preserve their original designs and findings. Historical runs are not current service readiness or acceptance of the replacement UI.

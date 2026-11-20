@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="900" viewBox="0 0 1500 900">
+<defs><marker id="arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9" fill="none" stroke="#738879" stroke-width="1.3"/></marker></defs>
+<rect width="100%" height="100%" fill="#f8faf6"/>
+<g font-family="Arial, sans-serif">
+<text x="55" y="65" font-size="31" font-weight="700" fill="#193e31">01 / System Context</text>
+<text x="55" y="102" font-size="17" fill="#62766a">Singapore Learning &amp; Classes Advisor | implemented local application</text>
+<polyline points="335,228 470,228" fill="none" stroke="#738879" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="351" y="207" font-size="15" fill="#62766a">Ask / inspect</text>
+<polyline points="970,228 1120,228" fill="none" stroke="#738879" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="984" y="207" font-size="15" fill="#62766a">Budget gateway</text>
+<polyline points="375,545 470,545" fill="none" stroke="#738879" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="393" y="525" font-size="15" fill="#62766a">Facts</text>
+<polyline points="720,325 720,460" fill="none" stroke="#738879" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="743" y="394" font-size="15" fill="#62766a">Enforced by worker</text>
+<polyline points="970,545 1120,545" fill="none" stroke="#738879" stroke-width="2" marker-end="url(#arrow)"/>
+<text x="991" y="525" font-size="15" fill="#62766a">Save / score</text>
+<rect x="55" y="165" width="280" height="125" rx="14" fill="#ffffff" stroke="#d5e1d0" stroke-width="1.5"/>
+<text x="77" y="201" font-size="21" font-weight="700" fill="#1b4937">Learner</text>
+<text x="77" y="234" font-size="16" fill="#52695b">SvelteKit browser or CLI</text>
+<text x="77" y="259" font-size="16" fill="#52695b">Explore classes and inspect tests</text>
+<rect x="470" y="165" width="500" height="160" rx="14" fill="#eaf3e5" stroke="#d5e1d0" stroke-width="1.5"/>
+<text x="492" y="201" font-size="21" font-weight="700" fill="#1b4937">Learning Lab</text>
+<text x="492" y="234" font-size="16" fill="#52695b">SvelteKit Node server and Python worker</text>
+<text x="492" y="259" font-size="16" fill="#52695b">Deep Agents or Fabric advisor runtime</text>
+<text x="492" y="284" font-size="16" fill="#52695b">UserSim experiment coordinator</text>
+<rect x="1120" y="165" width="325" height="160" rx="14" fill="#ffffff" stroke="#d5e1d0" stroke-width="1.5"/>
+<text x="1142" y="201" font-size="21" font-weight="700" fill="#1b4937">NVIDIA NIM</text>
+<text x="1142" y="234" font-size="16" fill="#52695b">Advisor: Nemotron Lightning</text>
+<text x="1142" y="259" font-size="16" fill="#52695b">Other roles: Nemotron Nano Omni</text>
+<text x="1142" y="284" font-size="16" fill="#52695b">Hosted inference with a local API key</text>
+<rect x="55" y="460" width="320" height="170" rx="14" fill="#ffffff" stroke="#d5e1d0" stroke-width="1.5"/>
+<text x="77" y="496" font-size="21" font-weight="700" fill="#1b4937">Local Inputs</text>
+<text x="77" y="529" font-size="16" fill="#52695b">Audited Singapore HF profiles</text>
+<text x="77" y="554" font-size="16" fill="#52695b">NGC Extended path: setup required</text>
+<text x="77" y="579" font-size="16" fill="#52695b">Data Designer preference hypotheses</text>
+<text x="77" y="604" font-size="16" fill="#52695b">Official course snapshot</text>
+<rect x="470" y="460" width="500" height="170" rx="14" fill="#eaf3e5" stroke="#d5e1d0" stroke-width="1.5"/>
+<text x="492" y="496" font-size="21" font-weight="700" fill="#1b4937">Boundaries</text>
+<text x="492" y="529" font-size="16" fill="#52695b">Read-only course MCP tools</text>
+<text x="492" y="554" font-size="16" fill="#52695b">120-call budget per experiment</text>
+<text x="492" y="579" font-size="16" fill="#52695b">Fresh target memory per condition</text>
+<text x="492" y="604" font-size="16" fill="#52695b">Original profiles preserved</text>
+<rect x="1120" y="460" width="325" height="170" rx="14" fill="#ffffff" stroke="#d5e1d0" stroke-width="1.5"/>
+<text x="1142" y="496" font-size="21" font-weight="700" fill="#1b4937">Evidence</text>
+<text x="1142" y="529" font-size="16" fill="#52695b">Relay agent / model / tool scopes</text>
+<text x="1142" y="554" font-size="16" fill="#52695b">Local run events and usage ledger</text>
+<text x="1142" y="579" font-size="16" fill="#52695b">Helix scoring of saved replies</text>
+<text x="1142" y="604" font-size="16" fill="#52695b">Frozen inputs for paired comparisons</text>
+<text x="55" y="860" font-size="16" fill="#687d6e">Local-only application and artifacts. No booking, payment or Platform deployment.</text></g></svg>

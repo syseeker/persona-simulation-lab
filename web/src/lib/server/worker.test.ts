@@ -19,5 +19,12 @@ test('correlates independent requests to one persistent worker', async () => {
 test('rejects invalid operations without losing the worker', async () => {
   const worker = client();
   await expect(worker.request('invalid' as Operation)).rejects.toThrow();
-  await expect(worker.request('status')).resolves.toHaveProperty('version', '0.1.0');
+  await expect(worker.request('status')).resolves.toHaveProperty('version', '0.2.0');
+});
+
+test('dataset-only clients reject execution operations before starting a process', async () => {
+  const reader = new WorkerClient('/nonexistent-checkout', { datasetsOnly: true });
+  clients.push(reader);
+  await expect(reader.request('start_run')).rejects.toThrow('only reads installed datasets');
+  await expect(reader.request('platform_action')).rejects.toThrow('only reads installed datasets');
 });

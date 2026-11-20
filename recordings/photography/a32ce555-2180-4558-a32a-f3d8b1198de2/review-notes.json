@@ -1,0 +1,6 @@
+{
+  "kind": "developer review; not a replacement evaluation",
+  "summary": "The saved reply places Toa Payoh West CC in Bukit Timah, contradicting the frozen Toa Payoh planning_area. The original seven narrow checks missed this. Later conditions add explicit location/fee checks and stronger source-use instructions.",
+  "criterion_gap": "planning-area grounding",
+  "original_result_preserved": true
+}

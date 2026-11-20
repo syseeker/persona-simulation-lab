@@ -31,6 +31,7 @@ jobs:
         run: |
           uv run ruff check src tests scripts integrations
           uv run pytest -q
+          uv run python scripts/check_docs.py
           uv run --project integrations/helix python integrations/helix/validate_agent.py
       - name: Install and verify Svelte application
         run: |

@@ -1,0 +1,34 @@
+# Policy intent for review. The Helix executor creates the runtime policy from
+# its versioned schema and adds the mandatory platform_egress rule. This file is
+# documentation metadata, not an executable OpenShell policy to apply blindly.
+schema: learning-lab-sandbox-intent/v1
+boundary: agent-and-catalogue-mcp
+preferences_mode: frozen-public-preset
+credential_store: native-encrypted
+filesystem_confinement: hard_requirement
+packaged_sources: root-owned-non-writable
+public_preset:
+  goal: photography
+  budget_sgd: 50
+  days: [5]
+  image_path: /workspace/scenarios/photography/preferences.json
+  sha256: 9caff7460300276e5a9e4fd6a92991f3c0d0e7afb8db51c8f48a30fc494dfb79
+network:
+  allowed:
+    - helix-platform
+  denied: [direct-inference-providers, internet, host-credentials]
+tools: [search_courses, get_course_details, compare_courses]
+verification:
+  - catalogue-search-through-mcp
+  - platform-health-allowed
+  - frozen-context-hash-validated-before-catalogue-search
+  - model-supplied-preference-overrides-cannot-relax-public-preset
+  - altered-or-missing-public-preset-denied
+  - unrelated-network-denied-with-audit-event
+  - filesystem-write-outside-workspace-denied
+  - packaged-catalogue-preset-code-write-and-replacement-denied
+  - explicit-scratch-write-allowed
+# Dynamic Docker uses the authenticated preferences callback. Dynamic OpenShell
+# callback delivery remains unverified: the pinned Helix signed-ticket external
+# credential driver rejects OpenShell's internally generated SSH host key. The
+# default frozen-preset path uses the maintained encrypted native store instead.

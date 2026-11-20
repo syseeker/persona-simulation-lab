@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 import asyncio
+import base64
+import binascii
 from contextlib import asynccontextmanager
 from dataclasses import dataclass, field
 import json
 import os
 import secrets
-from typing import Any
+from typing import Any, Iterable
 import uuid
 import time
 
@@ -59,9 +61,57 @@ def scripted_completion(payload: dict) -> dict:
     """Explicitly labelled offline demonstration of the real harness and tools."""
     messages = payload["messages"]
     latest = messages[-1]
-    if latest["role"] == "tool":
-        data = _tool_payload(latest["content"])
-        matches = data.get("matches", []) if isinstance(data, dict) else []
+    user = next((m["content"] for m in reversed(messages) if m["role"] == "user"), "learning")
+    prefs = {"goal": str(user)}
+    if "LAB_PREFERENCES=" in str(user):
+        prefs = json.loads(str(user).split("LAB_PREFERENCES=", 1)[1].split("\n", 1)[0])
+    names = {t["function"]["name"] for t in payload.get("tools", [])}
+
+    def call(name, arguments):
+        return {"role": "assistant", "content": None, "tool_calls": [{
+            "id": "call_" + uuid.uuid4().hex, "type": "function",
+            "function": {"name": name, "arguments": json.dumps(arguments)},
+        }]}
+
+    def course_result(value, depth=0):
+        if depth > 6:
+            return None
+        if isinstance(value, str) and value.startswith("<untrusted_tool_result"):
+            # Hermes labels real MCP output as untrusted data. Decode only the
+            # returned JSON segment; never adopt its text as executable policy.
+            start = value.find("\n\n{")
+            if start >= 0:
+                return course_result(value[start + 2:].rsplit("\n</untrusted_tool_result>", 1)[0], depth + 1)
+        value = _tool_payload(value)
+        if isinstance(value, dict):
+            matches = value.get("matches")
+            if isinstance(matches, list) and "query" not in value and "total_available" not in value:
+                if not matches or all(isinstance(item, dict) and "course" in item for item in matches):
+                    return value
+            for key in ("result", "results", "content", "output"):
+                if key in value:
+                    found = course_result(value[key], depth + 1)
+                    if found is not None:
+                        return found
+        if isinstance(value, list):
+            for item in value:
+                found = course_result(item, depth + 1)
+                if found is not None:
+                    return found
+        return None
+
+    data = _tool_payload(latest["content"]) if latest["role"] == "tool" else None
+    deferred = data.get("tools") if isinstance(data, dict) else None
+    qualified = next((name for name in deferred if "catalogue" in name and name.endswith("search_courses")), None) if isinstance(deferred, dict) else None
+    if qualified and "tool_describe" in names and "results" in data:
+        # Hermes exposes maintained deferred-tool bridge schemas. Discover the
+        # actual server name and schema instead of fabricating a native call.
+        message = call("tool_describe", {"names": [qualified]})
+    elif qualified and "tool_call" in names:
+        message = call("tool_call", {"calls": [{"name": qualified, "arguments": prefs}]})
+    elif latest["role"] == "tool":
+        facts = course_result(data)
+        matches = facts.get("matches", []) if facts is not None else []
         if matches:
             lines = ["These snapshot listings relate to your stated goal:"]
             for item in matches[:3]:
@@ -71,30 +121,17 @@ def scripted_completion(payload: dict) -> dict:
                 "Confirm fees, timetable, prerequisites and availability with the provider. Personal funding eligibility is unknown."
             )
             text = "\n".join(lines)
-        else:
+        elif facts is not None:
             text = "I found no suitable match in this small catalogue. What other topics, days or budget could work?"
+        else:
+            text = "[ERROR: Offline scripted harness did not return catalogue facts; inspect the saved tool evidence]"
         message = {"role": "assistant", "content": text}
     else:
-        user = next((m["content"] for m in reversed(messages) if m["role"] == "user"), "learning")
-        prefs = {"goal": str(user)}
-        if "LAB_PREFERENCES=" in str(user):
-            prefs = json.loads(str(user).split("LAB_PREFERENCES=", 1)[1].split("\n", 1)[0])
-        tools = payload.get("tools", [])
-        name = next(
-            (t["function"]["name"] for t in tools if t["function"]["name"].endswith("search_courses")), None
-        )
+        name = next((name for name in names if name.endswith("search_courses")), None)
         if name:
-            message = {
-                "role": "assistant",
-                "content": None,
-                "tool_calls": [
-                    {
-                        "id": "call_" + uuid.uuid4().hex,
-                        "type": "function",
-                        "function": {"name": name, "arguments": json.dumps(prefs)},
-                    }
-                ],
-            }
+            message = call(name, prefs)
+        elif "tool_search" in names:
+            message = call("tool_search", {"queries": ["catalogue search courses"], "limit": 3})
         else:
             message = {
                 "role": "assistant",
@@ -117,12 +154,21 @@ def scripted_completion(payload: dict) -> dict:
 
 
 class Gateway:
-    def __init__(self, budget: Budget, mode: str = "live"):
+    def __init__(self, budget: Budget, mode: str = "live", model_route: str = "fixed",
+                 allowed_tool_names: Iterable[str] | None = None):
         self.budget = budget
         self.mode = mode
+        if model_route not in {"fixed", "switchyard"}:
+            raise ValueError("Choose fixed or switchyard model routing")
+        self.model_route = model_route
         self.key = secrets.token_urlsafe(24)
         self.url = ""
         self.tool_rounds = 0
+        # Optional application-owned schema boundary. Some maintained harness
+        # adapters gate execution but still advertise their built-in tools.
+        if isinstance(allowed_tool_names, str):
+            raise ValueError("Supply allowed tool names as a collection, not a string")
+        self.allowed_tool_names = frozenset(allowed_tool_names) if allowed_tool_names is not None else None
         self._client = httpx.AsyncClient(timeout=httpx.Timeout(50, connect=10))
 
     async def complete(self, payload: dict, role="assistant") -> dict:
@@ -132,8 +178,30 @@ class Gateway:
         payload = {**payload, "max_tokens": min(int(payload.get("max_tokens", 1024)), 1024), "stream": False}
         # The local gateway is the single admission boundary, including Fabric adapter calls.
         payload.pop("max_completion_tokens", None)
+        if role == "assistant" and self.allowed_tool_names is not None:
+            received = payload.get("tools") or []
+            def name(tool):
+                return tool["function"].get("name") if isinstance(tool, dict) and isinstance(tool.get("function"), dict) else None
+            names = [name(tool) for tool in received]
+            exposed = [tool for tool in received if name(tool) in self.allowed_tool_names]
+            if exposed:
+                payload["tools"] = exposed
+            else:
+                payload.pop("tools", None)
+            record["tool_surface"] = {
+                "source": "application_allowlist", "received": names,
+                "exposed": [tool["function"]["name"] for tool in exposed],
+                "withheld": [name for name in names if name not in self.allowed_tool_names],
+            }
         if role == "assistant" and self.tool_rounds >= MAX_TOOL_ROUNDS:
-            payload["tool_choice"] = "none"
+            # Some providers serialize a forbidden tool call as XML when tool
+            # schemas remain present with tool_choice=none. Withdraw the tool
+            # surface for this final response; malformed output still fails validation.
+            payload.pop("tools", None)
+            payload.pop("tool_choice", None)
+            if "tool_surface" in record:
+                record["tool_surface"]["exposed"] = []
+                record["tool_surface"]["limit_reached"] = True
             payload["messages"] = [
                 {
                     "role": "system",
@@ -146,17 +214,67 @@ class Gateway:
                 result = scripted_completion(payload)
             else:
                 load_environment()
-                key = os.getenv("NVIDIA_API_KEY")
+                proxy = os.getenv("LAB_PROXY_BASE_URL", "").rstrip("/")
+                if self.model_route == "switchyard" and not proxy:
+                    raise ValueError("Switchyard requires LAB_PROXY_BASE_URL; no direct-provider fallback was used")
+                key = os.getenv("LAB_PROXY_API_KEY") if proxy else os.getenv("NVIDIA_API_KEY")
                 if not key:
-                    raise ValueError("NVIDIA_API_KEY is missing from the project .env")
+                    raise ValueError("Configure LAB_PROXY_API_KEY" if proxy else "NVIDIA_API_KEY is missing from the project .env")
+                endpoint = proxy or base_url()
+                record["provider_route"] = "litellm" if proxy else "nim-direct"
+                if proxy:
+                    payload["model"] = (
+                        "lab-advisor-routed" if role == "assistant" and self.model_route == "switchyard"
+                        else "lab-advisor-fixed" if role == "assistant" else "lab-support"
+                    )
+                record["requested_model"] = payload["model"]
                 response = await self._client.post(
-                    base_url() + "/chat/completions", json=payload, headers={"Authorization": f"Bearer {key}"}
+                    endpoint + "/chat/completions", json=payload,
+                    headers={"Authorization": f"Bearer {key}"},
                 )
                 if response.status_code >= 400:
+                    from .evidence import sanitize
+                    try:
+                        detail = response.json().get("error", {})
+                        safe_detail = {k: str(detail[k])[:800] for k in ("message", "type", "code") if k in detail}
+                        # Provider diagnostics sometimes quote configuration. Remove
+                        # actual process credentials as well as common key forms.
+                        for field, value in safe_detail.items():
+                            for name, secret in os.environ.items():
+                                if any(word in name.upper() for word in ("KEY", "TOKEN", "SECRET", "PASSWORD")) and len(secret) >= 8:
+                                    value = value.replace(secret, "[redacted]")
+                            safe_detail[field] = value
+                        record["provider_error"] = sanitize(safe_detail)
+                    except (ValueError, TypeError, AttributeError):
+                        record["provider_error"] = {"message": "Non-JSON provider error; inspect local proxy logs"}
+                    record["http_status"] = response.status_code
                     raise RuntimeError(
-                        f"NIM returned HTTP {response.status_code}; check the model, endpoint and access"
+                        f"{'LiteLLM' if proxy else 'NIM'} returned HTTP {response.status_code}; check the model, endpoint and access"
                     )
                 result = response.json()
+                record["selected_model"] = response.headers.get("x-litellm-model-name") or result.get("model")
+                record["routing"] = self.model_route if role == "assistant" else "fixed-support"
+                record["provider_request_id"] = response.headers.get("x-request-id")
+                native_decision = response.headers.get("x-lab-routing-decision", "")
+                if native_decision and len(native_decision) <= 8192:
+                    try:
+                        decoded = json.loads(base64.urlsafe_b64decode(native_decision))
+                        if decoded.get("version") == 1 and decoded.get("source") == "switchyard" and isinstance(decoded.get("decision"), dict):
+                            from .evidence import sanitize
+                            record["routing_decision"] = sanitize(decoded)
+                    except (ValueError, TypeError, binascii.Error):
+                        record["routing_notice"] = "The proxy returned an invalid native routing evidence header"
+            # Provider usage is evidence even if its returned tool call is invalid.
+            record["usage"] = result.get("usage") if self.mode == "live" else None
+            if role == "assistant" and self.allowed_tool_names is not None:
+                effective = set(record["tool_surface"]["exposed"])
+                returned = [call.get("function", {}).get("name")
+                            for choice in result.get("choices", [])
+                            for call in choice.get("message", {}).get("tool_calls", [])]
+                blocked = [name for name in returned if name not in effective]
+                if blocked:
+                    record["tool_surface"]["blocked_returned"] = blocked
+                    raise ValueError("Model requested a tool outside the application's effective allowlist")
             if role == "assistant" and result["choices"][0]["message"].get("tool_calls"):
                 if self.tool_rounds >= MAX_TOOL_ROUNDS:
                     raise BudgetExceeded(
@@ -169,8 +287,10 @@ class Gateway:
                 latency_ms=round((time.perf_counter() - started) * 1000),
             )
             return result
-        except BaseException:
+        except BaseException as exc:
             record["status"] = "cancelled" if asyncio.current_task().cancelling() else "failed"
+            record["error_type"] = type(exc).__name__
+            record["latency_ms"] = round((time.perf_counter() - started) * 1000)
             raise
 
     async def _handle(self, request: web.Request) -> web.Response:
@@ -178,24 +298,51 @@ class Gateway:
             raise web.HTTPUnauthorized()
         try:
             payload = await request.json()
-            if payload.get("stream"):
-                return web.json_response(
-                    {"error": {"message": "Streaming is disabled in this milestone"}}, status=400
-                )
+            requested_stream = bool(payload.get("stream"))
             result = await self.complete(payload)
+            if requested_stream:
+                # Hermes consumes SSE even when the application presents a buffered
+                # reply. Admit and complete one bounded upstream call, then project
+                # its exact structured output into the public OpenAI chunk format.
+                response = web.StreamResponse(headers={"Content-Type": "text/event-stream",
+                                                       "Cache-Control": "no-cache"})
+                await response.prepare(request)
+                choice = result["choices"][0]
+                message = choice["message"]
+                delta = {"role": message.get("role", "assistant")}
+                if message.get("content") is not None:
+                    delta["content"] = message["content"]
+                if message.get("tool_calls"):
+                    delta["tool_calls"] = [{"index": index, **call}
+                                           for index, call in enumerate(message["tool_calls"])]
+                base = {key: result[key] for key in ("id", "created", "model") if key in result}
+                base["object"] = "chat.completion.chunk"
+                chunks = [
+                    {**base, "choices": [{"index": 0, "delta": delta, "finish_reason": None}]},
+                    {**base, "choices": [{"index": 0, "delta": {},
+                                           "finish_reason": choice.get("finish_reason", "stop")}],
+                     "usage": result.get("usage")},
+                ]
+                for chunk in chunks:
+                    await response.write(("data: " + json.dumps(chunk) + "\n\n").encode())
+                await response.write(b"data: [DONE]\n\n")
+                await response.write_eof()
+                return response
             return web.json_response(result)
         except BudgetExceeded as exc:
-            return web.json_response({"error": {"message": str(exc)}}, status=429)
+            # This workload cannot recover by waiting. A non-retryable response
+            # prevents a harness SDK from retrying an exhausted application run.
+            return web.json_response({"error": {"message": str(exc), "code": "lab_budget_exhausted"}}, status=400)
         except (ValueError, RuntimeError, httpx.HTTPError) as exc:
-            return web.json_response({"error": {"message": str(exc)}}, status=502)
+            return web.json_response({"error": {"message": str(exc), "code": "lab_call_failed"}}, status=400)
 
     @asynccontextmanager
-    async def serving(self):
+    async def serving(self, *, port: int = 0):
         app = web.Application(client_max_size=4 * 1024 * 1024)
         app.router.add_post("/v1/chat/completions", self._handle)
         runner = web.AppRunner(app, access_log=None, shutdown_timeout=3)
         await runner.setup()
-        site = web.TCPSite(runner, "127.0.0.1", 0)
+        site = web.TCPSite(runner, "127.0.0.1", port)
         await site.start()
         self.url = f"http://127.0.0.1:{runner.addresses[0][1]}/v1"
         try:

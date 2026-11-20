@@ -1,0 +1,28 @@
+[
+  {
+    "turn": 1,
+    "role": "user",
+    "content": "Hi, I'm looking for a beginner photography class that meets on Saturdays, costs under S$50, and is nearby Bukit Timah. Could you help me find one?"
+  },
+  {
+    "turn": 1,
+    "role": "assistant",
+    "content": "Here’s a course that matches your criteria:\n\n- **Photography and Photo Enhancement with AI (AI30)** – Toa Payoh West CC  \n  • **Saturdays**, 2 pm – 5 pm (one‑session workshop)  \n  • **Fee**: S$10 (materials may incur an extra cost)  \n  • **Venue**: Toa Payoh West Community Club – within the Bukit Timah planning area  \n  • **Content**: Smartphone photography basics and AI‑assisted editing  \n  • **Link**: https://www.onepa.gov.sg/courses/photography-and-photo-enhancement-with-ai-ai30-c027245625  \n\n**Unresolved constraints**  \n- The published fee is S$10, well under your S$50 cap, but any additional material fee is unconfirmed.  \n- Venue is listed as “Toa Payoh West CC”; confirm it is the nearest location to your exact address.  \n- No prior skills are required, but you’ll need a smartphone with access to Gemini (or a browser).  \n\nIf this doesn’t suit, let me know and I can look for other topics or a different budget.",
+    "outcome": {
+      "status": "valid",
+      "code": "public_answer",
+      "reason": "A nonempty public answer was saved; factual checks are separate."
+    },
+    "thread_id": "a141c957-b4a1-406c-99c1-01fe57da5138",
+    "preferences": {
+      "goal": "photography",
+      "budget_sgd": 50.0,
+      "days": [
+        5
+      ],
+      "planning_area": null,
+      "known_skills": null,
+      "kind": null
+    }
+  }
+]

@@ -4,7 +4,10 @@ import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { randomUUID } from 'node:crypto';
 
-export type Operation = 'status' | 'catalogue' | 'chat' | 'runs' | 'start_run' | 'get_run' | 'get_trace' | 'cancel_run' | 'evaluate_run';
+export type Operation = 'status' | 'catalogue' | 'chat' | 'runs' | 'start_run' | 'get_run' | 'get_trace' | 'cancel_run' | 'evaluate_run'
+  | 'stories' | 'sources' | 'source' | 'get_evidence' | 'get_artifact' | 'dataset_catalogue' | 'browse_personas'
+  | 'persona_facets' | 'sample_personas' | 'lock_personas' | 'start_workbench' | 'get_workbench' | 'cancel_workbench' | 'list_workbench'
+  | 'runtime_profiles' | 'platform_action' | 'journey';
 type Pending = { resolve: (value: unknown) => void; reject: (error: Error) => void; timer: ReturnType<typeof setTimeout> };
 
 export class WorkerClient {
@@ -12,10 +15,14 @@ export class WorkerClient {
   private pending = new Map<string, Pending>();
   private stopped = false;
   private root: string;
+  private datasetsOnly: boolean;
+  private guideOnly: boolean;
 
-  constructor(root?: string) {
+  constructor(root?: string, options: { datasetsOnly?: boolean; guideOnly?: boolean } = {}) {
     const cwd = process.cwd();
     this.root = root ?? process.env.LAB_ROOT ?? (existsSync(resolve(cwd, 'pyproject.toml')) ? cwd : resolve(cwd, '..'));
+    this.datasetsOnly = options.datasetsOnly ?? false;
+    this.guideOnly = options.guideOnly ?? false;
   }
 
   private start() {
@@ -23,7 +30,7 @@ export class WorkerClient {
     this.stopped = false;
     const python = process.env.LAB_PYTHON ?? resolve(this.root, '.venv/bin/python');
     if (!existsSync(python)) throw new Error('The Python environment is missing. Run the project setup first.');
-    const child = spawn(python, ['-m', 'learning_lab.worker'], {
+    const child = spawn(python, ['-m', 'learning_lab.worker', ...(this.datasetsOnly ? ['--datasets-only'] : []), ...(this.guideOnly ? ['--guide-only'] : [])], {
       cwd: this.root, env: { ...process.env, PYTHONUNBUFFERED: '1' }, stdio: ['pipe', 'pipe', 'pipe']
     });
     this.child = child;
@@ -59,13 +66,17 @@ export class WorkerClient {
   }
 
   request<T = unknown>(method: Operation, params: Record<string, unknown> = {}): Promise<T> {
+    if (this.guideOnly && method !== 'journey') return Promise.reject(new Error('This worker only serves the integration guide.'));
+    if (this.datasetsOnly && !['dataset_catalogue', 'persona_facets', 'browse_personas'].includes(method)) {
+      return Promise.reject(new Error('This worker only reads installed datasets.'));
+    }
     this.start();
     const id = randomUUID();
     return new Promise((resolveResult, reject) => {
       const timer = setTimeout(() => {
         this.pending.delete(id);
         reject(new Error('The operation timed out. Check saved run progress before retrying.'));
-      }, method === 'chat' || method === 'evaluate_run' ? 160000 : 30000);
+      }, ['chat', 'evaluate_run', 'platform_action'].includes(method) ? 200000 : 30000);
       this.pending.set(id, { resolve: (value) => resolveResult(value as T), reject, timer });
       this.child!.stdin.write(JSON.stringify({ version: 1, id, method, params }) + '\n');
     });
@@ -76,7 +87,7 @@ export class WorkerClient {
     this.stopped = true;
     this.child?.stdin.end();
     const child = this.child;
-    if (child) { const timer = setTimeout(() => child.kill('SIGTERM'), 3000); timer.unref(); }
+    if (child) { const timer = setTimeout(() => child.kill('SIGTERM'), 20000); timer.unref(); }
     this.fail(new Error('The app is shutting down.'));
   }
 }

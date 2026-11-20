@@ -1,0 +1,62 @@
+{
+  "projection": "Allowlisted native fields; not a byte-for-byte original.",
+  "active_version": 2,
+  "config_revision": 10233330346072165490,
+  "hash": "5aa3af3f60e4d6e536aae45927b1aa02cb1e52b7302fc0134d996f6c42cebb06",
+  "policy": {
+    "filesystem_policy": {
+      "include_workdir": false,
+      "read_only": [
+        "/bin",
+        "/lib",
+        "/lib64",
+        "/usr",
+        "/opt/lab",
+        "/etc",
+        "/proc/self",
+        "/dev/urandom",
+        "/var/log",
+        "/proc"
+      ],
+      "read_write": [
+        "/workspace",
+        "/tmp",
+        "/dev/null"
+      ]
+    },
+    "landlock": {
+      "compatibility": "best_effort"
+    },
+    "network_policies": {
+      "model_bridge": {
+        "binaries": [
+          {
+            "path": "/usr/local/bin/python3.12"
+          }
+        ],
+        "endpoints": [
+          {
+            "enforcement": "enforce",
+            "host": "127.0.0.1",
+            "port": 18476,
+            "protocol": "rest",
+            "rules": [
+              {
+                "allow": {
+                  "method": "POST",
+                  "path": "/v1/chat/completions"
+                }
+              }
+            ]
+          }
+        ],
+        "name": "in-sandbox-model-bridge"
+      }
+    },
+    "version": 1
+  },
+  "policy_source": "sandbox",
+  "scope": "sandbox",
+  "status": "effective",
+  "version": 2
+}

@@ -1,0 +1,9 @@
+{
+  "projection": "Allowlisted native fields; not a byte-for-byte original.",
+  "run_id": "a32ce555-2180-4558-a32a-f3d8b1198de2",
+  "id": "02700a37-e77b-4fb8-9d56-0af6173220bd",
+  "name": "cl-a32ce55521804558",
+  "phase": "Ready",
+  "workspace": "default",
+  "current_policy_version": 2
+}

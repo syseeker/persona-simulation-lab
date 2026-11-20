@@ -88,6 +88,83 @@ async def test_sequential_chat_then_experiment_releases_resources(tmp_path):
         await service.close()
 
 
+async def test_chat_retains_bounded_turn_and_usage_evidence(tmp_path):
+    service = LabService(tmp_path)
+    try:
+        reply = await service.chat(ChatSpec(preferences=Preferences(goal="photography")))
+        for goal in ("calligraphy", "baking"):
+            reply = await service.chat(
+                ChatSpec(session_id=reply["session_id"], preferences=Preferences(goal=goal))
+            )
+        assert reply["calls"] == 6 and reply["turns"] == 3
+        with pytest.raises(ValueError, match="three-turn"):
+            await service.chat(
+                ChatSpec(session_id=reply["session_id"], preferences=Preferences(goal="photography"))
+            )
+        folder = tmp_path / "chats" / reply["session_id"]
+        state = json.loads((folder / "chat.json").read_text())
+        usage = json.loads((folder / "usage.json").read_text())
+        assert state["status"] == "turn_limit_reached" and len(state["turns"]) == 3
+        assert len(usage) == state["calls"] == 6 and all(call["status"] == "completed" for call in usage)
+    finally:
+        await service.close()
+    assert json.loads((folder / "chat.json").read_text())["closed_at"]
+
+
+@pytest.mark.parametrize("failure", ["timeout", "cancel"])
+async def test_failed_chat_closes_memory_and_retains_unknown_call_usage(tmp_path, monkeypatch, failure):
+    from contextlib import asynccontextmanager
+
+    started = asyncio.Event()
+    closed = []
+
+    class LocalGateway:
+        def __init__(self, budget, *args, **kwargs):
+            self.budget = budget
+
+        @asynccontextmanager
+        async def serving(self):
+            yield self
+
+    class Target:
+        def __init__(self, gateway, *args, **kwargs):
+            self.gateway = gateway
+
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, *args):
+            closed.append(True)
+
+        async def reply(self, *args):
+            await self.gateway.budget.admit("assistant", "offline-test")
+            started.set()
+            if failure == "timeout":
+                raise TimeoutError("Fixture provider timeout")
+            await asyncio.Event().wait()
+
+    monkeypatch.setattr("learning_lab.service.Gateway", LocalGateway)
+    monkeypatch.setattr("learning_lab.service.DirectTarget", Target)
+    service = LabService(tmp_path)
+    task = asyncio.create_task(service.chat(ChatSpec(preferences=Preferences(goal="photography"))))
+    await started.wait()
+    if failure == "cancel":
+        task.cancel()
+    with pytest.raises(TimeoutError if failure == "timeout" else asyncio.CancelledError):
+        await task
+    assert closed == [True] and not service.chats
+    path = next((tmp_path / "chats").glob("*/chat.json"))
+    state = json.loads(path.read_text())
+    assert state["status"] == ("timed_out" if failure == "timeout" else "cancelled")
+    assert state["calls"] == 1 and state["closed_at"]
+    assert json.loads(path.with_name("usage.json").read_text())[0]["status"] == "started"
+    with pytest.raises(ValueError, match="ended"):
+        await service.chat(
+            ChatSpec(session_id=state["session_id"], preferences=Preferences(goal="photography"))
+        )
+    await service.close()
+
+
 async def test_cancellation_keeps_a_terminal_manifest(tmp_path):
     service = LabService(tmp_path)
     state = await service.start_run(RunSpec(personas=3))

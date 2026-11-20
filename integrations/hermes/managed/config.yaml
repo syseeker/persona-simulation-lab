@@ -1,0 +1,5 @@
+# Hermes 0.22.7's public managed-scope configuration. One API attempt means
+# zero application retries; disable its additional transient recovery ladder.
+agent:
+  api_max_retries: 1
+  auto_recovery_cycles: 0

@@ -1,0 +1,36 @@
+# Reference configuration; start only after the operator's readiness checks.
+# Keep credentials in the environment or Helix Secrets, never this file.
+platform:
+  base_url: http://127.0.0.1:8080
+files:
+  default_storage_config:
+    type: local
+    path: .private/platform/files
+secrets:
+  encryption:
+    current_provider: lab-local-v1
+    providers:
+      secret_key:
+        lab-local-v1:
+          from_env: LAB_HELIX_ENCRYPTION_KEY
+agents:
+  deployments:
+    openshell_executor: lab-openshell
+    docker_executor: local-docker
+deployments:
+  executors:
+    - name: local-docker
+      backend: docker
+      config:
+        pull_images: false
+    - name: lab-openshell
+      backend: openshell
+      config:
+        gateway_endpoint: http://127.0.0.1:17670
+        platform_egress:
+          host: host.docker.internal
+          port: 8080
+        serve_workdir: /tmp
+        landlock_compatibility: hard_requirement
+# For Linux, replace the platform_egress host with the address verified from the
+# sandbox. Loopback in an agent sandbox is not the host's loopback.

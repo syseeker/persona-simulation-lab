@@ -1,35 +1,51 @@
-# Five-Phase Implementation Plan
+# Building Citizen Apps with NeMo — Integration Guide Plan
 
-## Contents
+## Goal and active boundary
 
-- [Objective](#objective)
-- [Preparation](#preparation)
-- [Implementation Phases](#implementation-phases)
-- [Acceptance And Learning](#acceptance-and-learning)
+The [canonical North Star](docs/project-goals.md) is unchanged: teach the integrated citizen application through understandable stories, source code and attributable evidence. The user authorised the shared foundation and photography implementation after the nine-stage wireframe, plus a process-chart improvement. The current review is the **repository-hosted guide and working Scenario 1**. Scenarios 2/3 remain illustrative until separately implemented.
 
-## Objective
+Preserve the existing four tabs, styling, typography, adjustable inspector and dataset browsing. Keep one Simplified map and one Detailed map with stable component positions; scenario and stage select highlights and directional animations. Setup stays collapsible with one scenario selector. Photography has explicit live controls and a run selector; saved requests expose attributable boundaries. Authored stage flows stay labelled as explanation. The process chart uses an alternating timeline with three phase bands without horizontal scrolling.
 
-Build a generic Singapore learning advisor using hosted NVIDIA NIM inference. Implement a working application first, then add observability, a managed harness interface, evaluation and optional synthetic enrichment. Each phase includes executable code, meaningful checks and a learner walkthrough.
+The accepted guide now resides in `web/` on SvelteKit/Svelte Flow. The shared Python services, version-1 worker, CLI and isolated compatible environments remain intact. A separate `--guide-only` worker owns new conditions without initializing legacy recovery. The [v0.2 source archive](docs/history/v0.2/INDEX.md) and v0.1 evidence remain immutable history.
 
-## Preparation
+## Nine common journey stages
 
-- Audit Singapore Personas before curating the catalogue. Completed: all 148,000 public records inspected; a diagnostic review panel saved locally.
-- Use real official course listings with source dates. Completed: six career-learning programmes and six community classes; absent facts remain unknown.
-- Use SvelteKit and TypeScript for the web application and Python for NVIDIA SDKs. Keep Data Designer 0.10 and Helix in separate locked environments.
-- Publish generic application code and documentation to a public repository. Keep private materials, credentials, datasets and run artifacts local.
+1. **Choose a test persona:** inspect, sample and lock an exact source record, separating public HF profile-only mode from Singapore NGC Extended.
+2. **Create a situation:** authored constraints in photography/board games; source-seeded Designer hypotheses in retail learning, with original/derived lineage.
+3. **Build and connect the agent:** Fabric configuration, selected Deep Agents or Hermes adapter, persistent memory, course MCP and model access.
+4. **Run the application:** a bounded UserSim conversation over one persistent selected harness. Public messages and private simulator context stay separate.
+5. **Investigate execution:** inspect the same saved turn/request, attributable native Relay events, course facts and role-labelled call ledger.
+6. **Evaluate behaviour:** transparent application assertions in the first two presets; Helix Evals and explicit managed jobs introduced in scenario 3.
+7. **Optimize model routing:** retain fixed access in photography/board games; inspect real Switchyard/LiteLLM decisions and separately named comparisons in retail learning.
+8. **Configure behavioural safeguards:** application restrictions in photography; native Guardrails introduced through a separate policy demonstration in board games and reused in retail learning.
+9. **Deploy with controlled access:** standalone OpenShell in the first two presets; Helix-managed OpenShell in scenario 3. Contain the application, selected harness and course tools throughout the conversation.
 
-## Implementation Phases
+These are teaching positions, not nine public turns, mandatory SDK calls or automatic reruns. Controls apply during execution even when their explanation is later in the guide. Navigating never changes execution ownership or starts inference. Persist stable stage IDs and migrate earlier seven-stage indexes by their original meaning.
 
-1. **Functional application.** Implement chat, typed course MCP tools, a budget gateway, a persistent JSON-lines worker, direct Deep Agents and a public UserSim extension. Freeze resolved profile inputs for paired conditions; isolate memory and preserve partial output on failure.
-2. **Relay.** Attach the maintained Deep Agents integration. Verify paired agent, LLM and tool scopes using actual generated events. Keep simulator and judge usage separate in the gateway ledger.
-3. **Fabric.** Build an in-memory typed configuration, validate the installed adapter and use one persistent runtime per episode. Reuse the same MCP tools, system policy and budget gateway. Attach Relay through the adapter once.
-4. **Helix.** Score saved output through the local Evals SDK. Generate fresh baseline and candidate responses on a frozen regression suite; retain failures and row-level criteria. Validate a declarative managed-agent artifact locally. Platform deployment is a separate operation.
-5. **Data Designer.** Generate explicit preference hypotheses over existing profiles. Preserve source IDs, revisions and hashes, and compare one source profile with and without enrichment under the same advisor strategy.
+## Progressive scenario presets
 
-## Acceptance And Learning
+- **Photography:** one public beginner/Saturday/S$50 request, Fabric/Deep Agents, fixed Nemotron via LiteLLM, read-only course MCP, Relay, application-owned assertions and standalone OpenShell. No Designer, Switchyard, native Guardrails or Helix dependency. Preserve unknown material fees and personal eligibility.
+- **Board games:** two public turns, Fabric/Hermes, the same fixed model, an authored situation and standalone OpenShell. Preserve the honest no-match when the follow-up asks whether video-game design is the same as learning to play board games. Add a separate native Guardrails policy probe; the legitimate conversation remains allowed. No Designer, Switchyard or Helix.
+- **Retail learning:** three public turns, Fabric/Deep Agents, Designer-generated hypothetical preferred-brand/salary columns, Switchyard with LiteLLM, Guardrails and Helix evaluation/managed operations. Salary S$2,500–3,499 stays private until turn 2; the explicit S$3,000 budget, weekends and shorter-study preference arrive in turn 3. Brand ambitions motivate learning; tools do not search jobs or establish employer requirements. Six months/S$20,000 remains hypothetical.
 
-Implementation is established by working code and offline contract checks. Live verification is reported separately for NIM, UserSim, Relay, Fabric, Helix and the enrichment ablation. A failed model response remains a failed experimental condition. Full live evidence stays local; [verification](docs/verification.md) contains the shareable status.
+Helix is a control plane spanning agent operations, evaluation, experiments and hardening, not just a scorer. Only actually connected capabilities can count as implementation. Native Guardrails decisions, application assertions and OpenShell enforcement are different records. The suite demonstrates these capabilities progressively; they are reusable configuration choices, not scenario-specific application forks.
 
-Default limits: one active model workload per worker, one concurrent episode, at most three conversation turns, four tool rounds per reply, 1,024 output tokens per call and 120 calls per experiment or benchmark. Tests, demos and live calls are labelled distinctly.
+For a routing-policy comparison, hold the harness, public inputs and catalogue fixed and use a fixed candidate from the same Gemma/GLM pool. Fixed Nemotron versus that pool also changes inventory and must be labelled accordingly. Confirm exact available NIM IDs and the pinned experimental integration's supported semantics. Harness comparisons use a fixed model and common inputs; different stories cannot establish harness quality.
 
-Booking, payment, Singpass, live catalogue crawling, fine-tuning and multi-agent social environments remain outside this implementation.
+## Implementation gates
+
+1. **Wireframe and housekeeping delivered:** nine-stage UX, progressive presets and verified private output archives. The user then authorised implementation. Preserve archives and unresolved ownership records.
+2. **Shared foundation implemented, review pending:** versioned preset metadata, strict execution contract, source locking, public-only advisor context, persistent Fabric runtime, budgets, cancellation/recovery, portable sources and run-scoped local artifacts.
+3. **Photography implemented, review pending:** native standalone OpenShell contains the persistent Fabric/Deep Agents application and MCP. One real UserSim turn, fixed LiteLLM access, Relay and transparent saved-response assertions; no Designer, Switchyard, native Guardrails or Helix operation. See [verification](docs/verification.md) for the completed run, preserved failures and limits.
+4. **Board games:** add Hermes, two-turn negative-case persistence and native Guardrails; regress photography.
+5. **Retail learning:** add Designer lineage, disclosure boundaries, native routing and actual Helix evaluation, registration/deployment/session/job lifecycle; regress the first two stories.
+
+Use reusable application packages with compatible harness-specific environments where necessary. Do not bake persona rows or scenarios into images, restart a harness per turn, copy private memory into managed deployment or silently fall back from OpenShell. Preserve the existing recorded Docker ingress and external-driver limitations as historical evidence, not new architectural requirements.
+
+## Evidence and documentation continuity
+
+Code links resolve allowlisted identifiers and repository-relative paths; logs use opaque artifact IDs. An unimplemented adapter shows an explicit unavailable state rather than an invented code path or native decision. Keep current working-tree references separate from the revision of any recording. Playback and inspection make zero inference calls.
+
+The user subsequently requested `dev` from GitHub `main`, with each completed round committed and pushed. Fixed sanitized recording packs are checked in under `recordings/`, with scenario-specific GitHub log permalinks and in-app previews. Preserve original private runs outside Git. Scenarios 2/3 have no executed packs yet. Future live-log linking is deferred; keep `main` unchanged until requested.
+
+Update the current README, [walkthrough](docs/learning-guide.md), architecture, contracts, decisions and [verification](docs/verification.md) together. The [output housekeeping policy](docs/output-housekeeping.md) covers private archives and recovery; these are separate from the immutable public v0.1/v0.2 source archives. Raw profiles, conversations and traces remain outside Git.

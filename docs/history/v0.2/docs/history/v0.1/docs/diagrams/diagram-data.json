@@ -1,0 +1,588 @@
+{
+  "status": "implemented",
+  "graphs": [
+    {
+      "file": "system-context",
+      "title": "01 / System Context",
+      "subtitle": "Singapore Learning & Classes Advisor | implemented local application",
+      "width": 1500,
+      "height": 900,
+      "nodes": [
+        {
+          "x": 55,
+          "y": 165,
+          "w": 280,
+          "h": 125,
+          "title": "Learner",
+          "lines": [
+            "SvelteKit browser or CLI",
+            "Explore classes and inspect tests"
+          ],
+          "accent": false
+        },
+        {
+          "x": 470,
+          "y": 165,
+          "w": 500,
+          "h": 160,
+          "title": "Learning Lab",
+          "lines": [
+            "SvelteKit Node server and Python worker",
+            "Deep Agents or Fabric advisor runtime",
+            "UserSim experiment coordinator"
+          ],
+          "accent": true
+        },
+        {
+          "x": 1120,
+          "y": 165,
+          "w": 325,
+          "h": 160,
+          "title": "NVIDIA NIM",
+          "lines": [
+            "Advisor: Nemotron Lightning",
+            "Other roles: Nemotron Nano Omni",
+            "Hosted inference with a local API key"
+          ],
+          "accent": false
+        },
+        {
+          "x": 55,
+          "y": 460,
+          "w": 320,
+          "h": 170,
+          "title": "Local Inputs",
+          "lines": [
+            "Audited Singapore HF profiles",
+            "NGC Extended path: setup required",
+            "Data Designer preference hypotheses",
+            "Official course snapshot"
+          ],
+          "accent": false
+        },
+        {
+          "x": 470,
+          "y": 460,
+          "w": 500,
+          "h": 170,
+          "title": "Boundaries",
+          "lines": [
+            "Read-only course MCP tools",
+            "120-call budget per experiment",
+            "Fresh target memory per condition",
+            "Original profiles preserved"
+          ],
+          "accent": true
+        },
+        {
+          "x": 1120,
+          "y": 460,
+          "w": 325,
+          "h": 170,
+          "title": "Evidence",
+          "lines": [
+            "Relay agent / model / tool scopes",
+            "Local run events and usage ledger",
+            "Helix scoring of saved replies",
+            "Frozen inputs for paired comparisons"
+          ],
+          "accent": false
+        }
+      ],
+      "edges": [
+        {
+          "points": [
+            [
+              335,
+              228
+            ],
+            [
+              470,
+              228
+            ]
+          ],
+          "label": "Ask / inspect",
+          "x": 351,
+          "y": 207
+        },
+        {
+          "points": [
+            [
+              970,
+              228
+            ],
+            [
+              1120,
+              228
+            ]
+          ],
+          "label": "Budget gateway",
+          "x": 984,
+          "y": 207
+        },
+        {
+          "points": [
+            [
+              375,
+              545
+            ],
+            [
+              470,
+              545
+            ]
+          ],
+          "label": "Facts",
+          "x": 393,
+          "y": 525
+        },
+        {
+          "points": [
+            [
+              720,
+              325
+            ],
+            [
+              720,
+              460
+            ]
+          ],
+          "label": "Enforced by worker",
+          "x": 743,
+          "y": 394
+        },
+        {
+          "points": [
+            [
+              970,
+              545
+            ],
+            [
+              1120,
+              545
+            ]
+          ],
+          "label": "Save / score",
+          "x": 991,
+          "y": 525
+        }
+      ],
+      "footer": "Local-only application and artifacts. No booking, payment or Platform deployment."
+    },
+    {
+      "file": "runtime-components",
+      "title": "02 / Runtime Components",
+      "subtitle": "One application service shared by the web worker and CLI",
+      "width": 1500,
+      "height": 1050,
+      "nodes": [
+        {
+          "x": 55,
+          "y": 155,
+          "w": 300,
+          "h": 125,
+          "title": "SvelteKit",
+          "lines": [
+            "Browser UI and Node server routes",
+            "Lazy persistent child worker"
+          ],
+          "accent": false
+        },
+        {
+          "x": 525,
+          "y": 155,
+          "w": 450,
+          "h": 125,
+          "title": "Python LabService",
+          "lines": [
+            "Versioned JSON-lines messages with IDs",
+            "Workload lock, cancellation and run state"
+          ],
+          "accent": true
+        },
+        {
+          "x": 1145,
+          "y": 155,
+          "w": 300,
+          "h": 125,
+          "title": "CLI",
+          "lines": [
+            "Same application service",
+            "Explicit offline / live modes"
+          ],
+          "accent": false
+        },
+        {
+          "x": 55,
+          "y": 435,
+          "w": 300,
+          "h": 170,
+          "title": "UserSim External Runtime",
+          "lines": [
+            "Immutable resolved profile input",
+            "User / assistant / judge activations",
+            "Native outcomes and warnings"
+          ],
+          "accent": false
+        },
+        {
+          "x": 525,
+          "y": 420,
+          "w": 450,
+          "h": 190,
+          "title": "Advisor Target",
+          "lines": [
+            "Direct Deep Agents or Fabric adapter",
+            "One conversation per memory workspace",
+            "Read-only tools and runtime skill",
+            "Native Relay instrumentation"
+          ],
+          "accent": true
+        },
+        {
+          "x": 1145,
+          "y": 435,
+          "w": 300,
+          "h": 170,
+          "title": "Course MCP",
+          "lines": [
+            "Search / details / compare",
+            "Explicit constraints bound by host",
+            "Frozen official catalogue"
+          ],
+          "accent": false
+        },
+        {
+          "x": 55,
+          "y": 765,
+          "w": 300,
+          "h": 150,
+          "title": "Isolated SDK Environments",
+          "lines": [
+            "Helix: exact-match local evaluation",
+            "Data Designer 0.10: overlays",
+            "Separate locks for compatibility"
+          ],
+          "accent": false
+        },
+        {
+          "x": 525,
+          "y": 765,
+          "w": 450,
+          "h": 150,
+          "title": "Inference Gateway",
+          "lines": [
+            "Counts all roles, judges and failures",
+            "1,024 output tokens; retries disabled",
+            "NVIDIA key remains server-side"
+          ],
+          "accent": true
+        },
+        {
+          "x": 1145,
+          "y": 765,
+          "w": 300,
+          "h": 150,
+          "title": "Hosted NIM",
+          "lines": [
+            "OpenAI-compatible endpoint",
+            "Configured model per role",
+            "Measured provider usage"
+          ],
+          "accent": false
+        }
+      ],
+      "edges": [
+        {
+          "points": [
+            [
+              355,
+              218
+            ],
+            [
+              525,
+              218
+            ]
+          ],
+          "label": "JSON-lines",
+          "x": 391,
+          "y": 196
+        },
+        {
+          "points": [
+            [
+              1145,
+              218
+            ],
+            [
+              975,
+              218
+            ]
+          ],
+          "label": "Python calls",
+          "x": 998,
+          "y": 196
+        },
+        {
+          "points": [
+            [
+              675,
+              280
+            ],
+            [
+              675,
+              420
+            ]
+          ],
+          "label": "Own lifecycle",
+          "x": 698,
+          "y": 350
+        },
+        {
+          "points": [
+            [
+              525,
+              250
+            ],
+            [
+              420,
+              250
+            ],
+            [
+              420,
+              385
+            ],
+            [
+              205,
+              385
+            ],
+            [
+              205,
+              435
+            ]
+          ],
+          "label": "Simulate",
+          "x": 238,
+          "y": 364
+        },
+        {
+          "points": [
+            [
+              975,
+              515
+            ],
+            [
+              1145,
+              515
+            ]
+          ],
+          "label": "MCP stdio",
+          "x": 1009,
+          "y": 494
+        },
+        {
+          "points": [
+            [
+              750,
+              610
+            ],
+            [
+              750,
+              765
+            ]
+          ],
+          "label": "Target requests",
+          "x": 774,
+          "y": 700
+        },
+        {
+          "points": [
+            [
+              205,
+              605
+            ],
+            [
+              205,
+              683
+            ],
+            [
+              525,
+              683
+            ],
+            [
+              525,
+              815
+            ]
+          ],
+          "label": "Other role requests",
+          "x": 265,
+          "y": 661
+        },
+        {
+          "points": [
+            [
+              975,
+              838
+            ],
+            [
+              1145,
+              838
+            ]
+          ],
+          "label": "Bounded HTTPS",
+          "x": 998,
+          "y": 815
+        }
+      ],
+      "footer": "Relay observes advisor work. The gateway ledger counts the complete experiment."
+    },
+    {
+      "file": "episode-sequence",
+      "title": "03 / One Paired Experiment",
+      "subtitle": "Exact inputs, isolated target state, preserved execution failures",
+      "width": 1500,
+      "height": 1030,
+      "nodes": [
+        {
+          "x": 70,
+          "y": 155,
+          "w": 1360,
+          "h": 125,
+          "title": "1. Freeze Inputs",
+          "lines": [
+            "Resolve the source profile and UserSim preamble once. Save model identities and catalogue hash.",
+            "Reuse the exact rows for both advisor strategies; keep preference overlays labelled."
+          ],
+          "accent": true
+        },
+        {
+          "x": 70,
+          "y": 340,
+          "w": 1360,
+          "h": 135,
+          "title": "2. Start A Fresh Condition",
+          "lines": [
+            "Create an isolated Deep Agents or Fabric runtime, memory workspace and MCP session.",
+            "Select concise or clarification-first policy; enable Relay once."
+          ],
+          "accent": false
+        },
+        {
+          "x": 70,
+          "y": 535,
+          "w": 650,
+          "h": 170,
+          "title": "3a. User / Judge / Summary Activation",
+          "lines": [
+            "Forward exact UserSim role messages to the gateway.",
+            "Admit each provider call against the shared budget.",
+            "Record the response and measured token usage."
+          ],
+          "accent": false
+        },
+        {
+          "x": 780,
+          "y": 535,
+          "w": 650,
+          "h": 170,
+          "title": "3b. Advisor Activation",
+          "lines": [
+            "Send only the latest public learner message to target.",
+            "Target performs real MCP lookups and bounded inference.",
+            "Return the final public reply to UserSim."
+          ],
+          "accent": false
+        },
+        {
+          "x": 70,
+          "y": 770,
+          "w": 1360,
+          "h": 140,
+          "title": "4. Finalize And Inspect",
+          "lines": [
+            "Continue up to three conversation turns; preserve partial outputs, failures and native warnings.",
+            "Save the usage ledger and trace evidence. Score saved replies through the local Helix SDK."
+          ],
+          "accent": true
+        }
+      ],
+      "edges": [
+        {
+          "points": [
+            [
+              750,
+              280
+            ],
+            [
+              750,
+              340
+            ]
+          ],
+          "label": "",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "points": [
+            [
+              395,
+              475
+            ],
+            [
+              395,
+              535
+            ]
+          ],
+          "label": "",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "points": [
+            [
+              1105,
+              475
+            ],
+            [
+              1105,
+              535
+            ]
+          ],
+          "label": "",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "points": [
+            [
+              395,
+              705
+            ],
+            [
+              395,
+              770
+            ]
+          ],
+          "label": "",
+          "x": 0,
+          "y": 0
+        },
+        {
+          "points": [
+            [
+              1105,
+              705
+            ],
+            [
+              1105,
+              770
+            ]
+          ],
+          "label": "",
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "footer": "Repeat activation 3 within the bounded loop, then repeat steps 2\u20134 for the paired strategy."
+    }
+  ]
+}

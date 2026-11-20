@@ -64,3 +64,26 @@ async def test_designer_preserves_source_and_labels_hypotheses(tmp_path, monkeyp
     corrupted["records"][0]["original_profile_json"] = "{}"
     with pytest.raises(ValueError):
         apply_overlays([row], corrupted)
+
+
+@pytest.mark.skipif(
+    not (ROOT / "integrations/designer/.venv/bin/python").exists(),
+    reason="Install the isolated Data Designer environment",
+)
+async def test_legacy_sampler_enriches_exact_random_profiles_instead_of_old_review_panel(
+    tmp_path, monkeypatch
+):
+    monkeypatch.setenv("LAB_SEED_PATH", str(tmp_path / "must-not-use-old-panel.jsonl"))
+    rows = [
+        {
+            "persona": {"uuid": f"new-random-fixture-{index}", "age": 30 + index},
+            "trajectory_id": f"trajectory-{index}",
+            "source_revision": "fixture-revision",
+        }
+        for index in range(2)
+    ]
+    overlays = await generate_overlays(tmp_path / "overlays.json", 2, resolved_rows=rows)
+    enriched = apply_overlays(rows, overlays)
+    assert [row["persona"] for row in enriched] == [row["persona"] for row in rows]
+    assert {item["source_id"] for item in overlays["records"]} == {row["persona"]["uuid"] for row in rows}
+    assert all(row["learning_overlay"]["hypothesis"] for row in enriched)

@@ -8,6 +8,7 @@ from pathlib import Path
 import re
 
 from .catalogue import all_courses
+from .evidence import decode_native
 
 PROFILE_FIELDS = [
     "age",
@@ -23,16 +24,7 @@ PROFILE_FIELDS = [
 
 
 def decode_content(value, depth=0):
-    if depth > 5:
-        return value
-    if isinstance(value, str):
-        try:
-            return decode_content(json.loads(value), depth + 1)
-        except (ValueError, TypeError):
-            return value
-    if isinstance(value, list) and len(value) == 1 and isinstance(value[0], dict) and "text" in value[0]:
-        return decode_content(value[0]["text"], depth + 1)
-    return value
+    return decode_native(value, depth)
 
 
 def course_ids(text: str) -> set[str]:
@@ -144,8 +136,8 @@ def build_trace(folder: Path, run: dict, episode_id: str) -> dict:
                 turn["tools"] = [
                     {
                         "name": t.get("name", "unknown"),
-                        "arguments": None,
-                        "result": decode_content(t.get("content")),
+                        "arguments": t.get("arguments"),
+                        "result": decode_content(t.get("result", t.get("content"))),
                     }
                     for t in event.get("tools", [])
                 ]
@@ -171,6 +163,7 @@ def build_trace(folder: Path, run: dict, episode_id: str) -> dict:
             "distribution": row.get("source_distribution", started.get("source")),
             "dataset": row.get("source_dataset"),
             "revision": row.get("source_revision"),
+            "lineage": row.get("source_lineage"),
         },
         "profile": profile,
         "scenario": {
@@ -178,6 +171,7 @@ def build_trace(folder: Path, run: dict, episode_id: str) -> dict:
             "strategy": started.get("strategy"),
             "overlay": row.get("learning_overlay"),
             "probe": row.get("probe_type"),
+            "binding": row.get("scenario_binding", started.get("scenario_binding")),
         },
         "snapshot": snapshot,
         "turns": turns,

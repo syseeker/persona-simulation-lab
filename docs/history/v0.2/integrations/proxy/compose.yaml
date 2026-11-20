@@ -1,0 +1,32 @@
+services:
+  litellm:
+    build:
+      context: .upstream
+      dockerfile: ../Dockerfile
+    image: persona-lab-proxy:0.2.0
+    ports: ["127.0.0.1:4000:4000"]
+    environment:
+      LITELLM_LOG: WARNING
+      LAB_PROXY_API_KEY: ${LAB_PROXY_API_KEY:?Set LAB_PROXY_API_KEY}
+      LAB_FIXED_MODEL: ${LAB_FIXED_MODEL:?Set LAB_FIXED_MODEL}
+      LAB_FIXED_API_BASE: ${LAB_FIXED_API_BASE:?Set LAB_FIXED_API_BASE}
+      LAB_FIXED_API_KEY: ${LAB_FIXED_API_KEY:?Set LAB_FIXED_API_KEY}
+      LAB_SUPPORT_MODEL: ${LAB_SUPPORT_MODEL:?Set LAB_SUPPORT_MODEL}
+      LAB_SUPPORT_API_BASE: ${LAB_SUPPORT_API_BASE:?Set LAB_SUPPORT_API_BASE}
+      LAB_SUPPORT_API_KEY: ${LAB_SUPPORT_API_KEY:?Set LAB_SUPPORT_API_KEY}
+      LAB_CAPABLE_MODEL: ${LAB_CAPABLE_MODEL:?Set LAB_CAPABLE_MODEL}
+      LAB_CAPABLE_API_BASE: ${LAB_CAPABLE_API_BASE:?Set LAB_CAPABLE_API_BASE}
+      LAB_CAPABLE_API_KEY: ${LAB_CAPABLE_API_KEY:?Set LAB_CAPABLE_API_KEY}
+      LAB_EFFICIENT_MODEL: ${LAB_EFFICIENT_MODEL:?Set LAB_EFFICIENT_MODEL}
+      LAB_EFFICIENT_API_BASE: ${LAB_EFFICIENT_API_BASE:?Set LAB_EFFICIENT_API_BASE}
+      LAB_EFFICIENT_API_KEY: ${LAB_EFFICIENT_API_KEY:?Set LAB_EFFICIENT_API_KEY}
+    volumes:
+      - ./litellm.yaml:/app/lab/litellm.yaml:ro
+      - ./lab_routing.py:/app/lab-plugin/lab_routing.py:ro
+    command: ["--config", "/app/lab/litellm.yaml", "--port", "4000", "--host", "0.0.0.0"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:4000/health/liveliness')"]
+      interval: 10s
+      timeout: 3s
+      retries: 6
+    restart: "no"

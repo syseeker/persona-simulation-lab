@@ -19,6 +19,8 @@ from langgraph.checkpoint.memory import InMemorySaver
 from .catalogue import Preferences, freeze_catalogue
 from .course_mcp import TOOL_NAMES
 from .inference import Gateway
+from .evidence import save_evidence
+from .outcomes import answer_outcome, require_valid_answer
 from .settings import ROOT
 
 ALLOWED_TOOLS = set(TOOL_NAMES)
@@ -150,20 +152,49 @@ class DirectTarget:
                 result = await self.agent.ainvoke(
                     {"messages": [{"role": "user", "content": content}]}, config
                 )
-        except Exception:
+        except Exception as exc:
             state = await self.agent.aget_state(config)
             self._save_history(state.values.get("messages", []))
+            save_evidence(
+                self.workspace.parent / "reply-outcomes.jsonl",
+                {
+                    "user": message,
+                    "preferences": preferences.model_dump(mode="json") if preferences else None,
+                    "runtime_status": "failed",
+                    "error_type": type(exc).__name__,
+                    "outcome": {
+                        "status": "invalid",
+                        "code": "execution_error",
+                        "reason": "The harness stopped before a public answer.",
+                    },
+                },
+                append=True,
+            )
             raise
         new = result["messages"][before:]
         self._save_history(result["messages"])
         output = result["messages"][-1]
-        if output.type != "ai" or not output.content:
-            raise RuntimeError(
-                "The model returned no final answer; inspect the token budget and model configuration"
-            )
+        content = output.content if output.type == "ai" and not getattr(output, "tool_calls", None) else None
+        outcome = answer_outcome(content)
+        tools = [{"name": m.name, "content": m.content} for m in new if m.type == "tool"]
+        save_evidence(
+            self.workspace.parent / "reply-outcomes.jsonl",
+            {
+                "user": message,
+                "content": output.content,
+                "preferences": preferences.model_dump(mode="json") if preferences else None,
+                "runtime_status": "succeeded",
+                "outcome": outcome,
+                "tools": tools,
+            },
+            append=True,
+        )
+        content = require_valid_answer(content)
         return {
-            "content": output.content,
-            "tools": [{"name": m.name, "content": m.content} for m in new if m.type == "tool"],
+            "content": content,
+            "outcome": outcome,
+            "tools": tools,
+            "preferences": preferences.model_dump(mode="json") if preferences else None,
             "thread_id": self.thread_id,
         }
 
@@ -228,6 +259,6 @@ def relay_evidence(folder: Path, provider_verified=False) -> dict:
     return {
         "events": len(events),
         "paired_categories": sorted({e.get("category") for e in pairs}),
-        "file": str(path.relative_to(ROOT)),
+        "file": str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path),
         "provider_verified": provider_verified,
     }

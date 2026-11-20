@@ -1,0 +1,93 @@
+{
+  "projection": "Allowlisted native fields; not a byte-for-byte original.",
+  "agent_name": "singapore-learning-advisor",
+  "resolution": "preinstalled",
+  "capability_plan": {
+    "tools": {
+      "enabled": [
+        "search_courses",
+        "get_course_details",
+        "compare_courses"
+      ]
+    },
+    "tools_configured": true,
+    "skill_paths": [
+      "/opt/lab/runtime-skills/course-advisor"
+    ],
+    "mcp_servers": {
+      "catalogue": {
+        "transport": "stdio",
+        "url": "/opt/lab/.venv/bin/python",
+        "args": [
+          "-m",
+          "learning_lab.course_mcp"
+        ],
+        "env": {
+          "LAB_CATALOGUE_FILE": "/workspace/run/catalogue-snapshot.json",
+          "LAB_PREFERENCES_FILE": "/workspace/run/preferences.json"
+        },
+        "exposure": "harness_native"
+      }
+    },
+    "native": {
+      "tools_configured": true,
+      "skill_paths": [
+        "/opt/lab/runtime-skills/course-advisor"
+      ],
+      "mcp_servers": {
+        "catalogue": {
+          "transport": "stdio",
+          "url": "/opt/lab/.venv/bin/python",
+          "args": [
+            "-m",
+            "learning_lab.course_mcp"
+          ],
+          "env": {
+            "LAB_CATALOGUE_FILE": "/workspace/run/catalogue-snapshot.json",
+            "LAB_PREFERENCES_FILE": "/workspace/run/preferences.json"
+          },
+          "exposure": "harness_native"
+        }
+      }
+    },
+    "managed": {
+      "tools_configured": false
+    },
+    "unsupported": {
+      "tools_configured": false
+    },
+    "routes": [
+      {
+        "kind": "tools",
+        "name": "tools.enabled",
+        "target": "harness_native",
+        "reason": "selected adapter explicitly supports the NeMo Fabric enabled-tools selection"
+      },
+      {
+        "kind": "skills",
+        "name": "skills",
+        "target": "harness_native",
+        "reason": "selected adapter accepts NeMo Fabric skills config"
+      },
+      {
+        "kind": "mcp",
+        "name": "catalogue",
+        "target": "harness_native",
+        "reason": "MCP server uses harness_native exposure and adapter accepts mcp"
+      }
+    ]
+  },
+  "capabilities": {
+    "service": false,
+    "streaming": false,
+    "updates": false,
+    "cancellation": false,
+    "metadata": {
+      "health_checks": [
+        "live",
+        "active",
+        "ready"
+      ]
+    }
+  }
+}

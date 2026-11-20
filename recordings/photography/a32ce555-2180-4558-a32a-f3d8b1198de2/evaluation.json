@@ -1,0 +1,107 @@
+{
+  "kind": "application assertions",
+  "rows": [
+    {
+      "id": "public-answer",
+      "criterion": "A valid public answer was saved",
+      "expected": true,
+      "actual": true,
+      "status": "pass",
+      "reason": "A transport result, empty answer or error string does not count as advice.",
+      "evidence": [
+        "public-conversation.json"
+      ],
+      "implementation": "application assertion; no model judge"
+    },
+    {
+      "id": "source-lock",
+      "criterion": "The test persona has an unchanged original hash",
+      "expected": true,
+      "actual": true,
+      "status": "pass",
+      "reason": "This checks the saved lock receipt, not representativeness or citizenship.",
+      "evidence": [
+        "source-lock.json"
+      ],
+      "implementation": "application assertion; no model judge"
+    },
+    {
+      "id": "public-situation",
+      "criterion": "The public opening actually states the selected situation",
+      "expected": {
+        "budget_sgd": 50.0,
+        "days": [
+          5
+        ]
+      },
+      "actual": {
+        "budget_sgd": 50.0,
+        "days": [
+          5
+        ]
+      },
+      "status": "pass",
+      "reason": "Generated UserSim wording may vary; omitted constraints do not count as a successful Saturday/S$50 demonstration.",
+      "evidence": [
+        "public-conversation.json",
+        "situation.json"
+      ],
+      "implementation": "application assertion; no model judge"
+    },
+    {
+      "id": "grounding-0",
+      "criterion": "Recommendation links and IDs belong to the frozen catalogue",
+      "expected": true,
+      "actual": true,
+      "status": "pass",
+      "reason": "An exact catalogue URL identifies a listing; internal course IDs are optional. Other factual sentences still need review.",
+      "evidence": [
+        "public-conversation.json",
+        "catalogue-snapshot.json"
+      ],
+      "implementation": "application assertion; no model judge"
+    },
+    {
+      "id": "constraints-0",
+      "criterion": "Recommended listings respect the publicly stated budget and day",
+      "expected": true,
+      "actual": true,
+      "status": "pass",
+      "reason": "Constraints are extracted only from the saved public learner turn, never the private persona.",
+      "evidence": [
+        "public-conversation.json",
+        "catalogue-snapshot.json"
+      ],
+      "implementation": "application assertion; no model judge"
+    },
+    {
+      "id": "assurances-0",
+      "criterion": "No unsupported fee or funding assurance pattern",
+      "expected": false,
+      "actual": false,
+      "status": "pass",
+      "reason": "A narrow phrase check; a pass does not certify every financial statement.",
+      "evidence": [
+        "public-conversation.json"
+      ],
+      "implementation": "application assertion; no model judge"
+    },
+    {
+      "id": "native-tools",
+      "criterion": "Native tool evidence includes a completed catalogue request",
+      "expected": true,
+      "actual": true,
+      "status": "pass",
+      "reason": "Native Relay evidence is required; an application log saying “searched” is insufficient.",
+      "evidence": [
+        "native/fabric-traces/relay.jsonl"
+      ],
+      "implementation": "application assertion; no model judge"
+    }
+  ],
+  "passed": 7,
+  "total": 7,
+  "coverage": "Exact course URLs and any explicit IDs, saved source lock, stated constraints, selected assurance patterns and native tool evidence. Not a certification of the whole answer.",
+  "inference_calls": 0,
+  "helix_used": false
+}
