@@ -1,5 +1,13 @@
 # Verification Record
 
+## Full retail rerun stopped on upstream throttling · 22 November 2026
+
+The verified Fabric comparison correction was committed and pushed to `dev` as `eeb1969870c168762880c8c72a305e605d7fad94`, leaving `main` unchanged. Full retail run `12568868-3c82-4257-aba5-c27323769932` then passed its baseline's 24/24 criteria and completed the durable Helix evaluation job. First fixed MiniMax condition `2373977d-40a7-4d73-ba83-5d6503ac8141` completed four calls with the expected model identity, delivering public turns 1 and 2 and a tool call for turn 3. Its fifth call received HTTP 429. The saved LiteLLM/OpenAI trace shows an upstream response, which the proxy forwarded as a rate-limit error; no fallback or automatic retry occurred. Neither exact quota/window nor reset time was captured.
+
+The overall run stopped after 26 admitted calls, with exact-resource cleanup and workload-guard release confirmed. Routed comparison, fixed Mistral access, optional diagnostics and managed deployment did not start. Captures are 64/72, reflecting failed/unstarted operations; no replacement demo has been selected or published. The failed run, partial conversation, actual provider errors, native requests/results and scoped proxy log remain private and unchanged. The user was asked before proposed configurable 30-second comparison-request spacing, rate-limit-header capture and a focused replay of only the failed MiniMax condition. The original 120-call/1,024-token limits and disabled retries remain unchanged.
+
+A separate read-only publication audit found that the ordinary routing projection omits newer verification/access/coverage and condition-plan fields, while the full capture projection retains them. No pack was exported or modified. That allowlist needs correction before selecting/publishing a replacement demo; this finding does not change the native run outcome.
+
 ## Comparison Fabric reasoning correction · 22 November 2026
 
 The user approved correcting our configuration builder, testing actual Fabric → gateway → LiteLLM execution, then resuming retail if it passes. For the three comparison aliases, Deep Agents now omits the shared `reasoning_effort: none`, leaving provider-specific settings to the selected retail deployment. Baseline and Hermes configuration remain unchanged. The installed adapter forwards supplied settings as documented; this is an application integration defect, not an established upstream Fabric defect.
