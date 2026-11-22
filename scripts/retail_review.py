@@ -34,7 +34,10 @@ def project(folder, emit):
         for row in routing['conditions']:
             condition = pick(row, ['condition_id', 'label', 'harness', 'alias', 'route', 'status', 'input_sha256',
                 'catalogue_sha256', 'fresh_memory', 'cleanup_confirmed', 'calls', 'native_decisions',
-                'purpose', 'evaluation', 'error_type', 'error', 'public_inputs', 'input_basis', 'fabric_configuration', 'fabric_results'])
+                'purpose', 'evaluation', 'error_type', 'error', 'public_inputs', 'input_basis', 'fabric_configuration', 'fabric_results',
+                'execution_status', 'evaluation_status', 'execution_verified', 'evaluation_verified',
+                'evaluation_scope', 'proposal_review', 'native_course_searches', 'native_course_scope_uuids',
+                'actual_selected_models', 'verified', 'stopped_at', 'requires_user_review', 'stop_reason'])
             condition['usage'] = [pick(call, ['call', 'role', 'mode', 'status', 'requested_model', 'selected_model',
                 'usage', 'latency_ms', 'routing_decision', 'http_status', 'error_type', 'control_request_id',
                 'thread_id', 'transport', 'finish_reason', 'output_token_limit',
@@ -45,7 +48,11 @@ def project(folder, emit):
                                                        'response_origin', 'response_policy'])
                                          for message in row.get('conversation', [])]
             conditions.append(condition)
-        emit('routing-comparison.json', {**pick(routing, ['comparison', 'baseline_notice']), 'conditions': conditions},
+        emit('routing-comparison.json', {**pick(routing, ['comparison', 'baseline_notice',
+            'condition_plan', 'status', 'stopped_at', 'requires_user_review', 'stop_reason', 'verified',
+            'routing_policy_verified', 'requested_access_verified', 'requested_model_access',
+            'diagnostic_verified', 'diagnostic_status', 'requested_model_coverage', 'provider_notice']),
+            'conditions': conditions},
              folder / 'routing-comparison.json')
     for name, keys in {
         'platform-package.json': ['harness', 'scenario_id', 'image', 'built', 'stage', 'files', 'catalogue_sha256', 'public_preset'],
