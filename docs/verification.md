@@ -10,7 +10,7 @@ Checks performed: local Markdown links/anchors/integration references and immuta
 
 Staged review confirmed exactly the seven intended Markdown paths, no whitespace errors, no machine-absolute paths and no high-confidence credential patterns or known local credential values. The scan reported only statuses/counts and did not print credential values. No private payloads or raw run artifacts were staged.
 
-Workstreams W1 (capture/execution fixes and fresh demos), W2 (full UX revision) and W3 (Metadata) remain queued in that order. Saving their specifications does not count as implementing them or selecting new demos. The Git commit containing this entry records the documentation repair; completion/publication status is tracked in the master ledger.
+The seven-file documentation repair was committed and pushed to `origin/dev` as [abbb6d2](https://github.com/syseeker/persona-simulation-lab/commit/abbb6d23e78d14decc73e48e5a5dd69dc9829a9d). W0 is complete; this completion entry records that actual publication. Workstreams W1 (capture/execution fixes and fresh demos), W2 (full UX revision) and W3 (Metadata) remain queued in that order. Saving their specifications does not count as implementing them or selecting new demos.
 
 ## Scenario 3 · Designer, disclosure, Helix and routing limits · 21 November 2026
 

@@ -38,7 +38,7 @@ Before a round, read this plan and the relevant specification, preserve a recove
 
 | ID | Workstream | Status | Dependency | Implementation / completion reference |
 | --- | --- | --- | --- | --- |
-| W0 | Repair saved planning and progress tracking | Verified | None | [Documentation verification](docs/verification.md); commit/push pending |
+| W0 | Repair saved planning and progress tracking | Complete | None | [Saved and pushed in abbb6d2](https://github.com/syseeker/persona-simulation-lab/commit/abbb6d23e78d14decc73e48e5a5dd69dc9829a9d); [verification](docs/verification.md) |
 | W1 | Complete captures, fix execution and rerun S1–S3 | Queued | W0 | No new implementation or runs; existing evidence is baseline only |
 | W2 | Comprehensive teaching UX revision | Queued | W1's verified evidence and demo bindings | [Full specification](docs/ux-review-spec.md); no new implementation |
 | W3 | Add the Metadata tab | Queued | W1 artifact contract and W2 UI integration | [Inventory and table contract](docs/configuration-evidence-inventory.md); no new implementation |
@@ -50,7 +50,7 @@ Before a round, read this plan and the relevant specification, preserve a recove
 - [x] Save one master plan, full UX/feedback specification and complete scenario-aware capture inventory.
 - [x] Add current documentation precedence/verification notes without rewriting historical findings.
 - [x] Check local documentation links, archive integrity, final diff scope, staged paths and credential/private-content exposure.
-- [ ] Commit/push the documentation repair to `dev` and record its completion reference.
+- [x] Commit/push the documentation repair to `dev` and record its completion reference: `abbb6d23e78d14decc73e48e5a5dd69dc9829a9d`.
 
 Acceptance: a future agent can find the agreed scope, detailed Step 2 requirements, all artifact gaps, delivery order, current state and plan lifecycle from the repository alone. Application code, datasets, SDK versions, recording bytes and workload ownership remain unchanged. This round does not perform W1–W3.
 
