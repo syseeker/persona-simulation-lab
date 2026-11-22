@@ -1,5 +1,13 @@
 # Architecture Decisions
 
+## 22 November 2026: Accept an explicit board-games distinction without broad semantic claims
+
+The board-games assertion missed a valid reply that described video-game design/programming as a separate skill set from board-game playing/strategy. Accept that narrowly scoped, same-sentence contrast while rejecting direct negation and unrelated separate skills. Keep the actual no-match, native-tool and persistent-thread checks unchanged. The phrase check still does not certify complete semantic or pedagogical quality. Preserve the original failed evaluation; verify the revised detector against synthetic counterexamples and a fresh full conversation.
+
+## 22 November 2026: Preserve undefined Designer statistics while completing native profiling
+
+Designer 0.10's native token-statistics validator cannot cast pandas Arrow's `NA` sample deviation for a one-row dataset. The isolated runner now temporarily normalizes only that missing statistic representation to native NaN, which the SDK serializes as JSON `null`. Generated rows, seed data and finite statistics remain unchanged; the original SDK function is restored on exit. A version check requires revalidation before any upgrade. The compatibility receipt identifies each affected field, and the run captures both helper sources. This replaces the earlier completed-batch salvage: a different profiling error is retained and raised, never accepted as a completed run.
+
 ## 22 November 2026: Require initial retrieval for a constrained retail recommendation
 
 Complete public budget and study days establish that a recommendation should search, rather than ask the same clarification again. In standalone retail native invocations, the application therefore requires the first provider response to select structured `search_courses`. The selected harness still performs the real MCP call, and delivery still requires attributable returned facts. Release the requirement only after validating the structured selection; preserve tool limits, failed attempts and unknown usage. Other presets, support models and managed execution retain their existing behavior. This is an application decision, not evidence of autonomous model tool choice.

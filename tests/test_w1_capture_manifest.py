@@ -13,6 +13,96 @@ def state():
             'episode_id': 'episode-one', 'status': 'failed', 'source_revision': 'fixture'}
 
 
+@pytest.fixture
+def designer_capture(tmp_path, monkeypatch):
+    from learning_lab import captures
+
+    monkeypatch.setattr(captures, 'REQUIREMENTS', {'CAP-DD-05': REQUIREMENTS['CAP-DD-05']})
+    selected = {**state(), 'scenario_id': 'dreamjob', 'status': 'completed'}
+    (tmp_path / 'run.json').write_text(json.dumps(selected))
+    private = tmp_path / 'designer-private'
+    private.mkdir()
+    receipt = private / 'designer-profiling.json'
+    receipt.write_text(json.dumps({'status': 'completed', 'error': None, 'error_type': None,
+                                   'analysis_report': 'designer-analysis.json'}))
+    report = private / 'designer-analysis.json'
+    report.write_text(json.dumps({'num_records': 1, 'target_num_records': 1,
+        'column_statistics': [{'column_name': 'retail_situation', 'output_tokens_stddev': None}]}))
+    return tmp_path, selected, receipt, report
+
+
+def test_completed_designer_profiling_requires_the_actual_native_report(designer_capture):
+    folder, selected, _, report = designer_capture
+    manifest = build_capture_manifest(folder, selected)
+    assert manifest['contract_version'] == 2 and manifest['coverage']['complete']
+    assert {item['location'] for item in manifest['rows'][0]['artifacts']} == {
+        'designer-private/designer-profiling.json', 'designer-private/designer-analysis.json'}
+    verify_capture_manifest(folder, manifest)
+    report.unlink()
+    missing = build_capture_manifest(folder, selected)
+    assert not missing['coverage']['complete'] and missing['rows'][0]['availability'] == 'missing'
+    assert missing['rows'][0]['missing'] == [['designer-private/designer-analysis.json']]
+    assert len(missing['rows'][0]['artifacts']) == 1  # Retain the real receipt.
+    with pytest.raises(ValueError, match='no longer matches'):
+        verify_capture_manifest(folder, manifest)
+
+
+@pytest.mark.parametrize('change', ['failed-receipt', 'other-report', 'reported-error',
+                                  'malformed-json', 'incomplete-rows', 'empty-statistics', 'nonfinite-json'])
+def test_designer_report_presence_cannot_claim_successful_complete_profiling(designer_capture, change):
+    folder, selected, receipt, report = designer_capture
+    if change in {'failed-receipt', 'other-report', 'reported-error'}:
+        value = json.loads(receipt.read_text())
+        if change == 'failed-receipt':
+            value.update(status='failed', analysis_report=None, error_type='DataDesignerProfilingError')
+        elif change == 'other-report':
+            value['analysis_report'] = '../another-run/designer-analysis.json'
+        else:
+            value['error'] = 'Native profiling failed'
+        receipt.write_text(json.dumps(value))
+    elif change == 'malformed-json':
+        report.write_text('{broken')
+    elif change == 'nonfinite-json':
+        report.write_text('{"num_records":1,"target_num_records":1,"column_statistics":'
+                          '[{"column_name":"retail_situation","output_tokens_stddev":NaN}]}')
+    else:
+        value = json.loads(report.read_text())
+        value.update({'target_num_records': 2} if change == 'incomplete-rows' else {'column_statistics': []})
+        report.write_text(json.dumps(value))
+    manifest = build_capture_manifest(folder, selected)
+    assert manifest['rows'][0]['availability'] == 'exists'
+    assert manifest['rows'][0]['integrity_errors'] and not manifest['coverage']['complete']
+    assert manifest['coverage']['missing'] == ['CAP-DD-05:baseline-one']
+    with pytest.raises(ValueError, match='coverage is incomplete'):
+        verify_capture_manifest(folder, manifest)
+
+
+def test_legacy_designer_failed_receipt_verifies_without_rewriting_history(designer_capture):
+    folder, selected, receipt, report = designer_capture
+    report.unlink()
+    receipt.write_text(json.dumps({'status': 'failed', 'analysis_report': None,
+                                   'error_type': 'DataDesignerProfilingError', 'error': 'NAType'}))
+    selected['status'] = 'failed'
+    (folder / 'run.json').write_text(json.dumps(selected))
+    historical = build_capture_manifest(folder, selected, contract_version=1)
+    historical.pop('contract_version')  # Exact unversioned historical contract.
+    original = json.dumps(historical, sort_keys=True)
+    assert historical['coverage']['complete']
+    verify_capture_manifest(folder, historical)
+    assert json.dumps(historical, sort_keys=True) == original
+    current = build_capture_manifest(folder, selected)
+    assert not current['coverage']['complete'] and len(current['rows'][0]['artifacts']) == 1
+
+
+@pytest.mark.parametrize('version', [0, 3, '2', True, None])
+def test_unsupported_capture_contract_cannot_skip_current_report_requirements(designer_capture, version):
+    folder, selected, _, _ = designer_capture
+    manifest = build_capture_manifest(folder, selected)
+    manifest['contract_version'] = version
+    with pytest.raises(ValueError, match='Unsupported capture contract'):
+        verify_capture_manifest(folder, manifest)
+
+
 def test_contract_covers_every_stable_requirement_and_never_borrows_another_run(tmp_path):
     assert len(REQUIREMENTS) == 51 and REQUIREMENTS.keys() == RULES.keys()
     unrelated = tmp_path / 'other-run'

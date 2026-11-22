@@ -10,6 +10,7 @@ import data_designer.config as dd
 from data_designer.interface import DataDesigner
 from data_designer.interface.errors import DataDesignerProfilingError
 from learning_preferences import capture_profiling, capture_settings
+from profiling_compat import native_missing_token_statistics
 
 
 def generate(request_path: Path, output: Path):
@@ -33,18 +34,15 @@ def generate(request_path: Path, output: Path):
         max_concurrent_row_groups=1, max_in_flight_tasks=1, async_trace=True, otel_metrics_port=None))
     capture_settings(designer, output.parent)
     designer.validate(builder)
-    batches, warnings = [], []
-    try:
-        result = designer.create(builder, num_records=1, dataset_name='retail', on_batch_complete=lambda path: batches.append(path))
-        rows = json.loads(result.load_dataset().to_json(orient='records'))
-        capture_profiling(output.parent, result=result, batches=batches)
-    except DataDesignerProfilingError as exc:
-        capture_profiling(output.parent, error=exc, batches=batches)
-        if 'NAType' not in str(exc) or not batches:
+    batches = []
+    with native_missing_token_statistics() as compatibility:
+        try:
+            result = designer.create(builder, num_records=1, dataset_name='retail', on_batch_complete=lambda path: batches.append(path))
+        except DataDesignerProfilingError as exc:
+            capture_profiling(output.parent, error=exc, batches=batches, compatibility=compatibility)
             raise
-        import pandas as pd
-        rows = json.loads(pd.concat([pd.read_parquet(path) for path in batches]).to_json(orient='records'))
-        warnings.append({'stage': 'profiling', 'type': type(exc).__name__, 'error': str(exc)})
+        rows = json.loads(result.load_dataset().to_json(orient='records'))
+        capture_profiling(output.parent, result=result, batches=batches, compatibility=compatibility)
     if len(rows) != 1 or rows[0]['original_profile_json'] != request['original_profile_json']:
         raise ValueError('The generated row did not preserve its original seed')
     fields = rows[0]['retail_situation']
@@ -52,7 +50,7 @@ def generate(request_path: Path, output: Path):
         fields = json.loads(fields)
     output.write_text(json.dumps({'engine': 'NeMo Data Designer', 'version': version('data-designer'),
         'fields': fields, 'original_profile_sha256': rows[0]['original_profile_sha256'],
-        'configuration_sha256': hashlib.sha256(config.read_bytes()).hexdigest(), 'warnings': warnings}, indent=2))
+        'configuration_sha256': hashlib.sha256(config.read_bytes()).hexdigest(), 'warnings': []}, indent=2))
 
 
 if __name__ == '__main__':

@@ -96,6 +96,53 @@ def target(root, run_id):
     return root / 'published/captures/photography' / run_id
 
 
+def test_native_designer_analysis_is_required_but_never_published_or_linked(tmp_path, monkeypatch):
+    from learning_lab import captures, guide_lessons, guide_metadata
+
+    requirement = {'CAP-DD-05': captures.REQUIREMENTS['CAP-DD-05']}
+    monkeypatch.setattr(captures, 'REQUIREMENTS', requirement)
+    monkeypatch.setattr(EXPORTER, 'REQUIREMENTS', requirement)
+    monkeypatch.setattr(guide_metadata, 'REQUIREMENTS', requirement)
+    monkeypatch.setattr(guide_metadata, '_public_url', lambda *_args: None)
+    run_id, condition, episode = (str(uuid.uuid4()) for _ in range(3))
+    folder = tmp_path / 'runs' / run_id
+    state = {'scenario_id': 'dreamjob', 'run_id': run_id, 'condition_id': condition,
+             'episode_id': episode, 'status': 'completed', 'cleanup_confirmed': True}
+    write(folder / 'run.json', state)
+    write(folder / 'designer-private/designer-profiling.json', {
+        'status': 'completed', 'error_type': None, 'error': None, 'analysis_report': 'designer-analysis.json'})
+    report = {'num_records': 1, 'target_num_records': 1, 'column_statistics': [
+        {'column_name': 'retail_situation', 'output_tokens_stddev': None,
+         'sample_values': ['PRIVATE_NATIVE_ANALYSIS_SOURCE_VALUE']}]}
+    report_path = folder / 'designer-private/designer-analysis.json'
+    write(report_path, report)
+    write_capture_manifest(folder, state)
+    before = {p.relative_to(folder): p.read_bytes() for p in folder.rglob('*') if p.is_file()}
+    destination = tmp_path / 'published/captures/dreamjob' / run_id
+    export(run_id, run_root=folder.parent, destination=destination)
+    manifest = json.loads((destination / 'manifest.json').read_text())
+    assert manifest['capture_contract_version'] == 2 and manifest['coverage']['complete']
+    row = manifest['rows'][0]
+    report_hash = hashlib.sha256(report_path.read_bytes()).hexdigest()
+    native_report = [item for item in row['artifacts'] if item['sha256'] == report_hash]
+    assert len(native_report) == 1 and native_report[0]['access'] == 'private'
+    assert 'location' not in native_report[0] and 'path' not in native_report[0]
+    assert len(manifest['files']) == 1  # Only the allowlisted profiling receipt.
+    assert all('designer-analysis' not in filename for filename in manifest['files'])
+    public_bytes = '\n'.join(p.read_text() for p in destination.rglob('*') if p.is_file())
+    assert 'PRIVATE_NATIVE_ANALYSIS_SOURCE_VALUE' not in public_bytes
+    assert {p.relative_to(folder): p.read_bytes() for p in folder.rglob('*') if p.is_file()} == before
+
+    monkeypatch.setattr(guide_metadata, 'PACKS', tmp_path / 'published/captures')
+    monkeypatch.setitem(guide_lessons.CANONICAL_DEMOS, 'dreamjob', run_id)
+    metadata = guide_metadata.metadata('dreamjob')
+    item = metadata['rows'][0]
+    assert 'designer-analysis.json' in item['filenames']
+    analysis = next(artifact for artifact in item['artifacts'] if artifact['sha256'] == report_hash)
+    assert analysis['privacy'] == 'private' and analysis['status'] == 'exists'
+    assert 'path' not in analysis and 'url' not in analysis
+
+
 def test_complete_publication_retains_cap_rows_hashes_execution_failure_and_opaque_private_sources(tmp_path, monkeypatch):
     monkeypatch.setenv('LAB_CAPTURE_TEST_API_KEY', 'ENV_SECRET_VALUE')
     run_id, folder, state = complete_run(tmp_path / 'runs')

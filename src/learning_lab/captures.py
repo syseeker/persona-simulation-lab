@@ -16,6 +16,7 @@ from .evidence import save_evidence
 
 REGISTRY = json.loads(Path(__file__).with_name('capture_registry.json').read_text())
 REQUIREMENTS = {entry['id']: entry for entry in REGISTRY['requirements']}
+CAPTURE_CONTRACT_VERSION = 2
 
 
 @dataclass(frozen=True)
@@ -40,7 +41,7 @@ RULES = {
     'CAP-DD-02': rule('root', 'designer-configuration.json', 'application-projection'),
     'CAP-DD-03': rule('root', 'designer-private/designer-run-config.json;designer-private/designer-model-providers.json', schema='RunConfig / ModelProvider'),
     'CAP-DD-04': rule('root', 'designer-output.json;designer-generation.json;designer-lineage.json', 'application-result'),
-    'CAP-DD-05': rule('root', 'designer-private/designer-profiling.json', 'profiling-outcome'),
+    'CAP-DD-05': rule('root', 'designer-private/designer-profiling.json;designer-private/designer-analysis.json', 'profiling-outcome'),
     'CAP-US-01': rule('root', 'resolved-inputs.json', 'native-input', 'ConversationSimulatorConfig / episode preamble'),
     'CAP-US-02': rule('root', 'resolved-inputs.json', 'native-input'),
     'CAP-US-03': rule('root', 'usersim-model-config.json', schema='HostRoleModel'),
@@ -134,8 +135,41 @@ def _boundary_errors(native):
         return ['Invalid native invocation boundary record']
 
 
-def build_capture_manifest(folder: Path, state: dict):
+def _designer_profiling_errors(artifacts, folder):
+    paths = {Path(item['location']).name: folder / item['location'] for item in artifacts}
+    receipt = paths.get('designer-profiling.json')
+    if receipt is None:
+        return []  # Ordinary coverage reports missing files.
+    try:
+        outcome = json.loads(receipt.read_text())
+        if (not isinstance(outcome, dict) or outcome.get('status') != 'completed'
+                or outcome.get('analysis_report') != 'designer-analysis.json'
+                or outcome.get('error') is not None or outcome.get('error_type') is not None):
+            return ['Native Designer profiling has no completed analysis receipt']
+        report_path = paths.get('designer-analysis.json')
+        if report_path is None:
+            return []
+
+        def invalid_constant(_value):
+            raise ValueError('Nonfinite JSON statistic')
+
+        report = json.loads(report_path.read_text(), parse_constant=invalid_constant)
+        if (not isinstance(report, dict) or type(report.get('num_records')) is not int
+                or type(report.get('target_num_records')) is not int
+                or report['num_records'] < 1 or report['num_records'] != report['target_num_records']
+                or not isinstance(report.get('column_statistics'), list) or not report['column_statistics']
+                or any(not isinstance(column, dict) or not isinstance(column.get('column_name'), str)
+                       or not column['column_name'] for column in report['column_statistics'])):
+            return ['Native Designer analysis report is invalid or incomplete']
+        return []
+    except (OSError, ValueError, TypeError):
+        return ['Invalid native Designer profiling receipt or analysis report']
+
+
+def build_capture_manifest(folder: Path, state: dict, *, contract_version=CAPTURE_CONTRACT_VERSION):
     """Resolve only this run's explicit condition roots; never borrow another run."""
+    if type(contract_version) is not int or contract_version not in {1, CAPTURE_CONTRACT_VERSION}:
+        raise ValueError('Unsupported capture contract version')
     scenario = state['scenario_id']
     rows = []
     contexts = list(_contexts(folder, state))
@@ -152,6 +186,10 @@ def build_capture_manifest(folder: Path, state: dict):
     for requirement in REQUIREMENTS.values():
         rid = requirement['id']
         spec = RULES[rid]
+        if rid == 'CAP-DD-05' and contract_version == 1:
+            # Recompute immutable pre-v2 manifests under their receipt-only
+            # contract, including retained historical profiling failures.
+            spec = rule('root', 'designer-private/designer-profiling.json', 'profiling-outcome')
         applicable = scenario in requirement['scenario_ids'] and spec.scope != 'unused'
         selected = contexts if spec.scope in {'native', 'host', 'boundary', 'sandbox', 'evaluation', 'safeguards', 'requested'} else contexts[:1]
         if managed_id and (spec.scope in {'host', 'boundary', 'safeguards'} or rid == 'CAP-GR-01'):
@@ -201,7 +239,9 @@ def build_capture_manifest(folder: Path, state: dict):
                             'location': relative, 'sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
                             'size_bytes': path.stat().st_size,
                             'captured_at': datetime.fromtimestamp(path.stat().st_mtime, timezone.utc).isoformat(),
-                            'access': 'private', 'role': spec.role, 'schema': spec.native_schema})
+                            'access': 'private', 'role': spec.role,
+                            'schema': ('DatasetProfilerResults' if rid == 'CAP-DD-05'
+                                       and path.name == 'designer-analysis.json' else spec.native_schema)})
             rows.append({**requirement, 'scenario_id': scenario, 'run_id': state['run_id'],
                 'condition_id': context['condition_id'], 'episode_id': context['episode_id'], 'purpose': purpose,
                 'availability': ('exists' if not missing else 'missing') if applies else 'not-used',
@@ -211,6 +251,10 @@ def build_capture_manifest(folder: Path, state: dict):
                 'publication_availability': 'not-published',
                 'publication_kind': 'projection-pending' if rid in {'CAP-US-02', 'CAP-FAB-02', 'CAP-REL-03'} else None,
                 'turn': None, 'model_role': None})
+            if applies and rid == 'CAP-DD-05' and contract_version >= 2:
+                errors = _designer_profiling_errors(artifacts, folder)
+                if errors:
+                    rows[-1]['integrity_errors'] = errors
     for context in contexts:
         errors = _boundary_errors(context['native'])
         if errors:
@@ -227,6 +271,7 @@ def build_capture_manifest(folder: Path, state: dict):
         except PackageNotFoundError:
             versions[package] = None
     return {'schema': 'citizen-captures/v1', 'registry_schema': REGISTRY['schema'],
+        'contract_version': contract_version,
         'host_sdk_versions': versions,
         'scenario_id': scenario, 'run_id': state['run_id'], 'rows': rows,
         'coverage': {'required': len(required), 'captured': len(required) - len(missing_ids),
@@ -245,7 +290,7 @@ def verify_capture_manifest(folder: Path, manifest: dict):
     state = json.loads((folder / 'run.json').read_text())
     if any(state[key] != manifest[key] for key in ['scenario_id', 'run_id']):
         raise ValueError('Capture manifest belongs to another scenario/run')
-    expected = build_capture_manifest(folder, state)
+    expected = build_capture_manifest(folder, state, contract_version=manifest.get('contract_version', 1))
     if expected['rows'] != manifest['rows'] or expected['coverage'] != manifest['coverage']:
         raise ValueError('Capture manifest no longer matches the retained artifacts')
     if not manifest['coverage']['complete']:

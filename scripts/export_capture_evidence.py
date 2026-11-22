@@ -403,6 +403,7 @@ def export(run_id, *, run_root: Path | None = None, destination: Path | None = N
                    else 'redacted-native-configuration' if public else None)
         rows.append(row)
     public_manifest = {'schema': 'citizen-public-captures/v1', 'registry_schema': REGISTRY['schema'],
+        'capture_contract_version': manifest.get('contract_version', 1),
         'scenario_id': state['scenario_id'], 'run_id': run_id, 'execution_status': state['status'],
         'source_revision': state.get('source_revision'), 'host_sdk_versions': manifest.get('host_sdk_versions', {}),
         'source_manifest_sha256': hashlib.sha256((folder / 'capture-manifest.json').read_bytes()).hexdigest(),

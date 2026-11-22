@@ -263,6 +263,7 @@ class JourneyService:
             for relative in ['src/learning_lab/retail.py', 'src/learning_lab/retail_checks.py',
                 'src/learning_lab/retail_experiments.py', 'src/learning_lab/retail_managed.py',
                 'src/learning_lab/probe.py', 'integrations/designer/retail_situation.py',
+                'integrations/designer/learning_preferences.py', 'integrations/designer/profiling_compat.py',
                 'integrations/platform/retail_resources.py', 'integrations/platform/retail_evaluate.py',
                 'integrations/platform/package_agent.py', 'integrations/helix/evaluate.py',
                 'src/learning_lab/retail_policy.py', 'integrations/proxy/retail-litellm.yaml',

@@ -29,7 +29,7 @@ def capture_settings(designer: DataDesigner, folder: Path):
                   designer.model_provider_registry.model_dump(mode='json'))
 
 
-def capture_profiling(folder: Path, *, result=None, error=None, batches=()):
+def capture_profiling(folder: Path, *, result=None, error=None, batches=(), compatibility=None):
     """Keep an actual profiling outcome; a saved batch is not an analysis report."""
     from learning_lab.evidence import save_evidence
 
@@ -37,7 +37,7 @@ def capture_profiling(folder: Path, *, result=None, error=None, batches=()):
     if result is not None:
         report = result.load_analysis()
         if report is not None:
-            save_evidence(folder / 'designer-analysis.json', report.model_dump(mode='json'))
+            save_evidence(folder / 'designer-analysis.json', json.loads(report.model_dump_json()))
     save_evidence(folder / 'designer-profiling.json', {
         'stage': 'native Data Designer post-generation profiling',
         'status': 'failed' if error is not None else 'completed',
@@ -46,6 +46,7 @@ def capture_profiling(folder: Path, *, result=None, error=None, batches=()):
         'completed_batch_paths': [str(path) for path in batches],
         'analysis_report': 'designer-analysis.json' if report is not None else None,
         'replayed_generation': False,
+        **({'compatibility': compatibility} if compatibility is not None else {}),
     })
 
 

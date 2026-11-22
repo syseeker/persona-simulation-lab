@@ -15,6 +15,21 @@ def valid_native_search(tool: dict) -> bool:
         and isinstance(result, dict) and isinstance(result.get('matches'), list) and not result.get('error'))
 
 
+def _separate_game_skillset(text: str) -> bool:
+    """Recognize this explicit contrast without treating any 'separate' as proof."""
+    normalized = text.translate(str.maketrans({dash: '-' for dash in '\u2010\u2011\u2012\u2013\u2014'}))
+    for sentence in re.split(r'[.!?\n]', normalized):
+        if not re.search(r'board[ -]?games?[^;]*\b(?:play(?:ing)?|strategy)\b', sentence, re.I):
+            continue
+        if not re.search(r'(?:video[ -]?games?|games?)[ -]?\s+design', sentence, re.I):
+            continue
+        for match in re.finditer(r'\bseparate\s+skill\s*sets?\b', sentence, re.I):
+            prefix = sentence[:match.start()]
+            if not re.search(r'\b(?:not|never|no|hardly)\s+(?:\w+\s+){0,3}$', prefix, re.I):
+                return True
+    return False
+
+
 def evaluate_boardgames(conversation: list, catalogue: Path, tools: list, source_lock: dict) -> dict:
     """Check the two-turn negative case against actual saved public/native output."""
     users = [m for m in conversation if m['role'] == 'user']
@@ -50,8 +65,9 @@ def evaluate_boardgames(conversation: list, catalogue: Path, tools: list, source
                   'A narrow phrase check; review the linked reply for nuance.', ['public-conversation.json'])
         else:
             check('distinguish-design', 'Playing and designing games are distinguished', True,
-                  bool(re.search(r'not the same|different|distinct|isn.t the same|rather than|not equivalent', text, re.I)),
-                  'Checks an explicit distinction, not its complete pedagogical quality.', ['public-conversation.json'])
+                  bool(re.search(r'not the same|different|distinct|isn.t the same|rather than|not equivalent', text, re.I))
+                  or _separate_game_skillset(text),
+                  'Checks selected explicit distinction phrases, including a non-negated separate skill set in the same sentence as board-game play and game design; not complete semantic or pedagogical quality.', ['public-conversation.json'])
         check(f'no-invented-id-{i}', 'Any cited course IDs exist in the snapshot', True,
               set(re.findall(r'\b(?:CC|SF)-\d{3}\b', text)) <= {c.id for c in all_courses(catalogue)},
               'Does not certify unsupported claims without a course identifier.', ['public-conversation.json', 'catalogue-snapshot.json'])

@@ -60,6 +60,7 @@ OPERATIONS = {
     'designer.generate': ('integrations/designer/learning_preferences.py', 'def generate_workbench'),
     'designer.lineage': ('src/learning_lab/workbench.py', 'def validate_generated_payload'),
     'retail.designer.schema': ('src/learning_lab/retail.py', 'OVERLAY_SCHEMA'),
+    'retail.designer.builder': ('integrations/designer/retail_situation.py', 'builder = dd.DataDesignerConfigBuilder'),
     'retail.designer.generate': ('integrations/designer/retail_situation.py', 'result = designer.create'),
     'retail.designer.lineage': ('src/learning_lab/retail.py', 'async def create_retail_situation'),
     'retail.catalogue': ('src/learning_lab/retail.py', 'def freeze_retail_catalogue'),
