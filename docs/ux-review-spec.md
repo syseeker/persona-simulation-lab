@@ -206,6 +206,53 @@ Every entry is pending and source-authoritative: the user's written comments con
 - **Label 30:** integrate file/symbol links seamlessly. Remove disconnected source/hash/proof filename notes and redundant reference bundles.
 - **Label 31:** remove the repeated footer, related-lessons links and boilerplate. Material limitations stay near the specific claim they qualify.
 
+## UserSim questions to revisit during W2
+
+**UX-US01 — Pending: preserve the developer-zero UserSim review.** The user supplied the questions and documentation references below on 22 November while W1 data collection continued. They are W2 teaching/review requirements, not evidence that a feature ran and not authorization to add a new probe, evaluator, dashboard or live simulation in W1. Answer from the implemented code and each scenario's selected recording. These references point to upstream `main`; compare them with the installed UserSim version and its pinned documentation before making claims. Keep the user's Sim2Real description below as a research/checking brief until that comparison is performed.
+
+### Inputs: who, behaviour and goal
+
+Reference: [UserSim architecture overview](https://github.com/NVIDIA-NeMo/UserSim/blob/main/architecture/overview.md). The developer wants to follow its four questions: who the user is, how they behave, what they are trying to do, and how well the assistant handled it.
+
+- Where does this application define the selected user, their behaviour and what they are trying to do? Which values came from the original profile, scenario/probe settings or a generated overlay? Were the resolved inputs logged, and where?
+- Where is our probe definition? Is it a custom probe? Where are its inputs and effective configuration?
+- Where is the result of “how well the assistant handled it” stored? Explain what **assistant** means in our integration: the target model by itself, or the citizen advisor/selected harness and its model/tool execution. Distinguish that target from UserSim's simulated user and judge model roles.
+
+Assign the explanation to its existing teaching home: persona selection in Lesson 1, situation/probe preparation in Lesson 2, the generated interaction in Lesson 4 and judging/evaluation in Lesson 6. The UserSim block explains how those responsibilities connect; operation pages teach their specific mechanism rather than repeating the whole overview.
+
+### Probe choice and custom authoring
+
+References: [Authoring a probe](https://github.com/NVIDIA-NeMo/UserSim/blob/main/docs/engine/AUTHORING_A_PROBE.md) and [probe templates](https://github.com/NVIDIA-NeMo/UserSim/tree/main/templates/probe/).
+
+- Did our scenarios use an existing probe such as sovereign-AI or safety, or did we create a custom probe? Explain the actual choice and inherited behaviour for each scenario.
+- Did we follow `AUTHORING_A_PROBE.md` and the template? Verify rather than claiming an unrecorded authoring history.
+- Point to the exact Python probe/registration and actual JSON/YAML configuration or serialized effective settings. Explain custom hooks versus the inherited conversation engine and which inputs each receives. Do not invent a YAML file if settings were built in Python.
+- If another probe or authoring workflow was not used, retain it as a future option; do not implement it merely to make the explanation look complete.
+
+### Trajectories, evaluation datasets and reports
+
+References: [Output formats](https://github.com/NVIDIA-NeMo/UserSim/blob/main/docs/outputs.md) and [evaluator architecture](https://github.com/NVIDIA-NeMo/UserSim/blob/main/architecture/evaluator.md). The cited upstream workflow is `panel → simulate → eval → report`, with a trajectory dataset, evaluation dataset and dashboard.
+
+- Where is the trajectory Parquet written and recorded for each run? Locate the real file, or explicitly report that our current integration did not produce that format. Explain any stored JSON/native result without presenting it as Parquet.
+- Does our **Evaluate behaviour** lesson actually invoke UserSim's post-loop evaluator? Identify its call/configuration/results if used; otherwise say it was not invoked and explain the actual application assertions or Helix evaluation used instead.
+- Where is each run's score, and how is it interpreted in the right panel? Keep in-loop reply/stop judges, optional post-loop UserSim scoring and saved-response evaluation distinct.
+- Where are the trajectory dataset, evaluation dataset and report/dashboard files for each selected scenario/run? Mark absent/private records accurately and give a purposeful path/reference for existing artifacts. Do not imply that every stage of the upstream CLI workflow ran.
+
+### Future live simulation and the Sim2Real gap
+
+References: [Methodology](https://github.com/NVIDIA-NeMo/UserSim/blob/main/docs/methodology.md) and [conversation engine](https://github.com/NVIDIA-NeMo/UserSim/blob/main/docs/engine/README.md).
+
+The user's question is whether our scenarios deliberately exercise the documented Sim2Real mitigations, and whether a later live simulation could demonstrate them. Review each feature against the installed implementation, effective configuration and native output; distinguish available capability, configured behaviour and observed execution. Propose a bounded future live exercise when revisiting this topic, without starting one as part of this note.
+
+Preserve these user-supplied points for that review; their defaults and names require version verification:
+
+- **Incremental disclosure:** the cited design describes 60% withholding details and revealing them gradually, versus 40% disclosing up front, controlled by `incremental_disclosure_ratio` with a stated default of `0.6`. Explain how this differs from our authored scenario-specific disclosure protocol.
+- **OCEAN-grounded interaction style:** cooperative, neutral, impatient, frustrated and confrontational styles derived from neuroticism, agreeableness and patience. Investigate how the effective profile supplies `patience`, `verbosity`, `cooperativeness`, `tech_literacy` and `error_proneness`, and where that interpretation is visible.
+- **Reactive frustration:** escalation depends on patience, style, turn and accumulated assistant failures. Check which in-loop judgments contribute, why `[UNGROUNDED]` tool-result judgments are excluded as invisible to the user, and how response-shape failures contribute: empty text, tool-call markup, over 800 words or heading-heavy output. Check the response-shape-only behaviour when judging is disabled. Interpret any observed escalation rather than inferring it from OCEAN values alone.
+- **D1–D4 and MATTR diagnostics:** front-loading ratio, politeness fraction, verbosity variation, frustration-marker frequency and lexical diversity. Locate `reporting/diagnostics.py`, the output fields and the report's Sim Health presentation if available/used; otherwise mark them unexecuted. Treat these as simulation-quality diagnostics, without implying proof of real-human fidelity.
+
+Acceptance: a developer can follow one selected scenario from original person and probe inputs to public turns and actual evaluation/output files, understand which parts the installed engine handled, and identify which documented features remain future work. Integrate these answers once at their proper destinations; avoid a second repetitive UserSim tutorial or generic link directory.
+
 ## Implementation boundaries and acceptance
 
 **UX-050 — Pending: author content before rendering it.** Create an editorial inventory stating the unique question, content owner, audience, scenario/condition scope and required evidence for each destination. Separate narrative content from graph/SDK binding metadata. Do not generate prose by concatenating labels, reuse one `concept` at several locations or use a broad `factsStage` fallback. Extend the shared guide relationships minimally so graph and panel cannot drift; keep existing read-only APIs compatible.
