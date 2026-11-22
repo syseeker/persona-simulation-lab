@@ -1,6 +1,8 @@
 import {expect, test} from '@playwright/test';
 
 test('installed HF and NGC profiles retain read-only browsing, filters and original-field inspection', async ({page}) => {
+  test.skip(process.env.LAB_REVIEW_INSTALLED_DATASETS !== '1',
+    'Set LAB_REVIEW_INSTALLED_DATASETS=1 to review locally installed HF and NGC originals.');
   test.setTimeout(120000);
   const allowed = ['/api/journey/lesson', '/api/journey/demo-persona', '/api/journey/metadata',
     '/api/local-datasets', '/api/persona-options', '/api/personas'];

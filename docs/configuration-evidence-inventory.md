@@ -139,7 +139,7 @@ Metadata distinguishes **NOT EXIST** from **PRIVATE**, **PARTIAL** and **UNAVAIL
 
 ## Workstream 1 acceptance checklist
 
-The execution and capture items below are verified for the three selected replacement demos. Final promoted-demo browser review checks the consumer bindings after publication; [PLAN.md](../PLAN.md) records the run identities, commits and verification evidence. The historical table's gaps are not retroactively filled.
+The execution and capture items below are verified for the three selected replacement demos. Final promoted-demo browser review verified the consumer bindings after check-in; [PLAN.md](../PLAN.md) records the run identities, commits and verification evidence. The historical table's gaps are not retroactively filled.
 
 - [x] **CAP-DD-03/05:** retain Designer effective runtime/provider settings and the actual profiling outcome, without requiring a fictitious successful report.
 - [x] **CAP-US-03:** retain effective learner/judge model-role settings.
@@ -152,6 +152,6 @@ The execution and capture items below are verified for the three selected replac
 - [x] **CAP-PLAT-01/02/03/05:** retain managed server/executor snapshot, exact final agent YAML, provider/environment creation definitions and missing native request/response envelopes. Link existing complete embedded configurations rather than declaring them absent.
 - [x] **Registry and manifest validation:** fail clearly for a missing required applicable capture, validate hashes and identities, and confirm the public projection excludes secret/private content. Exercise failures and not-used paths without inventing success.
 - [x] **New attributable demos:** complete new S1, S2 and S3 runs with the applicable inventory; retain all previous packs unchanged and preserve failed attempts. Verify actual outcomes and exact-resource cleanup before promoting replacements. S3's approved non-Nemotron replacement pool must be verified independently of a Nemotron diagnostic; preserve the earlier Gemma/GLM failures.
-- [ ] **Consumer consistency:** prove the selected demo's UX links and implemented Metadata rows resolve from the same registry/manifests, with no scenario/condition borrowing and no inference/deployment on inspection.
+- [x] **Consumer consistency:** prove the selected demo's UX links and implemented Metadata rows resolve from the same registry/manifests, with no scenario/condition borrowing and no inference/deployment on inspection.
 
 When implementation completes an item, record its commit and actual verification evidence in the master plan. Update this inventory's dated current-state assessment alongside new run identities; do not silently convert baseline findings into claims about a later run.

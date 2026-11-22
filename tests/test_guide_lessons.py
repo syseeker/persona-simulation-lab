@@ -129,8 +129,40 @@ def test_published_companion_excludes_private_rows_prompts_and_reasoning(scenari
     folder = guide.CONTEXT_ROOT / scenario / guide.CANONICAL_DEMOS[scenario]
     values = [json.loads(p.read_text()) for p in folder.glob('*.json') if p.name != 'manifest.json']
     serialized = json.dumps(values)
-    for forbidden in ['behavioral_profile', 'persona_text', 'source_id', 'api_key', 'reasoning_content', '/home/']:
+    for forbidden in ['behavioral_profile', 'persona_text', 'api_key', 'reasoning_content', '/home/']:
         assert forbidden not in serialized
+    catalogue = json.loads(recordings.read(guide.CANONICAL_DEMOS[scenario], 'catalogue-snapshot.json'))
+    course_ids = {course['id'] for course in catalogue['courses']}
+
+    def inspect_identity(value):
+        if isinstance(value, dict):
+            assert 'source_id' not in value  # A private persona identity is forbidden.
+            if 'source_ids' in value:
+                # Public answer provenance names courses, not persona rows.
+                assert isinstance(value['source_ids'], list)
+                assert set(value['source_ids']) <= course_ids
+            for item in value.values():
+                inspect_identity(item)
+        elif isinstance(value, list):
+            for item in value:
+                inspect_identity(item)
+
+    inspect_identity(values)
     result = guide.lesson_context(scenario)
     assert result['state'] == 'recorded'
-    assert result['context']['fabric-invocations.json'][0]['output']['response'] in [m['content'] for m in result['trace']['conversation']]
+    answers = [m['content'] for m in result['trace']['conversation'] if m['role'] == 'assistant']
+    invocations = result['context']['fabric-invocations.json']
+    for invocation in invocations:
+        output = invocation['output']
+        answer = answers[invocation['turn'] - 1]
+        if output.get('native_response_published') is False:
+            assert 'response' not in output  # Never publish the unpresented native proposal.
+            assert output['response_origin'] == 'application_source_summary'
+            assert output['delivered_content_sha256'] == hashlib.sha256(answer.encode()).hexdigest()
+        else:
+            assert output['response'] == answer
+    if scenario == 'dreamjob':
+        assert [row['turn'] for row in invocations] == [1, 3]
+        clarification, = result['context']['application-turns.json']
+        assert clarification['turn'] == 2 and clarification['inference_calls'] == 0
+        assert clarification['model_proposal_sha256'] is None and clarification['content'] == answers[1]

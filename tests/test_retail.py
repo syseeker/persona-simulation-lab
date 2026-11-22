@@ -11,9 +11,11 @@ from learning_lab.retail import OVERLAY_SCHEMA, RetailPublicContext, freeze_reta
 from learning_lab.settings import ROOT
 
 
-def test_curated_retail_pack_preserves_partial_failure_and_separate_native_proof():
-    from learning_lab.guide_lessons import lesson_context
-    result = lesson_context('dreamjob')
+def test_curated_retail_pack_preserves_partial_failure_and_separate_native_proof(monkeypatch):
+    from learning_lab import guide_lessons
+    # Historical endpoint failures remain evidence after a newer demo is promoted.
+    monkeypatch.setitem(guide_lessons.CANONICAL_DEMOS, 'dreamjob', '8542330d-d6df-494e-8509-d81a5841d69e')
+    result = guide_lessons.lesson_context('dreamjob')
     trace, context = result['trace'], result['context']
     assert trace['run']['status'] == 'failed' and trace['run']['cleanup_confirmed']
     assert trace['evaluation']['passed'] == trace['evaluation']['total'] == 20
@@ -29,6 +31,88 @@ def test_curated_retail_pack_preserves_partial_failure_and_separate_native_proof
     assert managed['fresh_session'] and not managed['private_persona_in_image'] and not managed['local_memory_resumed']
     assert context['platform-trace.json']['spans'] and context['platform-trace.json']['tools']
     assert all(row['boundary_passed'] for row in context['disclosure-audit.jsonl'])
+    for name in ['designer-output.json', 'platform-package.json', 'platform-invocation.json', 'platform-trace.json']:
+        published = json.dumps(context[name])
+        for forbidden in ['original_profile_json', 'reasoning_content', 'behavioral_profile', 'api_key', '/home/']:
+            assert forbidden not in published
+
+
+def test_current_retail_demo_preserves_complete_execution_and_public_boundaries():
+    from learning_lab.guide_lessons import lesson_context
+
+    result = lesson_context('dreamjob')
+    trace, context = result['trace'], result['context']
+    assert result['run_id'] == '8ce3ace2-0bb4-46f7-898c-795bc7da4794'
+    assert trace['run']['status'] == 'completed' and trace['run']['cleanup_confirmed']
+    assert trace['evaluation']['passed'] == trace['evaluation']['total'] == 24
+    assert context['helix-job.json']['status'] == 'completed'
+
+    comparison = context['routing-comparison.json']
+    assert comparison['status'] == 'completed' and comparison['verified']
+    assert comparison['routing_policy_verified'] and comparison['requested_access_verified']
+    assert comparison['diagnostic_verified'] and comparison['diagnostic_status'] == 'passed'
+    assert comparison['requested_model_coverage']['all_candidates_observed']
+    conditions = comparison['conditions']
+    assert [row['label'] for row in conditions] == [
+        'fixed-candidate', 'switchyard', 'capable-access', 'available-fixed', 'available-switchyard']
+    assert len({row['condition_id'] for row in conditions}) == 5
+    assert len({row['input_sha256'] for row in conditions}) == 1
+    assert len({row['catalogue_sha256'] for row in conditions}) == 1
+    for row in conditions:
+        assert row['status'] == row['execution_status'] == 'completed'
+        assert row['verified'] and row['execution_verified'] and row['evaluation_verified']
+        assert row['fresh_memory'] and row['cleanup_confirmed']
+        assert row['evaluation']['passed'] == row['evaluation']['total'] == 24
+        assert row['native_course_searches'] and row['actual_selected_models']
+        if row['route'] == 'switchyard':
+            assert row['native_decisions']
+        else:
+            assert row['native_decisions'] == []
+
+    # Public turn 2 is a confirmed application clarification, never a fake Fabric call.
+    native = context['fabric-invocations.json']
+    assert [(row['public_turn'], row['invocation_sequence']) for row in native] == [(1, 1), (3, 2)]
+    replies = [row for row in trace['conversation'] if row['role'] == 'assistant']
+    assert [row['public_turn'] for row in replies] == [1, 2, 3]
+    assert [row['response_policy']['execution_kind'] for row in replies] == [
+        'native_agent', 'application_clarification', 'native_agent']
+    assert len(context['application-turns.json']) == 1
+    clarification = context['application-turns.json'][0]
+    assert clarification['public_turn'] == 2 and clarification['status'] == 'delivered'
+    assert clarification['agent_invoked'] is False and clarification['inference_calls'] == 0
+    assert clarification['application_response_id'] == replies[1]['application_response_id']
+    assert clarification['model_proposal_sha256'] is None
+    assert clarification['missing_constraints'] == ['budget_sgd', 'days']
+    assert clarification['delivered_content_sha256'] == hashlib.sha256(replies[1]['content'].encode()).hexdigest()
+    assert all(row['response_policy']['model_proposal_semantically_certified'] is False for row in replies)
+
+    audit = context['disclosure-audit.jsonl']
+    assert audit and all(row['boundary_passed'] for row in audit)
+    assert {row['public_turn'] for row in audit} == {1, 3}
+    assert all(not row['salary_band_in_request'] and not row['public_salary_disclosed']
+               for row in audit if row['public_turn'] == 1)
+    constraints = context['public-constraints.jsonl']
+    assert [row['salary_publicly_disclosed'] for row in constraints] == [False, True, True]
+    assert [row['preferences']['budget_sgd'] for row in constraints] == [None, None, 3000]
+    assert [row['preferences']['days'] for row in constraints] == [None, None, [5, 6]]
+
+    managed = context['platform-condition.json']
+    assert managed['parent_run_id'] == result['run_id']
+    assert managed['status'] == 'completed' and managed['fresh_session'] and managed['cleanup_confirmed']
+    assert not managed['private_persona_in_image'] and not managed['local_memory_resumed']
+    assert managed['public_preferences'] == constraints[2]['preferences']
+    assert context['platform-cleanup.json']['native_absence_confirmed']
+    assert context['platform-cleanup.json']['errors'] == []
+    intake = context['platform-trace.json']
+    assert intake['status'] == 'observed' and intake['spans']
+    assert intake['session_identity'] == context['platform-session.json']['session_identity']
+    assert all(row['native_status'] == 'success' and row['result_state'] == 'returned' for row in intake['tools'])
+    assert {row['name'] for row in intake['tools']} >= {'search_courses', 'get_course_details', 'compare_courses'}
+    invocation = context['platform-invocation.json']
+    assert invocation['session_id'] == managed['session_id']
+    assert invocation['native_model_content_published'] is False
+    assert invocation['application_delivery']['response_policy']['status'] == 'delivered'
+    assert invocation['application_delivery']['response_origin'] == 'application_source_summary'
     for name in ['designer-output.json', 'platform-package.json', 'platform-invocation.json', 'platform-trace.json']:
         published = json.dumps(context[name])
         for forbidden in ['original_profile_json', 'reasoning_content', 'behavioral_profile', 'api_key', '/home/']:
