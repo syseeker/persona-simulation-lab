@@ -5,7 +5,7 @@ import { journeyWorker } from '#lib/server/journey.ts';
 const reads: Record<string, string[]> = {
   presets: [], readiness: [], list: ['scenario_id'], get: ['run_id'], trace: ['run_id'],
   source: ['component', 'module'], artifacts: ['run_id'], artifact: ['run_id', 'artifact_id'],
-  lesson: ['scenario_id'], 'demo-persona': ['scenario_id']
+  lesson: ['scenario_id'], 'demo-persona': ['scenario_id'], metadata: ['scenario_id']
 };
 const writes = new Set(['sample', 'start', 'cancel', 'recover']);
 const headers = { 'Cache-Control': 'no-store' };

@@ -592,7 +592,7 @@ class JourneyService:
         params = dict(params)
         action = params.pop('action', None)
         keys = {'presets': set(), 'readiness': set(), 'sample': {'source'}, 'start': {'spec'}, 'list': {'scenario_id'},
-                'lesson': {'scenario_id'}, 'demo-persona': {'scenario_id'},
+                'lesson': {'scenario_id'}, 'demo-persona': {'scenario_id'}, 'metadata': {'scenario_id'},
                 'get': {'run_id'}, 'trace': {'run_id'}, 'cancel': {'run_id'}, 'recover': {'run_id'},
                 'source': {'component', 'module'}, 'artifacts': {'run_id'}, 'artifact': {'run_id', 'artifact_id'}}
         if action not in keys or set(params) - keys[action]:
@@ -602,6 +602,9 @@ class JourneyService:
         if action in {'lesson', 'demo-persona'}:
             from .guide_lessons import demo_persona, lesson_context
             return browser_projection((lesson_context if action == 'lesson' else demo_persona)(**params))
+        if action == 'metadata':
+            from .guide_metadata import metadata
+            return metadata(**params)
         if action == 'readiness':
             return await self.readiness()
         if action == 'sample':

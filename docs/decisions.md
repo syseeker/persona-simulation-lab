@@ -1,5 +1,9 @@
 # Architecture Decisions
 
+## 22 November 2026: Retrieve an explicitly named programme before searching alternatives
+
+A routed diagnostic applied a community-only search to the named SMU certificate, then interpreted its empty result as absence from the whole catalogue. Delivery validation correctly rejected the missing programme evidence. Retail instructions now identify the stable catalogue lookup key `SF-007` for that explicitly named programme and require the real details tool first for content/duration/fee questions. The instruction contains no fee or duration; those still come from the returned frozen record. Later alternatives still require a real search against the public budget/days. The matcher, provider inventory, validation and failure records remain unchanged.
+
 ## 22 November 2026: Clarify decision constraints before agent dispatch
 
 The user approved an early clarification path after the baseline model made four searches using invented budgets and returned malformed tool-call text. Retail now asks for missing budget/study days before Fabric/model/tool execution when the learner supplies income or only part of the decision constraints. An opening request for programme information still runs the real course-tool path without first requiring a spending budget. The earlier invalid result remains invalid and unchanged; this branch is selected before dispatch, never after catching a native error.
