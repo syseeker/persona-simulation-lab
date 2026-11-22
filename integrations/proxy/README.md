@@ -4,14 +4,17 @@ The application owns its inference budget. LiteLLM owns the model proxy and
 provider credentials; the pinned experimental Switchyard plugin owns routing.
 No model or proxy starts at application import.
 
-Scenario 3's requested Gemma/GLM inventory runs separately on loopback port
+Scenario 3's selected non-Nemotron inventory runs separately on loopback port
 4001 using `retail-litellm.yaml` and `start_retail.py`. The helper verifies its
 container ownership/configuration hash and preserves the existing port-4000
 proxy. Fixed `lab-advisor-candidate` and routed `lab-advisor-routed` share that
-inventory, request ceiling and reasoning setting. Current full-context calls
-timed out despite separate successful small endpoint probes; configuration
-alone does not establish availability. A second, explicitly labelled comparison
-on the existing reachable Nemotron inventory has real native decisions.
+inventory, request ceiling and per-model reasoning settings. The current defaults
+are MiniMax M3.1 Flash and Mistral Large 4, selected after bounded direct tool-loop
+probes succeeded. The user authorized replacing the earlier Gemma/GLM pool after
+timeouts; those failed recordings remain unchanged. A small serving probe does
+not establish full-context scenario success. The efficient/capable names are
+routing roles, not benchmark conclusions. Existing Nemotron baseline/support and
+the separately labelled Nemotron diagnostic remain independent of this pool.
 See [retail integration](../../docs/retail-integration.md).
 
 The upstream source is fixed at `9e8408c9e06baf146b63cecda14959a30c34697b`,

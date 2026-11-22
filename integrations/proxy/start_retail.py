@@ -20,8 +20,8 @@ def start():
     load_environment()
     key, nim = os.environ['LAB_PROXY_API_KEY'], os.environ['NVIDIA_API_KEY']
     models = {'FIXED': 'openai/' + model_id(), 'SUPPORT': 'openai/' + model_id('user'),
-              'EFFICIENT': os.getenv('LAB_RETAIL_EFFICIENT_MODEL', 'openai/google/gemma-4-31b-it'),
-              'CAPABLE': os.getenv('LAB_RETAIL_CAPABLE_MODEL', 'openai/z-ai/glm-5.3-flash')}
+              'EFFICIENT': os.getenv('LAB_RETAIL_EFFICIENT_MODEL', 'openai/minimaxai/minimax-m3.1-flash'),
+              'CAPABLE': os.getenv('LAB_RETAIL_CAPABLE_MODEL', 'openai/mistralai/mistral-large-4-1t-a52b')}
     config, plugin = ROOT / 'integrations/proxy/retail-litellm.yaml', ROOT / 'integrations/proxy/lab_routing.py'
     configuration_hash = hashlib.sha256(config.read_bytes() + plugin.read_bytes()).hexdigest()
     inspected = subprocess.run(['docker', 'inspect', NAME], capture_output=True)

@@ -24,19 +24,18 @@ model_list:
       # omits a shared reasoning_effort for this mixed-model inventory.
       extra_body:
         chat_template_kwargs:
-          enable_thinking: false
+          reasoning_effort: low
   # A separate fixed condition proves capable-model access. It does not force
-  # the routing policy to select GLM or count as a routing-policy comparison.
+  # the routing policy to select Mistral or count as a routing-policy comparison.
   - model_name: lab-advisor-capable
     litellm_params:
       model: os.environ/LAB_CAPABLE_MODEL
       api_base: os.environ/LAB_CAPABLE_API_BASE
       api_key: os.environ/LAB_CAPABLE_API_KEY
       num_retries: 0
-      reasoning_effort: low
-      extra_body:
-        chat_template_kwargs:
-          clear_thinking: true
+      # The hosted endpoint rejected none; the high setting passed the direct
+      # tool-loop probe. Keep it identical in the fixed and routed deployments.
+      reasoning_effort: high
   # Declaration order is part of the pinned Switchyard Stage adapter contract.
   - model_name: lab-advisor-routed
     litellm_params:
@@ -44,10 +43,7 @@ model_list:
       api_base: os.environ/LAB_CAPABLE_API_BASE
       api_key: os.environ/LAB_CAPABLE_API_KEY
       num_retries: 0
-      reasoning_effort: low
-      extra_body:
-        chat_template_kwargs:
-          clear_thinking: true
+      reasoning_effort: high
   - model_name: lab-advisor-routed
     litellm_params:
       model: os.environ/LAB_EFFICIENT_MODEL
@@ -56,7 +52,7 @@ model_list:
       num_retries: 0
       extra_body:
         chat_template_kwargs:
-          enable_thinking: false
+          reasoning_effort: low
 router_settings:
   num_retries: 0
   fallbacks: []

@@ -1,5 +1,11 @@
 # Architecture Decisions
 
+## 22 November 2026: Keep comparison reasoning policy with each model deployment
+
+Our Fabric configuration builder applied Deep Agents `reasoning_effort: none` to every model. The installed maintained adapter forwards that value into the request. This application-owned default can override a LiteLLM deployment's provider-specific policy; the selected Mistral endpoint rejected none while high passed controlled serving probes. The user authorized correcting the builder and verifying the actual Fabric path before another full retail run. No upstream Fabric defect is established by the SDK forwarding supplied settings.
+
+For the three comparison aliases, the builder now omits that shared value. Each fixed/routed deployment retains its model's identical reasoning configuration in the retail proxy. Existing fixed-baseline and Hermes settings remain unchanged. MiniMax M3.1 Flash and Mistral Large 4 are the user-authorized replacement pool after Gemma/GLM timeouts; their efficient/capable names describe routing roles, not benchmark conclusions. Direct/proxy serving probes and actual Fabric execution remain separate verification milestones. Preserve the failed original pool and the source-specific settings/results for every new condition.
+
 ## 22 November 2026: Separate native proposals from application delivery
 
 The retail prompt-only correction failed a new live replay. The user then approved explicit clarification and response validation. Retail now treats a successful native Fabric reply as a proposal. An application-owned boundary renders the programme facts or a budget/schedule clarification from successful native course-tool results, validating every returned course against the frozen catalogue. It does not fill missing tool evidence from the catalogue, estimate affordability, infer budget from income, or describe an unknown fee/duration/timetable as a confirmed fit. Presentation has an enforced 180-word maximum and makes no additional inference calls. Failed, empty or token-truncated native execution still stops.

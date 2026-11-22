@@ -49,6 +49,11 @@ def build_config(
         raise ValueError("Choose the Deep Agents or Hermes Fabric harness")
     if model_route not in {"fixed", "switchyard"}:
         raise ValueError("Choose the fixed or Switchyard model route")
+    # A mixed-model proxy owns each comparison deployment's reasoning policy.
+    # A shared request-level value would override those provider-specific settings.
+    comparison_model = model in {
+        "lab-advisor-candidate", "lab-advisor-capable", "lab-advisor-routed"
+    }
     discovery = DiscoveryConfig()
     if harness == "hermes":
         from .runtime_profiles import hermes_descriptor_dir
@@ -64,7 +69,7 @@ def build_config(
             resolution="preinstalled",
             settings={"reasoning_config": {"enabled": False, "effort": "none"}, "save_trajectories": False}
             if harness == "hermes"
-            else {"reasoning_effort": "none"},
+            else {} if comparison_model else {"reasoning_effort": "none"},
         ),
         models={
             "default": ModelConfig(

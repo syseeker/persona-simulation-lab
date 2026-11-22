@@ -2,7 +2,10 @@
 from contextlib import asynccontextmanager
 from copy import deepcopy
 import asyncio
+import hashlib
+import importlib.util
 import json
+from types import SimpleNamespace
 from unittest.mock import AsyncMock
 
 import pytest
@@ -132,15 +135,84 @@ def test_requested_pool_has_model_specific_settings_in_both_selection_modes():
     fixed = groups['lab-advisor-candidate'][0]
     capable, efficient = groups['lab-advisor-routed']
     assert groups['lab-advisor-capable'][0] == capable
-    # Same Gemma deployment policy for fixed and routed; GLM uses its own
-    # supported effort instead of inheriting a shared "none" or "low".
+    # Each fixed deployment must use the same verified provider controls as
+    # its routed counterpart. Roles must not exchange model-specific settings.
     assert fixed == efficient
-    assert efficient['extra_body'] == {'chat_template_kwargs': {'enable_thinking': False}}
+    assert efficient['extra_body'] == {'chat_template_kwargs': {'reasoning_effort': 'low'}}
     assert 'reasoning_effort' not in efficient
-    assert capable['reasoning_effort'] == 'low'
-    assert capable['extra_body'] == {'chat_template_kwargs': {'clear_thinking': True}}
+    assert capable['reasoning_effort'] == 'high'
+    assert 'extra_body' not in capable
+    assert efficient['model'] == 'os.environ/LAB_EFFICIENT_MODEL'
+    assert capable['model'] == 'os.environ/LAB_CAPABLE_MODEL'
     assert all(row['num_retries'] == 0 for row in [fixed, capable, efficient])
     assert source['router_settings']['fallbacks'] == []
+
+
+@pytest.mark.parametrize('efficient,capable', [
+    ('minimaxai/minimax-m3.1-flash', 'mistralai/mistral-large-4-1t-a52b'),
+    ('replacement-vendor/efficient-fixture', 'another-vendor/capable-fixture'),
+])
+def test_replacement_inventory_coverage_uses_configured_roles_instead_of_historical_model_names(efficient, capable):
+    current = {'inventories': {'citizen-retail-proxy-v1': {'models': {
+        'EFFICIENT': 'openai/' + efficient, 'CAPABLE': 'openai/' + capable}}}}
+    receipts = []
+    for route, label in [('fixed', 'fixed-candidate'), ('switchyard', 'switchyard'),
+                         ('fixed', 'capable-access')]:
+        receipt = passing_receipt(route, label)
+        receipt['usage'][0]['selected_model'] = capable if label == 'capable-access' else 'openai/' + efficient
+        receipt.update(condition_verification(receipt, [native_search()]))
+        receipts.append(receipt)
+    summary = comparison_summary(receipts, current)
+    assert summary['verified'] and summary['requested_access_verified']
+    coverage = summary['requested_model_coverage']
+    assert {key: coverage[key] for key in ['configured_models', 'observed_models', 'unexercised_models',
+                                          'all_candidates_observed']} == {
+        'configured_models': sorted([efficient, capable]), 'observed_models': sorted([efficient, capable]),
+        'unexercised_models': [], 'all_candidates_observed': True}
+    assert {row['condition']: row['model'] for row in summary['requested_model_access']} == {
+        'fixed-candidate': efficient, 'capable-access': capable}
+    assert summary['diagnostic_status'] == 'not_run' and not summary['diagnostic_verified']
+
+
+def test_retail_proxy_defaults_select_the_directly_verified_non_nemotron_pool_without_starting_docker(
+    tmp_path, monkeypatch,
+):
+    spec = importlib.util.spec_from_file_location('retail_proxy_default_fixture',
+        ROOT / 'integrations/proxy/start_retail.py')
+    launcher = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(launcher)
+    folder = tmp_path / 'integrations/proxy'
+    folder.mkdir(parents=True)
+    for name in ['retail-litellm.yaml', 'lab_routing.py']:
+        (folder / name).write_bytes((ROOT / 'integrations/proxy' / name).read_bytes())
+    (tmp_path / '.private').mkdir()
+    monkeypatch.setattr(launcher, 'ROOT', tmp_path)
+    monkeypatch.setattr(launcher, 'load_environment', lambda: None)
+    monkeypatch.setattr(launcher, 'model_id', lambda *args: 'fixture-support' if args else 'fixture-fixed')
+    monkeypatch.setenv('LAB_PROXY_API_KEY', 'offline-proxy-fixture-key')
+    monkeypatch.setenv('NVIDIA_API_KEY', 'offline-provider-fixture-key')
+    monkeypatch.delenv('LAB_RETAIL_EFFICIENT_MODEL', raising=False)
+    monkeypatch.delenv('LAB_RETAIL_CAPABLE_MODEL', raising=False)
+    expected = {'FIXED': 'openai/fixture-fixed', 'SUPPORT': 'openai/fixture-support',
+        'EFFICIENT': 'openai/minimaxai/minimax-m3.1-flash',
+        'CAPABLE': 'openai/mistralai/mistral-large-4-1t-a52b'}
+    digest = hashlib.sha256((folder / 'retail-litellm.yaml').read_bytes()
+                            + (folder / 'lab_routing.py').read_bytes()).hexdigest()
+    inspected = {'Config': {'Labels': {'citizen.scope': 'retail-routing', 'citizen.configuration': digest},
+                            'Env': [f'LAB_{role}_MODEL={model}' for role, model in expected.items()]}}
+
+    def docker_read_only(arguments, **_kwargs):
+        assert arguments == ['docker', 'inspect', 'citizen-retail-proxy-v1']
+        return SimpleNamespace(returncode=0, stdout=json.dumps([inspected]).encode())
+
+    monkeypatch.setattr(launcher.subprocess, 'run', docker_read_only)
+    aliases = ['lab-advisor-candidate', 'lab-advisor-capable', 'lab-advisor-routed',
+               'lab-advisor-fixed', 'lab-support']
+    monkeypatch.setattr(launcher.httpx, 'get', lambda *_args, **_kwargs: SimpleNamespace(
+        is_success=True, json=lambda: {'data': [{'id': alias} for alias in aliases]}))
+    receipt = launcher.start()
+    assert receipt['models'] == expected and receipt['inference_calls'] == 0
+    assert receipt['configuration_sha256'] == digest
 
 
 @pytest.mark.parametrize('cancelled', [False, True])

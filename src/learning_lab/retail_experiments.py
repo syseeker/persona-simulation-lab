@@ -45,12 +45,14 @@ async def routing_configuration(folder: Path) -> dict:
         'source_sha256': {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest()
             for name in ['integrations/proxy/retail-litellm.yaml', 'integrations/proxy/litellm.yaml', 'integrations/proxy/lab_routing.py']},
         'notice': 'Declared inventory and policy are configuration. Completed calls/native decisions separately establish observed behaviour.'}
-    access = ROOT / '.private/verification/scenario3-tool-access.json'
-    if access.is_file():
-        configuration['endpoint_probe'] = json.loads(access.read_text())
-    recheck = ROOT / '.private/verification/scenario3-glm-tool-access-300.json'
-    if recheck.is_file():
-        configuration['later_glm_tool_recheck'] = json.loads(recheck.read_text())
+    historical = []
+    for name in ['scenario3-tool-access.json', 'scenario3-glm-tool-access-300.json']:
+        path = ROOT / '.private/verification' / name
+        if path.is_file():
+            historical.append({'source': name, 'result': json.loads(path.read_text()),
+                'scope': 'Historical endpoint diagnostic; does not verify the current inventory or condition.'})
+    if historical:
+        configuration['historical_endpoint_probes'] = historical
     save_evidence(folder / 'routing-configuration.json', configuration)
     return configuration
 
@@ -181,7 +183,7 @@ def comparison_summary(receipts: list[dict], configuration: dict) -> dict:
             'observed_models': sorted(observed), 'unexercised_models': sorted(candidates - observed),
             'all_candidates_observed': candidates <= observed,
             'meaning': 'Only completed requests with returned model identity establish execution. A configured or unselected candidate has no execution proof.'},
-        'comparison': 'Within each named inventory: one fixed efficient candidate versus the same pool with Switchyard; identical public inputs/catalogue/harness, fresh memory. A separate fixed capable-access condition replays all three public inputs to verify GLM access; it does not force a routed selection. The available Nemotron inventory remains a separate diagnostic.',
+        'comparison': 'Within each named inventory: one fixed efficient-role candidate versus the same pool with Switchyard; identical public inputs/catalogue/harness, fresh memory. A separate fixed capable-access condition replays all three public inputs to verify the second configured model; it does not force a routed selection. These are policy roles, not a benchmark ranking. The available Nemotron inventory remains a separate diagnostic.',
         'baseline_notice': 'The main Nemotron baseline changes model inventory, so it is not a routing-policy-only comparison. Fixed and routed requested-pool conditions share the 1,024-token ceiling and the same per-model provider settings.',
         'provider_notice': 'Each verified condition requires completed execution, passing criteria, native course search and cleanup; routed execution also requires native decisions. Overall verification additionally requires full fixed-condition access to each requested model. Candidate call coverage remains separate.'}
 
@@ -198,9 +200,9 @@ async def compare_routing(state: dict, folder: Path, budget, conversation: list,
         raise ValueError('The recorded comparison requires its two explicitly selected local proxies')
     configuration = await routing_configuration(folder)
     conditions = [
-        ('fixed-candidate', 'lab-advisor-candidate', 'fixed', proxy, 'requested Gemma/GLM pool'),
-        ('switchyard', 'lab-advisor-routed', 'switchyard', proxy, 'requested Gemma/GLM pool'),
-        ('capable-access', 'lab-advisor-capable', 'fixed', proxy, 'requested Gemma/GLM pool: explicit capable-model access'),
+        ('fixed-candidate', 'lab-advisor-candidate', 'fixed', proxy, 'requested non-Nemotron pool'),
+        ('switchyard', 'lab-advisor-routed', 'switchyard', proxy, 'requested non-Nemotron pool'),
+        ('capable-access', 'lab-advisor-capable', 'fixed', proxy, 'requested non-Nemotron pool: explicit second-model access'),
         ('available-fixed', 'lab-support', 'fixed', diagnostic_proxy, 'separate available-inventory diagnostic'),
         ('available-switchyard', 'lab-advisor-routed', 'switchyard', diagnostic_proxy, 'separate available-inventory diagnostic'),
     ]
