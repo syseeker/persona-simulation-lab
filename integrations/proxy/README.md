@@ -43,7 +43,11 @@ distinct models, ordered capable then efficient. The fixed aliases bypass
 Switchyard. A Stage routing decision is not evidence of cost or quality gains;
 inspect actual calls and compare with a fixed-model baseline.
 
-No retries or fallback policy is configured. The plugin logs only decision
+No proxy/SDK retries or fallback policy is configured. The requested retail
+comparison gateway alone can retry HTTP 429 after 30 and then 60 seconds,
+within its original deadline and shared attempt budget; other gateways retain
+one attempt. This application policy is captured in `gateway-effective-config.json`.
+The plugin logs only decision
 metadata. Compose passes only selected inference credentials, binds loopback,
 and does not receive persona datasets or host HF/NGC credentials.
 

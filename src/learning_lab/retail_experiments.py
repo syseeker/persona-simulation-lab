@@ -226,7 +226,8 @@ async def compare_routing(state: dict, folder: Path, budget, conversation: list,
             async with Gateway(budget, mode='live', model_route=route, assistant_alias=alias,
                                proxy_url=endpoint, allowed_tool_names=TOOL_NAMES, on_request=public.audit,
                                request_timeout=300 if purpose.startswith('requested') else 50,
-                               evidence_dir=work, fail_on_truncated_output=True).serving() as gateway:
+                               evidence_dir=work, fail_on_truncated_output=True,
+                               rate_limit_retry_delays=(30, 60) if purpose.startswith('requested') else ()).serving() as gateway:
                 native = NativeSandbox(identity, work / 'runtime', gateway, catalogue=catalogue,
                                        scenario_id='dreamjob', harness='deepagents', model_route=route,
                                        model=alias if purpose.startswith('requested') else None)

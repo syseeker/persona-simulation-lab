@@ -157,6 +157,15 @@ def export(run_id, *, note, destination=None):
                     "transport",
                     "http_status",
                     "provider_error",
+                    "logical_request_id",
+                    "attempt",
+                    "retry_of_call",
+                    "retry_status",
+                    "retry_delay_seconds",
+                    "retry_wait_seconds",
+                    "retry_after_seconds",
+                    "rate_limit_headers",
+                    "rate_limit_header_source",
                 ],
             )
             for row in trace["usage"]["records"]

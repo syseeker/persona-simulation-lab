@@ -16,6 +16,12 @@ Effective response settings, validation/delivery decisions and private original 
 
 Retail orchestration now stops after failed baseline scoring, failed auxiliary execution or the first failed comparison. Unstarted operations stay `not_run`; cancellation preserves attempted receipts and unknown usage. Incomplete required captures cannot leave a run marked completed. Cleanup confirmation continues to determine ownership release.
 
+## 22 November 2026: Bounded recovery from provider throttling
+
+After the MiniMax comparison received upstream HTTP 429, the user authorized waiting 30 seconds, then 60 seconds if still throttled. Implement that exception in the application gateway only for requested retail assistant comparisons. SDK/proxy/provider retries remain zero. Every attempt consumes the shared budget and keeps a distinct receipt; successful tool execution is never repeated. All waits and attempts share the original model-request deadline. Honor a received `Retry-After` up to the approved 60-second wait bound; a longer wait, exhausted schedule or different failure stops for the existing user checkpoint.
+
+Capture selected quota/wait headers from the received HTTP hop, not arbitrary response headers. Keep raw errors, planned/actual waits and logical request/attempt identities without claiming that LiteLLM headers prove the provider's exact quota. Publication retains the failed attempts alongside a recovered result. Default/baseline, simulator, judge and Hermes calls retain their previous single-attempt behavior.
+
 ## 22 November 2026: One durable master plan and preserved detailed requirements
 
 The user identified that successive chat proposals had not been consolidated into repository state and explicitly requested a tracking repair. [PLAN.md](../PLAN.md) is the single active delivery plan, with stable workstream IDs, statuses, dependencies, acceptance criteria, amendments and completion references. Its linked [UX specification and feedback register](ux-review-spec.md) and [configuration/evidence inventory](configuration-evidence-inventory.md) preserve detail; they are subordinate requirements, not competing schedules. A short summary never discards their requirements. Reconcile a new instruction into the affected item before implementing it and record actual verification separately.

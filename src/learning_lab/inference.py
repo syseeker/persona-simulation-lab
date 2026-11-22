@@ -7,7 +7,10 @@ import base64
 import binascii
 from contextlib import asynccontextmanager
 from dataclasses import dataclass, field
+from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 import json
+import math
 import os
 import secrets
 from pathlib import Path
@@ -23,6 +26,46 @@ from .settings import base_url, load_environment
 
 class BudgetExceeded(RuntimeError):
     pass
+
+
+class ProviderRateLimited(RuntimeError):
+    """An actual upstream HTTP 429, eligible only for explicit bounded recovery."""
+
+    def __init__(self, message, retry_after_seconds=None):
+        super().__init__(message)
+        self.retry_after_seconds = retry_after_seconds
+
+
+def _retry_after_seconds(value):
+    if not value:
+        return None
+    try:
+        if str(value).isdigit():
+            return float(value)
+        date = parsedate_to_datetime(value)
+        if date.tzinfo is None:
+            return None
+        return max(0.0, (date - datetime.now(timezone.utc)).total_seconds())
+    except (ValueError, TypeError, OverflowError):
+        return None
+
+
+def _rate_limit_headers(headers):
+    # Capture only quota/wait metadata received from this HTTP hop. Cookies,
+    # authorization and arbitrary response headers never enter this record.
+    allowed = {'retry-after', 'ratelimit-limit', 'ratelimit-remaining', 'ratelimit-reset',
+               'x-ratelimit-limit-requests', 'x-ratelimit-remaining-requests', 'x-ratelimit-reset-requests',
+               'x-ratelimit-limit-tokens', 'x-ratelimit-remaining-tokens', 'x-ratelimit-reset-tokens'}
+    from .evidence import sanitize
+    result = {}
+    for name, value in headers.items():
+        if name.lower() not in allowed:
+            continue
+        for env_name, secret in os.environ.items():
+            if any(word in env_name.upper() for word in ('KEY', 'TOKEN', 'SECRET', 'PASSWORD')) and len(secret) >= 8:
+                value = value.replace(secret, '[redacted]')
+        result[name.lower()] = sanitize(value[:256])
+    return result
 
 
 MAX_TOOL_ROUNDS = 4
@@ -158,7 +201,8 @@ class Gateway:
     def __init__(self, budget: Budget, mode: str = "live", model_route: str = "fixed",
                  allowed_tool_names: Iterable[str] | None = None, *, proxy_url: str | None = None,
                  assistant_alias: str | None = None, on_request=None, request_timeout: float = 50,
-                 evidence_dir: Path | None = None, fail_on_truncated_output: bool = False):
+                 evidence_dir: Path | None = None, fail_on_truncated_output: bool = False,
+                 rate_limit_retry_delays: tuple[float, ...] = ()):
         self.budget = budget
         self.mode = mode
         if model_route not in {"fixed", "switchyard"}:
@@ -180,6 +224,11 @@ class Gateway:
         self.request_timeout = request_timeout
         self.evidence_dir = evidence_dir
         self.fail_on_truncated_output = fail_on_truncated_output
+        delays = tuple(rate_limit_retry_delays)
+        if len(delays) > 2 or any(isinstance(delay, bool) or not isinstance(delay, (int, float))
+                                 or not math.isfinite(delay) or not 0 < delay <= 60 for delay in delays):
+            raise ValueError('Configure at most two rate-limit waits, each above zero and at most 60 seconds')
+        self.rate_limit_retry_delays = delays
         self._client = httpx.AsyncClient(timeout=httpx.Timeout(request_timeout, connect=10))
 
     def configuration(self):
@@ -194,6 +243,14 @@ class Gateway:
             if self.allowed_tool_names is not None else None,
             'schema_filter_owner': 'application gateway', 'buffered_upstream_response': True,
             'fail_on_truncated_output': self.fail_on_truncated_output,
+            'application_rate_limit_recovery': {
+                'enabled': self.mode == 'live' and bool(self.rate_limit_retry_delays),
+                'status_codes': [429], 'retry_delays_seconds': list(self.rate_limit_retry_delays),
+                'max_retries': len(self.rate_limit_retry_delays), 'maximum_wait_seconds': 60,
+                'attempts_count_toward_budget': True,
+                'total_request_deadline_seconds': self.request_timeout,
+                'scope': 'Assistant calls only; SDK/provider retries remain disabled.',
+            },
         }
 
     def capture(self, name, value, *, append=False):
@@ -202,21 +259,53 @@ class Gateway:
             save_evidence(self.evidence_dir / name, value, append=append)
 
     async def complete(self, payload: dict, role="assistant", *, evidence_context: dict | None = None) -> dict:
-        record = await self.budget.admit(role, self.mode)
-        if evidence_context:
-            record.update({key: evidence_context[key] for key in
-                           ('control_request_id', 'thread_id', 'transport', 'public_turn') if key in evidence_context})
-        try:
-            return await self._complete_admitted(payload, role, record)
-        except BaseException as exc:
-            if record['status'] == 'started':
-                record.update(status='cancelled' if isinstance(exc, asyncio.CancelledError) else 'failed',
-                              error_type=type(exc).__name__)
-            raise
-        finally:
-            self.capture('gateway-calls.jsonl', record, append=True)
+        delays = self.rate_limit_retry_delays if self.mode == 'live' and role == 'assistant' else ()
+        deadline = time.monotonic() + self.request_timeout if delays else None
+        logical_id = str(uuid.uuid4()) if delays else None
+        previous = None
+        waited = None
+        for attempt in range(len(delays) + 1):
+            record = await self.budget.admit(role, self.mode)
+            if evidence_context:
+                record.update({key: evidence_context[key] for key in
+                               ('control_request_id', 'thread_id', 'transport', 'public_turn') if key in evidence_context})
+            if delays:
+                record.update(logical_request_id=logical_id, attempt=attempt + 1, retry_of_call=previous)
+                if waited is not None:
+                    record['retry_wait_seconds'] = waited
+            try:
+                return await self._complete_admitted(payload, role, record, deadline=deadline)
+            except ProviderRateLimited as exc:
+                if attempt == len(delays):
+                    if delays:
+                        record['retry_status'] = 'exhausted'
+                    raise
+                if self.budget.calls >= self.budget.limit:
+                    record['retry_status'] = 'budget_exhausted'
+                    raise BudgetExceeded('No call budget remains for a rate-limit retry') from exc
+                wait = max(delays[attempt], exc.retry_after_seconds or 0)
+                if wait > 60:
+                    record['retry_status'] = 'provider_wait_exceeds_bound'
+                    raise
+                if wait >= deadline - time.monotonic():
+                    record['retry_status'] = 'request_deadline_exhausted'
+                    raise
+                record.update(retry_status='scheduled', retry_delay_seconds=wait)
+            except BaseException as exc:
+                if record['status'] == 'started':
+                    record.update(status='cancelled' if isinstance(exc, asyncio.CancelledError) else 'failed',
+                                  error_type=type(exc).__name__)
+                raise
+            finally:
+                # A 429 receipt is durable before waiting. A cancellation during
+                # that wait cannot create another model attempt or repeat tools.
+                self.capture('gateway-calls.jsonl', record, append=True)
+            previous = record['call']
+            wait_started = time.monotonic()
+            await asyncio.sleep(wait)
+            waited = round(time.monotonic() - wait_started, 3)
 
-    async def _complete_admitted(self, payload: dict, role: str, record: dict) -> dict:
+    async def _complete_admitted(self, payload: dict, role: str, record: dict, *, deadline=None) -> dict:
         record["model"] = payload.get("model")
         started = time.perf_counter()
         # Fabric's maintained OpenAI adapter supplies max_completion_tokens;
@@ -296,11 +385,17 @@ class Gateway:
                 record["requested_model"] = payload["model"]
                 if self.on_request:
                     await self.on_request(payload, role, record)
-                async with asyncio.timeout(self.request_timeout):
+                remaining = self.request_timeout if deadline is None else deadline - time.monotonic()
+                if remaining <= 0:
+                    raise TimeoutError('The total model-request deadline expired before dispatch')
+                async with asyncio.timeout(remaining):
                     response = await self._client.post(
                         endpoint + "/chat/completions", json=payload,
                         headers={"Authorization": f"Bearer {key}"},
                     )
+                record['http_status'] = response.status_code
+                record['rate_limit_headers'] = _rate_limit_headers(response.headers)
+                record['rate_limit_header_source'] = record['provider_route']
                 if response.status_code >= 400:
                     from .evidence import sanitize
                     try:
@@ -317,9 +412,13 @@ class Gateway:
                     except (ValueError, TypeError, AttributeError):
                         record["provider_error"] = {"message": "Non-JSON provider error; inspect local proxy logs"}
                     record["http_status"] = response.status_code
-                    raise RuntimeError(
-                        f"{'LiteLLM' if proxy else 'NIM'} returned HTTP {response.status_code}; check the model, endpoint and access"
-                    )
+                    message = f"{'LiteLLM' if proxy else 'NIM'} returned HTTP {response.status_code}; check the model, endpoint and access"
+                    if response.status_code == 429:
+                        retry_after = _retry_after_seconds(response.headers.get('retry-after'))
+                        if retry_after is not None:
+                            record['retry_after_seconds'] = retry_after
+                        raise ProviderRateLimited(message, retry_after)
+                    raise RuntimeError(message)
                 result = response.json()
                 record["selected_model"] = response.headers.get("x-litellm-model-name") or result.get("model")
                 record["routing"] = self.model_route if role == "assistant" else "fixed-support"

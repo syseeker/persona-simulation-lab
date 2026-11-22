@@ -35,7 +35,9 @@ US_CONFIG = ['name', 'locale', 'max_turns', 'max_steps', 'max_query_attempts', '
 CALL_FIELDS = ['call', 'role', 'mode', 'status', 'model', 'requested_model', 'selected_model',
                'provider_route', 'usage', 'latency_ms', 'http_status', 'error_type', 'finish_reason',
                'output_token_limit', 'tool_surface', 'routing_decision', 'control_request_id',
-               'thread_id', 'transport', 'public_turn']
+               'thread_id', 'transport', 'public_turn', 'logical_request_id', 'attempt', 'retry_of_call',
+               'retry_status', 'retry_delay_seconds', 'retry_wait_seconds', 'retry_after_seconds',
+               'rate_limit_headers', 'rate_limit_header_source']
 BOUNDARY_FIELDS = ['schema', 'turn', 'thread_id', 'request_id', 'captured_at']
 REPLY_FIELDS = ['adapter', 'harness', 'mode', 'model', 'completed', 'event_count', 'message_count',
                 'runtime_id', 'thread_id', 'resumed', 'response', 'enabled_toolsets']

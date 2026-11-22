@@ -37,7 +37,10 @@ def project(folder, emit):
                 'purpose', 'evaluation', 'error_type', 'error', 'public_inputs', 'input_basis', 'fabric_configuration', 'fabric_results'])
             condition['usage'] = [pick(call, ['call', 'role', 'mode', 'status', 'requested_model', 'selected_model',
                 'usage', 'latency_ms', 'routing_decision', 'http_status', 'error_type', 'control_request_id',
-                'thread_id', 'transport', 'finish_reason', 'output_token_limit']) for call in row.get('usage', [])]
+                'thread_id', 'transport', 'finish_reason', 'output_token_limit',
+                'logical_request_id', 'attempt', 'retry_of_call', 'retry_status', 'retry_delay_seconds',
+                'retry_wait_seconds', 'retry_after_seconds', 'rate_limit_headers', 'rate_limit_header_source'])
+                for call in row.get('usage', [])]
             condition['conversation'] = [pick(message, ['turn', 'role', 'content', 'thread_id', 'outcome',
                                                        'response_origin', 'response_policy'])
                                          for message in row.get('conversation', [])]
