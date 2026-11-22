@@ -1,5 +1,17 @@
 # Verification Record
 
+## Plan tracking repair · 22 November 2026
+
+This round consolidates planning only. [PLAN.md](../PLAN.md) is now the single active delivery ledger and lifecycle record. The full [UX specification and feedback register](ux-review-spec.md) retains labels 1–31, all nine lessons, all three scenarios, both views and every selection level. The [configuration/evidence inventory](configuration-evidence-inventory.md) retains 51 stable capture requirements, scenario applicability, current locations, missing captures and private/projection/not-used distinctions. README, walkthrough and decisions identify the existing implementation separately from queued requirements. Dated verification entries below remain historical observations, not claims that the queued work has executed.
+
+Baseline: `19b26b82f8e61ab02ab3a317bf58cb9feb13eac0` on `dev`; `main` remains at `b49cd85b506848e2d3ac64372387b7c9408adb33`. A recoverable ignored baseline of the five affected existing documents was saved under `.private/history/2026-11-22-plan-consolidation/`, and its hashes were rechecked before publication. Two supporting specification files were added. The scope is seven Markdown files; no application code, SDK/configuration, dataset, recording pack, runtime ownership or workload was changed.
+
+Checks performed: local Markdown links/anchors/integration references and immutable v0.2 archive integrity passed; a separate portability check verified new/current documentation links resolve from versioned files rather than ignored private data. Structural checks confirmed all nine UX lesson IDs, the full feedback scope, 51 unique capture IDs and the six Metadata columns. Independent content review found no blocking omission in the master or specifications. The initial `uv` invocation could not create its default cache lock in the read-only home cache; the same check passed with a task-specific temporary cache and no source change. This was a tool-environment retry, not an application validation failure. External URLs were not probed; full runtime/browser tests and live scenarios were not run for this documentation-only change.
+
+Staged review confirmed exactly the seven intended Markdown paths, no whitespace errors, no machine-absolute paths and no high-confidence credential patterns or known local credential values. The scan reported only statuses/counts and did not print credential values. No private payloads or raw run artifacts were staged.
+
+Workstreams W1 (capture/execution fixes and fresh demos), W2 (full UX revision) and W3 (Metadata) remain queued in that order. Saving their specifications does not count as implementing them or selecting new demos. The Git commit containing this entry records the documentation repair; completion/publication status is tracked in the master ledger.
+
 ## Scenario 3 · Designer, disclosure, Helix and routing limits · 21 November 2026
 
 Curated run **`8542330d-d6df-494e-8509-d81a5841d69e`** executed three public turns through persistent Fabric/Deep Agents and fixed Nemotron in OpenShell. Data Designer generated one source-seeded closed-schema overlay; its native one-row profiling warning remains visible. Seven actual advisor-request disclosure audits passed. Six native Guardrails public-boundary checks passed and the separate credential-disclosure probe was blocked. **20/20 saved criteria passed through native local Helix 0.9.1**. Durable Helix job **`nemo-evals-fhfwmtnq`** completed over those same 20 saved criteria without generation calls.

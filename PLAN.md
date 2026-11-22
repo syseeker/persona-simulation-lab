@@ -1,12 +1,104 @@
-# Building Citizen Apps with NeMo — Integration Guide Plan
+# Building Citizen Apps with NeMo — Master Plan
 
-## Goal and active boundary
+## Authority and current state
 
-The [canonical North Star](docs/project-goals.md) is unchanged: teach the integrated citizen application through understandable stories, source code and attributable evidence. The user authorised the shared foundation and photography implementation after the nine-stage wireframe, plus a process-chart improvement. The redesigned guide was checked in as `630f8a8`. On 21 November the user authorised continuing through **Scenario 2, then Scenario 3**, with verified rounds committed and pushed to `dev`. Their UI remains illustrative until each scenario has its own executed recording.
+**Last amended: 22 November 2026. This is the single active delivery plan.** The [canonical North Star](docs/project-goals.md) remains unchanged. It defines why the project exists; this file defines what happens next and how progress is tracked.
 
-Preserve the existing four tabs, styling, typography, adjustable inspector and dataset browsing. Keep one Simplified map and one Detailed map with stable component positions; scenario and stage select highlights and directional animations. One scenario selector stays visible while its summary collapses. Photography has separate explicit live controls and one curated review recording; no run-history selector appears. The teaching panel interprets scenario-specific results and links exact code/configuration/proof, without raw JSON, snippets or all-file dumps. Simplified and Detailed share component/operation metadata, with nine lessons selecting paths through that architecture. Entering the map, switching levels or resetting layout shows it without dimming; explicit lesson/operation interaction focuses participating operations. Authored stage flows stay labelled as explanation. The process chart uses an alternating timeline with three phase bands without horizontal scrolling.
+The user is developer zero and a one-person development team. The guide must teach enough background to understand a mechanism, make an engineering decision, inspect how that decision becomes effective configuration and interpret an actual result. Quiet, coherent teaching and precise code review take precedence over product lists, repeated tables and decorative proof links.
 
-The accepted guide now resides in `web/` on SvelteKit/Svelte Flow. The shared Python services, version-1 worker, CLI and isolated compatible environments remain intact. A separate `--guide-only` worker owns new conditions without initializing legacy recovery. The [v0.2 source archive](docs/history/v0.2/INDEX.md) and v0.1 evidence remain immutable history.
+The implemented baseline is commit `19b26b82f8e61ab02ab3a317bf58cb9feb13eac0` on `dev`. All three scenarios have their own existing recordings. Scenario 2 completed its application checks while retaining a UserSim helpfulness disagreement. Scenario 3's baseline/evaluation/managed condition completed, but its requested Gemma/GLM routing comparison failed; the separate Nemotron diagnostic does not verify that pool. The full new capture pass, comprehensive UX revision and Metadata tab below are **not implemented** in that baseline.
+
+The latest user instruction authorizes repairing durable plan tracking now. **This round is W0 only:** save the agreed specifications, verify the documentation, commit and push to `dev`. Do not infer that saving a plan executes W1, changes the UI or creates new scenario evidence. W1–W3 remain authorized, queued work in the order below; their existing authorization is not revoked by this documentation round.
+
+## Where requirements and progress live
+
+- **This master plan:** scope, order, dependencies, current statuses, work-item checklists, amendments and completion references.
+- **[Detailed UX specification and feedback register](docs/ux-review-spec.md):** the full Step 2 specification, all nine lessons, every workflow and selection level, both audiences, labels 1–31 and later teaching clarifications. It is a subordinate specification, not a competing delivery plan.
+- **[Configuration and evidence inventory](docs/configuration-evidence-inventory.md):** the six-column scenario-aware audit, existing private/public records, missing captures, future capture contract and Metadata requirements. It is a subordinate specification, not an independent schedule.
+- **[Architecture decisions](docs/decisions.md):** consequential choices and reasons. Dated earlier decisions remain history; they do not override a later explicit amendment here.
+- **[Verification record](docs/verification.md):** checks actually performed, outcomes, failures and evidence. It must not describe queued work as implemented.
+
+If a delivery summary omits detail, the linked specification still applies. A short chat response does not silently replace a detailed requirement. New user instructions take precedence; reconcile them into the affected requirement and this amendment log before subsequent implementation. Do not create another active plan for each interaction. Update current walkthrough/API documentation when its corresponding implementation changes, rather than claiming planned behavior already exists.
+
+## Lifecycle and implementation discipline
+
+The normal lifecycle is **Draft → Agreed → Queued → Implementing → Verified → Complete**. These are tracking states, not extra permission gates.
+
+- **Draft:** a proposal with unresolved decisions; no claim of agreement or implementation.
+- **Agreed:** the user has established the scope; preserve its detailed requirements.
+- **Queued:** agreed work with its dependencies and next action identified.
+- **Implementing:** code, documentation or an authorized run is actually being changed/executed; record partial results honestly.
+- **Verified:** the identified acceptance checks have actual evidence; publication or final integration may remain.
+- **Complete:** all required work and verification are finished, completion evidence is recorded and the verified round is committed/pushed to `dev`.
+- **Blocked** records a concrete impediment and the next resolving action. **Superseded** identifies an explicitly replaced requirement and its replacement; do not delete its provenance.
+
+Before a round, read this plan and the relevant specification, preserve a recoverable baseline and change only that round's scope. During work, update the relevant checklist and distinguish baseline facts from new results. Before completing, inspect the final diff, run appropriate checks, record evidence and commit/push to `dev`, keeping `main` unchanged. Identify completion commits directly or through the Git commit containing the completion entry; never invent a commit ID or test result. Markdown is read by the implementing agent; there is no automatic executor or scheduler attached to this file.
+
+## Delivery ledger
+
+| ID | Workstream | Status | Dependency | Implementation / completion reference |
+| --- | --- | --- | --- | --- |
+| W0 | Repair saved planning and progress tracking | Verified | None | [Documentation verification](docs/verification.md); commit/push pending |
+| W1 | Complete captures, fix execution and rerun S1–S3 | Queued | W0 | No new implementation or runs; existing evidence is baseline only |
+| W2 | Comprehensive teaching UX revision | Queued | W1's verified evidence and demo bindings | [Full specification](docs/ux-review-spec.md); no new implementation |
+| W3 | Add the Metadata tab | Queued | W1 artifact contract and W2 UI integration | [Inventory and table contract](docs/configuration-evidence-inventory.md); no new implementation |
+
+### W0 — Repair saved planning and progress tracking
+
+- [x] Inspect the saved plan, current source and baseline Git state; distinguish chat requirements from implemented work.
+- [x] Preserve and hash-check a recoverable copy of the affected existing documents before editing.
+- [x] Save one master plan, full UX/feedback specification and complete scenario-aware capture inventory.
+- [x] Add current documentation precedence/verification notes without rewriting historical findings.
+- [x] Check local documentation links, archive integrity, final diff scope, staged paths and credential/private-content exposure.
+- [ ] Commit/push the documentation repair to `dev` and record its completion reference.
+
+Acceptance: a future agent can find the agreed scope, detailed Step 2 requirements, all artifact gaps, delivery order, current state and plan lifecycle from the repository alone. Application code, datasets, SDK versions, recording bytes and workload ownership remain unchanged. This round does not perform W1–W3.
+
+### W1 — Complete captures, fix execution and rerun S1–S3
+
+- [ ] W1.1 Implement one shared artifact inventory/manifest contract, using the audited [capture requirements](docs/configuration-evidence-inventory.md). Retain existing captures and add applicable missing ones. Identify configuration source, native effective settings, application projection and execution result separately. Bind artifacts to scenario/run/condition/turn, producer, schema, privacy and availability; the UX and Metadata tab will consume this shared definition.
+- [ ] W1.2 Diagnose/fix actual failures before full reruns: requested Gemma/GLM NIM access and realistic tool-enabled requests through LiteLLM/gateway/Fabric, request compatibility and bounded deadlines, Designer profiling/capture issues and any remaining harness/evaluation/deployment defect. Small endpoint probes do not establish scenario completion. Do not silently substitute Nemotron for the requested pool, weaken criteria or simply raise limits to hide failures.
+- [ ] W1.3 Classify Scenario 2's no-match, native judge disagreement, prior development failures and any new real defects separately. Preserve legitimate no-match behavior and the separate blocked Guardrails test; do not force every native judge result to agree with application assertions.
+- [ ] W1.4 Execute fresh S1, then S2, then S3 under the existing ownership, budgets and compatible-environment boundaries. Generate all applicable new missing captures and continue generating the existing/private records. Keep S3 baseline, requested routing conditions, diagnostic and managed deployment individually attributable. Preserve native warnings/failures and raw private evidence.
+- [ ] W1.5 Verify capture coverage, real application outcomes, native component evidence, evaluation scope and exact-resource cleanup. Publish sanitized immutable packs/companions. Pin the new verified demo IDs explicitly for each scenario; retain old recordings and avoid a latest-directory fallback.
+- [ ] W1.6 Record actual verification and commit/push the verified round on `dev`.
+
+Acceptance: each scenario has a new independently attributable demo recording with all applicable captures, successful required integration behavior and confirmed cleanup. S3 must verify the requested Gemma/GLM comparison; a successful alternative diagnostic is insufficient. An externally unresolved condition stays failed/incomplete with its blocker recorded and cannot be promoted as a successful replacement demo. Never relabel old evidence or hide a failure.
+
+No YAML file is required merely because the inventory requests reviewable settings: serialize the actual Python configuration where appropriate. Private existing copies are not missing captures and can be exported offline if useful. A failed profiling step retains failure evidence, not a fabricated report. Unused Designer/Helix/Guardrails/Switchyard/optional UserSim post-loop or collector paths remain unused according to the selected preset. Secrets and private source/prompts never enter public packs.
+
+### W2 — Comprehensive teaching UX revision
+
+- [ ] W2.1 Implement all [detailed UX requirements and feedback](docs/ux-review-spec.md), including labels 1–31 and later clarifications; no Fabric-only or Step 3-only review gate.
+- [ ] W2.2 Separate lesson, conceptual block/action and technical library/operation identities and content ownership. Author Simplified and Detailed explanations for their respective audiences. Remove repeated whole-lesson facts, circular teaching links, generic checklists/status filler and misleading configuration/log references.
+- [ ] W2.3 Teach all nine lessons with actual scenario-specific decisions, native/library boundaries, inputs, effective configuration and interpreted outcomes. Correct turn/condition scoping, tool-result interpretation and baseline/managed placement differences. Use new verified W1 evidence; missing records remain explicit.
+- [ ] W2.4 Apply the recorded introduction/card/status changes. Preserve unrelated styling, typography, panel resizing, layout saving/restoration, dataset browsing and read-only ownership behavior.
+- [ ] W2.5 Review all 27 scenario/lesson combinations in both views and every selectable block/action. Verify exact titles, distinct teaching value, code/settings/result links, accessibility/reduced motion, saved selection, layout and zero inference/deployment during inspection. Present all nine lessons together for developer review.
+- [ ] W2.6 Record verification and commit/push the verified round on `dev`.
+
+Acceptance: the developer can understand a mechanism, identify the design decision, inspect the configuration that implements it and interpret the actual result without assembling repeated fragments from multiple pages. The detailed linked specification is mandatory scope, not optional elaboration.
+
+### W3 — Add the Metadata tab
+
+- [ ] W3.1 Add the requested fifth tab while preserving the existing four. Generate its table from W1's shared artifact definition and selected-demo manifests; do not maintain another independent handwritten inventory.
+- [ ] W3.2 Show exactly these columns: **Module · Steps · YAML/JSON file · Status · Location · Apply to scenario**. Support scenario/module/status filtering and purposeful file links. Distinguish source input, effective native configuration, projection, output, private/not-public, missing, failed and not-used states.
+- [ ] W3.3 Bind rows to the matching scenario and condition. Show private availability without exposing secrets, raw private prompts or arbitrary filesystem reads. Keep browsing read-only; do not add future live-log behavior.
+- [ ] W3.4 Verify table/manifests/teaching-panel agreement, filters and exact locations, then record checks and commit/push on `dev`.
+
+Acceptance: a developer can find a module's configuration and results for the selected scenario and determine what was configured, captured or unavailable. A file's existence does not imply successful execution.
+
+## Amendment record
+
+- **22 November 2026 — Consolidation:** the user identified that successive chat proposals were not tracked durably and requested an immediate fix. This master and its two linked specifications consolidate those requirements. Earlier chat summaries remain discussion provenance; they are not separate active plans.
+- **22 November 2026 — Delivery order:** execution/capture fixes and fresh demos first (W1), full retained UX specification second (W2), Metadata third (W3). Defining the shared artifact contract belongs at the start of W1; it does not move Metadata UI implementation ahead of the execution work.
+- **22 November 2026 — Scope retention:** the full UX critique applies to every lesson/workflow/selection in both views. All nine lessons are reviewed together. A scheduling summary cannot discard labels 1–31, the detailed teaching specification or the scenario-aware capture audit.
+- **22 November 2026 — Current round boundary:** W0 is documentation consolidation/verification/publication only. W1–W3 remain queued, not executed, and their prior authorization remains recorded.
+
+## Preserved architecture and scope boundaries
+
+Preserve the existing four tabs and add only the requested Metadata tab in W3. Keep unrelated styling, typography, adjustable inspector, dataset browsing, one Simplified map and one Detailed map. Keep the scenario selector visible with a collapsible summary, one curated demo per scenario and no run-history selector. Entering the map, switching levels or resetting layout shows the whole architecture; explicit interaction focuses the relevant operations. The alternating journey timeline and its three phase bands remain without horizontal scrolling. W2 changes only the specified teaching content, selection/reference behavior and necessary supporting metadata/tests.
+
+The existing guide resides in `web/` on SvelteKit/Svelte Flow. Preserve shared Python services, the version-1 worker, CLI, developer MCP and isolated compatible SDK environments. The restricted `--guide-only` worker remains distinct from legacy recovery. Playback/inspection never infer or deploy. The immutable [v0.2 source archive](docs/history/v0.2/INDEX.md), v0.1 evidence and previous recording packs remain history.
 
 ## Nine common journey stages
 
@@ -32,7 +124,9 @@ Helix is a control plane spanning agent operations, evaluation, experiments and 
 
 For a routing-policy comparison, hold the harness, public inputs and catalogue fixed and use a fixed candidate from the same Gemma/GLM pool. Fixed Nemotron versus that pool also changes inventory and must be labelled accordingly. Confirm exact available NIM IDs and the pinned experimental integration's supported semantics. Harness comparisons use a fixed model and common inputs; different stories cannot establish harness quality.
 
-## Implementation gates
+## Implemented baseline before this change program
+
+The entries below describe work already implemented before W0. They are not completion claims for W1–W3, and historical review wording does not override the current ledger.
 
 1. **Wireframe and housekeeping delivered:** nine-stage UX, progressive presets and verified private output archives. The user then authorised implementation. Preserve archives and unresolved ownership records.
 2. **Shared foundation implemented, review pending:** versioned preset metadata, strict execution contract, source locking, public-only advisor context, persistent Fabric runtime, budgets, cancellation/recovery, portable sources and run-scoped local artifacts.

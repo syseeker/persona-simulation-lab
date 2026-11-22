@@ -1,10 +1,12 @@
 # Building Citizen Apps with NeMo — Walkthrough
 
+This walkthrough describes the implemented baseline at `19b26b8`. The [master delivery ledger](../PLAN.md#delivery-ledger) tracks the authorized next changes. The [detailed UX specification](ux-review-spec.md) supersedes this baseline's panel design as a requirement; it is not implemented yet. The [configuration/evidence inventory](configuration-evidence-inventory.md) records existing captures and gaps. Update this walkthrough alongside the corresponding implementation, without presenting queued work as current behavior.
+
 ## What is available now
 
 The guide now runs inside this checkout's SvelteKit application. **All three scenarios have their own execution evidence.** Trace reads one tagged demo per scenario; a missing or corrupt pack stays unavailable and never falls back to a different run. Explore profiles retains the read-only connection to installed originals. Launch the guide using the [README instructions](../README.md#run-locally); actual execution also needs [native runtime setup](../integrations/openshell/README.md).
 
-The current [review gate](../PLAN.md#implementation-gates) covers the redesigned guide and all three implemented presets. The retail baseline and managed session passed their checks; its requested Gemma/GLM comparison remains incomplete after provider timeouts. The separately labelled Nemotron routing diagnostic does not replace that result. The [canonical goals](project-goals.md) remain unchanged.
+The [implemented baseline](../PLAN.md#implemented-baseline-before-this-change-program) covers the existing guide and all three implemented presets. The retail baseline and managed session passed their checks; its requested Gemma/GLM comparison remains incomplete after provider timeouts. The separately labelled Nemotron routing diagnostic does not replace that result. The [canonical goals](project-goals.md) remain unchanged.
 
 ## Review the board-games integration
 

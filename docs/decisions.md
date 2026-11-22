@@ -1,5 +1,13 @@
 # Architecture Decisions
 
+## 22 November 2026: One durable master plan and preserved detailed requirements
+
+The user identified that successive chat proposals had not been consolidated into repository state and explicitly requested a tracking repair. [PLAN.md](../PLAN.md) is the single active delivery plan, with stable workstream IDs, statuses, dependencies, acceptance criteria, amendments and completion references. Its linked [UX specification and feedback register](ux-review-spec.md) and [configuration/evidence inventory](configuration-evidence-inventory.md) preserve detail; they are subordinate requirements, not competing schedules. A short summary never discards their requirements. Reconcile a new instruction into the affected item before implementing it and record actual verification separately.
+
+The agreed order is execution/capture fixes plus fresh S1–S3 demos, the full teaching UX revision, then the Metadata tab. The shared artifact contract is defined at the start of the execution work and later drives both UI surfaces. All nine lessons and every workflow/selection in both views remain in the UX scope; no Step 3-only review gate replaces it. Metadata is the requested fifth tab; preserve the existing four. Earlier dated entries below retain historical rationale and do not override the newer master/specification.
+
+The current repair changes documentation only. It does not rerun scenarios, fix Gemma/GLM, change SDKs, update demo IDs, implement the UX or add Metadata. Those workstreams remain queued with the user's authorization preserved. The existing four-tab application and its recordings remain the baseline until separately verified replacement work is completed.
+
 ## 21 November 2026: Retail disclosure, comparisons and managed ownership
 
 Keep one fixed-Nemotron baseline and separate fresh-memory comparison conditions. Designer generates a closed hypothetical overlay from the locked source; free text cannot redefine the salary/budget protocol or copy a source name. UserSim generates three public turns after preceding replies; actual advisor dispatches are audited for hidden salary before disclosure. Public salary never becomes a budget. Use actual SMU fee/duration facts from the separately dated supplement.
