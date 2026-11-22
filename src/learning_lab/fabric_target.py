@@ -310,6 +310,7 @@ class FabricTarget:
 
     async def reply(self, message: str, preferences: Preferences | None = None) -> dict:
         self.gateway.tool_rounds = 0
+        self.gateway.required_initial_tool = None
         self.public_turn += 1
         user_message = message
         boundary = getattr(self, 'response_boundary', None)
@@ -320,6 +321,8 @@ class FabricTarget:
                           public_turn=self.public_turn, agent_invoked=False,
                           application_response_id=clarification['application_response_id'])
                 return clarification
+        if boundary is not None and preferences is not None and preferences.budget_sgd is not None and preferences.days:
+            self.gateway.required_initial_tool = 'search_courses'
         self.invocation_count += 1
         path = self.workspace.parent / "preferences.json"
         if preferences:

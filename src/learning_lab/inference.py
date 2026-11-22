@@ -214,6 +214,7 @@ class Gateway:
         self.key = secrets.token_urlsafe(24)
         self.url = ""
         self.tool_rounds = 0
+        self.required_initial_tool: str | None = None
         # Optional application-owned schema boundary. Some maintained harness
         # adapters gate execution but still advertise their built-in tools.
         if isinstance(allowed_tool_names, str):
@@ -257,6 +258,42 @@ class Gateway:
         if self.evidence_dir is not None:
             from .evidence import save_evidence
             save_evidence(self.evidence_dir / name, value, append=append)
+
+    def initial_tool_payload(self, payload: dict) -> tuple[dict, str | None]:
+        """Require a real first tool request; the harness still executes its tool."""
+        required = self.required_initial_tool
+        if required is None:
+            return payload, None
+        names = [tool.get('function', {}).get('name') for tool in payload.get('tools', [])
+                 if isinstance(tool, dict) and isinstance(tool.get('function'), dict)]
+        if required not in names:
+            raise ValueError('Required initial course tool is absent from the effective provider schemas')
+        return {**payload, 'tool_choice': {'type': 'function', 'function': {'name': required}}}, required
+
+    def accept_initial_tool(self, result: dict, required: str | None) -> None:
+        """Release only after the provider returned the requested structured call."""
+        if required is None:
+            return
+        choices = result.get('choices') if isinstance(result, dict) else None
+        message = choices[0].get('message') if isinstance(choices, list) and choices and isinstance(choices[0], dict) else None
+        calls = message.get('tool_calls') if isinstance(message, dict) else None
+        if not isinstance(calls, list) or not calls:
+            raise ValueError('Model ignored the required initial course-tool call')
+        seen = set()
+        for call in calls:
+            function = call.get('function') if isinstance(call, dict) else None
+            if (not isinstance(function, dict) or call.get('type') != 'function'
+                    or function.get('name') != required or not isinstance(call.get('id'), str)
+                    or not call['id'] or call['id'] in seen):
+                raise ValueError('Model returned an invalid required initial course-tool call')
+            seen.add(call['id'])
+            try:
+                arguments = json.loads(function.get('arguments', ''))
+            except (ValueError, TypeError) as exc:
+                raise ValueError('Required initial course-tool arguments are not a JSON object') from exc
+            if not isinstance(arguments, dict) or not isinstance(arguments.get('goal'), str) or not arguments['goal'].strip():
+                raise ValueError('Required initial course-tool arguments need a nonempty goal')
+        self.required_initial_tool = None
 
     async def complete(self, payload: dict, role="assistant", *, evidence_context: dict | None = None) -> dict:
         delays = self.rate_limit_retry_delays if self.mode == 'live' and role == 'assistant' else ()
@@ -355,6 +392,7 @@ class Gateway:
                 *payload["messages"],
             ]
         try:
+            payload, required_initial_tool = self.initial_tool_payload(payload) if role == 'assistant' else (payload, None)
             # Capture the final provider-visible schema after allowlist/round-limit
             # filtering. This is not the server's MCP discovery response.
             self.capture('gateway-effective-config.json', self.configuration())
@@ -446,6 +484,7 @@ class Gateway:
                 if blocked:
                     record["tool_surface"]["blocked_returned"] = blocked
                     raise ValueError("Model requested a tool outside the application's effective allowlist")
+            self.accept_initial_tool(result, required_initial_tool)
             if role == "assistant" and result["choices"][0]["message"].get("tool_calls"):
                 if self.tool_rounds >= MAX_TOOL_ROUNDS:
                     raise BudgetExceeded(

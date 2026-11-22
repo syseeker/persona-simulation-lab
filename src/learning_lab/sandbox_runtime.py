@@ -52,7 +52,10 @@ class ExecGateway(Gateway):
     async def complete(self, payload, role='assistant'):
         if role != 'assistant':
             raise ValueError('The sandbox only invokes the advisor model')
-        return await self.channel.model(payload)
+        payload, required = self.initial_tool_payload(payload)
+        result = await self.channel.model(payload)
+        self.accept_initial_tool(result, required)
+        return result
 
 
 def export_artifacts(channel):

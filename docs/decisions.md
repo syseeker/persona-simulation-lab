@@ -1,5 +1,9 @@
 # Architecture Decisions
 
+## 22 November 2026: Require initial retrieval for a constrained retail recommendation
+
+Complete public budget and study days establish that a recommendation should search, rather than ask the same clarification again. In standalone retail native invocations, the application therefore requires the first provider response to select structured `search_courses`. The selected harness still performs the real MCP call, and delivery still requires attributable returned facts. Release the requirement only after validating the structured selection; preserve tool limits, failed attempts and unknown usage. Other presets, support models and managed execution retain their existing behavior. This is an application decision, not evidence of autonomous model tool choice.
+
 ## 22 November 2026: Preserve every MCP comparison result in managed evidence
 
 Helix Intake returns each compared course in a separate MCP text block. Decode all blocks before interpreting the result, and accept only the complete two/three-course comparison shape; malformed or partial blocks stay unavailable. The existing source-only renderer continues to verify native identity, unique course IDs and exact frozen facts. This fixes our evidence reader rather than loosening delivery validation. The failed 42-call full run remains unchanged; verify the failed managed path in fresh resources before repeating the complete scenario.

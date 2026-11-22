@@ -69,6 +69,8 @@ OPERATIONS = {
     'retail.response.render': ('src/learning_lab/retail_responses.py', 'def apply'),
     'retail.response.confirm': ('src/learning_lab/retail_responses.py', 'def confirm_delivery'),
     'retail.response.config': ('src/learning_lab/retail_responses.py', 'class ResponseConfiguration'),
+    'retail.retrieval.arm': ('src/learning_lab/fabric_target.py', "self.gateway.required_initial_tool = 'search_courses'"),
+    'retail.retrieval.enforce': ('src/learning_lab/inference.py', 'def initial_tool_payload'),
     'retail.alias': ('integrations/proxy/retail-litellm.yaml', 'model_list:'),
     'retail.comparison': ('src/learning_lab/retail_experiments.py', 'async def compare_routing'),
     'retail.package': ('integrations/platform/package_agent.py', 'def prepare_bundle'),

@@ -9,10 +9,20 @@ import re
 from typing import Literal
 import uuid
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 from .catalogue import Course, Preferences, all_courses
 from .evidence import decode_native, save_evidence
+
+
+class InitialToolPolicy(BaseModel):
+    model_config = ConfigDict(extra='forbid', frozen=True)
+    scope: Literal['standalone-retail-explicit-budget-and-study-days'] = 'standalone-retail-explicit-budget-and-study-days'
+    name: Literal['search_courses'] = 'search_courses'
+    provider_api: Literal['OpenAI-named-tool_choice'] = 'OpenAI-named-tool_choice'
+    release: Literal['validated-first-choice-function-call'] = 'validated-first-choice-function-call'
+    harness_executes_tool: Literal[True] = True
+    managed_enabled: Literal[False] = False
 
 
 class ResponseConfiguration(BaseModel):
@@ -27,6 +37,7 @@ class ResponseConfiguration(BaseModel):
     catalogue_sha256: str
     clarification: str = 'Ask missing total training budget/study days; salary establishes neither affordability nor eligibility.'
     clarification_dispatch: str = 'Before Fabric/model/tool execution for salary or partially supplied decision constraints; programme-information questions still use native tools.'
+    required_initial_tool: InitialToolPolicy = Field(default_factory=InitialToolPolicy)
     tool_evidence: str = 'Successful native Relay or Helix Intake result; previous facts only for clarification.'
     unknowns: str = 'Unknown full costs, timetable, duration and personal eligibility remain unconfirmed.'
     guardrails_relationship: str = 'Application delivery policy, separate from native behavioural Guardrails.'
