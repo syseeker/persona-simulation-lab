@@ -1,5 +1,9 @@
 # Architecture Decisions
 
+## 22 November 2026: Preserve every MCP comparison result in managed evidence
+
+Helix Intake returns each compared course in a separate MCP text block. Decode all blocks before interpreting the result, and accept only the complete two/three-course comparison shape; malformed or partial blocks stay unavailable. The existing source-only renderer continues to verify native identity, unique course IDs and exact frozen facts. This fixes our evidence reader rather than loosening delivery validation. The failed 42-call full run remains unchanged; verify the failed managed path in fresh resources before repeating the complete scenario.
+
 ## 22 November 2026: Retrieve an explicitly named programme before searching alternatives
 
 A routed diagnostic applied a community-only search to the named SMU certificate, then interpreted its empty result as absence from the whole catalogue. Delivery validation correctly rejected the missing programme evidence. Retail instructions now identify the stable catalogue lookup key `SF-007` for that explicitly named programme and require the real details tool first for content/duration/fee questions. The instruction contains no fee or duration; those still come from the returned frozen record. Later alternatives still require a real search against the public budget/days. The matcher, provider inventory, validation and failure records remain unchanged.

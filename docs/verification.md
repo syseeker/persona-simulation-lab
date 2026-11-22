@@ -1,5 +1,11 @@
 # Verification Record
 
+## Managed comparison projection failure and repair · 22 November 2026
+
+Full retail `7bf58a43-20dd-4ed0-a5d1-93219414ff76` completed its baseline and all five comparison conditions with 24/24 delivered-response criteria per evaluated conversation, actual MiniMax/Mistral access, native Switchyard decisions, the same frozen inputs/facts/instructions and confirmed standalone cleanup. A requested routed call recovered from a preserved HTTP 429 after the configured 30-second wait. The native Mistral proposal still violated the word limit; delivered-response passes do not overwrite it. UserSim retained two separate in-loop helpfulness failures with no warnings.
+
+Managed invocation retrieved three courses through `compare_courses`, but our host-side `publishable_intake` decoded only the first MCP content block. The unchanged delivery validator correctly rejected the resulting single object. The full run remains failed after 42 calls, with every owned resource cleaned up. No failed record was rewritten or omitted. The decoder now retains all valid comparison blocks (or a single block containing the complete array) and rejects malformed/partial shapes, preserving exact native IDs and frozen-fact/cardinality validation. Nineteen new regressions and related suites passed **89 tests**. The host-only module is outside both image source allowlists, so the repair requires no image rebuild. The complete offline suite then passed **682 tests**. A fresh managed-only replay follows before another full scenario.
+
 ## Explicit programme lookup and read-only Metadata foundation · 22 November 2026
 
 Focused routed diagnostic `d7a61dfe-d761-44df-9cc7-4e93b495e1f8` reused the failed condition's three public inputs and frozen catalogue in fresh native memory. It retained actual `get_course_details("SF-007")`, a later constrained course search, four completed Nano Omni calls with native Switchyard decisions, **24/24 Helix-scored application criteria**, an application-only second reply and confirmed cleanup. It did not relax the renderer or load an unreturned course. Both standalone and managed images rebuilt from the corrected public policy. Full scenario verification follows this checkpoint; earlier failures remain immutable.

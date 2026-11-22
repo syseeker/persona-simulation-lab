@@ -25,6 +25,27 @@ IMAGE = 'citizen-retail-helix:0.4.0'
 AGENT = 'citizen-retail-advisor-deepagents-v1'
 
 
+def _intake_tool_result(name: str, raw: dict):
+    """Decode every MCP text block without accepting a partial comparison."""
+    if not isinstance(raw, dict):
+        raise ValueError('Native MCP result is not an object')
+    content = raw.get('content')
+    if (not isinstance(content, list) or not content
+            or any(not isinstance(block, dict) or block.get('type') != 'text'
+                   or not isinstance(block.get('text'), str) for block in content)):
+        raise ValueError('Native MCP result has malformed text content')
+    decoded = [json.loads(block['text']) for block in content]
+    result = decoded[0] if len(decoded) == 1 else decoded
+    if isinstance(result, dict) and result.get('error'):
+        return result
+    if name == 'compare_courses':
+        if not isinstance(result, list) or not 2 <= len(result) <= 3 or any(not isinstance(row, dict) for row in result):
+            raise ValueError('Native comparison requires two or three complete course records')
+    elif not isinstance(result, dict):
+        raise ValueError('Native search/details result requires one object')
+    return result
+
+
 def publishable_intake(logs: dict) -> dict:
     """Keep native relationships and decoded public tool facts, never model payloads."""
     intake = logs.get('intake') or {}
@@ -38,12 +59,13 @@ def publishable_intake(logs: dict) -> dict:
         request, result = {}, None
         try:
             request = json.loads(row.get('input') or '{}')
+            if not isinstance(request, dict):
+                raise ValueError('Native tool request is not an object')
             raw = json.loads(row.get('output') or '{}')
-            content = raw.get('content') or []
-            if content and content[0].get('type') == 'text':
-                result = json.loads(content[0]['text'])
+            result = _intake_tool_result(row['name'], raw)
         except (ValueError, TypeError, KeyError):
-            pass
+            request = request if isinstance(request, dict) else {}
+            result = None
         tools.append({'name': row['name'], 'source_span_id': row['span_id'], 'native_status': row.get('status'),
             'arguments': request.get('arguments'), 'result': result,
             'evidence_origin': 'native_helix_intake',
