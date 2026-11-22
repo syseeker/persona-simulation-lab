@@ -1,0 +1,62 @@
+{
+  "projection": "Allowlisted native/public configuration fields.",
+  "active_version": 1,
+  "config_revision": 13341181774601660081,
+  "hash": "e23e7ad4018a104f7d1ddb11527b88b03f2eaf02331204ed45bf262b49ef6404",
+  "policy": {
+    "filesystem_policy": {
+      "include_workdir": true,
+      "read_only": [
+        "/usr",
+        "/bin",
+        "/lib",
+        "/etc",
+        "/opt",
+        "/proc",
+        "/dev/urandom",
+        "/var/log"
+      ],
+      "read_write": [
+        "/workspace",
+        "[developer-home]",
+        "/sandbox",
+        "/tmp",
+        "/dev/null",
+        "/dev/shm"
+      ]
+    },
+    "landlock": {
+      "compatibility": "hard_requirement"
+    },
+    "network_policies": {
+      "nemo_helix": {
+        "binaries": [
+          {
+            "path": "/opt/uv/python/*/bin/python3*"
+          },
+          {
+            "path": "/usr/bin/curl"
+          }
+        ],
+        "endpoints": [
+          {
+            "access": "full",
+            "enforcement": "enforce",
+            "host": "host.docker.internal",
+            "port": 8080,
+            "protocol": "rest"
+          }
+        ],
+        "name": "nemo-helix-egress"
+      }
+    },
+    "process": {
+      "run_as_group": "sandbox",
+      "run_as_user": "sandbox"
+    },
+    "version": 1
+  },
+  "policy_source": "sandbox",
+  "status": "effective",
+  "version": 1
+}

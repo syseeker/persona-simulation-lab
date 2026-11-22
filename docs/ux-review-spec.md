@@ -1,8 +1,8 @@
 # Integration Guide UX review specification
 
-Status: **Agreed / queued — implementation not started.**
+Status: **Implementing — content and selection repair in progress; final evidence binding and acceptance pending.**
 
-Recorded: 22 November 2026, Asia/Singapore. This is a supporting specification of the [single master plan](../PLAN.md), not an alternative plan or a new approval gate. All requirements below are pending. A documentation commit records this agreement; it does not establish that the UI has been changed or accepted.
+Recorded: 22 November 2026, Asia/Singapore. This is a supporting specification of the [single master plan](../PLAN.md), not an alternative plan or a new approval gate. Requirements labelled Pending below have not yet passed final acceptance. Implementation progress does not establish that the complete UI has been verified or accepted.
 
 ## Authority and scope
 

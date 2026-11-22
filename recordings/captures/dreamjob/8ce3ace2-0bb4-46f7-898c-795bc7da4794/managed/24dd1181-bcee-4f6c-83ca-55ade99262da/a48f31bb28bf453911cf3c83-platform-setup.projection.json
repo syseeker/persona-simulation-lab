@@ -1,0 +1,203 @@
+{
+  "run_id": "24dd1181-bcee-4f6c-83ca-55ade99262da",
+  "provider_status": "ModelProviderStatus.READY",
+  "model_alias": "citizen-retail-advisor",
+  "public_preset": {
+    "preferences_mode": "frozen-public-preset",
+    "frozen_preferences": {
+      "goal": "retail sales inventory data analytics visualisation Excel",
+      "budget_sgd": 3000,
+      "days": [
+        5,
+        6
+      ],
+      "planning_area": null,
+      "known_skills": null,
+      "kind": null
+    },
+    "preferences_sha256": "9dd3fd7b655c8201074cac85a529012c13521b956e132a83974fb25c4aa82888"
+  },
+  "inference_calls": 0,
+  "native_resource_definitions": {
+    "provider": {
+      "operation": "create_provider",
+      "creation_submitted": true,
+      "request": {
+        "name": "citizen-retail-24dd1181bcee-model",
+        "project": null,
+        "description": "Scenario 3 owned fixed-model admission lease",
+        "host_url": "http://127.0.0.1:8876/v1",
+        "api_key_secret_name": "[redacted]",
+        "enabled_models": [
+          "citizen-retail-advisor"
+        ],
+        "default_extra_body": null,
+        "default_extra_headers": null,
+        "required_extra_body": null,
+        "required_extra_headers": null,
+        "model_deployment_id": null,
+        "status": null,
+        "status_message": null,
+        "auth_header_format": null,
+        "calls_back_as_caller": false
+      },
+      "response": {
+        "id": "model-provider-5jR7gK3mTSfUam8QEoV1Z7",
+        "name": "citizen-retail-24dd1181bcee-model",
+        "workspace": "persona-lab",
+        "project": null,
+        "created_at": "2026-11-22T12:14:34.380534",
+        "updated_at": "2026-11-22T12:14:34.380547",
+        "description": "Scenario 3 owned fixed-model admission lease",
+        "host_url": "http://127.0.0.1:8876/v1",
+        "api_key_secret_name": "[redacted]",
+        "served_models": [],
+        "enabled_models": [
+          "citizen-retail-advisor"
+        ],
+        "status": "CREATED",
+        "status_message": "Model provider created",
+        "default_extra_body": null,
+        "default_extra_headers": null,
+        "required_extra_body": null,
+        "required_extra_headers": null,
+        "model_deployment_id": null,
+        "auth_header_format": null,
+        "calls_back_as_caller": false
+      },
+      "ready_response": {
+        "id": "model-provider-5jR7gK3mTSfUam8QEoV1Z7",
+        "name": "citizen-retail-24dd1181bcee-model",
+        "workspace": "persona-lab",
+        "project": null,
+        "created_at": "2026-11-22T12:14:34.380534",
+        "updated_at": "2026-11-22T12:14:37.572657",
+        "description": "Scenario 3 owned fixed-model admission lease",
+        "host_url": "http://127.0.0.1:8876/v1",
+        "api_key_secret_name": "[redacted]",
+        "served_models": [
+          {
+            "model_entity_id": "persona-lab/citizen-retail-advisor",
+            "served_model_name": "citizen-retail-advisor"
+          }
+        ],
+        "enabled_models": [
+          "citizen-retail-advisor"
+        ],
+        "status": "READY",
+        "status_message": "",
+        "default_extra_body": null,
+        "default_extra_headers": null,
+        "required_extra_body": null,
+        "required_extra_headers": null,
+        "model_deployment_id": null,
+        "auth_header_format": null,
+        "calls_back_as_caller": false
+      }
+    },
+    "environment": {
+      "operation": "create_environment",
+      "creation_submitted": true,
+      "request": {
+        "description": "Explicit public retail budget/weekend preset; no persona or salary",
+        "environment_spec": {
+          "description": "",
+          "env": {},
+          "secrets": "[redacted]",
+          "model_provider_override": null,
+          "provider": "local",
+          "workspace_path": null,
+          "artifacts_path": null,
+          "control_location": null,
+          "ownership": null,
+          "connection": {},
+          "metadata": {
+            "preferences_mode": "frozen-public-preset",
+            "frozen_preferences": {
+              "goal": "retail sales inventory data analytics visualisation Excel",
+              "budget_sgd": 3000,
+              "days": [
+                5,
+                6
+              ],
+              "planning_area": null,
+              "known_skills": null,
+              "kind": null
+            },
+            "preferences_sha256": "9dd3fd7b655c8201074cac85a529012c13521b956e132a83974fb25c4aa82888"
+          },
+          "settings": {},
+          "mcp": {
+            "catalogue": {
+              "url": "/workspace/.venv/bin/learning-lab-courses",
+              "env": {
+                "LAB_PREFERENCES_PRESET_FILE": "/workspace/scenarios/dreamjob/preferences.json",
+                "LAB_PREFERENCES_PRESET_SHA256": "9dd3fd7b655c8201074cac85a529012c13521b956e132a83974fb25c4aa82888",
+                "LAB_REQUIRE_PREFERENCES": "1",
+                "LAB_MCP_EVIDENCE_FILE": "/workspace/artifacts/mcp-tools-list.jsonl"
+              },
+              "secrets": "[redacted]"
+            }
+          }
+        },
+        "compute_spec": null,
+        "name": "citizen-retail-24dd1181bcee-preset"
+      },
+      "response": {
+        "description": "Explicit public retail budget/weekend preset; no persona or salary",
+        "environment_spec": {
+          "description": "",
+          "env": {},
+          "secrets": "[redacted]",
+          "model_provider_override": null,
+          "provider": "local",
+          "workspace_path": null,
+          "artifacts_path": null,
+          "control_location": null,
+          "ownership": null,
+          "connection": {},
+          "metadata": {
+            "preferences_mode": "frozen-public-preset",
+            "frozen_preferences": {
+              "goal": "retail sales inventory data analytics visualisation Excel",
+              "budget_sgd": 3000,
+              "days": [
+                5,
+                6
+              ],
+              "planning_area": null,
+              "known_skills": null,
+              "kind": null
+            },
+            "preferences_sha256": "9dd3fd7b655c8201074cac85a529012c13521b956e132a83974fb25c4aa82888"
+          },
+          "settings": {},
+          "mcp": {
+            "catalogue": {
+              "url": "/workspace/.venv/bin/learning-lab-courses",
+              "env": {
+                "LAB_PREFERENCES_PRESET_FILE": "/workspace/scenarios/dreamjob/preferences.json",
+                "LAB_PREFERENCES_PRESET_SHA256": "9dd3fd7b655c8201074cac85a529012c13521b956e132a83974fb25c4aa82888",
+                "LAB_REQUIRE_PREFERENCES": "1",
+                "LAB_MCP_EVIDENCE_FILE": "/workspace/artifacts/mcp-tools-list.jsonl"
+              },
+              "secrets": "[redacted]"
+            }
+          }
+        },
+        "compute_spec": null,
+        "name": "citizen-retail-24dd1181bcee-preset",
+        "workspace": "persona-lab",
+        "project": null,
+        "id": "agent-environment-515DzBqFrzAkFY2XfdFTac",
+        "entity_id": "agent-environment-515DzBqFrzAkFY2XfdFTac",
+        "parent": null,
+        "created_at": "2026-11-22T12:14:38.657872",
+        "created_by": "service:platform",
+        "updated_at": "2026-11-22T12:14:38.657883",
+        "updated_by": "service:platform",
+        "db_version": 1
+      }
+    }
+  }
+}

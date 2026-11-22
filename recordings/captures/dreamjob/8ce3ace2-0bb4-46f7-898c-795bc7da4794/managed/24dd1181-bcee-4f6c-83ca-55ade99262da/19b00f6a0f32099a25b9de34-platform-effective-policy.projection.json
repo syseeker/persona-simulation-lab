@@ -1,0 +1,56 @@
+{
+  "status": "effective",
+  "policy": {
+    "filesystem_policy": {
+      "include_workdir": true,
+      "read_only": [
+        "/usr",
+        "/bin",
+        "/lib",
+        "/etc",
+        "/opt",
+        "/proc",
+        "/dev/urandom",
+        "/var/log"
+      ],
+      "read_write": [
+        "/workspace",
+        "[private-path]",
+        "/sandbox",
+        "/tmp",
+        "/dev/null",
+        "/dev/shm"
+      ]
+    },
+    "landlock": {
+      "compatibility": "hard_requirement"
+    },
+    "network_policies": {
+      "nemo_helix": {
+        "binaries": [
+          {
+            "path": "/opt/uv/python/*/bin/python3*"
+          },
+          {
+            "path": "/usr/bin/curl"
+          }
+        ],
+        "endpoints": [
+          {
+            "access": "full",
+            "enforcement": "enforce",
+            "host": "host.docker.internal",
+            "port": 8080,
+            "protocol": "rest"
+          }
+        ],
+        "name": "nemo-helix-egress"
+      }
+    },
+    "process": {
+      "run_as_group": "sandbox",
+      "run_as_user": "sandbox"
+    },
+    "version": 1
+  }
+}

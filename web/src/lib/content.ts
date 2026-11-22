@@ -90,8 +90,8 @@ export const stages: Stage[] = [
     id: 'situation',
     title: 'Create a situation',
     pain: 'How do I turn background data into a meaningful test without presenting invented traits as facts?',
-    component: 'UserSim preparation · authored constraints · Data Designer in the dream-job story',
-    journey: 'Prepare data and explicit circumstances',
+    component: 'UserSim preparation · authored constraints · Data Designer',
+    journey: 'Prepare data and simulate interaction',
     description: 'Photography and board games use authored requests and explicit constraints, with no Designer step. Only the dream-job preset illustrates Designer preparation of hypothetical brand preferences and a salary band. Preserve original records and derived lineage; no generation occurs in this wireframe.',
     input: 'The preset’s authored request and constraints; only dream job adds a closed generation schema.',
     output: 'A resolved authored situation, or a separately labelled hypothetical overlay for the dream-job story.',
@@ -182,7 +182,7 @@ export const stages: Stage[] = [
   "id": "investigate",
   "title": "Investigate execution",
   "pain": "Why did the advisor say that, and where did the calls go?",
-  "component": "Relay · saved records · role-labelled call ledger",
+  "component": "Relay · saved actions · model calls for the advisor, learner and judges",
   "journey": "Observe the same execution",
   "description": "Choose a saved public turn, model call or MCP request and inspect its attributable native evidence. Relay covers target execution; application records also account for simulator, checker and judge roles. Missing correlations stay explicit.",
   "input": "The selected condition, episode, public turn and saved records.",
@@ -533,7 +533,7 @@ export const scenarioDetails: Record<ScenarioId, Partial<Record<StageId, Scenari
     routing: {
       input: 'Frozen retail-learning inputs and Deep Agents harness for an explicit fixed-versus-Switchyard comparison.',
       output: 'Native model decisions, completed and failed conditions, actual usage and explicit availability limits.',
-      description: 'Within each inventory, fixed and Switchyard conditions use identical public inputs, catalogue, harness and output limit. The requested Gemma/GLM pool and a separate available-Nemotron diagnostic keep independent results. Inspect native metadata and actual responses; a configured candidate or a selected model alone does not establish an improvement.',
+      description: 'Within each inventory, fixed and Switchyard conditions use identical public inputs, catalogue, harness and output limit. The MiniMax/Mistral comparison pool and separate Nemotron diagnostic keep independent results; historical Gemma/GLM failures remain recorded. Inspect native metadata and actual responses; a configured candidate or a selected model alone does not establish an improvement.',
     },
     evaluate: {
       input: 'Saved public turns, frozen provider facts, request audit and explicitly disclosed constraints.',
@@ -622,7 +622,7 @@ export const faqs: FAQ[] = [
   {
     id: 'routing-receipt', group: 'Execution and evidence', stage: 'routing', component: 'routing',
     question: 'How do I verify which model Switchyard chose?',
-    answer: 'Open retail learning’s routing lesson and compare the native decision metadata with the returned provider model, usage, reply and evaluation. The requested Gemma/GLM pool and separate available-Nemotron diagnostic retain independent results. Endpoint probes do not establish a completed multi-turn comparison; failures and unknown usage remain visible. A configured pool or an unchanged selected model does not establish an improvement.',
+    answer: 'Open retail learning’s routing lesson and compare the native decision metadata with the returned provider model, usage, reply and evaluation. The MiniMax/Mistral pool and separate Nemotron diagnostic retain independent results, alongside the historical Gemma/GLM failures. Endpoint probes do not establish a completed multi-turn comparison; failures and unknown usage remain visible. A configured pool or an unchanged selected model does not establish an improvement.',
   },
   {
     id: 'app-code', group: 'Execution and evidence', stage: 'investigate', component: 'records',

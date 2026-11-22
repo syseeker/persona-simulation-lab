@@ -1,0 +1,8 @@
+{
+  "engine": "NeMo Data Designer",
+  "version": "0.10.0",
+  "model_calls": 1,
+  "native_output_sha256": "f65d6c60b520a0e0d57239043749ced0fcbf183a858c112a5d5bd486a95867df",
+  "warnings": [],
+  "record_count": 1
+}

@@ -6,14 +6,17 @@
   import IntegrationGraph from '#lib/IntegrationGraph.svelte';
   import PanelDivider from '#lib/PanelDivider.svelte';
   import DatasetsPage from '#lib/DatasetsPage.svelte';
+  import MetadataPage from '#lib/MetadataPage.svelte';
+  import {conceptOperations,validSelection} from '../lib/teaching/selection';
   import {stages,scenarios,faqs,legacyStageIds} from '#lib/content.ts';
   import {learningResources} from '#lib/learningResources.ts';
   import {lessonFor,componentById,operationById,resolveComponent} from '#lib/lessonArchitecture.ts';
   import '../style.css';
-  type Page='why'|'map'|'qa'|'datasets';
+  type Page='why'|'map'|'qa'|'datasets'|'metadata';
   let page=$state<Page>('map'),scenarioId=$state('photography'),liveMode=$state(false);
   let liveRuns=$state<Record<string,string|null>>({photography:null,boardgames:null,dreamjob:null});
   let personaSource=$state('ngc'),lockedPersona=$state<Record<string,any>|null>(null);
+  let reviewContext=$state<Record<string,any>|null>(null),metadataFocus=$state(''),metadataCondition=$state(''),conditionId=$state('');
   let setupOpen=$state(true),detailed=$state(false),stageIndex=$state(0),turnIndex=$state(0),focused=$state(false);
   let search=$state(''),qaSearch=$state(''),qaGroup=$state('all'),labels=$state(true);
   let selected=$state<string|null>(null),operationId=$state(''),playing=$state(false),notice=$state(''),restored=$state(false),reducedMotion=$state(false);
@@ -28,22 +31,24 @@
   const harness=$derived(currentScenario.preset.harness),designer=$derived(currentScenario.preset.designer),routing=$derived(currentScenario.preset.routing);
   const hasDemo=$derived(['photography','boardgames','dreamjob'].includes(scenarioId));
   const nativeGuards=$derived(currentScenario.preset.guardrails),managed=$derived(currentScenario.preset.helix);
+  const routingSummary=$derived(reviewContext?.trace?.run?.verification?.routing?.verified?'Fixed and Switchyard comparisons verified':reviewContext?.context?.['routing-comparison.json']?'Routing comparison incomplete':'Routing evidence unavailable');
   const lastStage=stages.length-1,faqGroups=[...new Set(faqs.map(f=>f.group))];
   const stage=$derived(stages[stageIndex]);
-  const activeOperations=$derived(!focused?[]:operationId?[operationId]:selected?componentById[selected].operations.map(o=>o.id):lessonFor(scenarioId,stage.id).operations);
+  const applicationOnly=$derived(focused&&!selected&&scenarioId==='dreamjob'&&['run','investigate'].includes(stage.id)&&!!reviewContext?.context?.['application-turns.json']?.some((r:Record<string,any>)=>r.public_turn===turnIndex+1));
+  const activeOperations=$derived(!focused?[]:applicationOnly?['usersim.loop','models.admit','models.request','models.alias','guardrails.check']:selected?detailed?(operationId?[operationId]:componentById[selected]?.operations.map(o=>o.id)||[]):conceptOperations(scenarioId,selected,operationId):lessonFor(scenarioId,stage.id).operations);
   const filteredFaqs=$derived(faqs.filter(f=>(qaGroup==='all'||f.group===qaGroup)&&`${f.question} ${f.answer}`.toLowerCase().includes(qaSearch.toLowerCase())));
   function stopPlayback(){playing=false;}
   function scrollInspectorTop(){void tick().then(()=>document.querySelector('.trace-inspector .inspector-content')?.scrollTo({top:0,behavior:'instant'}));}
   function overview(){focused=false;selected=null;operationId='';search='';}
   function changePage(next:Page){stopPlayback();page=next;if(next==='map')overview();}
-  async function locate(index:number,node?:string){stopPlayback();page='map';liveMode=false;stageIndex=Math.max(0,index);selected=null;operationId='';focused=true;
+  async function locate(index:number,node?:string){stopPlayback();page='map';liveMode=false;stageIndex=Math.max(0,index);conditionId='';selected=null;operationId='';focused=true;
     if(node&&componentById[resolveComponent(node)]&&!lessonFor(scenarioId,stage.id).operations.some(id=>operationById[id].component===resolveComponent(node)))selected=resolveComponent(node);
     await tick();graph?.fit();scrollInspectorTop();}
-  function chooseStage(index:number){stopPlayback();liveMode=false;stageIndex=Math.max(0,Math.min(lastStage,index));selected=null;operationId='';focused=true;scrollInspectorTop();}
-  function inspect(component:string,operation=''){stopPlayback();const id=resolveComponent(component);if(!componentById[id])return;selected=id;operationId=operationById[operation]?.component===id?operation:'';focused=true;scrollInspectorTop();}
+  function chooseStage(index:number){stopPlayback();liveMode=false;stageIndex=Math.max(0,Math.min(lastStage,index));conditionId='';selected=null;operationId='';focused=true;scrollInspectorTop();}
+  function inspect(component:string,operation=''){stopPlayback();if(!validSelection(scenarioId,detailed,component,operation))return;selected=component;operationId=operation;focused=true;scrollInspectorTop();}
   function returnToPlayer(){selected=null;operationId='';scrollInspectorTop();}
-  function scenarioChanged(){stopPlayback();liveMode=false;stageIndex=0;turnIndex=0;overview();notice='';scrollInspectorTop();}
-  function changeDetail(value:boolean){stopPlayback();detailed=value;focused=false;search='';scrollInspectorTop();}
+  function scenarioChanged(){stopPlayback();liveMode=false;stageIndex=0;turnIndex=0;conditionId='';if(reviewContext?.scenario_id!==scenarioId)reviewContext=null;metadataFocus='';overview();notice='';scrollInspectorTop();}
+  function changeDetail(value:boolean){stopPlayback();detailed=value;overview();scrollInspectorTop();}
   function saveLayout(){notice=graph?.saveLayout()?`${detailed?'Detailed':'Simplified'} layout saved in this browser.`:'Browser storage is unavailable. This layout has not been saved.';}
   function resetLayout(){stopPlayback();overview();graph?.resetLayout();notice='Default layout restored for this view. The whole architecture is visible.';}
   onMount(()=>{
@@ -52,17 +57,16 @@
       const savedWidth=JSON.parse(localStorage.getItem(panelWidthKey)||'null');
       if(Number.isFinite(savedWidth)&&savedWidth>=panelMin&&savedWidth<=900)preferredPanelWidth=savedWidth;
       const saved=JSON.parse(localStorage.getItem(storageKey)||localStorage.getItem('persona-lab-guide-wireframe:selection:v3')||localStorage.getItem('persona-lab-guide-wireframe:selection:v2')||'null');
-      if([2,3,4].includes(saved?.version)){
-        if(['why','map','qa','datasets'].includes(saved.page))page=saved.page;
+      if([2,3,4,5].includes(saved?.version)){
+        if(['why','map','qa','datasets','metadata'].includes(saved.page))page=saved.page;
         if(scenarios.some(s=>s.id===saved.scenarioId))scenarioId=saved.scenarioId;
         if(typeof saved.setupOpen==='boolean')setupOpen=saved.setupOpen;
         const index=stages.findIndex(s=>s.id===(saved.version===2?legacyStageIds[saved.stageIndex]:saved.stageId));if(index>=0)stageIndex=index;
         if(typeof saved.detailed==='boolean')detailed=saved.detailed;
         if(Number.isInteger(saved.turnIndex)&&saved.turnIndex>=0&&saved.turnIndex<currentScenario.turns.length)turnIndex=saved.turnIndex;
-        if(saved.version===4){
+        if(saved.version>=4){
           focused=saved.focused===true;
-          if(componentById[saved.selected])selected=saved.selected;
-          if(operationById[saved.operationId]?.component===selected)operationId=saved.operationId;
+          if(saved.version===5&&validSelection(scenarioId,detailed,saved.selected,saved.operationId||'')){selected=saved.selected;operationId=saved.operationId||'';}
           if(saved.liveRuns&&typeof saved.liveRuns==='object')for(const candidate of scenarios){
             const id=saved.liveRuns[candidate.id];if(typeof id==='string'&&/^[a-f0-9-]{36}$/.test(id))liveRuns[candidate.id]=id;
           }
@@ -74,9 +78,9 @@
     }catch{/* Browser preferences are optional. */}
     restored=true;
   });
-  $effect(()=>{const snapshot={version:4,page,scenarioId,setupOpen,stageId:stage.id,turnIndex,detailed,selected,operationId,focused,liveRunId:liveRuns[scenarioId]||null,liveRuns};if(restored)try{localStorage.setItem(storageKey,JSON.stringify(snapshot));}catch{/* Optional preference. */}});
+  $effect(()=>{const snapshot={version:5,page,scenarioId,setupOpen,stageId:stage.id,turnIndex,detailed,selected,operationId,focused,liveRunId:liveRuns[scenarioId]||null,liveRuns};if(restored)try{localStorage.setItem(storageKey,JSON.stringify(snapshot));}catch{/* Optional preference. */}});
   $effect(()=>{const width=preferredPanelWidth;if(restored)try{if(width===null)localStorage.removeItem(panelWidthKey);else localStorage.setItem(panelWidthKey,JSON.stringify(width));}catch{/* Optional preference. */}});
-  $effect(()=>{if(!playing||page!=='map')return;const position=stageIndex;const timer=window.setTimeout(()=>{if(position<lastStage){stageIndex=position+1;selected=null;operationId='';scrollInspectorTop();}else playing=false;},4200);return()=>window.clearTimeout(timer);});
+  $effect(()=>{if(!playing||page!=='map')return;const position=stageIndex;const timer=window.setTimeout(()=>{if(position<lastStage){stageIndex=position+1;conditionId='';selected=null;operationId='';scrollInspectorTop();}else playing=false;},4200);return()=>window.clearTimeout(timer);});
 </script>
 
 <svelte:head><title>Building Citizen Apps with NeMo · Integration Guide</title></svelte:head>
@@ -87,7 +91,6 @@
       <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
       <span><strong>Building Citizen Apps with NeMo</strong><small>NeMo Stack Integration Guide · Singapore</small></span>
     </button>
-    <div class="header-note"><span class="status-pill">INTEGRATION GUIDE</span><span class="header-caption">{page === 'datasets' ? 'Schema reference · local profile reader · no inference' : 'Three scenario recordings · routing comparison limits retained'}</span></div>
   </header>
 
   <nav class="main-nav" aria-label="Main sections">
@@ -95,6 +98,7 @@
     <button class:active={page === 'map'} aria-current={page === 'map' ? 'page' : undefined} onclick={() => changePage('map')}><span>2</span> Integration Map</button>
     <button class:active={page === 'qa'} aria-current={page === 'qa' ? 'page' : undefined} onclick={() => changePage('qa')}><span>3</span> Q&amp;A</button>
     <button class:active={page === 'datasets'} aria-current={page === 'datasets' ? 'page' : undefined} onclick={() => changePage('datasets')}><span>4</span> Datasets</button>
+    <button class:active={page === 'metadata'} aria-current={page === 'metadata' ? 'page' : undefined} onclick={() => {metadataFocus='';metadataCondition='';changePage('metadata');}}><span>5</span> Metadata</button>
     <span class="nav-meta">One application. Nine developer lessons.</span>
   </nav>
 
@@ -103,15 +107,15 @@
       <section class="hero">
         <div class="eyebrow">BUILD · INSPECT · IMPROVE · CONTAIN</div>
         <h1>Build citizen-focused AI.<br />Follow the agent development journey.</h1>
-        <p class="hero-lead">How do synthetic test personas, an agent harness, application tools and the NeMo stack become one understandable application?</p>
+        <p class="hero-lead">Build and inspect a Singapore learning and community advisor, from choosing a test person to checking a deployed application.</p>
         <div class="north-star"><span class="eyebrow">NORTH STAR</span><p>Teach developers to build a citizen-focused AI application with country-specific Nemotron Personas and the NVIDIA NeMo stack—by seeing how it works, following its information flow, and opening the code and evidence behind it.</p></div>
-        <div class="application-story"><span class="eyebrow">THE APPLICATION WE ARE BUILDING</span><h2>A Singapore learning and community advisor</h2><p>Can it understand different needs, recommend only supported options, explain its behaviour, and run within controlled boundaries?</p><p class="muted">Learning is the goal: a hobby, a community activity or skills towards a dream job. Career aspirations guide course advice; they do not establish vacancies, endorsement or guaranteed outcomes.</p></div>
+        <p>Every lesson must answer:</p><p><strong>What are we trying to achieve → which components cooperate → what does the application call → what configuration is used → what comes back → where is the proof?</strong></p>
+        <div class="application-story"><span class="eyebrow">THE APPLICATION WE ARE BUILDING</span><h2>A Singapore learning and community advisor</h2><p>This project builds an AI advisor that helps people find courses and community activities suited to their goals, budget and available time. A beginner looking for a photography class, a resident interested in board games and a retail worker exploring new skills put the same application to different tests.</p><p>The advisor retrieves published course information, explains what is known and asks when important details are missing. Country-specific synthetic personas provide test participants; the NeMo integrations support simulated conversations, agent execution, tracing, evaluation and controlled deployment. The guide connects each design decision to its calling code, recorded settings and observed result.</p></div>
       </section>
 
       <section class="editorial-section">
         <div class="section-heading"><div><span class="eyebrow">THE DEVELOPER'S JOURNEY</span><h2>Nine steps. One connected application.</h2></div><button class="text-button" onclick={() => locate(0)}>Follow the journey <span aria-hidden="true">→</span></button></div>
         <JourneyChart onselect={(index) => locate(index)} />
-        <p class="section-intro">Prepare data, build and connect the agent, inspect its behaviour, measure changes and deploy with controlled access. A baseline model is configured before the first run; routing is a later, explicit experiment.</p>
         <div class="lesson-grid">{#each stages as lesson, i}
           <article class="lesson-card">
             <div class="card-number">{String(i + 1).padStart(2, '0')} <span>{lesson.journey}</span></div>
@@ -134,7 +138,7 @@
       <section class="editorial-section">
         <h2>Know what you are looking at.</h2>
         <div class="availability-grid"><div><span class="tag">TRACE WALKTHROUGH</span><h3>Follow one request</h3><p>Choose a scenario and advance through nine stages. Explanatory flows connect its recorded inputs, actual operations and results.</p></div><div><span class="tag muted-tag">CODE AND LOGS</span><h3>Open the relevant detail</h3><p>Application calls and configuration link to committed repository symbols. Scenario logs open the matching fixed recording; missing evidence and failed comparisons stay explicit.</p></div><div><span class="tag muted-tag">EXPLICIT LIVE RUN</span><h3>Run a real interaction</h3><p>Simulate a Session opens separate execution controls. Check prerequisites, lock one test persona, then start a new saved condition.</p></div></div>
-        <details class="disclosure"><summary>Prerequisites and integration limits</summary><p>The actual lab needs local persona data and configured model endpoints. Designer, Helix evaluation and Platform adapters retain their separately compatible environments. NGC scope is Singapore Nemotron Personas Extended only.</p><p>Each scenario supplies its own recorded native evidence. Historical records do not establish current live readiness. Retail's requested Gemma/GLM comparison timed out; the separate native-routing diagnostic does not replace it. The dynamic Docker profile retains its recorded host-ingress limitation.</p><p>The guide reads installed originals and curated scenario packs. Source/log inspection and playback start no inference.</p></details>
+        <details class="disclosure"><summary>Prerequisites and integration limits</summary><p>The actual lab needs local persona data and configured model endpoints. Designer, Helix evaluation and Platform adapters retain their separately compatible environments. NGC scope is Singapore Nemotron Personas Extended only.</p><p>Each scenario supplies its own recorded native evidence. Historical records do not establish current live readiness. The selected retail recording identifies the model inventory, verification results and deployment limitations actually observed; earlier failed conditions remain in the verification history.</p><p>The guide reads installed originals and curated scenario packs. Source/log inspection and playback start no inference.</p></details>
         <button class="primary large" onclick={() => locate(0)}>Explore the Integration Map <span aria-hidden="true">→</span></button>
       </section>
       <footer class="editorial-footer">Current code and selected-run evidence are distinct. Each scenario has its own recording; failed comparisons remain visible.</footer>
@@ -151,7 +155,7 @@
       <div class="workspace" bind:clientWidth={workspaceWidth} style:--inspector-width={`${panelWidth}px`}>
         <div class="graph-column">
           <div class="canvas-caption"><span>{focused?'Highlighted paths explain the selected lesson or operation; logs establish what actually ran.':'Whole architecture · select a lesson or operation to follow its information flow.'}</span><span class="illustration-label">{hasDemo?'Curated scenario recording':'Planned scenario · no execution evidence'}</span></div>
-          <div class="graph-host"><IntegrationGraph bind:this={graph} {detailed} {scenarioId} active={activeOperations} {focused} {search} {labels} {selected} oninspect={inspect} /></div>
+          <div class="graph-host"><IntegrationGraph bind:this={graph} {detailed} {scenarioId} {applicationOnly} active={activeOperations} {focused} {search} {labels} {selected} oninspect={inspect} /></div>
           <div class="graph-footer"><div class="flow-legend"><span><i class="prep"></i>Preparation</span><span><i class="request"></i>Request / response</span><span><i class="telemetry"></i>Evidence</span><span><i class="control"></i>Deployment control</span></div><span>{reducedMotion ? 'Reduced motion' : 'Arrows indicate direction'}</span></div>
           <div class="graph-context"><strong>{currentScenario.title}</strong><span>{managed?'Standalone baseline + separate Helix-managed OpenShell session':hasDemo?'Standalone OpenShell · no Helix':'Standalone OpenShell preview · no Helix'} · {routing==='switchyard'?'Fixed baseline + Switchyard comparisons':'Fixed model via LiteLLM'} · {harness==='deepagents'?'Fabric + Deep Agents':'Fabric + Hermes'}</span></div>
         </div>
@@ -162,16 +166,17 @@
           <details class="scenario-setup" bind:open={setupOpen}>
             <summary aria-label="Toggle scenario summary"><span class="setup-summary">Scenario summary</span><span class="setup-action">{setupOpen?'Hide summary':'Show summary'}</span></summary>
             <div class="scenario-setup-body">
+              {#if reviewContext?.state==='recorded'}<div class="record-state" data-testid="record-state"><strong>Selected demo · {reviewContext.run_id.slice(0,8)}</strong><p>{reviewContext.trace.run.status} · cleanup {reviewContext.trace.run.cleanup_confirmed?'confirmed':'not confirmed'} · {reviewContext.trace.usage.calls} model calls across the advisor, learner and judges.</p>{#if reviewContext.trace.developer_review}<p>{reviewContext.trace.developer_review.summary}</p>{/if}{#if reviewContext.trace.run.error}<p role="alert">{reviewContext.trace.run.error}</p>{/if}</div>{:else if reviewContext}<p>{reviewContext.notice}</p>{/if}
               <p class="preset-summary">{harness==='deepagents'?'Fabric + LangChain Deep Agents':'Fabric + Hermes'} · {currentScenario.preset.baseline}</p>
               <p class="preset-constraints">{currentScenario.preset.constraints}</p>
-              <p class="preset-allocation">{currentScenario.turns.length} public {currentScenario.turns.length===1?'turn':'turns'} · {designer?'Designer overlay recorded':'Designer enrichment skipped'} · {routing==='switchyard'?'Routing diagnostic recorded · requested pool incomplete':'Fixed routing'} · {nativeGuards?(hasDemo?'Native Guardrails recorded':'Native Guardrails planned'):'Native Guardrails omitted'} · {managed?'Helix evaluation, job and managed session recorded':hasDemo?'Standalone OpenShell verified · Helix omitted':'Standalone OpenShell planned · Helix omitted'}</p>
+              <p class="preset-allocation">{currentScenario.turns.length} public {currentScenario.turns.length===1?'turn':'turns'} · {designer?'Designer overlay recorded':'Designer enrichment skipped'} · {routing==='switchyard'?routingSummary:'Fixed routing'} · {nativeGuards?(hasDemo?'Native Guardrails recorded':'Native Guardrails planned'):'Native Guardrails omitted'} · {managed?'Helix evaluation, job and managed session recorded':hasDemo?'Standalone OpenShell verified · Helix omitted':'Standalone OpenShell planned · Helix omitted'}</p>
             </div>
           </details>
           <div class="inspector-content" data-testid="trace-content">
             {#if liveMode}
               <LiveSessionPanel {scenarioId} bind:runId={liveRuns[scenarioId]} bind:source={personaSource} bind:persona={lockedPersona} />
             {:else}
-              <JourneyPanel {scenarioId} stageId={stage.id} {detailed} component={selected||''} operation={operationId} {focused} bind:turnIndex oninspect={inspect} onback={returnToPlayer} onfollow={()=>chooseStage(stageIndex)} onlesson={chooseStage} />
+              <JourneyPanel {scenarioId} stageId={stage.id} {detailed} component={selected||''} operation={operationId} {focused} bind:turnIndex bind:conditionId onback={returnToPlayer} onfollow={()=>chooseStage(stageIndex)} oncontext={value=>reviewContext=value} onmetadata={(id,condition)=>{metadataFocus=id;metadataCondition=condition||'';changePage('metadata');}} />
             {/if}
           </div>
           <div class="player-footer"><span class="footer-step">Step {stageIndex+1} of {stages.length}</span><div class="playback-controls"><button onclick={()=>chooseStage(stageIndex-1)} disabled={stageIndex===0}>← Back</button><button class="primary" onclick={()=>chooseStage(stageIndex+1)} disabled={stageIndex===lastStage}>Next →</button><button aria-pressed={playing} onclick={()=>{if(stageIndex===lastStage)stageIndex=0;returnToPlayer();liveMode=false;focused=true;playing=!playing;}}>{playing?'Pause':'Play'}</button><button onclick={()=>{chooseStage(0);turnIndex=0;}} aria-label="Reset playback">Reset</button></div></div>
@@ -179,6 +184,8 @@
         </aside>
       </div>
     </section>
+  {:else if page === 'metadata'}
+    <MetadataPage {scenarioId} focusRequirement={metadataFocus} focusCondition={metadataCondition} onScenarioChange={id=>{scenarioId=id;scenarioChanged();}} />
   {:else if page === 'datasets'}
     <DatasetsPage onchoose={() => locate(0, 'personas')} />
   {:else}

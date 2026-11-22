@@ -1,0 +1,50 @@
+[
+  {
+    "turn": 2,
+    "content": "Salary alone does not establish a training budget, affordability or funding eligibility. What is your total training budget in Singapore dollars? On which days of the week can you study?\n\nPreviously retrieved programme: (SCTP) Advanced Certificate in Data Communications and Visualisation for Business Analyst (SF-007). Official source: https://academy.smu.edu.sg/courses/sctp-adv-cert-data-comm-and-visual-biz-analyst",
+    "schema_version": 1,
+    "public_turn": 2,
+    "owner": "application",
+    "status": "delivered",
+    "response_origin": "application_constraint_clarification",
+    "execution_kind": "application_clarification",
+    "agent_invoked": false,
+    "inference_calls": 0,
+    "application_response_id": "application-c89e08ec1ee24fd28d34773fc26f0168",
+    "missing_constraints": [
+      "budget_sgd",
+      "days"
+    ],
+    "model_proposal_sha256": null,
+    "original_word_count": null,
+    "model_proposal_rule_failures": [],
+    "model_proposal_rule_status": "not_invoked",
+    "model_proposal_semantically_certified": false,
+    "delivered_word_count": 48,
+    "delivered_content_sha256": "04708e6861cd384839ce1d8247e794f950fa193c69b4114787a6b4a88427f304",
+    "source_ids": [
+      "SF-007"
+    ],
+    "source_hashes": {
+      "SF-007": "1e66bb3b30ffe4a15ed1e8d8e7f86c3038cb303f829df84f1cc199850c722a0c"
+    },
+    "native_tool_evidence": [],
+    "excluded_source_ids": [],
+    "public_preferences": {
+      "goal": "retail sales inventory data analytics visualisation Excel",
+      "budget_sgd": null,
+      "days": null,
+      "planning_area": null,
+      "known_skills": null,
+      "kind": null
+    },
+    "source_provenance": {
+      "SF-007": {
+        "public_turn": 1,
+        "native_ids": [
+          "01a20328-ffb7-7762-a932-7d2e9a8b72cd"
+        ]
+      }
+    }
+  }
+]

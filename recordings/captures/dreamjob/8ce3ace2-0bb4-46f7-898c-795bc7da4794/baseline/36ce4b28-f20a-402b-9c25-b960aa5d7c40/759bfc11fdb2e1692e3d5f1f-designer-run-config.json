@@ -1,0 +1,19 @@
+{
+  "disable_early_shutdown": false,
+  "shutdown_error_rate": 0.5,
+  "shutdown_error_window": 10,
+  "buffer_size": 1000,
+  "max_concurrent_row_groups": 1,
+  "max_in_flight_tasks": 1,
+  "non_inference_max_parallel_workers": 4,
+  "max_conversation_restarts": 0,
+  "max_conversation_correction_steps": 0,
+  "async_trace": true,
+  "write_scheduler_events": false,
+  "display_tui": false,
+  "progress_interval": 5.0,
+  "otel_metrics_port": null,
+  "preserve_dropped_columns": true,
+  "jinja_rendering_engine": "secure",
+  "request_admission": null
+}

@@ -56,6 +56,26 @@ Each archive also contains a standalone `recover.py` copy of this checker. From
 the archive directory, `python3 recover.py .` verifies it without the checkout.
 The immutable public v0.1/v0.2 source archives are separate and remain unchanged.
 
+## Superseded publication attempts · 22 November 2026
+
+Four untracked photography/board-games publication attempts were archived under
+`.private/history/20261122T120816466155Z-superseded-publication-attempts/`:
+182 files, 783,364 bytes, preserving their `recordings/` trees. Host ownership and
+open-file checks preceded copying; every hash, size and timestamp was verified,
+including a complete restore into a new temporary directory, before originals
+were removed. Raw runs, tracked immutable packs and the latest photography pack
+were unchanged. The archive's `completion-receipt.json` records the checks.
+
+This publication archive uses its narrowly scoped `recover-recordings.py`, rather
+than the output checker for `runs/` and `artifacts/`:
+
+```bash
+python3 .private/history/20261122T120816466155Z-superseded-publication-attempts/recover-recordings.py .private/history/20261122T120816466155Z-superseded-publication-attempts --restore /tmp/NEW_RECOVERY_DESTINATION
+```
+
+Choose a destination that does not exist. Recovery verifies data and writes files;
+it does not promote a demo, execute a probe or overwrite current recordings.
+
 ## Current versus historical documentation
 
 README, plan, walkthrough, architecture, contracts and verification describe the

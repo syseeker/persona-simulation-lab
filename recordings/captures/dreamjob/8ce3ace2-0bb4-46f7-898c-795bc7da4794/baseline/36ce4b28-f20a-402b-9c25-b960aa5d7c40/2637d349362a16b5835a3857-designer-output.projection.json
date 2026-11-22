@@ -1,0 +1,11 @@
+{
+  "hypothesis": true,
+  "fields": {
+    "preferred_brands": [
+      "UNIQLO",
+      "Decathlon"
+    ],
+    "monthly_salary_range_sgd": "2500-3499",
+    "learning_situation": "Analyze retail sales data for a familiar brand, identify inventory trends, and create visual dashboards to support stock replenishment decisions."
+  }
+}

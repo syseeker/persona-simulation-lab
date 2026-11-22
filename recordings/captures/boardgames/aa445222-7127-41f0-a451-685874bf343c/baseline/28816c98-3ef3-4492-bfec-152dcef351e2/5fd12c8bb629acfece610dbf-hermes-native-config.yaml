@@ -1,0 +1,30 @@
+model:
+  provider: openai-compatible
+  default: nvidia/nemotron-3.5-lightning-30b-a3b
+  base_url: http://127.0.0.1:18476/v1
+agent:
+  max_turns: 24
+terminal:
+  backend: local
+  cwd: /workspace/run/workspace
+  timeout: 60
+auxiliary:
+  title_generation:
+    enabled: false
+skills:
+  external_dirs:
+  - /opt/lab/runtime-skills/course-advisor
+mcp_servers:
+  catalogue:
+    enabled: true
+    command: /opt/lab/.venv/bin/python
+    args:
+    - -m
+    - learning_lab.course_mcp
+    env:
+      LAB_CATALOGUE_FILE: /workspace/run/catalogue-snapshot.json
+      LAB_MCP_EVIDENCE_FILE: /workspace/run/mcp-tools-list.jsonl
+      LAB_PREFERENCES_FILE: /workspace/run/preferences.json
+platform_toolsets:
+  cli:
+  - mcp-catalogue

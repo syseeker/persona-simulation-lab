@@ -1,0 +1,610 @@
+{
+  "run": {
+    "schema": "citizen-journey/v1",
+    "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+    "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+    "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+    "scenario_id": "photography",
+    "status": "completed",
+    "created_at": "2026-11-22T11:54:02.950213+00:00",
+    "started_at": "2026-11-22T11:54:03.058510+00:00",
+    "ended_at": "2026-11-22T11:54:25.506325+00:00",
+    "stage": "deploy",
+    "calls": 5,
+    "cleanup_confirmed": true,
+    "configuration": {
+      "harness": "deepagents",
+      "fabric": true,
+      "route": "fixed",
+      "proxy": "LiteLLM",
+      "execution": "standalone OpenShell",
+      "designer": false,
+      "guardrails": false,
+      "helix": false,
+      "turn_limit": 1,
+      "model_call_limit": 120,
+      "output_tokens": 1024
+    },
+    "source_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+    "source_hashes": {
+      "src/learning_lab/journey.py": "276f7732e8dd2b38b8ecc9b80537964b38d3f37589768eec58169d8dd917fb0a",
+      "src/learning_lab/datasets.py": "0f9f7af968f29b16e5c84998d80858945d12ff2e470ab194f429e9b53378703a",
+      "src/learning_lab/stories.py": "61be8b8c87aee42a843044f8a5eac2842d9af74b203a82d9a2faa643a97f94d0",
+      "src/learning_lab/simulation.py": "0c4f6acbb03a34809b2736dcb22ab7608739bdcf8a2d5119d732ca0f6ffed59c",
+      "src/learning_lab/fabric_target.py": "4b293e6dfba146b9cd40c54621bb2fd1207ec61e5f7f67490f54ae879b568775",
+      "src/learning_lab/course_mcp.py": "2c7d05e09aa50a6d156b9dd5eac93c3a2adda016e9d1779b1c76075514d3c973",
+      "src/learning_lab/catalogue.py": "db256e366d50addce67242e5ef9c16b225ab88b8f5e11bd8c72a9be51ed84280",
+      "src/learning_lab/inference.py": "f8dd324180c188a45b6c489cd89b57c61bf839538214f7594890a048d452719e",
+      "integrations/proxy/litellm.yaml": "432feebd4bdcaafc11aa6e202c7e359b3c2b71fdd5645717cdd8b9f8e48520fb",
+      "src/learning_lab/settings.py": "2f938000cce64f7b21e4e52ec5ddd553ab12424d3a1ec845dcf935cab4b431a0",
+      "src/learning_lab/journey_checks.py": "1a627cd32264e418badcf0fbb2fab39cc109f6568b4df14499efa1c363ec9df1",
+      "src/learning_lab/sandbox.py": "5f4f6ddbeb819c979a05372826cf8ac1d59dc494999eac206178cf0519a002bb",
+      "src/learning_lab/sandbox_runtime.py": "00b066f683ee4a109a8e41baa12b4687e62db445128a01d09ccb1a8312c7e841",
+      "src/learning_lab/behavioural_safeguards.py": "3bd7e9ffef6224077f0a9419a7c532ae8565a11a34dac8ead2565a5cb231bf87"
+    },
+    "catalogue_sha256": "a0fec3e3c5e358f0e2913ad89d4c06dc17625d3724114eb9adc12940e53d66af",
+    "native_thread_id": "c3c88e99-7046-4c60-ae0b-24a27cde2f89",
+    "evaluation_passed": 9,
+    "evaluation_total": 9,
+    "baseline_status": "completed",
+    "capture_schema": "citizen-captures/v1",
+    "capture_coverage": {
+      "required": 28,
+      "captured": 28,
+      "complete": true,
+      "missing": []
+    }
+  },
+  "conversation": [
+    {
+      "turn": 1,
+      "role": "user",
+      "content": "Hi, I'm looking for a beginner photography class that meets on Saturdays and costs under S$50. Do you have any recommendations?"
+    },
+    {
+      "turn": 1,
+      "public_turn": 1,
+      "role": "assistant",
+      "content": "Here’s a shortlist that matches your criteria (Saturday class, ≤ S$50):\n\n- **Photography and Photo Enhancement with AI (AI30)** – Toa Payoh West CC  \n  • **Venue:** Toa Payoh West CC (planning area: Toa Payoh)  \n  • **Schedule:** Saturday, 14:00‑17:00, one 3‑hour session on 12 Dec 2026  \n  • **Fee:** S$10 (materials fee may apply; other checkout costs unconfirmed)  \n  • **Content:** Smartphone photo capture and AI‑assisted editing  \n  • **Link:** https://www.onepa.gov.sg/courses/photography-and-photo-enhancement-with-ai-ai30-c027245625  \n\n**Unresolved constraints**  \n- The venue is in Toa Payoh; proximity to your preferred area is unverified.  \n- Additional material fees and funding eligibility are unconfirmed.  \n- No other Saturday‑only courses under S$50 appear in this snapshot.  \n\nIf you’d like to explore a different topic, a broader budget, or a different day, just let me know!",
+      "outcome": {
+        "status": "valid",
+        "code": "public_answer",
+        "reason": "A nonempty public answer was saved; factual checks are separate."
+      },
+      "thread_id": "c3c88e99-7046-4c60-ae0b-24a27cde2f89",
+      "preferences": {
+        "goal": "photography",
+        "budget_sgd": 50.0,
+        "days": [
+          5
+        ],
+        "planning_area": null,
+        "known_skills": null,
+        "kind": null
+      }
+    }
+  ],
+  "source_lock": {
+    "source": "ngc",
+    "source_revision": "0.0.1",
+    "original_sha256": "0ef70355417745611d26f1469d35728c1430454f8f10936a34682e38726451dc",
+    "kind": "immutable original",
+    "source_url": "https://catalog.ngc.nvidia.com/orgs/nvidia/teams/nemotron-personas/resources/nemotron-personas-dataset-en_sg",
+    "conditioning": "Original synthetic OCEAN fields"
+  },
+  "situation": {
+    "kind": "authored situation; Designer intentionally skipped",
+    "goal": "beginner photography",
+    "day": "Saturday",
+    "budget_sgd": 50,
+    "disclosure": "The advisor receives only what the public user messages state."
+  },
+  "usage": {
+    "calls": 5,
+    "records": [
+      {
+        "call": 1,
+        "role": "user",
+        "mode": "live",
+        "status": "completed",
+        "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "provider_route": "litellm",
+        "requested_model": "lab-support",
+        "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "finish_reason": "stop",
+        "output_token_limit": 1024,
+        "usage": {
+          "completion_tokens": 32,
+          "prompt_tokens": 1773,
+          "total_tokens": 1805,
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "latency_ms": 1152,
+        "http_status": 200,
+        "rate_limit_headers": {},
+        "rate_limit_header_source": "litellm"
+      },
+      {
+        "call": 2,
+        "role": "judge",
+        "mode": "live",
+        "status": "completed",
+        "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "provider_route": "litellm",
+        "requested_model": "lab-support",
+        "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "finish_reason": "stop",
+        "output_token_limit": 1024,
+        "usage": {
+          "completion_tokens": 76,
+          "prompt_tokens": 162,
+          "total_tokens": 238,
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "latency_ms": 986,
+        "http_status": 200,
+        "rate_limit_headers": {},
+        "rate_limit_header_source": "litellm"
+      },
+      {
+        "call": 3,
+        "role": "assistant",
+        "mode": "live",
+        "status": "completed",
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "provider_route": "litellm",
+        "requested_model": "lab-advisor-fixed",
+        "selected_model": "openai/nvidia/nemotron-3.5-lightning-30b-a3b",
+        "finish_reason": "tool_calls",
+        "output_token_limit": 1024,
+        "usage": {
+          "completion_tokens": 53,
+          "prompt_tokens": 1800,
+          "total_tokens": 1853,
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "latency_ms": 767,
+        "tool_surface": {
+          "source": "application_allowlist",
+          "received": [
+            "ls",
+            "read_file",
+            "write_file",
+            "edit_file",
+            "delete",
+            "glob",
+            "grep",
+            "task",
+            "search_courses",
+            "get_course_details",
+            "compare_courses"
+          ],
+          "exposed": [
+            "search_courses",
+            "get_course_details",
+            "compare_courses"
+          ],
+          "withheld": [
+            "ls",
+            "read_file",
+            "write_file",
+            "edit_file",
+            "delete",
+            "glob",
+            "grep",
+            "task"
+          ]
+        },
+        "control_request_id": "2bb6cf23-cc36-4e7b-b227-a84b9ea3d873",
+        "thread_id": "c3c88e99-7046-4c60-ae0b-24a27cde2f89",
+        "transport": "openshell-native-exec",
+        "http_status": 200,
+        "rate_limit_headers": {},
+        "rate_limit_header_source": "litellm"
+      },
+      {
+        "call": 4,
+        "role": "assistant",
+        "mode": "live",
+        "status": "completed",
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "provider_route": "litellm",
+        "requested_model": "lab-advisor-fixed",
+        "selected_model": "openai/nvidia/nemotron-3.5-lightning-30b-a3b",
+        "finish_reason": "stop",
+        "output_token_limit": 1024,
+        "usage": {
+          "completion_tokens": 283,
+          "prompt_tokens": 2562,
+          "total_tokens": 2845,
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "latency_ms": 1782,
+        "tool_surface": {
+          "source": "application_allowlist",
+          "received": [
+            "ls",
+            "read_file",
+            "write_file",
+            "edit_file",
+            "delete",
+            "glob",
+            "grep",
+            "task",
+            "search_courses",
+            "get_course_details",
+            "compare_courses"
+          ],
+          "exposed": [
+            "search_courses",
+            "get_course_details",
+            "compare_courses"
+          ],
+          "withheld": [
+            "ls",
+            "read_file",
+            "write_file",
+            "edit_file",
+            "delete",
+            "glob",
+            "grep",
+            "task"
+          ]
+        },
+        "control_request_id": "5887902c-bb68-4377-957f-470566f8b447",
+        "thread_id": "c3c88e99-7046-4c60-ae0b-24a27cde2f89",
+        "transport": "openshell-native-exec",
+        "http_status": 200,
+        "rate_limit_headers": {},
+        "rate_limit_header_source": "litellm"
+      },
+      {
+        "call": 5,
+        "role": "judge",
+        "mode": "live",
+        "status": "completed",
+        "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "provider_route": "litellm",
+        "requested_model": "lab-support",
+        "selected_model": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "finish_reason": "stop",
+        "output_token_limit": 1024,
+        "usage": {
+          "completion_tokens": 126,
+          "prompt_tokens": 517,
+          "total_tokens": 643,
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          },
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "latency_ms": 1492,
+        "http_status": 200,
+        "rate_limit_headers": {},
+        "rate_limit_header_source": "litellm"
+      }
+    ]
+  },
+  "evaluation": {
+    "kind": "application assertions",
+    "rows": [
+      {
+        "id": "public-answer",
+        "criterion": "A valid public answer was saved",
+        "expected": true,
+        "actual": true,
+        "status": "pass",
+        "reason": "A transport result, empty answer or error string does not count as advice.",
+        "evidence": [
+          "public-conversation.json"
+        ],
+        "implementation": "application assertion; no model judge"
+      },
+      {
+        "id": "source-lock",
+        "criterion": "The test persona has an unchanged original hash",
+        "expected": true,
+        "actual": true,
+        "status": "pass",
+        "reason": "This checks the saved lock receipt, not representativeness or citizenship.",
+        "evidence": [
+          "source-lock.json"
+        ],
+        "implementation": "application assertion; no model judge"
+      },
+      {
+        "id": "public-situation",
+        "criterion": "The public opening actually states the selected situation",
+        "expected": {
+          "budget_sgd": 50.0,
+          "days": [
+            5
+          ]
+        },
+        "actual": {
+          "budget_sgd": 50.0,
+          "days": [
+            5
+          ]
+        },
+        "status": "pass",
+        "reason": "Generated UserSim wording may vary; omitted constraints do not count as a successful Saturday/S$50 demonstration.",
+        "evidence": [
+          "public-conversation.json",
+          "situation.json"
+        ],
+        "implementation": "application assertion; no model judge"
+      },
+      {
+        "id": "grounding-0",
+        "criterion": "Recommendation links and IDs belong to the frozen catalogue",
+        "expected": true,
+        "actual": true,
+        "status": "pass",
+        "reason": "An exact catalogue URL identifies a listing; internal course IDs are optional. Other factual sentences still need review.",
+        "evidence": [
+          "public-conversation.json",
+          "catalogue-snapshot.json"
+        ],
+        "implementation": "application assertion; no model judge"
+      },
+      {
+        "id": "location-0",
+        "criterion": "Explicit venue planning-area claims match the cited facts",
+        "expected": true,
+        "actual": true,
+        "status": "pass",
+        "reason": "Checks explicit planning-area attribution phrases: ['toa payoh']; cited source areas: ['toa payoh']. This does not establish proximity or cover every geographic expression.",
+        "evidence": [
+          "public-conversation.json",
+          "catalogue-snapshot.json"
+        ],
+        "implementation": "application assertion; no model judge"
+      },
+      {
+        "id": "fee-0",
+        "criterion": "Explicit fee fields match published catalogue amounts",
+        "expected": true,
+        "actual": true,
+        "status": "pass",
+        "reason": "Checks labelled fee amounts [10.0] against published amounts [10.0]; does not infer an all-in total.",
+        "evidence": [
+          "public-conversation.json",
+          "catalogue-snapshot.json"
+        ],
+        "implementation": "application assertion; no model judge"
+      },
+      {
+        "id": "constraints-0",
+        "criterion": "Recommended listings respect the publicly stated budget and day",
+        "expected": true,
+        "actual": true,
+        "status": "pass",
+        "reason": "Constraints are extracted only from the saved public learner turn, never the private persona.",
+        "evidence": [
+          "public-conversation.json",
+          "catalogue-snapshot.json"
+        ],
+        "implementation": "application assertion; no model judge"
+      },
+      {
+        "id": "assurances-0",
+        "criterion": "No unsupported fee or funding assurance pattern",
+        "expected": false,
+        "actual": false,
+        "status": "pass",
+        "reason": "A narrow phrase check; a pass does not certify every financial statement.",
+        "evidence": [
+          "public-conversation.json"
+        ],
+        "implementation": "application assertion; no model judge"
+      },
+      {
+        "id": "native-tools",
+        "criterion": "Native tool evidence includes a completed catalogue request",
+        "expected": true,
+        "actual": true,
+        "status": "pass",
+        "reason": "Native Relay evidence is required; an application log saying “searched” is insufficient.",
+        "evidence": [
+          "native/fabric-traces/relay.jsonl"
+        ],
+        "implementation": "application assertion; no model judge"
+      }
+    ],
+    "passed": 9,
+    "total": 9,
+    "coverage": "Exact course URLs/IDs, explicit planning-area and fee phrases, source lock, stated constraints, selected assurance patterns and native tool evidence. Other factual phrasing, proximity, seats and personal eligibility require review.",
+    "inference_calls": 0,
+    "helix_used": false
+  },
+  "relay": {
+    "scopes": [
+      {
+        "id": "34fd8a448c670b7d89394485:01a2031b-6d32-7612-9220-768db297b47e",
+        "uuid": "01a2031b-6d32-7612-9220-768db297b47e",
+        "parent_uuid": "c3c88e99-7046-4c60-ae0b-24a27cde2f89",
+        "parent_id": "34fd8a448c670b7d89394485:c3c88e99-7046-4c60-ae0b-24a27cde2f89",
+        "category": "agent",
+        "name": "deepagents-request",
+        "status": "completed",
+        "started_at": "2026-11-22T11:54:18.802365816+00:00",
+        "ended_at": "2026-11-22T11:54:22.865456879+00:00",
+        "duration_ms": 4063.091,
+        "parent_available": false
+      },
+      {
+        "id": "34fd8a448c670b7d89394485:01a2031b-6d37-7241-8e6f-b0fd48d6bb08",
+        "uuid": "01a2031b-6d37-7241-8e6f-b0fd48d6bb08",
+        "parent_uuid": "01a2031b-6d32-7612-9220-768db297b47e",
+        "parent_id": "34fd8a448c670b7d89394485:01a2031b-6d32-7612-9220-768db297b47e",
+        "category": "agent",
+        "name": "DeepAgent",
+        "status": "completed",
+        "started_at": "2026-11-22T11:54:18.807733121+00:00",
+        "ended_at": "2026-11-22T11:54:22.865115+00:00",
+        "duration_ms": 4057.382,
+        "parent_available": true
+      },
+      {
+        "id": "34fd8a448c670b7d89394485:01a2031b-6d48-7f90-9811-5e409dd24b2d",
+        "uuid": "01a2031b-6d48-7f90-9811-5e409dd24b2d",
+        "parent_uuid": "01a2031b-6d37-7241-8e6f-b0fd48d6bb08",
+        "parent_id": "34fd8a448c670b7d89394485:01a2031b-6d37-7241-8e6f-b0fd48d6bb08",
+        "category": "llm",
+        "name": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "status": "completed",
+        "started_at": "2026-11-22T11:54:18.826907467+00:00",
+        "ended_at": "2026-11-22T11:54:19.624889007+00:00",
+        "duration_ms": 797.982,
+        "parent_available": true
+      },
+      {
+        "id": "34fd8a448c670b7d89394485:01a2031b-706d-73c1-a3d8-017e392e43ff",
+        "uuid": "01a2031b-706d-73c1-a3d8-017e392e43ff",
+        "parent_uuid": "01a2031b-6d37-7241-8e6f-b0fd48d6bb08",
+        "parent_id": "34fd8a448c670b7d89394485:01a2031b-6d37-7241-8e6f-b0fd48d6bb08",
+        "category": "tool",
+        "name": "search_courses",
+        "status": "completed",
+        "started_at": "2026-11-22T11:54:19.629342886+00:00",
+        "ended_at": "2026-11-22T11:54:21.048164739+00:00",
+        "duration_ms": 1418.822,
+        "parent_available": true
+      },
+      {
+        "id": "34fd8a448c670b7d89394485:01a2031b-7600-7940-970f-b8c6fdfd4a5c",
+        "uuid": "01a2031b-7600-7940-970f-b8c6fdfd4a5c",
+        "parent_uuid": "01a2031b-6d37-7241-8e6f-b0fd48d6bb08",
+        "parent_id": "34fd8a448c670b7d89394485:01a2031b-6d37-7241-8e6f-b0fd48d6bb08",
+        "category": "llm",
+        "name": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "status": "completed",
+        "started_at": "2026-11-22T11:54:21.057720870+00:00",
+        "ended_at": "2026-11-22T11:54:22.856058839+00:00",
+        "duration_ms": 1798.338,
+        "parent_available": true
+      }
+    ],
+    "notices": [
+      "Sanitized native projection: payloads/private prompts/local paths omitted; native IDs/parents/status unchanged.",
+      "Gateway calls and native model scopes have no verified automatic span join."
+    ]
+  },
+  "tools": [
+    {
+      "name": "search_courses",
+      "arguments": {
+        "budget_sgd": 50,
+        "days": [
+          5
+        ],
+        "goal": "photography"
+      },
+      "result": {
+        "snapshot_date": "2026-11-10",
+        "as_of": "2026-11-22",
+        "matches": [
+          {
+            "course": {
+              "id": "CC-001",
+              "title": "Photography and Photo Enhancement with AI (AI30)",
+              "provider": "Toa Payoh West CC",
+              "kind": "community",
+              "summary": "Learn smartphone photo capture and AI-assisted editing.",
+              "tags": [
+                "photography",
+                "photo",
+                "smartphone",
+                "ai",
+                "creative"
+              ],
+              "source_url": "https://www.onepa.gov.sg/courses/photography-and-photo-enhancement-with-ai-ai30-c027245625",
+              "captured_on": "2026-11-10",
+              "venue": "Toa Payoh West CC",
+              "planning_area": "Toa Payoh",
+              "price_min_sgd": 10.0,
+              "price_max_sgd": 10.0,
+              "extra_cost_sgd": null,
+              "cost_note": "Published course-fee range; add the stated material fee. Other checkout costs are unconfirmed.",
+              "start_date": "2026-12-12",
+              "end_date": "2026-12-12",
+              "registration_closes": "2026-12-12",
+              "weekdays": [
+                5
+              ],
+              "schedule_note": "14:00-17:00; one session.",
+              "duration_hours": 3.0,
+              "duration_months": null,
+              "prerequisites": [],
+              "prerequisite_note": "Access to Gemini on a smartphone or browser is required.",
+              "languages": null,
+              "funding_note": "Personal eligibility is unverified; check the official course listing and provider.",
+              "availability": "listed"
+            },
+            "score": 30,
+            "matched_terms": [
+              "photo",
+              "photography",
+              "smartphone"
+            ],
+            "confirm": [
+              "Confirm a place is still available",
+              "Confirm personal funding eligibility",
+              "Additional costs are unconfirmed"
+            ]
+          }
+        ],
+        "excluded": [
+          {
+            "id": "CC-002",
+            "reason": "Published class days conflict with availability"
+          },
+          {
+            "id": "CC-003",
+            "reason": "Published upper fee including known extras exceeds the budget"
+          },
+          {
+            "id": "CC-004",
+            "reason": "Published class days conflict with availability"
+          },
+          {
+            "id": "CC-005",
+            "reason": "Published class days conflict with availability"
+          },
+          {
+            "id": "CC-006",
+            "reason": "Published class days conflict with availability"
+          }
+        ],
+        "notice": "Curated snapshot. Check the official listing before acting; individual eligibility is unknown."
+      },
+      "scope_uuid": "01a2031b-706d-73c1-a3d8-017e392e43ff",
+      "status": "completed",
+      "evidence_origin": "native_relay"
+    }
+  ],
+  "developer_review": null
+}

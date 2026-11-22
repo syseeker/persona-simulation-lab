@@ -1,0 +1,10 @@
+{"at": "2026-11-22T12:10:04.233677+00:00", "event": "configuration_saved", "thread_id": "f3226dfc-5a64-47ed-98d7-48ee744d29ae", "harness": "deepagents", "model_route": "fixed"}
+{"at": "2026-11-22T12:10:04.337997+00:00", "event": "plan_created"}
+{"at": "2026-11-22T12:10:04.432497+00:00", "event": "doctor_completed", "status": "pass"}
+{"at": "2026-11-22T12:10:10.617638+00:00", "event": "runtime_started", "thread_id": "f3226dfc-5a64-47ed-98d7-48ee744d29ae"}
+{"at": "2026-11-22T12:10:10.640090+00:00", "event": "invocation_started", "thread_id": "f3226dfc-5a64-47ed-98d7-48ee744d29ae"}
+{"at": "2026-11-22T12:10:26.066926+00:00", "event": "invocation_finished", "status": "succeeded", "runtime_id": "runtime-1795349404527-88-2", "invocation_id": "invocation-1795349410642-88-5"}
+{"at": "2026-11-22T12:10:26.108819+00:00", "event": "application_clarification_prepared", "public_turn": 2, "agent_invoked": false, "application_response_id": "application-e80744f140b0434aa5f265735105b7f1"}
+{"at": "2026-11-22T12:10:26.147877+00:00", "event": "invocation_started", "thread_id": "f3226dfc-5a64-47ed-98d7-48ee744d29ae"}
+{"at": "2026-11-22T12:10:34.213547+00:00", "event": "invocation_finished", "status": "succeeded", "runtime_id": "runtime-1795349404527-88-2", "invocation_id": "invocation-1795349426149-88-9"}
+{"at": "2026-11-22T12:10:34.600547+00:00", "event": "runtime_closed", "thread_id": "f3226dfc-5a64-47ed-98d7-48ee744d29ae"}

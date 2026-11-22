@@ -1,0 +1,67 @@
+{
+  "active_version": 2,
+  "config_revision": 5469698284815751569,
+  "hash": "e671c43a472ae63b5f4ca611cfdd1684dcf64394acb200e18b5287565121a844",
+  "policy": {
+    "filesystem_policy": {
+      "include_workdir": false,
+      "read_only": [
+        "/bin",
+        "/lib",
+        "/lib64",
+        "/usr",
+        "/opt/lab",
+        "/opt/hermes",
+        "/opt/python",
+        "/etc",
+        "/proc/self",
+        "/dev/urandom",
+        "/var/log",
+        "/proc"
+      ],
+      "read_write": [
+        "/workspace",
+        "/tmp",
+        "/dev/null"
+      ]
+    },
+    "landlock": {
+      "compatibility": "best_effort"
+    },
+    "network_policies": {
+      "model_bridge": {
+        "binaries": [
+          {
+            "path": "/usr/local/bin/python3.12"
+          },
+          {
+            "path": "/opt/python/cpython-3.14.0-linux-x86_64-gnu/bin/python3.14"
+          }
+        ],
+        "endpoints": [
+          {
+            "enforcement": "enforce",
+            "host": "127.0.0.1",
+            "port": 18476,
+            "protocol": "rest",
+            "rules": [
+              {
+                "allow": {
+                  "method": "POST",
+                  "path": "/v1/chat/completions"
+                }
+              }
+            ]
+          }
+        ],
+        "name": "in-sandbox-model-bridge"
+      }
+    },
+    "version": 1
+  },
+  "policy_source": "sandbox",
+  "sandbox": "cl-1b5beee3c59540df",
+  "scope": "sandbox",
+  "status": "effective",
+  "version": 2
+}

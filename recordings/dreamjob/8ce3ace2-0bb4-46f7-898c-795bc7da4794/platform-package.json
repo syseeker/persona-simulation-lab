@@ -1,0 +1,24 @@
+{
+  "projection": "Allowlisted native/public configuration fields.",
+  "harness": "deepagents",
+  "scenario_id": "dreamjob",
+  "image": "citizen-retail-helix:0.4.0",
+  "built": true,
+  "stage": "image-built",
+  "catalogue_sha256": "d2ce4abda853f269d2fd1c93bb60dbd2cd1468a6562e8bc3fbb7140744e38dfa",
+  "public_preset": {
+    "preferences_mode": "frozen-public-preset",
+    "frozen_preferences": {
+      "goal": "retail sales inventory data analytics visualisation Excel",
+      "budget_sgd": 3000,
+      "days": [
+        5,
+        6
+      ],
+      "planning_area": null,
+      "known_skills": null,
+      "kind": null
+    },
+    "preferences_sha256": "9dd3fd7b655c8201074cac85a529012c13521b956e132a83974fb25c4aa82888"
+  }
+}

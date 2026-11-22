@@ -1,0 +1,118 @@
+[
+  {
+    "turn": 1,
+    "role": "user",
+    "content": "Hi, I'm interested in learning how to play board games—could you help me find a class or community session?"
+  },
+  {
+    "turn": 1,
+    "role": "assistant",
+    "content": "No courses matching “board games” were found in the current catalogue snapshot (as of 2026‑11‑22). Would you like to explore a different topic—such as a specific game genre, game‑design fundamentals, or another hobby?",
+    "outcome": {
+      "status": "valid",
+      "code": "public_answer",
+      "reason": "A nonempty public answer was saved; factual checks are separate."
+    },
+    "tools": [
+      {
+        "name": "mcp__catalogue__search_courses",
+        "arguments": {
+          "goal": "board games"
+        },
+        "result": {
+          "snapshot_date": "2026-11-10",
+          "as_of": "2026-11-22",
+          "matches": [],
+          "excluded": [
+            {
+              "id": "CC-004",
+              "reason": "Registration closed for this listed intake"
+            }
+          ],
+          "notice": "Curated snapshot. Check the official listing before acting; individual eligibility is unknown."
+        },
+        "content": "{\"snapshot_date\": \"2026-11-10\", \"as_of\": \"2026-11-22\", \"matches\": [], \"excluded\": [{\"id\": \"CC-004\", \"reason\": \"Registration closed for this listed intake\"}], \"notice\": \"Curated snapshot. Check the official listing before acting; individual eligibility is unknown.\"}",
+        "scope_uuid": "01a20328-1859-7642-997f-36e673810178",
+        "status": "completed",
+        "evidence_origin": "native_relay"
+      }
+    ],
+    "preferences": {
+      "goal": "board games",
+      "budget_sgd": null,
+      "days": null,
+      "planning_area": null,
+      "known_skills": null,
+      "kind": null
+    },
+    "thread_id": "30a17a34-b2c6-4ad9-851a-e55a494eeb0a",
+    "public_turn": 1,
+    "fabric": {
+      "status": "succeeded",
+      "runtime_id": "runtime-1795349274198-88-2",
+      "invocation_id": "invocation-1795349287310-88-5",
+      "artifacts": [
+        "artifacts",
+        "root"
+      ]
+    }
+  },
+  {
+    "turn": 2,
+    "role": "user",
+    "content": "Oh, okay—so there aren't any board‑game classes right now. Is learning video‑game design the same as learning to play board games?"
+  },
+  {
+    "turn": 2,
+    "role": "assistant",
+    "content": "No, learning video‑game design is not the same as learning to play board games. Board‑game classes focus on rules, strategy, and group play of existing games, while video‑game design teaches programming, art, and systems creation for digital games. The current catalogue snapshot (as of 2026‑11‑22) has no entries for either “board games” or “video game design,” so there are no listed courses to recommend at this time. \n\nIf you’re interested in a different topic—such as a specific game genre, tabletop‑design fundamentals, or another hobby—let me know and I can search again.",
+    "outcome": {
+      "status": "valid",
+      "code": "public_answer",
+      "reason": "A nonempty public answer was saved; factual checks are separate."
+    },
+    "tools": [
+      {
+        "name": "mcp__catalogue__search_courses",
+        "arguments": {
+          "goal": "video game design"
+        },
+        "result": {
+          "snapshot_date": "2026-11-10",
+          "as_of": "2026-11-22",
+          "matches": [],
+          "excluded": [
+            {
+              "id": "CC-004",
+              "reason": "Registration closed for this listed intake"
+            }
+          ],
+          "notice": "Curated snapshot. Check the official listing before acting; individual eligibility is unknown."
+        },
+        "content": "{\"snapshot_date\": \"2026-11-10\", \"as_of\": \"2026-11-22\", \"matches\": [], \"excluded\": [{\"id\": \"CC-004\", \"reason\": \"Registration closed for this listed intake\"}], \"notice\": \"Curated snapshot. Check the official listing before acting; individual eligibility is unknown.\"}",
+        "scope_uuid": "01a20328-3391-7233-947c-e910f2896e7c",
+        "status": "completed",
+        "evidence_origin": "native_relay"
+      }
+    ],
+    "preferences": {
+      "goal": "board games",
+      "budget_sgd": null,
+      "days": null,
+      "planning_area": null,
+      "known_skills": null,
+      "kind": null
+    },
+    "thread_id": "30a17a34-b2c6-4ad9-851a-e55a494eeb0a",
+    "public_turn": 2,
+    "fabric": {
+      "status": "succeeded",
+      "runtime_id": "runtime-1795349274198-88-2",
+      "invocation_id": "invocation-1795349294337-88-9",
+      "artifacts": [
+        "artifacts",
+        "root"
+      ]
+    }
+  }
+]

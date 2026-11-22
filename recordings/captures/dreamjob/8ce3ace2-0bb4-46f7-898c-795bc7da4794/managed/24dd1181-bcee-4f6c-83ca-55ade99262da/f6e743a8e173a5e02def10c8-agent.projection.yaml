@@ -1,0 +1,35 @@
+name: citizen-retail-24dd1181bcee-agent
+description: Retail review owned by condition 24dd1181-bcee-4f6c-83ca-55ade99262da
+models:
+  default:
+    provider: openai-compatible
+    model: citizen-retail-advisor
+    temperature: 0.0
+    max_tokens: 1024
+runtime:
+  timeout_seconds: 120
+  max_turns: 24
+tools:
+  enabled:
+  - search_courses
+  - get_course_details
+  - compare_courses
+mcp:
+  servers:
+    catalogue:
+      transport: stdio
+      url: /workspace/.venv/bin/learning-lab-courses
+      env:
+        LAB_CATALOGUE_FILE: /workspace/catalogue/courses.json
+        LAB_MCP_EVIDENCE_FILE: /workspace/artifacts/mcp-tools-list.jsonl
+        LAB_PREFERENCES_PRESET_FILE: /workspace/scenarios/dreamjob/preferences.json
+        LAB_PREFERENCES_PRESET_SHA256: 9dd3fd7b655c8201074cac85a529012c13521b956e132a83974fb25c4aa82888
+        LAB_REQUIRE_PREFERENCES: '1'
+environment:
+  workspace: ./workspace
+  artifacts: ./artifacts
+  env:
+    LAB_CATALOGUE_FILE: /workspace/catalogue/courses.json
+skills:
+  paths:
+  - ./skills/course-advisor

@@ -1,0 +1,14 @@
+[
+  {
+    "kind": "assistant_quality",
+    "turn_idx": 1,
+    "rating": "failure",
+    "detail": "The user asked specifically about payment plans or financial aid options for someone earning a monthly salary between S$2,500–3,499. The assistant's response does not address this question at all. Instead, it shifts focus to asking about the user's total training budget and study days, which is irrelevant to the user's actual query. The response also repeats previously retrieved programme details without providing new information about financial support options. This constitutes a failure to add"
+  },
+  {
+    "kind": "assistant_quality",
+    "turn_idx": 2,
+    "rating": "failure",
+    "detail": "The user asked for alternatives for retail sales and inventory analysis that fit a S$3,000 budget, weekend-only study availability, and a preference for a shorter option. The assistant's response listed three unrelated short courses (IT Literacy, Fundamentals of Data Analytics & Visualization using Python, Data Analytics Begins With Me) with unconfirmed fees, durations, and study days, none of which address retail sales and inventory analysis or the user's constraints. The response fails to prov"
+  }
+]

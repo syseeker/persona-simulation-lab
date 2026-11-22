@@ -1,0 +1,73 @@
+{
+  "scopes": [
+    {
+      "id": "34fd8a448c670b7d89394485:01a2031b-6d32-7612-9220-768db297b47e",
+      "uuid": "01a2031b-6d32-7612-9220-768db297b47e",
+      "parent_uuid": "c3c88e99-7046-4c60-ae0b-24a27cde2f89",
+      "parent_id": "34fd8a448c670b7d89394485:c3c88e99-7046-4c60-ae0b-24a27cde2f89",
+      "category": "agent",
+      "name": "deepagents-request",
+      "status": "completed",
+      "started_at": "2026-11-22T11:54:18.802365816+00:00",
+      "ended_at": "2026-11-22T11:54:22.865456879+00:00",
+      "duration_ms": 4063.091,
+      "parent_available": false
+    },
+    {
+      "id": "34fd8a448c670b7d89394485:01a2031b-6d37-7241-8e6f-b0fd48d6bb08",
+      "uuid": "01a2031b-6d37-7241-8e6f-b0fd48d6bb08",
+      "parent_uuid": "01a2031b-6d32-7612-9220-768db297b47e",
+      "parent_id": "34fd8a448c670b7d89394485:01a2031b-6d32-7612-9220-768db297b47e",
+      "category": "agent",
+      "name": "DeepAgent",
+      "status": "completed",
+      "started_at": "2026-11-22T11:54:18.807733121+00:00",
+      "ended_at": "2026-11-22T11:54:22.865115+00:00",
+      "duration_ms": 4057.382,
+      "parent_available": true
+    },
+    {
+      "id": "34fd8a448c670b7d89394485:01a2031b-6d48-7f90-9811-5e409dd24b2d",
+      "uuid": "01a2031b-6d48-7f90-9811-5e409dd24b2d",
+      "parent_uuid": "01a2031b-6d37-7241-8e6f-b0fd48d6bb08",
+      "parent_id": "34fd8a448c670b7d89394485:01a2031b-6d37-7241-8e6f-b0fd48d6bb08",
+      "category": "llm",
+      "name": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "status": "completed",
+      "started_at": "2026-11-22T11:54:18.826907467+00:00",
+      "ended_at": "2026-11-22T11:54:19.624889007+00:00",
+      "duration_ms": 797.982,
+      "parent_available": true
+    },
+    {
+      "id": "34fd8a448c670b7d89394485:01a2031b-706d-73c1-a3d8-017e392e43ff",
+      "uuid": "01a2031b-706d-73c1-a3d8-017e392e43ff",
+      "parent_uuid": "01a2031b-6d37-7241-8e6f-b0fd48d6bb08",
+      "parent_id": "34fd8a448c670b7d89394485:01a2031b-6d37-7241-8e6f-b0fd48d6bb08",
+      "category": "tool",
+      "name": "search_courses",
+      "status": "completed",
+      "started_at": "2026-11-22T11:54:19.629342886+00:00",
+      "ended_at": "2026-11-22T11:54:21.048164739+00:00",
+      "duration_ms": 1418.822,
+      "parent_available": true
+    },
+    {
+      "id": "34fd8a448c670b7d89394485:01a2031b-7600-7940-970f-b8c6fdfd4a5c",
+      "uuid": "01a2031b-7600-7940-970f-b8c6fdfd4a5c",
+      "parent_uuid": "01a2031b-6d37-7241-8e6f-b0fd48d6bb08",
+      "parent_id": "34fd8a448c670b7d89394485:01a2031b-6d37-7241-8e6f-b0fd48d6bb08",
+      "category": "llm",
+      "name": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "status": "completed",
+      "started_at": "2026-11-22T11:54:21.057720870+00:00",
+      "ended_at": "2026-11-22T11:54:22.856058839+00:00",
+      "duration_ms": 1798.338,
+      "parent_available": true
+    }
+  ],
+  "notices": [
+    "Sanitized native projection: payloads/private prompts/local paths omitted; native IDs/parents/status unchanged.",
+    "Gateway calls and native model scopes have no verified automatic span join."
+  ]
+}

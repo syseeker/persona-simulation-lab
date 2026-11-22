@@ -1,0 +1,150 @@
+{
+  "kind": "application assertions",
+  "rows": [
+    {
+      "id": "two-turns",
+      "criterion": "Two public learner/advisor pairs were completed",
+      "expected": [
+        2,
+        2
+      ],
+      "actual": [
+        2,
+        2
+      ],
+      "status": "pass",
+      "reason": "An early stop or missing reply remains incomplete, rather than being padded with a transcript.",
+      "evidence": [
+        "public-conversation.json"
+      ],
+      "implementation": "application assertion; no model judge"
+    },
+    {
+      "id": "valid-answers",
+      "criterion": "Both replies are valid public answers",
+      "expected": true,
+      "actual": true,
+      "status": "pass",
+      "reason": "Checks empty/error/pseudo-tool output independently of transport success.",
+      "evidence": [
+        "public-conversation.json"
+      ],
+      "implementation": "application assertion; no model judge"
+    },
+    {
+      "id": "source-lock",
+      "criterion": "Original identity and revision are preserved",
+      "expected": true,
+      "actual": true,
+      "status": "pass",
+      "reason": "Saved provenance does not establish population coverage.",
+      "evidence": [
+        "source-lock.json"
+      ],
+      "implementation": "application assertion; no model judge"
+    },
+    {
+      "id": "followup",
+      "criterion": "The follow-up asks about game design",
+      "expected": true,
+      "actual": true,
+      "status": "pass",
+      "reason": "The actual UserSim follow-up must exercise the intended distinction.",
+      "evidence": [
+        "public-conversation.json"
+      ],
+      "implementation": "application assertion; no model judge"
+    },
+    {
+      "id": "catalogue-no-match",
+      "criterion": "The frozen catalogue has no board-game playing class",
+      "expected": [],
+      "actual": [],
+      "status": "pass",
+      "reason": "This is a dated catalogue result, not a claim about every provider.",
+      "evidence": [
+        "catalogue-snapshot.json"
+      ],
+      "implementation": "application assertion; no model judge"
+    },
+    {
+      "id": "honest-no-match",
+      "criterion": "The first reply acknowledges a catalogue limit",
+      "expected": true,
+      "actual": true,
+      "status": "pass",
+      "reason": "A narrow phrase check; review the linked reply for nuance.",
+      "evidence": [
+        "public-conversation.json"
+      ],
+      "implementation": "application assertion; no model judge"
+    },
+    {
+      "id": "no-invented-id-0",
+      "criterion": "Any cited course IDs exist in the snapshot",
+      "expected": true,
+      "actual": true,
+      "status": "pass",
+      "reason": "Does not certify unsupported claims without a course identifier.",
+      "evidence": [
+        "public-conversation.json",
+        "catalogue-snapshot.json"
+      ],
+      "implementation": "application assertion; no model judge"
+    },
+    {
+      "id": "distinguish-design",
+      "criterion": "Playing and designing games are distinguished",
+      "expected": true,
+      "actual": true,
+      "status": "pass",
+      "reason": "Checks selected explicit distinction phrases, including a non-negated separate skill set in the same sentence as board-game play and game design; not complete semantic or pedagogical quality.",
+      "evidence": [
+        "public-conversation.json"
+      ],
+      "implementation": "application assertion; no model judge"
+    },
+    {
+      "id": "no-invented-id-1",
+      "criterion": "Any cited course IDs exist in the snapshot",
+      "expected": true,
+      "actual": true,
+      "status": "pass",
+      "reason": "Does not certify unsupported claims without a course identifier.",
+      "evidence": [
+        "public-conversation.json",
+        "catalogue-snapshot.json"
+      ],
+      "implementation": "application assertion; no model judge"
+    },
+    {
+      "id": "one-thread",
+      "criterion": "Both replies use the same persistent native thread",
+      "expected": true,
+      "actual": true,
+      "status": "pass",
+      "reason": "Same-thread identity plus the follow-up checks persistence; it is not proof of cross-session memory.",
+      "evidence": [
+        "public-conversation.json"
+      ],
+      "implementation": "application assertion; no model judge"
+    },
+    {
+      "id": "native-tools",
+      "criterion": "A completed native catalogue search is attributable",
+      "expected": true,
+      "actual": true,
+      "status": "pass",
+      "reason": "Application intent logs cannot replace native tool execution.",
+      "evidence": [
+        "native-tools.json"
+      ],
+      "implementation": "application assertion; no model judge"
+    }
+  ],
+  "passed": 11,
+  "total": 11,
+  "coverage": "Two public pairs, explicit no-match/design distinction, valid answers, known IDs, same native thread and actual tool evidence. Semantic recommendation quality still requires review.",
+  "inference_calls": 0,
+  "helix_used": false
+}

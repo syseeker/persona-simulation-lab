@@ -1,0 +1,580 @@
+{
+  "scopes": [
+    {
+      "uuid": "01a2032b-66ae-76d2-a1fa-a0e3a2dbab63",
+      "parent_uuid": "cb024fed-bdcf-49c5-85a2-d795a8d65a19",
+      "category": "agent",
+      "name": "deepagents-request",
+      "status": "completed",
+      "started_at": "2026-11-22T12:11:45.710710357+00:00",
+      "ended_at": "2026-11-22T12:12:22.143501069+00:00",
+      "duration_ms": 36432.791,
+      "parent_available": false
+    },
+    {
+      "uuid": "01a2032b-66b3-7093-9066-1a66f98c6cf9",
+      "parent_uuid": "01a2032b-66ae-76d2-a1fa-a0e3a2dbab63",
+      "category": "agent",
+      "name": "DeepAgent",
+      "status": "completed",
+      "started_at": "2026-11-22T12:11:45.715977797+00:00",
+      "ended_at": "2026-11-22T12:12:22.142958+00:00",
+      "duration_ms": 36426.981,
+      "parent_available": true
+    },
+    {
+      "uuid": "01a2032b-66c4-70a2-ae61-7179f53c6a76",
+      "parent_uuid": "01a2032b-66b3-7093-9066-1a66f98c6cf9",
+      "category": "llm",
+      "name": "lab-advisor-capable",
+      "status": "completed",
+      "started_at": "2026-11-22T12:11:45.735688731+00:00",
+      "ended_at": "2026-11-22T12:11:48.768003788+00:00",
+      "duration_ms": 3032.315,
+      "parent_available": true
+    },
+    {
+      "uuid": "01a2032b-72a4-7723-8de4-3c56d6a5c7f9",
+      "parent_uuid": "01a2032b-66b3-7093-9066-1a66f98c6cf9",
+      "category": "tool",
+      "name": "get_course_details",
+      "status": "completed",
+      "started_at": "2026-11-22T12:11:48.772855952+00:00",
+      "ended_at": "2026-11-22T12:11:50.096596922+00:00",
+      "duration_ms": 1323.741,
+      "parent_available": true
+    },
+    {
+      "uuid": "01a2032b-77da-7343-8372-e3a0197f3b4e",
+      "parent_uuid": "01a2032b-66b3-7093-9066-1a66f98c6cf9",
+      "category": "llm",
+      "name": "lab-advisor-capable",
+      "status": "completed",
+      "started_at": "2026-11-22T12:11:50.108796216+00:00",
+      "ended_at": "2026-11-22T12:12:22.132883087+00:00",
+      "duration_ms": 32024.087,
+      "parent_available": true
+    },
+    {
+      "uuid": "01a2032b-f553-76f3-8656-cccb7b4429f3",
+      "parent_uuid": "cb024fed-bdcf-49c5-85a2-d795a8d65a19",
+      "category": "agent",
+      "name": "deepagents-request",
+      "status": "completed",
+      "started_at": "2026-11-22T12:12:22.227154080+00:00",
+      "ended_at": "2026-11-22T12:13:35.418961281+00:00",
+      "duration_ms": 73191.807,
+      "parent_available": false
+    },
+    {
+      "uuid": "01a2032b-f553-76f3-8656-ccd1bd29f26e",
+      "parent_uuid": "01a2032b-f553-76f3-8656-cccb7b4429f3",
+      "category": "agent",
+      "name": "DeepAgent",
+      "status": "completed",
+      "started_at": "2026-11-22T12:12:22.227550941+00:00",
+      "ended_at": "2026-11-22T12:13:35.417849+00:00",
+      "duration_ms": 73190.299,
+      "parent_available": true
+    },
+    {
+      "uuid": "01a2032b-f55a-7f33-ac62-aa5c6426f512",
+      "parent_uuid": "01a2032b-f553-76f3-8656-ccd1bd29f26e",
+      "category": "llm",
+      "name": "lab-advisor-capable",
+      "status": "completed",
+      "started_at": "2026-11-22T12:12:22.237630441+00:00",
+      "ended_at": "2026-11-22T12:12:29.749799611+00:00",
+      "duration_ms": 7512.169,
+      "parent_available": true
+    },
+    {
+      "uuid": "01a2032c-12bb-7421-b254-9d2af23de0cd",
+      "parent_uuid": "01a2032b-f553-76f3-8656-ccd1bd29f26e",
+      "category": "tool",
+      "name": "search_courses",
+      "status": "completed",
+      "started_at": "2026-11-22T12:12:29.755254679+00:00",
+      "ended_at": "2026-11-22T12:12:31.068489463+00:00",
+      "duration_ms": 1313.235,
+      "parent_available": true
+    },
+    {
+      "uuid": "01a2032c-12bb-7421-b254-9d3834df00ba",
+      "parent_uuid": "01a2032b-f553-76f3-8656-ccd1bd29f26e",
+      "category": "tool",
+      "name": "search_courses",
+      "status": "completed",
+      "started_at": "2026-11-22T12:12:29.755275624+00:00",
+      "ended_at": "2026-11-22T12:12:31.199186564+00:00",
+      "duration_ms": 1443.911,
+      "parent_available": true
+    },
+    {
+      "uuid": "01a2032c-1868-73f0-8285-fcfc892b7e7b",
+      "parent_uuid": "01a2032b-f553-76f3-8656-ccd1bd29f26e",
+      "category": "llm",
+      "name": "lab-advisor-capable",
+      "status": "completed",
+      "started_at": "2026-11-22T12:12:31.211877525+00:00",
+      "ended_at": "2026-11-22T12:13:01.409980745+00:00",
+      "duration_ms": 30198.103,
+      "parent_available": true
+    },
+    {
+      "uuid": "01a2032c-8e65-7163-a161-3b5c02893c90",
+      "parent_uuid": "01a2032b-f553-76f3-8656-ccd1bd29f26e",
+      "category": "tool",
+      "name": "search_courses",
+      "status": "completed",
+      "started_at": "2026-11-22T12:13:01.413403960+00:00",
+      "ended_at": "2026-11-22T12:13:02.773029784+00:00",
+      "duration_ms": 1359.626,
+      "parent_available": true
+    },
+    {
+      "uuid": "01a2032c-93bf-7e31-9df3-1747385acc10",
+      "parent_uuid": "01a2032b-f553-76f3-8656-ccd1bd29f26e",
+      "category": "llm",
+      "name": "lab-advisor-capable",
+      "status": "completed",
+      "started_at": "2026-11-22T12:13:02.786663987+00:00",
+      "ended_at": "2026-11-22T12:13:35.407578638+00:00",
+      "duration_ms": 32620.915,
+      "parent_available": true
+    }
+  ],
+  "tools": [
+    {
+      "name": "get_course_details",
+      "arguments": {
+        "course_id": "SF-007"
+      },
+      "result": {
+        "id": "SF-007",
+        "title": "(SCTP) Advanced Certificate in Data Communications and Visualisation for Business Analyst",
+        "provider": "SMU Academy",
+        "kind": "skillsfuture",
+        "summary": "Data visualisation, data preparation, charts, storytelling, dashboards and a capstone. Tools include Tableau, Excel and Python libraries. The published duration is 330 hours over three months; this is not the hypothetical six-month programme.",
+        "tags": [
+          "data",
+          "analytics",
+          "visualisation",
+          "visualization",
+          "excel",
+          "python",
+          "dashboards",
+          "storytelling"
+        ],
+        "source_url": "https://academy.smu.edu.sg/courses/sctp-adv-cert-data-comm-and-visual-biz-analyst",
+        "captured_on": "2026-11-21",
+        "venue": null,
+        "planning_area": null,
+        "price_min_sgd": 20928.0,
+        "price_max_sgd": 20928.0,
+        "extra_cost_sgd": null,
+        "cost_note": "Published full headline fee. Confirm all costs with the provider; reduced fees depend on eligibility.",
+        "start_date": null,
+        "end_date": null,
+        "registration_closes": null,
+        "weekdays": null,
+        "schedule_note": "330 hours over 3 months (12 weeks), including asynchronous, synchronous, classroom and assessment hours. Next start is to be advised; weekend-only attendance is not established.",
+        "duration_hours": 330.0,
+        "duration_months": 3,
+        "prerequisites": [],
+        "prerequisite_note": "Published application conditions include Singapore Citizen, Permanent Resident or LTVP+ holder; at least 21 years old; self-sponsored. Personal eligibility is not established.",
+        "languages": null,
+        "funding_note": "Provider lists conditional funded fees. Salary, a synthetic persona or a brand ambition does not establish eligibility or entitlement.",
+        "availability": "unknown",
+        "constraint_notes": []
+      },
+      "scope_uuid": "01a2032b-72a4-7723-8de4-3c56d6a5c7f9",
+      "status": "completed",
+      "evidence_origin": "native_relay"
+    },
+    {
+      "name": "search_courses",
+      "arguments": {
+        "budget_sgd": 3000,
+        "days": [
+          5,
+          6
+        ],
+        "goal": "retail sales inventory data analytics visualisation Excel dashboards",
+        "kind": "skillsfuture"
+      },
+      "result": {
+        "snapshot_date": "2026-11-21",
+        "as_of": "2026-11-22",
+        "matches": [
+          {
+            "course": {
+              "id": "SF-006",
+              "title": "IT Literacy - Basic Microsoft Excel",
+              "provider": "Institute of Technical Education",
+              "kind": "skillsfuture",
+              "summary": "Develop foundational spreadsheet and Excel skills.",
+              "tags": [
+                "excel",
+                "spreadsheet",
+                "computer",
+                "digital",
+                "office",
+                "data"
+              ],
+              "source_url": "https://www.aic.sg/Age-Well/Learning-and-Volunteerism/Learning-Opportunities/Computer-Skills",
+              "captured_on": "2026-11-10",
+              "venue": null,
+              "planning_area": null,
+              "price_min_sgd": null,
+              "price_max_sgd": null,
+              "extra_cost_sgd": null,
+              "cost_note": "Total unsubsidised fee has not been verified; confirm with the provider.",
+              "start_date": null,
+              "end_date": null,
+              "registration_closes": null,
+              "weekdays": null,
+              "schedule_note": "Confirm the next intake and timetable.",
+              "duration_hours": 7.0,
+              "duration_months": null,
+              "prerequisites": [],
+              "prerequisite_note": "AIC Age Well directory listing; confirm provider age, entry and intake requirements.",
+              "languages": null,
+              "funding_note": "AIC lists SkillsFuture Credit eligibility. Its published subsidised fee does not establish this learner’s entitlement.",
+              "availability": "unknown"
+            },
+            "score": 40,
+            "matched_terms": [
+              "data",
+              "excel",
+              "office",
+              "spreadsheet"
+            ],
+            "confirm": [
+              "Confirm a place is still available",
+              "Confirm personal funding eligibility",
+              "Next intake is unknown",
+              "Total fee is unknown; budget fit is unconfirmed",
+              "Timetable fit is unconfirmed"
+            ]
+          },
+          {
+            "course": {
+              "id": "SF-003",
+              "title": "Fundamentals of Data Analytics & Visualization using Python",
+              "provider": "National University of Singapore",
+              "kind": "skillsfuture",
+              "summary": "Practise Python data preparation, descriptive statistics and visualisation.",
+              "tags": [
+                "python",
+                "data",
+                "analytics",
+                "visualisation",
+                "coding"
+              ],
+              "source_url": "https://www.stat.nus.edu.sg/fundamentals-of-data-analytics-visualization-using-python/",
+              "captured_on": "2026-11-10",
+              "venue": null,
+              "planning_area": null,
+              "price_min_sgd": null,
+              "price_max_sgd": null,
+              "extra_cost_sgd": null,
+              "cost_note": "Total unsubsidised fee has not been verified; confirm with the provider.",
+              "start_date": null,
+              "end_date": null,
+              "registration_closes": null,
+              "weekdays": null,
+              "schedule_note": "Confirm the next intake and timetable.",
+              "duration_hours": null,
+              "duration_months": null,
+              "prerequisites": [],
+              "prerequisite_note": "Confirm entry requirements with the provider.",
+              "languages": null,
+              "funding_note": "NUS lists SSG funding. Individual subsidy and credit eligibility require official confirmation.",
+              "availability": "unknown"
+            },
+            "score": 30,
+            "matched_terms": [
+              "analytics",
+              "data",
+              "visualisation"
+            ],
+            "confirm": [
+              "Confirm a place is still available",
+              "Confirm personal funding eligibility",
+              "Next intake is unknown",
+              "Total fee is unknown; budget fit is unconfirmed",
+              "Timetable fit is unconfirmed"
+            ]
+          },
+          {
+            "course": {
+              "id": "SF-002",
+              "title": "Data Analytics Begins With Me",
+              "provider": "National University of Singapore",
+              "kind": "skillsfuture",
+              "summary": "Build an introductory understanding of data analytics.",
+              "tags": [
+                "data",
+                "analytics",
+                "business",
+                "workplace"
+              ],
+              "source_url": "https://www.stat.nus.edu.sg/education/cet/short-course/",
+              "captured_on": "2026-11-10",
+              "venue": null,
+              "planning_area": null,
+              "price_min_sgd": null,
+              "price_max_sgd": null,
+              "extra_cost_sgd": null,
+              "cost_note": "Total unsubsidised fee has not been verified; confirm with the provider.",
+              "start_date": null,
+              "end_date": null,
+              "registration_closes": null,
+              "weekdays": null,
+              "schedule_note": "Confirm the next intake and timetable.",
+              "duration_hours": null,
+              "duration_months": null,
+              "prerequisites": [],
+              "prerequisite_note": "Confirm entry requirements with the provider.",
+              "languages": null,
+              "funding_note": "NUS lists SSG funding. Individual subsidy and credit eligibility require official confirmation.",
+              "availability": "unknown"
+            },
+            "score": 20,
+            "matched_terms": [
+              "analytics",
+              "data"
+            ],
+            "confirm": [
+              "Confirm a place is still available",
+              "Confirm personal funding eligibility",
+              "Next intake is unknown",
+              "Total fee is unknown; budget fit is unconfirmed",
+              "Timetable fit is unconfirmed"
+            ]
+          }
+        ],
+        "excluded": [
+          {
+            "id": "SF-007",
+            "reason": "Published upper fee including known extras exceeds the budget"
+          }
+        ],
+        "notice": "Curated snapshot. Check the official listing before acting; individual eligibility is unknown."
+      },
+      "scope_uuid": "01a2032c-12bb-7421-b254-9d2af23de0cd",
+      "status": "completed",
+      "evidence_origin": "native_relay"
+    },
+    {
+      "name": "search_courses",
+      "arguments": {
+        "budget_sgd": 3000,
+        "days": [
+          5,
+          6
+        ],
+        "goal": "retail sales inventory analysis Excel data visualisation short course weekend",
+        "kind": "community"
+      },
+      "result": {
+        "snapshot_date": "2026-11-21",
+        "as_of": "2026-11-22",
+        "matches": [],
+        "excluded": [
+          {
+            "id": "CC-002",
+            "reason": "Published class days conflict with availability"
+          },
+          {
+            "id": "CC-004",
+            "reason": "Published class days conflict with availability"
+          },
+          {
+            "id": "CC-006",
+            "reason": "Published class days conflict with availability"
+          }
+        ],
+        "notice": "Curated snapshot. Check the official listing before acting; individual eligibility is unknown."
+      },
+      "scope_uuid": "01a2032c-12bb-7421-b254-9d3834df00ba",
+      "status": "completed",
+      "evidence_origin": "native_relay"
+    },
+    {
+      "name": "search_courses",
+      "arguments": {
+        "budget_sgd": 3000,
+        "days": [
+          5,
+          6
+        ],
+        "goal": "short Excel spreadsheet data analysis course for working adults weekend",
+        "kind": "skillsfuture"
+      },
+      "result": {
+        "snapshot_date": "2026-11-21",
+        "as_of": "2026-11-22",
+        "matches": [
+          {
+            "course": {
+              "id": "SF-006",
+              "title": "IT Literacy - Basic Microsoft Excel",
+              "provider": "Institute of Technical Education",
+              "kind": "skillsfuture",
+              "summary": "Develop foundational spreadsheet and Excel skills.",
+              "tags": [
+                "excel",
+                "spreadsheet",
+                "computer",
+                "digital",
+                "office",
+                "data"
+              ],
+              "source_url": "https://www.aic.sg/Age-Well/Learning-and-Volunteerism/Learning-Opportunities/Computer-Skills",
+              "captured_on": "2026-11-10",
+              "venue": null,
+              "planning_area": null,
+              "price_min_sgd": null,
+              "price_max_sgd": null,
+              "extra_cost_sgd": null,
+              "cost_note": "Total unsubsidised fee has not been verified; confirm with the provider.",
+              "start_date": null,
+              "end_date": null,
+              "registration_closes": null,
+              "weekdays": null,
+              "schedule_note": "Confirm the next intake and timetable.",
+              "duration_hours": 7.0,
+              "duration_months": null,
+              "prerequisites": [],
+              "prerequisite_note": "AIC Age Well directory listing; confirm provider age, entry and intake requirements.",
+              "languages": null,
+              "funding_note": "AIC lists SkillsFuture Credit eligibility. Its published subsidised fee does not establish this learner’s entitlement.",
+              "availability": "unknown"
+            },
+            "score": 40,
+            "matched_terms": [
+              "data",
+              "excel",
+              "office",
+              "spreadsheet"
+            ],
+            "confirm": [
+              "Confirm a place is still available",
+              "Confirm personal funding eligibility",
+              "Next intake is unknown",
+              "Total fee is unknown; budget fit is unconfirmed",
+              "Timetable fit is unconfirmed"
+            ]
+          },
+          {
+            "course": {
+              "id": "SF-002",
+              "title": "Data Analytics Begins With Me",
+              "provider": "National University of Singapore",
+              "kind": "skillsfuture",
+              "summary": "Build an introductory understanding of data analytics.",
+              "tags": [
+                "data",
+                "analytics",
+                "business",
+                "workplace"
+              ],
+              "source_url": "https://www.stat.nus.edu.sg/education/cet/short-course/",
+              "captured_on": "2026-11-10",
+              "venue": null,
+              "planning_area": null,
+              "price_min_sgd": null,
+              "price_max_sgd": null,
+              "extra_cost_sgd": null,
+              "cost_note": "Total unsubsidised fee has not been verified; confirm with the provider.",
+              "start_date": null,
+              "end_date": null,
+              "registration_closes": null,
+              "weekdays": null,
+              "schedule_note": "Confirm the next intake and timetable.",
+              "duration_hours": null,
+              "duration_months": null,
+              "prerequisites": [],
+              "prerequisite_note": "Confirm entry requirements with the provider.",
+              "languages": null,
+              "funding_note": "NUS lists SSG funding. Individual subsidy and credit eligibility require official confirmation.",
+              "availability": "unknown"
+            },
+            "score": 10,
+            "matched_terms": [
+              "data"
+            ],
+            "confirm": [
+              "Confirm a place is still available",
+              "Confirm personal funding eligibility",
+              "Next intake is unknown",
+              "Total fee is unknown; budget fit is unconfirmed",
+              "Timetable fit is unconfirmed"
+            ]
+          },
+          {
+            "course": {
+              "id": "SF-003",
+              "title": "Fundamentals of Data Analytics & Visualization using Python",
+              "provider": "National University of Singapore",
+              "kind": "skillsfuture",
+              "summary": "Practise Python data preparation, descriptive statistics and visualisation.",
+              "tags": [
+                "python",
+                "data",
+                "analytics",
+                "visualisation",
+                "coding"
+              ],
+              "source_url": "https://www.stat.nus.edu.sg/fundamentals-of-data-analytics-visualization-using-python/",
+              "captured_on": "2026-11-10",
+              "venue": null,
+              "planning_area": null,
+              "price_min_sgd": null,
+              "price_max_sgd": null,
+              "extra_cost_sgd": null,
+              "cost_note": "Total unsubsidised fee has not been verified; confirm with the provider.",
+              "start_date": null,
+              "end_date": null,
+              "registration_closes": null,
+              "weekdays": null,
+              "schedule_note": "Confirm the next intake and timetable.",
+              "duration_hours": null,
+              "duration_months": null,
+              "prerequisites": [],
+              "prerequisite_note": "Confirm entry requirements with the provider.",
+              "languages": null,
+              "funding_note": "NUS lists SSG funding. Individual subsidy and credit eligibility require official confirmation.",
+              "availability": "unknown"
+            },
+            "score": 10,
+            "matched_terms": [
+              "data"
+            ],
+            "confirm": [
+              "Confirm a place is still available",
+              "Confirm personal funding eligibility",
+              "Next intake is unknown",
+              "Total fee is unknown; budget fit is unconfirmed",
+              "Timetable fit is unconfirmed"
+            ]
+          }
+        ],
+        "excluded": [
+          {
+            "id": "SF-007",
+            "reason": "Published upper fee including known extras exceeds the budget"
+          }
+        ],
+        "notice": "Curated snapshot. Check the official listing before acting; individual eligibility is unknown."
+      },
+      "scope_uuid": "01a2032c-8e65-7163-a161-3b5c02893c90",
+      "status": "completed",
+      "evidence_origin": "native_relay"
+    }
+  ],
+  "notices": [],
+  "native_event_count": 28
+}

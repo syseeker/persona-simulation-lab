@@ -97,7 +97,7 @@ export const components: Component[] = [
     architecture:'https://docs.nvidia.com/nemo/fabric/latest/about-nemo-fabric/overview',
     workflow:'https://docs.nvidia.com/nemo/fabric/adapter-contract/overview',
     operations:[
-      op('fabric.config','Build FabricConfig and resolve the adapter','Application → FabricConfig',
+      op('fabric.config','Build the typed FabricConfig','Application → FabricConfig',
         'The application chooses a harness and connects instructions, model access, MCP and observability through typed configuration.',
         'Selected harness, model connection, course tools and instructions.','Saved Fabric configuration; resolved adapter.',
         'adapter_id; model provider/name; chat input, message output; timeout; tool allowlist; Relay config.',
@@ -323,7 +323,7 @@ export const scenarioIds = scenarios.map(s=>s.id) as ScenarioId[];
 export function preset(id:string) { return scenarios.find(s=>s.id===id)!.preset; }
 export function componentUsed(id:string, scenario:string) {
   const p=preset(scenario);
-  return id==='designer' ? p.designer : id==='routing' ? p.routing==='switchyard' : id==='guardrails' ? p.guardrails : ['helix','platform'].includes(id) ? p.helix : id==='checks' ? !p.helix : true;
+  return id==='designer' ? p.designer : id==='routing' ? p.routing==='switchyard' : id==='guardrails' ? p.guardrails : ['helix','platform'].includes(id) ? p.helix : true;
 }
 export function componentTitle(id:string, scenario:string) {
   return id==='harness' ? preset(scenario).harness==='hermes' ? 'Hermes' : 'LangChain Deep Agents' : componentById[id]?.title || id;
@@ -334,10 +334,10 @@ export function architectureUrl(id:string,scenario:string) {
 export function sourceId(id:string,scenario:string) {
   if(id==='checks.evaluate'&&scenario==='boardgames')return 'checks.boardgames';
   if(scenario==='dreamjob'){
-    const retail:Record<string,string>={'designer.schema':'retail.designer.schema','designer.generate':'retail.designer.generate','designer.lineage':'retail.designer.lineage','catalogue.freeze':'retail.catalogue','checks.evaluate':'retail.criteria','checks.coverage':'retail.criteria','models.alias':'retail.alias','platform.deploy':'retail.package'};
+    const retail:Record<string,string>={'designer.schema':'retail.designer.schema','designer.generate':'retail.designer.generate','designer.lineage':'retail.designer.lineage','catalogue.freeze':'retail.catalogue','checks.evaluate':'retail.criteria','checks.coverage':'retail.criteria','models.alias':'retail.alias'};
     if(retail[id])return retail[id];
   }
-  return id==='harness.context' && preset(scenario).harness==='hermes' ? 'hermes.environment' : operationById[id]?.call;
+  return operationById[id]?.call;
 }
 export function resolveComponent(id:string) {
   return ({people:'personas',testpeople:'personas',simulator:'usersim',application:'fabric',deepagents:'harness',hermes:'harness',courses:'mcp',models:'gateway',evidence:'relay',providers:'litellm',budget:'gateway',standalone:'openshell',transport:'openshell'} as Record<string,string>)[id] || id;

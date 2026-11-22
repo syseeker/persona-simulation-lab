@@ -1,0 +1,29 @@
+[
+  {
+    "turn": 1,
+    "role": "user",
+    "content": "Hi, I'm looking for a beginner photography class that meets on Saturdays and costs under S$50. Do you have any recommendations?"
+  },
+  {
+    "turn": 1,
+    "public_turn": 1,
+    "role": "assistant",
+    "content": "Here’s a shortlist that matches your criteria (Saturday class, ≤ S$50):\n\n- **Photography and Photo Enhancement with AI (AI30)** – Toa Payoh West CC  \n  • **Venue:** Toa Payoh West CC (planning area: Toa Payoh)  \n  • **Schedule:** Saturday, 14:00‑17:00, one 3‑hour session on 12 Dec 2026  \n  • **Fee:** S$10 (materials fee may apply; other checkout costs unconfirmed)  \n  • **Content:** Smartphone photo capture and AI‑assisted editing  \n  • **Link:** https://www.onepa.gov.sg/courses/photography-and-photo-enhancement-with-ai-ai30-c027245625  \n\n**Unresolved constraints**  \n- The venue is in Toa Payoh; proximity to your preferred area is unverified.  \n- Additional material fees and funding eligibility are unconfirmed.  \n- No other Saturday‑only courses under S$50 appear in this snapshot.  \n\nIf you’d like to explore a different topic, a broader budget, or a different day, just let me know!",
+    "outcome": {
+      "status": "valid",
+      "code": "public_answer",
+      "reason": "A nonempty public answer was saved; factual checks are separate."
+    },
+    "thread_id": "c3c88e99-7046-4c60-ae0b-24a27cde2f89",
+    "preferences": {
+      "goal": "photography",
+      "budget_sgd": 50.0,
+      "days": [
+        5
+      ],
+      "planning_area": null,
+      "known_skills": null,
+      "kind": null
+    }
+  }
+]

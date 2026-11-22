@@ -1,0 +1,45 @@
+{
+  "probe": "learning_advisor",
+  "configuration": {
+    "locale": "en_SG",
+    "max_turns": 1,
+    "max_steps": 10,
+    "max_query_attempts": 1,
+    "max_assistant_attempts": 1,
+    "enforce_user_language": true,
+    "context_compression": false,
+    "persona_grounding_ratio": 1.0,
+    "probe_options": {
+      "learning_advisor": {
+        "profile_only": false,
+        "story_id": "photography"
+      }
+    }
+  },
+  "outcome": {
+    "status": "ok",
+    "failure_class": null,
+    "failure_attribution": null,
+    "n_turns": 1,
+    "n_tool_calls": 0,
+    "n_user_query_attempts": 1,
+    "n_user_followup_retries": 0,
+    "n_assistant_inline_failures": 0,
+    "n_assistant_retries": 0,
+    "n_api_response_rerolls": 0,
+    "n_fourth_wall_triggers": 0,
+    "n_user_role_violations": 0,
+    "n_user_language_violations": 0,
+    "early_stop": false,
+    "per_model_calls": {
+      "user_model": 1,
+      "judge_model": 2,
+      "assistant_model": 1
+    },
+    "warning_count": 0
+  },
+  "behaviour_basis": "Original NGC Extended behavioural fields interpreted by the native UserSim preamble.",
+  "private_context_published": false,
+  "counting_notice": "A UserSim assistant activation calls the application, which may clarify without invoking an agent. Fabric invocations, model calls and course MCP calls are counted separately.",
+  "evaluation_notice": "Native in-loop judges ran. The optional post-loop UserSim eval/report commands were not invoked."
+}

@@ -10,6 +10,9 @@ test('the integrated guide starts no execution operation on entry', async ({ pag
       await route.fulfill({json:{state:'unavailable',scenario_id:'photography',trace:null,artifacts:[],sources:{}}});
     } else if (route.request().url().includes('/api/journey/demo-persona')) {
       await route.fulfill({json:{available:false,notice:'Offline test: source unavailable'}});
+    } else if (route.request().url().includes('/api/journey/metadata')) {
+      await route.fulfill({json:{schema:'citizen-guide-metadata/v1',scenario_id:'photography',run_id:null,
+        available:false,rows:[],conditions:[],inference_calls_for_inspection:0}});
     } else await route.abort('blockedbyclient');
   });
 
@@ -18,7 +21,7 @@ test('the integrated guide starts no execution operation on entry', async ({ pag
   await expect(page.getByRole('button', {name:'Simulate a Session',exact:true})).toBeEnabled();
   await expect(page.getByRole('button', {name:'Trace a Request',exact:true})).toHaveAttribute('aria-pressed','true');
   await page.waitForLoadState('networkidle');
-  expect(apiRequests.every(url=>/\/api\/journey\/(lesson|demo-persona)\?scenario_id=photography$/.test(url))).toBe(true);
+  expect(apiRequests.every(url=>/\/api\/journey\/(lesson|demo-persona|metadata)\?scenario_id=photography$/.test(url))).toBe(true);
 });
 
 test('retained metadata routes reach the real local worker without inference', async ({ request }) => {

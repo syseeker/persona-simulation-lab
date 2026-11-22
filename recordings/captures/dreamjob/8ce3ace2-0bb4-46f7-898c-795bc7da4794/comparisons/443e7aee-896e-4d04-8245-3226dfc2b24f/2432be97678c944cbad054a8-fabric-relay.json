@@ -1,0 +1,28 @@
+{
+  "relay": {
+    "config": {
+      "version": 1,
+      "components": [
+        {
+          "kind": "observability",
+          "enabled": true,
+          "config": {
+            "version": 4,
+            "atof": {
+              "enabled": true,
+              "sinks": [
+                {
+                  "type": "file",
+                  "output_directory": "/workspace/run/fabric-traces",
+                  "filename": "relay.jsonl",
+                  "mode": "append"
+                }
+              ]
+            },
+            "enable_full_payloads": false
+          }
+        }
+      ]
+    }
+  }
+}

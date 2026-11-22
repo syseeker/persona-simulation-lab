@@ -35,7 +35,7 @@ describe('one architecture across all scenario lessons',()=>{
     expect(componentUsed('designer','dreamjob')).toBe(true);expect(componentUsed('platform','dreamjob')).toBe(true);
     expect(lessonFor('photography','routing').operations).not.toContain('routing.decision');
     expect(lessonFor('dreamjob','routing').operations).toContain('routing.decision');
-    expect(sourceId('harness.context','boardgames')).toBe('hermes.environment');
+    expect(sourceId('harness.context','boardgames')).toBe('harness.context');
     expect(sourceId('fabric.invoke','boardgames')).toBe(sourceId('fabric.invoke','photography'));
   });
   it('connects existing components, attaches Relay to the harness and places safeguards on public boundaries',()=>{

@@ -1,0 +1,142 @@
+{
+  "agent_name": "singapore-learning-advisor",
+  "resolution": "preinstalled",
+  "capability_plan": {
+    "tools": {
+      "enabled": [
+        "search_courses",
+        "get_course_details",
+        "compare_courses"
+      ]
+    },
+    "tools_configured": true,
+    "skill_paths": [
+      "/opt/lab/runtime-skills/course-advisor"
+    ],
+    "mcp_servers": {
+      "catalogue": {
+        "transport": "stdio",
+        "url": "/opt/lab/.venv/bin/python",
+        "args": [
+          "-m",
+          "learning_lab.course_mcp"
+        ],
+        "env": {
+          "LAB_CATALOGUE_FILE": "/workspace/run/catalogue-snapshot.json",
+          "LAB_MCP_EVIDENCE_FILE": "/workspace/run/mcp-tools-list.jsonl",
+          "LAB_PREFERENCES_FILE": "/workspace/run/preferences.json"
+        },
+        "exposure": "harness_native"
+      }
+    },
+    "native": {
+      "tools_configured": true,
+      "skill_paths": [
+        "/opt/lab/runtime-skills/course-advisor"
+      ],
+      "mcp_servers": {
+        "catalogue": {
+          "transport": "stdio",
+          "url": "/opt/lab/.venv/bin/python",
+          "args": [
+            "-m",
+            "learning_lab.course_mcp"
+          ],
+          "env": {
+            "LAB_CATALOGUE_FILE": "/workspace/run/catalogue-snapshot.json",
+            "LAB_MCP_EVIDENCE_FILE": "/workspace/run/mcp-tools-list.jsonl",
+            "LAB_PREFERENCES_FILE": "/workspace/run/preferences.json"
+          },
+          "exposure": "harness_native"
+        }
+      }
+    },
+    "managed": {
+      "tools_configured": false
+    },
+    "unsupported": {
+      "tools_configured": false
+    },
+    "routes": [
+      {
+        "kind": "tools",
+        "name": "tools.enabled",
+        "target": "harness_native",
+        "reason": "selected adapter explicitly supports the NeMo Fabric enabled-tools selection"
+      },
+      {
+        "kind": "skills",
+        "name": "skills",
+        "target": "harness_native",
+        "reason": "selected adapter accepts NeMo Fabric skills config"
+      },
+      {
+        "kind": "mcp",
+        "name": "catalogue",
+        "target": "harness_native",
+        "reason": "MCP server uses harness_native exposure and adapter accepts mcp"
+      }
+    ]
+  },
+  "capabilities": {
+    "service": false,
+    "streaming": false,
+    "updates": false,
+    "cancellation": false,
+    "metadata": {
+      "health_checks": [
+        "live",
+        "active",
+        "ready"
+      ]
+    }
+  },
+  "agent_config": {
+    "runtime": {
+      "max_turns": 24
+    },
+    "tools": {
+      "enabled": [
+        "search_courses",
+        "get_course_details",
+        "compare_courses"
+      ]
+    },
+    "models": {
+      "default": {
+        "provider": "openai-compatible",
+        "model": "lab-advisor-routed",
+        "base_url": "http://127.0.0.1:18476/v1",
+        "api_key_env": "LAB_GATEWAY_KEY",
+        "max_tokens": 1024,
+        "temperature": 0.0
+      }
+    },
+    "environment": {},
+    "mcp": {
+      "servers": {
+        "catalogue": {
+          "transport": "stdio",
+          "url": "/opt/lab/.venv/bin/python",
+          "args": [
+            "-m",
+            "learning_lab.course_mcp"
+          ],
+          "env": {
+            "LAB_CATALOGUE_FILE": "/workspace/run/catalogue-snapshot.json",
+            "LAB_MCP_EVIDENCE_FILE": "/workspace/run/mcp-tools-list.jsonl",
+            "LAB_PREFERENCES_FILE": "/workspace/run/preferences.json"
+          }
+        }
+      }
+    },
+    "relay": null,
+    "skills": {
+      "paths": [
+        "/opt/lab/runtime-skills/course-advisor"
+      ]
+    },
+    "instructions_sha256": "d4a2075d6c729f6c0c53ed65b0e45511cc51ae12186700d3d089a44342aca72d"
+  },
+  "adapter_descriptor": {}
+}

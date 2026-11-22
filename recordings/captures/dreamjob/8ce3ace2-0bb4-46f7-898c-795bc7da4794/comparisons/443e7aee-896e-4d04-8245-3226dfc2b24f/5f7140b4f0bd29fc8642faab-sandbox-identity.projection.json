@@ -1,0 +1,17 @@
+{
+  "run_id": "443e7aee-896e-4d04-8245-3226dfc2b24f",
+  "id": "68a17a5a-8b25-4a92-8b33-6c19b9b9f4b6",
+  "name": "cl-443e7aee896e4d04",
+  "phase": "Ready",
+  "workspace": "default",
+  "configuration_admission": {
+    "config_revision": 5469698284815751569,
+    "error": "",
+    "policy_hash": "e671c43a472ae63b5f4ca611cfdd1684dcf64394acb200e18b5287565121a844",
+    "policy_version": 2,
+    "provider_env_revision": 3176606324465211593,
+    "state": "accepted"
+  },
+  "current_policy_version": 2,
+  "host_key_fingerprint": "SHA256:Zchs7WPapwHHwcLcJLiqhLKvtt0DH6PSLg2QZN23l4s"
+}

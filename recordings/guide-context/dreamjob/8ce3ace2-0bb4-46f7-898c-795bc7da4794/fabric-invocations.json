@@ -1,0 +1,118 @@
+[
+  {
+    "turn": 1,
+    "public_turn": 1,
+    "invocation_sequence": 1,
+    "thread_id": "021cf296-2655-499b-8750-2f6183c7aa90",
+    "request_id": "request-ccdc0d074fb74dd8888d47ae51d6bea3",
+    "runtime_status": "succeeded",
+    "runtime_id": "runtime-1795349336751-88-2",
+    "invocation_id": "invocation-1795349347414-88-5",
+    "outcome": {
+      "status": "valid",
+      "code": "public_answer",
+      "reason": "A nonempty public answer was saved; factual checks are separate."
+    },
+    "tool_scope_uuids": [
+      "01a20328-ffb7-7762-a932-7d2e9a8b72cd"
+    ],
+    "normalized_output_fields": [
+      "adapter",
+      "base_url",
+      "completed",
+      "event_count",
+      "events",
+      "harness",
+      "message_count",
+      "messages",
+      "mode",
+      "model",
+      "relay_artifacts",
+      "response",
+      "resumed",
+      "runtime_id",
+      "telemetry",
+      "thread_id",
+      "usage"
+    ],
+    "output": {
+      "adapter": "python",
+      "harness": "deepagents",
+      "mode": "deepagents",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "completed": true,
+      "event_count": 9,
+      "message_count": 4,
+      "runtime_id": "runtime-1795349336751-88-2",
+      "thread_id": "5ea69ffa30854009b1c121772941e35f",
+      "resumed": false,
+      "native_response_sha256": "030ca0e90e7cd6dae648b32a618c0fd2ed9d8c1a1760c436e5948872b2ae2cee",
+      "native_response_published": false,
+      "response_origin": "application_source_summary",
+      "delivered_content_sha256": "f2caf1e0e24f5bc420abcae8350fcaf9bcf38d7f53c61007da72af4bb19c522c"
+    },
+    "usage": {
+      "prompt_tokens": 5024,
+      "completion_tokens": 335,
+      "total_tokens": 5359
+    }
+  },
+  {
+    "turn": 3,
+    "public_turn": 3,
+    "invocation_sequence": 2,
+    "thread_id": "021cf296-2655-499b-8750-2f6183c7aa90",
+    "request_id": "request-4c61e65abe28494c81cc9d6298d47c3a",
+    "runtime_status": "succeeded",
+    "runtime_id": "runtime-1795349336751-88-2",
+    "invocation_id": "invocation-1795349361192-88-9",
+    "outcome": {
+      "status": "valid",
+      "code": "public_answer",
+      "reason": "A nonempty public answer was saved; factual checks are separate."
+    },
+    "tool_scope_uuids": [
+      "01a20329-34f2-72d0-8118-31070dd1265a"
+    ],
+    "normalized_output_fields": [
+      "adapter",
+      "base_url",
+      "completed",
+      "event_count",
+      "events",
+      "harness",
+      "message_count",
+      "messages",
+      "mode",
+      "model",
+      "relay_artifacts",
+      "response",
+      "resumed",
+      "runtime_id",
+      "telemetry",
+      "thread_id",
+      "usage"
+    ],
+    "output": {
+      "adapter": "python",
+      "harness": "deepagents",
+      "mode": "deepagents",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "completed": true,
+      "event_count": 9,
+      "message_count": 8,
+      "runtime_id": "runtime-1795349336751-88-2",
+      "thread_id": "5ea69ffa30854009b1c121772941e35f",
+      "resumed": true,
+      "native_response_sha256": "7ad3f66e1c4383846847d20395b6605a1a3a8e8f229cd30cd3cbcf0fd997dc47",
+      "native_response_published": false,
+      "response_origin": "application_source_summary",
+      "delivered_content_sha256": "ee08385c43c672cd670e6968463c47ede8eee3dc6a149788f4d4d1dd34178932"
+    },
+    "usage": {
+      "prompt_tokens": 8116,
+      "completion_tokens": 501,
+      "total_tokens": 8617
+    }
+  }
+]

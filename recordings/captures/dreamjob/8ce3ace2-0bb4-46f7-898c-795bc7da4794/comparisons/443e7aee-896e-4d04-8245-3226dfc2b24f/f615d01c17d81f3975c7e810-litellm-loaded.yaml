@@ -1,0 +1,59 @@
+model_list:
+- model_name: lab-advisor-fixed
+  litellm_params:
+    model: os.environ/LAB_FIXED_MODEL
+    api_base: os.environ/LAB_FIXED_API_BASE
+    api_key: '[redacted]'
+    num_retries: 0
+- model_name: lab-support
+  litellm_params:
+    model: os.environ/LAB_SUPPORT_MODEL
+    api_base: os.environ/LAB_SUPPORT_API_BASE
+    api_key: '[redacted]'
+    num_retries: 0
+- model_name: lab-advisor-candidate
+  litellm_params:
+    model: os.environ/LAB_EFFICIENT_MODEL
+    api_base: os.environ/LAB_EFFICIENT_API_BASE
+    api_key: '[redacted]'
+    num_retries: 0
+    extra_body:
+      chat_template_kwargs:
+        reasoning_effort: low
+- model_name: lab-advisor-capable
+  litellm_params:
+    model: os.environ/LAB_CAPABLE_MODEL
+    api_base: os.environ/LAB_CAPABLE_API_BASE
+    api_key: '[redacted]'
+    num_retries: 0
+    reasoning_effort: high
+- model_name: lab-advisor-routed
+  litellm_params:
+    model: os.environ/LAB_CAPABLE_MODEL
+    api_base: os.environ/LAB_CAPABLE_API_BASE
+    api_key: '[redacted]'
+    num_retries: 0
+    reasoning_effort: high
+- model_name: lab-advisor-routed
+  litellm_params:
+    model: os.environ/LAB_EFFICIENT_MODEL
+    api_base: os.environ/LAB_EFFICIENT_API_BASE
+    api_key: '[redacted]'
+    num_retries: 0
+    extra_body:
+      chat_template_kwargs:
+        reasoning_effort: low
+router_settings:
+  num_retries: 0
+  fallbacks: []
+  context_window_fallbacks: []
+  plugins:
+  - lab_routing.ROUTING_PLUGIN
+litellm_settings:
+  callbacks:
+  - lab_routing.ROUTING_PLUGIN
+  num_retries: 0
+  set_verbose: false
+  turn_off_message_logging: true
+general_settings:
+  master_key: os.environ/LAB_PROXY_API_KEY

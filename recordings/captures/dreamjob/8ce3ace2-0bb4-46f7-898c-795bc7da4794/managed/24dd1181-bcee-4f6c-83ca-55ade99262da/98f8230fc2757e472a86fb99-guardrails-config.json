@@ -1,0 +1,6 @@
+{
+  "configuration": "models: []\nrails:\n  input:\n    flows: [citizen input]\n  output:\n    flows: [citizen output]\n",
+  "colang": "define bot refuse to respond\n  \"I cannot disclose credentials or promise unsupported outcomes. I can help with published learning options.\"\n\ndefine flow citizen input\n  $allowed = execute citizen_input_allowed\n  if not $allowed\n    bot refuse to respond\n    stop\n\ndefine flow citizen output\n  $allowed = execute citizen_output_allowed\n  if not $allowed\n    bot refuse to respond\n    stop\n",
+  "location": "host public caller of the separate Helix-managed condition",
+  "model_generation": false
+}

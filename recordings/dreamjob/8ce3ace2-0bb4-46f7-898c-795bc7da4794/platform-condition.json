@@ -1,0 +1,138 @@
+{
+  "projection": "Allowlisted native/public configuration fields.",
+  "condition_id": "24dd1181-bcee-4f6c-83ca-55ade99262da",
+  "parent_run_id": "8ce3ace2-0bb4-46f7-898c-795bc7da4794",
+  "status": "completed",
+  "fresh_session": true,
+  "public_preferences": {
+    "goal": "retail sales inventory data analytics visualisation Excel",
+    "budget_sgd": 3000.0,
+    "days": [
+      5,
+      6
+    ],
+    "planning_area": null,
+    "known_skills": null,
+    "kind": null
+  },
+  "private_persona_in_image": false,
+  "local_memory_resumed": false,
+  "cleanup_confirmed": true,
+  "image": "citizen-retail-helix:0.4.0",
+  "input_kind": "developer-selected public constraints for a new managed condition; not a new UserSim turn",
+  "guardrails_location": "host caller boundary for this managed condition; local baseline rails execute inside its own sandbox",
+  "agent": "citizen-retail-24dd1181bcee-agent",
+  "deployment_name": "citizen-retail-24dd1181bcee",
+  "stage": "cleanup",
+  "resource_creation_attempted": true,
+  "registration_created": true,
+  "session_id": "citizen-retail-24dd1181bcee-review",
+  "sandbox": {
+    "id": "4446ef8b-160d-4f7a-abc5-6b5141ab4c77",
+    "name": "nhx-e5000502e6cc19",
+    "labels": {
+      "managed-by": "nemo-deployments",
+      "nemo.agents/deployment": "citizen-retail-24dd1181bcee",
+      "nemo.agents/mode": "openshell",
+      "nemo.agents/runtime": "fabric",
+      "nemo.nvidia.com/backoff-limit": "6",
+      "nemo.nvidia.com/deployment-config": "citizen-retail-24dd1181bcee",
+      "nemo.nvidia.com/deployment-name": "citizen-retail-24dd1181bcee",
+      "nemo.nvidia.com/deployment-workspace": "persona-lab",
+      "nemo.nvidia.com/resource-scope": "default",
+      "nemo.nvidia.com/restart-policy": "Always"
+    }
+  },
+  "reply": "Returned course facts for your stated budget and study days; fit remains unconfirmed.\n\n- Data Analytics Begins With Me (SF-002), National University of Singapore: duration unconfirmed; published fee full fee unconfirmed; study days unconfirmed. https://www.stat.nus.edu.sg/education/cet/short-course/\n\n- Fundamentals of Data Analytics & Visualization using Python (SF-003), National University of Singapore: duration unconfirmed; published fee full fee unconfirmed; study days unconfirmed. https://www.stat.nus.edu.sg/fundamentals-of-data-analytics-visualization-using-python/\n\n- IT Literacy - Basic Microsoft Excel (SF-006), Institute of Technical Education: 7 hours; published fee full fee unconfirmed; study days unconfirmed. https://www.aic.sg/Age-Well/Learning-and-Volunteerism/Learning-Opportunities/Computer-Skills\n\nUnknown fees, additional costs, timetables or places prevent a guaranteed fit. Confirm full costs, study days, availability and personal funding eligibility with each provider.",
+  "response_origin": "application_source_summary",
+  "response_policy": {
+    "schema_version": 1,
+    "public_turn": 1,
+    "owner": "application",
+    "execution_kind": "native_agent",
+    "agent_invoked": true,
+    "model_proposal_sha256": "e8e88bc60803d30a75f0d999d23e29e3a14caeab5b804b75f6c7805cbcf6c54a",
+    "original_word_count": 158,
+    "model_proposal_rule_failures": [],
+    "model_proposal_rule_status": "passed_selected_rules",
+    "model_proposal_rule_coverage": "word limit + frozen catalogue URL/ID membership only; financial prose not semantically certified",
+    "model_proposal_semantically_certified": false,
+    "source_ids": [
+      "SF-002",
+      "SF-003",
+      "SF-006"
+    ],
+    "source_hashes": {
+      "SF-002": "3885c197e7aad695760356ed99097406b5c4de8dd69048a5bf140f7ce04db4d7",
+      "SF-003": "227dae621f4dad58b349ae197f692f3d1ebaa26ca17c0292bbb00a876e99ae65",
+      "SF-006": "64fab086df4e7c1a06de092446297fd72ac07d73b15870a74a5a015e08fc6b87"
+    },
+    "native_tool_evidence": [
+      {
+        "name": "compare_courses",
+        "origin": "native_helix_intake",
+        "native_id": "span-66842b7acb9d0f00c53f3410e38b0626",
+        "status": "returned",
+        "source_ids": [
+          "SF-002",
+          "SF-003",
+          "SF-006"
+        ],
+        "result_sha256": "f62b6b34aef9bc0ae979dbfbb7b833ff6def4c68b80ef3307ed06e2768c12668"
+      },
+      {
+        "name": "get_course_details",
+        "origin": "native_helix_intake",
+        "native_id": "span-b15f35312e7cbfdd6bb3701c0f94a05e",
+        "status": "returned",
+        "source_ids": [
+          "SF-007"
+        ],
+        "result_sha256": "3be0c2295b2a902c9eab4cfc9aa66d0e999efa885b27e083d0ae0cf34a43caea"
+      },
+      {
+        "name": "search_courses",
+        "origin": "native_helix_intake",
+        "native_id": "span-98ec2a97cc5280f5ea910525d5bb0ca8",
+        "status": "returned",
+        "source_ids": [
+          "SF-006",
+          "SF-003",
+          "SF-002"
+        ],
+        "result_sha256": "d147ef31c301eae9fd58c23b29235d1da3c937edb7f4e3505b2103d1acebbf09"
+      }
+    ],
+    "response_origin": "application_source_summary",
+    "delivered_word_count": 102,
+    "delivered_content_sha256": "84734c4bac5dcd4669236770460119b350ee20029bea20365947c4afe15a1640",
+    "source_provenance": {
+      "SF-002": {
+        "public_turn": 1,
+        "native_ids": [
+          "span-66842b7acb9d0f00c53f3410e38b0626",
+          "span-98ec2a97cc5280f5ea910525d5bb0ca8"
+        ]
+      },
+      "SF-003": {
+        "public_turn": 1,
+        "native_ids": [
+          "span-66842b7acb9d0f00c53f3410e38b0626",
+          "span-98ec2a97cc5280f5ea910525d5bb0ca8"
+        ]
+      },
+      "SF-006": {
+        "public_turn": 1,
+        "native_ids": [
+          "span-66842b7acb9d0f00c53f3410e38b0626",
+          "span-98ec2a97cc5280f5ea910525d5bb0ca8"
+        ]
+      }
+    },
+    "excluded_source_ids": [
+      "SF-007"
+    ],
+    "status": "delivered"
+  },
+  "cleanup_errors": []
+}

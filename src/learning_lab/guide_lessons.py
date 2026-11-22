@@ -19,9 +19,9 @@ from .datasets import DatasetQuery, _dataset, profile_hash
 from .guide_sources import _git, operation_links, repository_url
 from .settings import ROOT
 
-CANONICAL_DEMOS = {'photography': '7863c607-cb99-4a31-b60c-381bf2099f0e',
-                   'boardgames': '938bdb3f-568e-442e-889f-fed046edf5a0',
-                   'dreamjob': '8542330d-d6df-494e-8509-d81a5841d69e'}
+CANONICAL_DEMOS = {'photography': '94e49df8-7dfa-445b-9614-d79e31f2c024',
+                   'boardgames': 'aa445222-7127-41f0-a451-685874bf343c',
+                   'dreamjob': '8ce3ace2-0bb4-46f7-898c-795bc7da4794'}
 CONTEXT_ROOT = ROOT / 'recordings/guide-context'
 INDEX_PATH = ROOT / '.private/cache/guide-original-index.json'
 

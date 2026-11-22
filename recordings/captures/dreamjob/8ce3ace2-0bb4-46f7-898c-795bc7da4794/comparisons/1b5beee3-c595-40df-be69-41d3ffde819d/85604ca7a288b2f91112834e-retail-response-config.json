@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "owner": "application",
+  "rendering": "validated-returned-course-facts-only",
+  "maximum_words": 180,
+  "maximum_options": 3,
+  "inference_calls": 0,
+  "original_prose_semantically_certified": false,
+  "catalogue_sha256": "d2ce4abda853f269d2fd1c93bb60dbd2cd1468a6562e8bc3fbb7140744e38dfa",
+  "clarification": "Ask missing total training budget/study days; salary establishes neither affordability nor eligibility.",
+  "clarification_dispatch": "Before Fabric/model/tool execution for salary or partially supplied decision constraints; programme-information questions still use native tools.",
+  "required_initial_tool": {
+    "scope": "standalone-retail-explicit-budget-and-study-days",
+    "name": "search_courses",
+    "provider_api": "OpenAI-named-tool_choice",
+    "release": "validated-first-choice-function-call",
+    "harness_executes_tool": true,
+    "managed_enabled": false
+  },
+  "tool_evidence": "Successful native Relay or Helix Intake result; previous facts only for clarification.",
+  "unknowns": "Unknown full costs, timetable, duration and personal eligibility remain unconfirmed.",
+  "guardrails_relationship": "Application delivery policy, separate from native behavioural Guardrails."
+}

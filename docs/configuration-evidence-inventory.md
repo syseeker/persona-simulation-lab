@@ -1,14 +1,32 @@
 # Configuration and evidence inventory
 
-This is the supporting specification for **Workstream 1 (execution fixes and complete capture)** and **Workstream 3 (Metadata)** in the [authoritative plan](../PLAN.md). It records the audit as of **22 November 2026**, against implementation baseline **`19b26b8`**. Saving this document does not add capture code, rerun a scenario, change a demo selection or establish a new successful result.
+This is the supporting specification for **Workstream 1 (execution fixes and complete capture)** and **Workstream 3 (Metadata)** in the [authoritative plan](../PLAN.md). The current selected demos and their capture manifests are indexed below. The original **22 November 2026** audit at baseline **`19b26b8`** remains separately labelled, with its historical EXISTS/PRIVATE/NOT EXIST findings preserved. A documentation update or new export does not itself rerun a scenario or establish a successful result.
 
 The learner should be able to follow a decision from application code to effective library settings and then to an attributable result. Some libraries consume Python objects, not YAML/JSON files. Do not invent a mandatory YAML file merely to populate a table. Retain actual authored inputs, generated settings, native results and useful application projections, and identify which role each plays.
 
-**Implementation amendment, 22 November:** the 51 stable requirements below remain the baseline audit. The active registry and capture rules add retail application presentation artifacts under **CAP-FAB-07** (standalone baseline/comparisons) and **CAP-PLAT-05** (managed caller): generated `retail-response-config.json`, `retail-response-decisions.jsonl` and private `retail-model-proposals.jsonl`. They distinguish validated candidates, confirmed public delivery and original native proposals. Public projections expose response origin, source hashes and selected proposal-rule failures; original unpresented prose stays private. Their presence does not establish successful execution or change a selected demo.
+**Implementation amendment, 22 November:** the 51 stable requirements below remain the baseline audit. The active registry and capture rules add retail application presentation artifacts under **CAP-FAB-07** (standalone baseline/comparisons) and **CAP-PLAT-05** (managed caller): generated `retail-response-config.json`, `retail-response-decisions.jsonl` and private `retail-model-proposals.jsonl`. They distinguish validated candidates, confirmed public delivery and original native proposals. Public projections expose response origin, source hashes and selected proposal-rule failures; original unpresented prose stays private. Their presence alone does not establish successful execution.
+
+**Teaching and Metadata implementation, 22 November:** [the capture registry](../src/learning_lab/capture_registry.json) and [capture rules](../src/learning_lab/captures.py) supply the shared requirement IDs. [The read-only Metadata resolver](../src/learning_lab/guide_metadata.py) verifies the selected public capture pack; [Metadata](../web/src/lib/MetadataPage.svelte) renders the requested six columns with scenario/condition filters and module/file/status search. Inline teaching references use that same response. Distinct lesson, conceptual and technical destinations explain the purpose of each link instead of repeating a link checklist. All three selected demos have complete public capture inventories; a historical pack without an inventory remains explicitly unavailable rather than borrowing a new run's files or inferring that its private originals are missing.
 
 ## Current demos and location keys
 
-These remain the selected demos until Workstream 1 verifies and publishes replacements. Newer development/regression runs do not become demos automatically.
+The selected replacement demos completed their scenario checks and applicable capture requirements. Each link identifies the exact scenario/run; separate baseline, comparison and managed conditions retain their own settings and results. The Metadata tab and teaching links resolve the public capture manifests below.
+
+| Scenario | Selected demo run | Published recording | Teaching companion | Configuration and evidence captures |
+|---|---|---|---|---|
+| **S1 — Photography** | `94e49df8-7dfa-445b-9614-d79e31f2c024` | [Recording](../recordings/photography/94e49df8-7dfa-445b-9614-d79e31f2c024/manifest.json) | [Companion](../recordings/guide-context/photography/94e49df8-7dfa-445b-9614-d79e31f2c024/manifest.json) | [28/28 applicable requirements](../recordings/captures/photography/94e49df8-7dfa-445b-9614-d79e31f2c024/manifest.json) |
+| **S2 — Board games** | `aa445222-7127-41f0-a451-685874bf343c` | [Recording](../recordings/boardgames/aa445222-7127-41f0-a451-685874bf343c/manifest.json) | [Companion](../recordings/guide-context/boardgames/aa445222-7127-41f0-a451-685874bf343c/manifest.json) | [31/31 applicable requirements](../recordings/captures/boardgames/aa445222-7127-41f0-a451-685874bf343c/manifest.json) |
+| **S3 — Retail learning** | `8ce3ace2-0bb4-46f7-898c-795bc7da4794` | [Recording](../recordings/dreamjob/8ce3ace2-0bb4-46f7-898c-795bc7da4794/manifest.json) | [Companion](../recordings/guide-context/dreamjob/8ce3ace2-0bb4-46f7-898c-795bc7da4794/manifest.json) | [181/181 applicable requirements](../recordings/captures/dreamjob/8ce3ace2-0bb4-46f7-898c-795bc7da4794/manifest.json) |
+
+Photography passed 9/9 application assertions. Board games passed 11/11 and retains one native UserSim helpfulness flag. Retail passed 24/24 baseline delivered-response criteria, completed its native Designer profiling report, durable Helix job, MiniMax/Mistral fixed/routed and capable-access comparisons, separate Nemotron diagnostic and managed condition. Cleanup is confirmed for all three selected runs. Retail admitted 42 model attempts; one HTTP 429 attempt failed and recovered after its recorded 30-second wait. Native model-proposal findings remain separate from delivered-response checks.
+
+The retail capture pack exposes 198 Metadata rows across seven conditions, including explicit unused requirements; 181 are required applicable captures. Its salary-only public turn two is an application clarification with zero advisor inference, while turns one and three have native Fabric invocations. See [retail integration](retail-integration.md) for the source-rendering and initial-tool-choice boundaries. These new results do not relabel the earlier failed Gemma/GLM pool or remove development failures.
+
+## Baseline audit · 22 November 2026 (`19b26b8`)
+
+The P/B/R keys and 51 requirement rows below refer only to the original audit. Their run identities, locations and findings remain unchanged so a newly complete capture cannot be mistaken for an older run's evidence.
+
+### Baseline demos and location keys
 
 | Key | Scenario | Current demo run | Published recording | Published teaching companion | Ignored private original |
 |---|---|---|---|---|---|
@@ -18,11 +36,11 @@ These remain the selected demos until Workstream 1 verifies and publishes replac
 
 Public packs and companions are separate immutable, manifest-verified publications. The private paths above are operator recovery references, deliberately not hyperlinks or public dependencies; they are absent from a public clone. Do not copy private original rows, simulator prompts, arbitrary model reasoning, credentials or private environment values into public documentation or Metadata responses.
 
-**S2 is not an unresolved failed scenario:** its curated conversation passed 11 application assertions and cleanup. Its native UserSim helpfulness flag and failed development conditions remain retained. An honest no-match is not a defect to eliminate. **S3's overall requested experiment remains failed:** its fixed-Nemotron baseline, saved-response scoring and separate managed condition passed their reported checks, while the requested Gemma/GLM comparisons timed out. The successful reachable-Nemotron diagnostic is separate evidence and cannot replace that pool. See [verification](verification.md) and [retail integration](retail-integration.md).
+**S2 is not an unresolved failed scenario:** its curated conversation passed 11 application assertions and cleanup. Its native UserSim helpfulness flag and failed development conditions remain retained. An honest no-match is not a defect to eliminate. **The baseline S3 experiment remains failed:** its fixed-Nemotron baseline, saved-response scoring and separate managed condition passed their reported checks, while the requested Gemma/GLM comparisons timed out. The successful reachable-Nemotron diagnostic is separate evidence and cannot replace that pool. The new selected retail run uses the later approved MiniMax/Mistral inventory and has its own successful comparison evidence; it does not replace this historical finding. See [verification](verification.md) and [retail integration](retail-integration.md).
 
 Within a private run, `EP/native/` means its recorded baseline episode's native directory; locate it using that run's recorded episode ID. S3 comparison settings/results live under their own `comparisons/CONDITION_ID/` subdirectories. Managed Platform records are a separate condition with its own identities. A run directory containing all of them does not make them one execution.
 
-## How to read the audit
+### How to read the audit
 
 - **EXISTS:** the stated source or retained artifact was found. Existence alone does not mean an operation succeeded.
 - **PRIVATE:** already retained outside Git. This is not a missing file; publication can be a separate gap.
@@ -33,7 +51,9 @@ Within a private run, `EP/native/` means its recorded baseline episode's native 
 
 Each `CAP-…` identifier is a stable inventory requirement. The six columns preserve the requested Metadata presentation. Journey steps refer to the nine teaching lessons, not necessarily execution order: policy and tracing are configured before the conversation even when taught later.
 
-## Full module and operation audit
+### Full module and operation audit
+
+This table retains the original baseline findings. Source links open current repository templates, which can differ from the baseline's recorded source revision. Use the selected pack's Metadata response for current per-condition availability; do not treat a newly implemented capture rule as proof that an older run produced that file.
 
 | Module | Steps | YAML/JSON file | Status | Location | Apply to scenario |
 |---|---|---|---|---|---|
@@ -97,9 +117,9 @@ The same distinction applies elsewhere: Designer and local Helix evaluation use 
 
 ## Workstream 1 capture contract
 
-This section specifies future implementation; no machine-readable inventory, capture function or Metadata endpoint is added by this documentation repair.
+The registry, boundary capture rules, public exporter and read-only Metadata consumer implement this contract. The three selected replacement runs have complete applicable capture coverage and verified execution outcomes, as indexed above. Each immutable manifest binds its own conditions and publication; the original audit is not silently rewritten to describe newer output.
 
-1. **One registry, two consumers.** Implement one machine-readable artifact registry from these stable `CAP-…` requirements. The Integration Map references it for purposeful configuration/result links, and Metadata renders its six requested columns. Both resolve availability from the selected demo manifest and its validated companion. Do not maintain a second handwritten UI table.
+1. **One registry, two consumers.** The machine-readable registry uses these stable `CAP-…` requirements. The Integration Map references them for purposeful configuration/result links, and Metadata renders its six requested columns. Both resolve capture availability from the same selected public capture manifest; lesson observations additionally use the matching recording/companion. There is no second handwritten UI inventory.
 2. **Retain shared sources and scenario-specific effective settings.** Do not duplicate all source YAML per scenario. Record the shared source reference/hash and the exact effective settings used for every applicable condition. Reuse equal content through explicit content identity while preserving each execution's binding. Do not hardcode a model inventory into narrative text as proof of what ran.
 3. **Capture at the real boundary.** Save native request/configuration objects immediately before the SDK/native call and native results immediately after it, including terminal errors. Export sandbox-local generated settings before cleanup. Capture discovered tool schemas separately from schemas actually sent to the provider. Per-turn preferences must show only publicly disclosed information at that point.
 4. **Preserve existing capture.** Continue retaining every currently saved public/private artifact, native warnings, failures and unknown usage. Missing public projections may be produced offline from matching retained private originals without rerunning; missing historical native objects cannot be reconstructed and called exact captures. The requested new S1-S3 runs must nevertheless exercise the newly completed capture paths.
@@ -115,23 +135,23 @@ Minimum artifact bindings for that registry and manifests:
 - Content hash and manifest binding, capture time, repository-relative public location or opaque private artifact reference, and source-to-projection relation with included/omitted fields. Do not expose arbitrary host paths in browser responses.
 - Meaningful relationships: configuration used by a call, request answered by a result, result evaluated by criteria, source projected into an artifact, policy verified by a probe. Link only recorded native/correlation identities; do not invent model-call/Relay parentage.
 
-Metadata must distinguish **NOT EXIST** from **PRIVATE** and **PARTIAL**. It should explain private-only availability without returning the private contents or a host filesystem URL. Configuration links open actual settings; application-call links open the relevant committed code; scenario-log links open the exact selected run/condition record. Read-only registry/manifest resolution must never initialize a model, simulation or deployment.
+Metadata distinguishes **NOT EXIST** from **PRIVATE**, **PARTIAL** and **UNAVAILABLE**. An absent old-pack inventory leaves private availability unknown. Private-only descriptors expose no original contents or host filesystem URL. Configuration links open actual settings or explicitly labelled projections; application-call links open committed code; result links open the selected scenario/condition record. A URL is available only when the exact public capture bytes are committed. Multi-file references open the matching requirement and condition rather than guessing a file. Explicit condition reads never fall back to baseline; **CAP-SW-01/02** are identified as run-owned aggregates. Read-only registry/manifest resolution never initializes a model, simulation or deployment.
 
 ## Workstream 1 acceptance checklist
 
-All items below are **queued**, not completed by saving this audit. They are capture gaps in addition to the separately tracked Gemma/GLM and other execution fixes in [PLAN.md](../PLAN.md).
+The execution and capture items below are verified for the three selected replacement demos. Final promoted-demo browser review checks the consumer bindings after publication; [PLAN.md](../PLAN.md) records the run identities, commits and verification evidence. The historical table's gaps are not retroactively filled.
 
-- [ ] **CAP-DD-03/05:** retain Designer effective runtime/provider settings and the actual profiling outcome, without requiring a fictitious successful report.
-- [ ] **CAP-US-03:** retain effective learner/judge model-role settings.
-- [ ] **CAP-FAB-05/06:** retain full request/result boundary snapshots for every invocation, including comparison errors and safe publication projections.
-- [ ] **CAP-HER-01:** retain the exact run-bound managed Hermes YAML; preserve existing embedded effective settings.
-- [ ] **CAP-MCP-02/04:** retain actual discovery, gateway/provider schema filtering and per-turn public preferences, related to the corresponding calls.
-- [ ] **CAP-GW-01 and CAP-LLM-03:** retain effective gateway controls, actual loaded LiteLLM YAML and resolved redacted settings per selected proxy/condition.
-- [ ] **CAP-REL-01:** export the physical generated Relay configuration before teardown; continue retaining native ATOF events and public projections.
-- [ ] **CAP-HX-02:** retain native metric definitions and local evaluator run settings; preserve the already-retained durable job specification.
-- [ ] **CAP-PLAT-01/02/03/05:** retain managed server/executor snapshot, exact final agent YAML, provider/environment creation definitions and missing native request/response envelopes. Link existing complete embedded configurations rather than declaring them absent.
-- [ ] **Registry and manifest validation:** fail clearly for a missing required applicable capture, validate hashes and identities, and confirm the public projection excludes secret/private content. Exercise failures and not-used paths without inventing success.
-- [ ] **New attributable demos:** complete new S1, S2 and S3 runs with the applicable inventory; retain all previous packs unchanged and preserve failed attempts. Verify actual outcomes and exact-resource cleanup before promoting replacements. S3's requested Gemma/GLM pool must be verified independently of a Nemotron diagnostic.
-- [ ] **Consumer consistency:** prove the selected demo's UX links and future Metadata rows resolve from the same registry/manifests, with no scenario/condition borrowing and no inference/deployment on inspection.
+- [x] **CAP-DD-03/05:** retain Designer effective runtime/provider settings and the actual profiling outcome, without requiring a fictitious successful report.
+- [x] **CAP-US-03:** retain effective learner/judge model-role settings.
+- [x] **CAP-FAB-05/06:** retain full request/result boundary snapshots for every invocation, including comparison errors and safe publication projections.
+- [x] **CAP-HER-01:** retain the exact run-bound managed Hermes YAML; preserve existing embedded effective settings.
+- [x] **CAP-MCP-02/04:** retain actual discovery, gateway/provider schema filtering and per-turn public preferences, related to the corresponding calls.
+- [x] **CAP-GW-01 and CAP-LLM-03:** retain effective gateway controls, actual loaded LiteLLM YAML and resolved redacted settings per selected proxy/condition.
+- [x] **CAP-REL-01:** export the physical generated Relay configuration before teardown; continue retaining native ATOF events and public projections.
+- [x] **CAP-HX-02:** retain native metric definitions and local evaluator run settings; preserve the already-retained durable job specification.
+- [x] **CAP-PLAT-01/02/03/05:** retain managed server/executor snapshot, exact final agent YAML, provider/environment creation definitions and missing native request/response envelopes. Link existing complete embedded configurations rather than declaring them absent.
+- [x] **Registry and manifest validation:** fail clearly for a missing required applicable capture, validate hashes and identities, and confirm the public projection excludes secret/private content. Exercise failures and not-used paths without inventing success.
+- [x] **New attributable demos:** complete new S1, S2 and S3 runs with the applicable inventory; retain all previous packs unchanged and preserve failed attempts. Verify actual outcomes and exact-resource cleanup before promoting replacements. S3's approved non-Nemotron replacement pool must be verified independently of a Nemotron diagnostic; preserve the earlier Gemma/GLM failures.
+- [ ] **Consumer consistency:** prove the selected demo's UX links and implemented Metadata rows resolve from the same registry/manifests, with no scenario/condition borrowing and no inference/deployment on inspection.
 
 When implementation completes an item, record its commit and actual verification evidence in the master plan. Update this inventory's dated current-state assessment alongside new run identities; do not silently convert baseline findings into claims about a later run.

@@ -1,0 +1,25 @@
+{
+  "projection": "Allowlisted native fields; not a byte-for-byte original.",
+  "run_id": "aa445222-7127-41f0-a451-685874bf343c",
+  "sandbox_name": "cl-aa445222712741f0",
+  "native_absence_confirmed": true,
+  "runtime_process_exited": true,
+  "native_artifact_sha256": {
+    "fabric-config.json": "a27cade8c074ecaf5e3eca35405a9961540d8bc03060764b70e2ca8dcf5294b5",
+    "fabric-doctor.json": "27abfb4dec20650b27929d2413b240a27f0797611d23c4226d32a7016f1a518c",
+    "fabric-lifecycle.jsonl": "a2e399ffd43ccca36248f33ff1a36e7ad413a4c085d43aa4feb66fd8949c96d9",
+    "fabric-plan.json": "370258e7d4753e075f32f2b2719590c988bcf96e9226dba678b037a3c9f88d75",
+    "fabric-relay.json": "1148f3a41b9992d2456fef7feb688ab6733bf888fea15f81305b0338a7ab98aa",
+    "guardrails-config.json": "6e62fbc544a2459922ec08f37e564fb8b4925dea229fd3b97e074ed82bb4d7bb",
+    "hermes-config-capture.jsonl": "ebccb586b7d577f6c2b2ff4d93f6aa458f490d013e4a747f57b03b107059a417",
+    "hermes-managed-config.yaml": "0163cb6c4070e4d74408a63c388c896d989114849b7efb241547e5d4ce965cc0",
+    "hermes-native-config.yaml": "09967dfc0890c9c74c810b48ae08f114d3e0f98ef915c7a0f5c2a94439c076ac",
+    "mcp-tools-list.jsonl": "68d5a8d8827a0fb2d68e9864b85f9656af4a793c530ecc3feb80c7229b929847",
+    "fabric-run-requests.jsonl": "09e3e60ad0d11ecf3b29ae7ca24b592ea93020cafaef59d3699f699718e24f4f",
+    "fabric-run-results.jsonl": "d74c097b50b4e45ada544dc8dde357d6a740771b8a0670f0f7b8c1db6b67a731",
+    "fabric-traces/runtime-1795349274198-88-2/relay.jsonl": "d060ba88b934108d6b59e675b5b2949c1acea2d8665e8881c02a413518a8bac2",
+    "guardrails-decisions.jsonl": "d1c032c917e4ca70b4c7158e5e5f834d57453650ec0e08b221f001d0b5c33be3",
+    "preferences-by-turn.jsonl": "84f94e21ade69b16534d18212f0dde4638d9092a44800b544589f352014ca366",
+    "reply-outcomes.jsonl": "c704ee58b301a222c3740efc92c7efba98fc87e8c7b3bb286bb1d334cb0f130a"
+  }
+}

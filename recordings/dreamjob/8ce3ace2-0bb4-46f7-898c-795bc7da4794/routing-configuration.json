@@ -1,0 +1,36 @@
+{
+  "inventories": {
+    "citizen-retail-proxy-v1": {
+      "container_id": "a817688a85b02e186e08d7972158b6e51f8d3b5dda59e4311462bc78f4d7c314",
+      "image_id": "sha256:e8b4d47d51ffedc8a88dd234c7ca8b8c6155d83e9c6925e1671146c31f338f01",
+      "models": {
+        "FIXED": "openai/nvidia/nemotron-3.5-lightning-30b-a3b",
+        "SUPPORT": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "EFFICIENT": "openai/minimaxai/minimax-m3.1-flash",
+        "CAPABLE": "openai/mistralai/mistral-large-4-1t-a52b"
+      }
+    },
+    "proxy-litellm-1": {
+      "container_id": "6d4b67c6707062e6830ae9b6c23dbefd489611fe217902bbf048feefa1c55e3d",
+      "image_id": "sha256:e8b4d47d51ffedc8a88dd234c7ca8b8c6155d83e9c6925e1671146c31f338f01",
+      "models": {
+        "FIXED": "openai/nvidia/nemotron-3.5-lightning-30b-a3b",
+        "SUPPORT": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "EFFICIENT": "openai/nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+        "CAPABLE": "openai/nvidia/nemotron-3.5-lightning-30b-a3b"
+      }
+    }
+  },
+  "policy": {
+    "picker": "efficient_first",
+    "confidence_threshold": 0.5,
+    "recent_window": 3,
+    "only_on_wrong_signal_escalation": true
+  },
+  "source_sha256": {
+    "integrations/proxy/retail-litellm.yaml": "bcf4acee6e8fece8154b95ff1c09d378381e0ac1fb5f786c95c3b5bea55da150",
+    "integrations/proxy/litellm.yaml": "432feebd4bdcaafc11aa6e202c7e359b3c2b71fdd5645717cdd8b9f8e48520fb",
+    "integrations/proxy/lab_routing.py": "460b2e5b54fb36c20488664428c41eb32ade8688bf13d547c4bde205a243c89f"
+  },
+  "notice": "Declared inventory and policy are configuration. Completed calls/native decisions separately establish observed behaviour."
+}

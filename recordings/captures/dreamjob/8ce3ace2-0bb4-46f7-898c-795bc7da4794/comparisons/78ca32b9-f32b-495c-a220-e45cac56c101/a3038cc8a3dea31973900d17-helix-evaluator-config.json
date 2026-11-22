@@ -1,0 +1,24 @@
+{
+  "engine": "NeMo Helix Evals SDK",
+  "version": "0.9.1",
+  "mode": "saved-output local evaluation",
+  "inference_calls": 0,
+  "metrics": [
+    {
+      "type": "exact-match",
+      "description": null,
+      "labels": {},
+      "supported_job_types": [
+        "online",
+        "offline"
+      ],
+      "reference": "{{item.expected}}",
+      "candidate": "{{item.output}}"
+    }
+  ],
+  "run_config": {
+    "parallelism": 1,
+    "limit_samples": null
+  },
+  "dataset_rows": 24
+}

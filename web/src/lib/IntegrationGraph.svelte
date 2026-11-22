@@ -6,9 +6,10 @@
   import ComponentNode from './ComponentNode.svelte';
   import ZoneNode from './ZoneNode.svelte';
   import { components, componentById, operationById, componentTitle, componentUsed, simpleBlocks, edgesFor, preset } from './lessonArchitecture';
+  import {conceptOperations} from './teaching/selection';
 
-  let { detailed=false, scenarioId='photography', active=[], focused=false, search='', labels=true, selected=null, oninspect=()=>{} }:
-    { detailed?:boolean; scenarioId?:string; active?:string[]; focused?:boolean; search?:string; labels?:boolean; selected?:string|null;
+  let { applicationOnly=false,detailed=false, scenarioId='photography', active=[], focused=false, search='', labels=true, selected=null, oninspect=()=>{} }:
+    { detailed?:boolean; applicationOnly?:boolean; scenarioId?:string; active?:string[]; focused?:boolean; search?:string; labels?:boolean; selected?:string|null;
       oninspect?:(component:string,operation?:string)=>void } = $props();
   const nodeTypes={component:ComponentNode,zone:ZoneNode};
   let nodes=$state.raw<Node[]>([]), edges=$state.raw<Edge[]>([]);
@@ -63,10 +64,10 @@
       if(!simple&&!component)return node;
       const members=simple?.members||[node.id];
       const operations=simple?members.flatMap(m=>componentById[m].operations):component.operations;
-      const isActive=operations.some(o=>lit.has(o.id));
-      const modules=simple?simple.rows.map(r=>({id:r.operation,title:r.title,component:operationById[r.operation].component,
-        active:lit.has(r.operation)||members.some(m=>componentById[m].operations.some(o=>o.id===r.operation&&lit.has(o.id)))})):
-        component.operations.map(o=>({id:o.id,title:o.title,component:component.id,active:lit.has(o.id)}));
+      const isActive=operations.some(o=>lit.has(o.id))||(applicationOnly&&['advisor','evidence','records'].includes(node.id));
+      const modules=simple?simple.rows.map((r,index)=>({id:`${simple.id}.${index}`,title:r.title,component:simple.id,
+        active:conceptOperations(options.scenario,simple.id,`${simple.id}.${index}`).some(id=>lit.has(id))})):
+        component.operations.map((o,index)=>({id:options.detail?o.id:`${component.id}.${index}`,title:o.title,component:component.id,active:lit.has(o.id)}));
       const title=simple?.title||(!options.detail?component.simple:componentTitle(node.id,options.scenario));
       const used=members.some(m=>componentUsed(m,options.scenario));
       const text=`${title} ${members.map(m=>componentTitle(m,options.scenario)).join(' ')} ${operations.map(o=>o.title).join(' ')}`.toLocaleLowerCase();
@@ -74,16 +75,11 @@
       const recorded=['photography','boardgames','dreamjob'].includes(options.scenario);
       if(!used)badge='Not used in this preset';
       else if(!recorded&&['designer','routing','guardrails','helix','platform'].includes(node.id))badge='Planned · no scenario evidence';
-      else if(node.id==='guardrails')badge='Native checks recorded';
-      else if(node.id==='openshell')badge=recorded?(preset(options.scenario).helix?'Standalone + managed verified':'Verified standalone boundary'):preset(options.scenario).helix?'Planned managed boundary':'Planned standalone boundary';
-      else if(node.id==='routing'&&options.scenario==='dreamjob')badge='Native diagnostic · requested pool incomplete';
-      else if(node.id==='helix'&&options.scenario==='dreamjob')badge='Local scores + durable job recorded';
-      else if(node.id==='platform'&&options.scenario==='dreamjob')badge='Managed session + cleanup verified';
       else if(node.id==='harness')badge='Selected harness';
       return {...node,data:{title,kind:simple?.kind||component.kind,subtitle:simple?.purpose,
         modules,active:options.focus&&isActive,dim:(!!query&&!text.includes(query))||(options.focus&&!isActive),
         inspected:options.selection===node.id||members.includes(options.selection||''),badge,wide:false,
-        inspectId:simple?members[0]:node.id,oninspect:inspect}};
+        inspectId:node.id,oninspect:inspect}};
     });
     const links=edgesFor(options.scenario), grouped=new Map<string,{source:string;target:string;label:string;kind:string;ops:string[]}>();
     for(const e of links){
@@ -100,7 +96,9 @@
       } as Record<string,string>)[e.id]||e.label,kind:e.kind,ops:[...e.operations]});
     }
     edges=[...grouped.entries()].map(([id,e])=>{
-      const animated=options.focus&&e.ops.some(o=>lit.has(o));
+      const nativePath=applicationOnly&&(options.detail?[e.source,e.target].some(id=>['fabric','harness','mcp','catalogue','relay'].includes(id)):
+        (e.source==='advisor'&&!['learner','guardrails'].includes(e.target))||(e.target==='advisor'&&!['learner','guardrails'].includes(e.source))||[e.source,e.target].includes('courses'));
+      const animated=options.focus&&!nativePath&&e.ops.some(o=>lit.has(o));
       const dim=options.focus&&!animated;
       const palette:Record<string,string[]>={prep:['#8ba59c','#477b66'],request:['#8b9aae','#3c6c95'],telemetry:['#9282b3','#7b5da6'],control:['#b79057','#9d7436']};
       const color=palette[e.kind][animated?1:0];
@@ -160,6 +158,7 @@
     <Background variant={BackgroundVariant.Dots} gap={20} size={.7} patternColor="#d4dfe5" bgColor="#fbfdfe" />
     <Controls position="bottom-left" showLock={false} fitViewOptions={{ padding: '6%', minZoom: .2, maxZoom: 1 }} />
   </SvelteFlow>
+  {#if applicationOnly}<div class="application-branch nodrag nopan" role="note"><strong>Application clarification · inside OpenShell</strong><span>Input check → ask for missing constraints → output check → public reply</span><small>No advisor model, Fabric invocation or course-tool call. UserSim's learner/judge work remains separate.</small></div>{/if}
   <div class="map-hint nodrag nopan" aria-hidden="true"><span class="hint-dot"></span>Drag a header · Pan the canvas · Select a block or operation to understand it</div>
 </div>
 
@@ -180,6 +179,7 @@
   .integration-map :global(.svelte-flow__edge-labels),
   .integration-map :global(.svelte-flow__edge-label),
   .integration-map :global(.svelte-flow__edge-label *) { pointer-events: none !important; }
+  .application-branch{position:absolute;left:22px;bottom:78px;max-width:440px;padding:12px 15px;border:1px solid #b6cec6;border-left:3px solid var(--teal);background:#f2f8f6f7;border-radius:5px;font-size:12px;display:grid;gap:6px;line-height:1.5;z-index:4}.application-branch small{color:var(--muted);font-size:10px}
   .map-hint { position: absolute; right: 12px; bottom: 31px; display: flex; align-items: center; gap: 6px; color: #82959e; background: #ffffffeb; border: 1px solid #e3ebef; border-radius: 5px; padding: 6px 9px; font-size: 9px; line-height: 1.2; pointer-events: none; }
   .hint-dot { width: 5px; height: 5px; border-radius: 50%; background: #749aa9; }
   @keyframes edge-travel { to { stroke-dashoffset: -22; } }

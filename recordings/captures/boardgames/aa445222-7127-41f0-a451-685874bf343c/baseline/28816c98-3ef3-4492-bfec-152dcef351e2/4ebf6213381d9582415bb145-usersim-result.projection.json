@@ -1,0 +1,33 @@
+{
+  "probe_type": "learning_advisor",
+  "usersim_config": {
+    "name": "conversation",
+    "locale": "en_SG",
+    "max_turns": 2,
+    "max_steps": 10,
+    "max_query_attempts": 1,
+    "max_assistant_attempts": 1,
+    "enforce_user_language": true,
+    "context_compression": false,
+    "persona_grounding_ratio": 1.0
+  },
+  "outcome": {
+    "status": "ok",
+    "failure_class": null,
+    "failure_attribution": null,
+    "n_turns": 2,
+    "n_tool_calls": 0,
+    "n_user_query_attempts": 1,
+    "n_user_followup_retries": 0,
+    "n_assistant_inline_failures": 1,
+    "n_assistant_retries": 0,
+    "early_stop": false,
+    "per_model_calls": {
+      "user_model": 2,
+      "judge_model": 4,
+      "assistant_model": 2,
+      "summary_model": 1
+    }
+  },
+  "private_preamble_published": false
+}

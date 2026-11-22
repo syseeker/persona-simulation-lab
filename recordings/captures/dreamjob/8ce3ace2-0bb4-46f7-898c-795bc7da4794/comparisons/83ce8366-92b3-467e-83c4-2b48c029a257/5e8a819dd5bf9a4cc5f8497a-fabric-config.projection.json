@@ -1,0 +1,92 @@
+{
+  "schema_version": "fabric.agent/v1alpha1",
+  "metadata": {
+    "name": "singapore-learning-advisor",
+    "description": null
+  },
+  "harness": {
+    "adapter_id": "nvidia.fabric.langchain.deepagents",
+    "resolution": "preinstalled"
+  },
+  "runtime": {
+    "input_schema": "chat",
+    "output_schema": "message",
+    "artifacts": null,
+    "timeout_seconds": 600.0,
+    "max_turns": 24
+  },
+  "tools": {
+    "enabled": [
+      "search_courses",
+      "get_course_details",
+      "compare_courses"
+    ]
+  },
+  "models": {
+    "default": {
+      "provider": "openai-compatible",
+      "model": "lab-advisor-capable",
+      "base_url": "http://127.0.0.1:18476/v1",
+      "api_key_env": "LAB_GATEWAY_KEY",
+      "max_tokens": 1024,
+      "temperature": 0.0,
+      "top_p": null
+    }
+  },
+  "environment": {
+    "provider": "local",
+    "workspace": "/workspace/run/workspace",
+    "artifacts": null,
+    "env_names": [
+      "LAB_GATEWAY_KEY"
+    ]
+  },
+  "mcp": {
+    "servers": {
+      "catalogue": {
+        "transport": "stdio",
+        "url": "/opt/lab/.venv/bin/python",
+        "args": [
+          "-m",
+          "learning_lab.course_mcp"
+        ],
+        "env": {
+          "LAB_PREFERENCES_FILE": "/workspace/run/preferences.json",
+          "LAB_CATALOGUE_FILE": "/workspace/run/catalogue-snapshot.json",
+          "LAB_MCP_EVIDENCE_FILE": "/workspace/run/mcp-tools-list.jsonl"
+        },
+        "exposure": "harness_native"
+      }
+    }
+  },
+  "relay": {
+    "project": null,
+    "output_dir": "/workspace/run/fabric-traces",
+    "observability": {
+      "version": 4,
+      "atof": {
+        "enabled": true,
+        "sinks": [
+          {
+            "type": "file",
+            "output_directory": "/workspace/run/fabric-traces",
+            "filename": "relay.jsonl",
+            "mode": "append"
+          }
+        ]
+      },
+      "atif": null,
+      "opentelemetry": null,
+      "policy": null,
+      "enable_full_payloads": false
+    },
+    "components": [],
+    "policy": null
+  },
+  "skills": {
+    "paths": [
+      "/opt/lab/runtime-skills/course-advisor"
+    ]
+  },
+  "instructions_sha256": "d4a2075d6c729f6c0c53ed65b0e45511cc51ae12186700d3d089a44342aca72d"
+}

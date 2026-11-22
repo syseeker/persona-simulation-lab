@@ -1,0 +1,24 @@
+{
+  "stage": "native Data Designer post-generation profiling",
+  "status": "completed",
+  "error_type": null,
+  "error": null,
+  "completed_batch_paths": [
+    "[private-run]/designer-private/artifacts/retail/parquet-files/batch_00000.parquet"
+  ],
+  "analysis_report": "designer-analysis.json",
+  "replayed_generation": false,
+  "compatibility": {
+    "sdk_version": "0.10.0",
+    "boundary": "calculate_output_token_stats",
+    "normalization": "pandas.NA to native NaN; JSON null for undefined statistics",
+    "normalized_fields": [
+      {
+        "column": "retail_situation",
+        "statistic": "output_tokens_stddev"
+      }
+    ],
+    "input_rows_modified": false,
+    "generation_replayed": false
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "agent_name": "singapore-learning-advisor",
+  "status": "pass",
+  "checks": [
+    {
+      "name": "adapter_descriptor",
+      "status": "pass",
+      "message": "resolved installed_package adapter descriptor `nvidia.fabric.hermes`",
+      "metadata": {
+        "source": "installed_package"
+      }
+    },
+    {
+      "name": "resolution",
+      "status": "pass",
+      "message": "selected resolution strategy `Preinstalled`",
+      "metadata": {}
+    },
+    {
+      "name": "environment",
+      "status": "pass",
+      "message": "resolved caller_owned local environment context",
+      "metadata": {
+        "control_location": "in_env_control",
+        "ownership": "caller_owned",
+        "provider": "local"
+      }
+    }
+  ]
+}

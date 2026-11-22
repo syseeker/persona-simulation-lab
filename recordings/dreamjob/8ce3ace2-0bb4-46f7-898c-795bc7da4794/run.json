@@ -1,0 +1,87 @@
+{
+  "schema": "citizen-journey/v1",
+  "run_id": "8ce3ace2-0bb4-46f7-898c-795bc7da4794",
+  "condition_id": "36ce4b28-f20a-402b-9c25-b960aa5d7c40",
+  "episode_id": "0e610052-f541-4ace-978d-e38821900d83",
+  "scenario_id": "dreamjob",
+  "status": "completed",
+  "created_at": "2026-11-22T12:08:45.869310+00:00",
+  "started_at": "2026-11-22T12:08:45.983058+00:00",
+  "ended_at": "2026-11-22T12:15:29.264727+00:00",
+  "stage": "deploy",
+  "calls": 42,
+  "cleanup_confirmed": true,
+  "configuration": {
+    "harness": "deepagents",
+    "fabric": true,
+    "route": "fixed",
+    "proxy": "LiteLLM",
+    "execution": "standalone baseline + separate Helix-managed condition",
+    "designer": true,
+    "guardrails": true,
+    "helix": true,
+    "turn_limit": 3,
+    "model_call_limit": 120,
+    "output_tokens": 1024
+  },
+  "source_revision": "99914ca525e4cabd11d72c26390eac96ada143ca",
+  "source_hashes": {
+    "src/learning_lab/journey.py": "6a14532ab6f6fe3c7531466e956d04faab181ccddca8daa87afe0a8d9bd0be8b",
+    "src/learning_lab/datasets.py": "0f9f7af968f29b16e5c84998d80858945d12ff2e470ab194f429e9b53378703a",
+    "src/learning_lab/stories.py": "61be8b8c87aee42a843044f8a5eac2842d9af74b203a82d9a2faa643a97f94d0",
+    "src/learning_lab/simulation.py": "0c4f6acbb03a34809b2736dcb22ab7608739bdcf8a2d5119d732ca0f6ffed59c",
+    "src/learning_lab/fabric_target.py": "4b293e6dfba146b9cd40c54621bb2fd1207ec61e5f7f67490f54ae879b568775",
+    "src/learning_lab/course_mcp.py": "2c7d05e09aa50a6d156b9dd5eac93c3a2adda016e9d1779b1c76075514d3c973",
+    "src/learning_lab/catalogue.py": "db256e366d50addce67242e5ef9c16b225ab88b8f5e11bd8c72a9be51ed84280",
+    "src/learning_lab/inference.py": "f8dd324180c188a45b6c489cd89b57c61bf839538214f7594890a048d452719e",
+    "integrations/proxy/litellm.yaml": "432feebd4bdcaafc11aa6e202c7e359b3c2b71fdd5645717cdd8b9f8e48520fb",
+    "src/learning_lab/settings.py": "2f938000cce64f7b21e4e52ec5ddd553ab12424d3a1ec845dcf935cab4b431a0",
+    "src/learning_lab/journey_checks.py": "9cdc5d65357fda40556d7912fafbe0e6f7d02898018ada20d4093e8cc4161e71",
+    "src/learning_lab/sandbox.py": "5f4f6ddbeb819c979a05372826cf8ac1d59dc494999eac206178cf0519a002bb",
+    "src/learning_lab/sandbox_runtime.py": "00b066f683ee4a109a8e41baa12b4687e62db445128a01d09ccb1a8312c7e841",
+    "src/learning_lab/behavioural_safeguards.py": "3bd7e9ffef6224077f0a9419a7c532ae8565a11a34dac8ead2565a5cb231bf87",
+    "src/learning_lab/retail.py": "94a45d4ef6e3341adee6ca9e1637e457f39a5f5dc384403fdc3e7e0ddf7b7d6c",
+    "src/learning_lab/retail_checks.py": "618543cbda3a43d30ed561739e1387afa17b0da61f003da8bf1bc5035c4eb7fc",
+    "src/learning_lab/retail_experiments.py": "00a8764477c1e850a82f392b44c2113f8ea8b22e08b419617c4df1f29064f76a",
+    "src/learning_lab/retail_managed.py": "0c7742be34dadc78b8452a1ac8fc662e09eb8eb86261f24ceb8ee1c9883c5dfb",
+    "src/learning_lab/probe.py": "f6912b9f4432e6c7cd1b8feb41a8f1a5aebf25ff0b8c6554b5c00c8a8b107cdd",
+    "integrations/designer/retail_situation.py": "e68ca74d19aa25767e2f885a60cd92b69438bda5c939f6c93c7a8ad72f8fcd2f",
+    "integrations/designer/learning_preferences.py": "928651e6c356fd2c9128bfd6dd568320cb7a0a3738897ecff25113bbc7c53ced",
+    "integrations/designer/profiling_compat.py": "68730c5cfa2c0b0ef23d2c413b1ed4452b5130300a6e0975a9c7526fbb1c0d53",
+    "integrations/platform/retail_resources.py": "e0b87288adca6cba00553cfd3324cc230ab777b76ef0adae8afc1f3db37a64ea",
+    "integrations/platform/retail_evaluate.py": "3008f8d6ac0057dfedffa8c006196197c3706475676793e64e392192ca24a3d0",
+    "integrations/platform/package_agent.py": "88f2026cb4fb87901dd124e2ca25be1645e2a8f7378d275f371522c2cdb09eba",
+    "integrations/helix/evaluate.py": "4bc6956a9f32f1177abc7c4a34a016d099b674e1196f56d71a9cc09bb016edfa",
+    "src/learning_lab/retail_policy.py": "48e9db4ed0ba07ce142cbbe111f76936f2e4dc372736310c97fc719a849e63a7",
+    "integrations/proxy/retail-litellm.yaml": "bcf4acee6e8fece8154b95ff1c09d378381e0ac1fb5f786c95c3b5bea55da150",
+    "integrations/proxy/lab_routing.py": "460b2e5b54fb36c20488664428c41eb32ade8688bf13d547c4bde205a243c89f"
+  },
+  "catalogue_sha256": "d2ce4abda853f269d2fd1c93bb60dbd2cd1468a6562e8bc3fbb7140744e38dfa",
+  "native_thread_id": "021cf296-2655-499b-8750-2f6183c7aa90",
+  "evaluation_passed": 24,
+  "evaluation_total": 24,
+  "verification": {
+    "helix_job": {
+      "verified": true,
+      "status": "completed"
+    },
+    "routing": {
+      "verified": true,
+      "status": "completed",
+      "diagnostic_verified": true,
+      "provider_notice": "Each verified condition requires completed execution, passing criteria, native course search and cleanup; routed execution also requires native decisions. Overall verification additionally requires full fixed-condition access to each requested model. Candidate call coverage remains separate."
+    },
+    "managed": {
+      "verified": true,
+      "status": "completed"
+    }
+  },
+  "baseline_status": "completed",
+  "capture_schema": "citizen-captures/v1",
+  "capture_coverage": {
+    "required": 181,
+    "captured": 181,
+    "complete": true,
+    "missing": []
+  }
+}

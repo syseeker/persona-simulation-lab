@@ -1,0 +1,2513 @@
+{
+  "schema": "citizen-public-captures/v1",
+  "registry_schema": "citizen-capture-registry/v1",
+  "scenario_id": "photography",
+  "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+  "execution_status": "completed",
+  "source_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+  "host_sdk_versions": {
+    "nemo-fabric": "0.6.1",
+    "nemo-relay": "0.11.1",
+    "usersim": "0.3.0",
+    "data-designer": "0.9.7"
+  },
+  "source_manifest_sha256": "0775b168b734f37ceecc0c16a3f2f94521d2904b49467c6e87064751f7e42911",
+  "coverage": {
+    "required": 28,
+    "captured": 28,
+    "complete": true,
+    "missing": []
+  },
+  "rows": [
+    {
+      "id": "CAP-PER-01",
+      "module": "Nemotron Personas / application selection",
+      "lessons": [
+        1
+      ],
+      "operation": "preserve the selected original",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-per-01",
+      "turn": null,
+      "model_role": null,
+      "description": "source-lock.json; resolved-inputs.json",
+      "artifacts": [
+        {
+          "id": "9dd6d6666e474e7126a04806",
+          "sha256": "36f3910e42200f7970bf266d08c513026c88cf6f366979cbf96762b5f7ab2a45",
+          "size_bytes": 490,
+          "captured_at": "2026-11-22T11:54:03.058668+00:00",
+          "role": "application-input",
+          "schema": "source-lock/v1",
+          "access": "private"
+        },
+        {
+          "id": "add9a6808d1dee37bb332623",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/9dd6d6666e474e7126a04806-source-lock.projection.json",
+          "sha256": "2a4e2b2cbde47ffe84500ae494796c3e11777df954b3e6fb0102c25c9300034b",
+          "size_bytes": 354,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "9dd6d6666e474e7126a04806"
+          ],
+          "source_sha256": "36f3910e42200f7970bf266d08c513026c88cf6f366979cbf96762b5f7ab2a45",
+          "source_role": "application-input",
+          "source_schema": "source-lock/v1"
+        },
+        {
+          "id": "f2527583a8b561d0e95ee10c",
+          "sha256": "ee8aa669ef2c8ec1508d1e47ef6cf76a954088e90b51798245d638cee57e6fb3",
+          "size_bytes": 13333,
+          "captured_at": "2026-11-22T11:54:03.200173+00:00",
+          "role": "application-input",
+          "schema": "source-lock/v1",
+          "access": "private"
+        },
+        {
+          "id": "47ff9ba41b0322005b531328",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/f2527583a8b561d0e95ee10c-resolved-inputs.projection.json",
+          "sha256": "555f3f6b0aa642bd0aa2ef97b25f2f9f6f07c2cdf5e094e4b0a5f4d6a2838740",
+          "size_bytes": 424,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "f2527583a8b561d0e95ee10c"
+          ],
+          "source_sha256": "ee8aa669ef2c8ec1508d1e47ef6cf76a954088e90b51798245d638cee57e6fb3",
+          "source_role": "application-input",
+          "source_schema": "source-lock/v1"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "projection"
+    },
+    {
+      "id": "CAP-SIT-01",
+      "module": "Authored situation",
+      "lessons": [
+        2
+      ],
+      "operation": "supply goal, constraints and disclosure rules",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-sit-01",
+      "turn": null,
+      "model_role": null,
+      "description": "situation.json",
+      "artifacts": [
+        {
+          "id": "3ffa5c0ea8b2a92249d3f937",
+          "sha256": "59d748f21c5be5ad28cc9a6268581903234a11247a5eafa85cf3c674601a7654",
+          "size_bytes": 224,
+          "captured_at": "2026-11-22T11:54:03.059510+00:00",
+          "role": "authored-source",
+          "schema": "application/v1",
+          "access": "private"
+        },
+        {
+          "id": "95d19a7b2d1d078ce79c8163",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/3ffa5c0ea8b2a92249d3f937-situation.projection.json",
+          "sha256": "59d748f21c5be5ad28cc9a6268581903234a11247a5eafa85cf3c674601a7654",
+          "size_bytes": 224,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "3ffa5c0ea8b2a92249d3f937"
+          ],
+          "source_sha256": "59d748f21c5be5ad28cc9a6268581903234a11247a5eafa85cf3c674601a7654",
+          "source_role": "authored-source",
+          "source_schema": "application/v1"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "projection"
+    },
+    {
+      "id": "CAP-DD-01",
+      "module": "Data Designer",
+      "lessons": [
+        2
+      ],
+      "operation": "configure seed and generated columns",
+      "scenario_ids": [
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "not-used",
+      "required": false,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-dd-01",
+      "turn": null,
+      "model_role": null,
+      "description": "designer-private/configuration.json; designer-private/artifacts/retail/builder_config.json",
+      "artifacts": [],
+      "access": "private",
+      "publication_availability": "not-used",
+      "publication_kind": null
+    },
+    {
+      "id": "CAP-DD-02",
+      "module": "Data Designer",
+      "lessons": [
+        2
+      ],
+      "operation": "inspect selected generation settings",
+      "scenario_ids": [
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "not-used",
+      "required": false,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-dd-02",
+      "turn": null,
+      "model_role": null,
+      "description": "designer-configuration.json",
+      "artifacts": [],
+      "access": "private",
+      "publication_availability": "not-used",
+      "publication_kind": null
+    },
+    {
+      "id": "CAP-DD-03",
+      "module": "Data Designer",
+      "lessons": [
+        2
+      ],
+      "operation": "configure execution and provider",
+      "scenario_ids": [
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "not-used",
+      "required": false,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-dd-03",
+      "turn": null,
+      "model_role": null,
+      "description": "Proposed designer-runtime-config.json; designer-provider-config.json",
+      "artifacts": [],
+      "access": "private",
+      "publication_availability": "not-used",
+      "publication_kind": null
+    },
+    {
+      "id": "CAP-DD-04",
+      "module": "Data Designer / application lineage",
+      "lessons": [
+        2
+      ],
+      "operation": "retain generated fields, completion and lineage",
+      "scenario_ids": [
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "not-used",
+      "required": false,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-dd-04",
+      "turn": null,
+      "model_role": null,
+      "description": "designer-output.json; designer-generation.json; designer-lineage.json",
+      "artifacts": [],
+      "access": "private",
+      "publication_availability": "not-used",
+      "publication_kind": null
+    },
+    {
+      "id": "CAP-DD-05",
+      "module": "Data Designer",
+      "lessons": [
+        2
+      ],
+      "operation": "retain profiling outcome",
+      "scenario_ids": [
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "not-used",
+      "required": false,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-dd-05",
+      "turn": null,
+      "model_role": null,
+      "description": "Native profiling report JSON, if produced",
+      "artifacts": [],
+      "access": "private",
+      "publication_availability": "not-used",
+      "publication_kind": null
+    },
+    {
+      "id": "CAP-US-01",
+      "module": "UserSim",
+      "lessons": [
+        2
+      ],
+      "operation": "resolve persona, behaviour and probe",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-us-01",
+      "turn": null,
+      "model_role": null,
+      "description": "resolved-inputs.json; usersim-result.json",
+      "artifacts": [
+        {
+          "id": "f2527583a8b561d0e95ee10c",
+          "sha256": "ee8aa669ef2c8ec1508d1e47ef6cf76a954088e90b51798245d638cee57e6fb3",
+          "size_bytes": 13333,
+          "captured_at": "2026-11-22T11:54:03.200173+00:00",
+          "role": "native-input",
+          "schema": "ConversationSimulatorConfig / episode preamble",
+          "access": "private"
+        },
+        {
+          "id": "47ff9ba41b0322005b531328",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/f2527583a8b561d0e95ee10c-resolved-inputs.projection.json",
+          "sha256": "555f3f6b0aa642bd0aa2ef97b25f2f9f6f07c2cdf5e094e4b0a5f4d6a2838740",
+          "size_bytes": 424,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "f2527583a8b561d0e95ee10c"
+          ],
+          "source_sha256": "ee8aa669ef2c8ec1508d1e47ef6cf76a954088e90b51798245d638cee57e6fb3",
+          "source_role": "application-input",
+          "source_schema": "source-lock/v1"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "projection"
+    },
+    {
+      "id": "CAP-US-02",
+      "module": "UserSim",
+      "lessons": [
+        2
+      ],
+      "operation": "inspect safe configuration summary",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-us-02",
+      "turn": null,
+      "model_role": null,
+      "description": "usersim-setup.json",
+      "artifacts": [
+        {
+          "id": "f2527583a8b561d0e95ee10c",
+          "sha256": "ee8aa669ef2c8ec1508d1e47ef6cf76a954088e90b51798245d638cee57e6fb3",
+          "size_bytes": 13333,
+          "captured_at": "2026-11-22T11:54:03.200173+00:00",
+          "role": "native-input",
+          "schema": "application/v1",
+          "access": "private"
+        },
+        {
+          "id": "47ff9ba41b0322005b531328",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/f2527583a8b561d0e95ee10c-resolved-inputs.projection.json",
+          "sha256": "555f3f6b0aa642bd0aa2ef97b25f2f9f6f07c2cdf5e094e4b0a5f4d6a2838740",
+          "size_bytes": 424,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "f2527583a8b561d0e95ee10c"
+          ],
+          "source_sha256": "ee8aa669ef2c8ec1508d1e47ef6cf76a954088e90b51798245d638cee57e6fb3",
+          "source_role": "application-input",
+          "source_schema": "source-lock/v1"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "projection"
+    },
+    {
+      "id": "CAP-US-03",
+      "module": "UserSim / model access",
+      "lessons": [
+        2,
+        4
+      ],
+      "operation": "configure learner and judge models",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-us-03",
+      "turn": null,
+      "model_role": null,
+      "description": "Proposed usersim-role-models.json",
+      "artifacts": [
+        {
+          "id": "6a9a1b00a785759d80a29be1",
+          "sha256": "ae34b43aae8ed12e0376de3c7d32d05498fd4067b172d0c78a3a39fa5b74a348",
+          "size_bytes": 591,
+          "captured_at": "2026-11-22T11:54:16.627423+00:00",
+          "role": "native-effective-configuration",
+          "schema": "HostRoleModel",
+          "access": "private"
+        },
+        {
+          "id": "525acd6a521029719c87801d",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/6a9a1b00a785759d80a29be1-usersim-model-config.projection.json",
+          "sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+          "size_bytes": 3,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "6a9a1b00a785759d80a29be1"
+          ],
+          "source_sha256": "ae34b43aae8ed12e0376de3c7d32d05498fd4067b172d0c78a3a39fa5b74a348",
+          "source_role": "native-effective-configuration",
+          "source_schema": "HostRoleModel"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "projection"
+    },
+    {
+      "id": "CAP-US-04",
+      "module": "UserSim",
+      "lessons": [
+        4
+      ],
+      "operation": "generate turns and finalize trajectory",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-us-04",
+      "turn": null,
+      "model_role": null,
+      "description": "usersim-activations.jsonl; public-conversation.json; usersim-result.json; usersim-quality-flags.json",
+      "artifacts": [
+        {
+          "id": "70c297789c0f80c924bb3506",
+          "sha256": "2f70baa086affc5e84ac5899da134fa6b9ed44fa6cb525a8a97e9c03a7feba8e",
+          "size_bytes": 1574,
+          "captured_at": "2026-11-22T11:54:24.392622+00:00",
+          "role": "native-response",
+          "schema": "UserSim external runtime",
+          "access": "private"
+        },
+        {
+          "id": "d3bf0d94fc73c958d483bb90",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/70c297789c0f80c924bb3506-usersim-activations.projection.jsonl",
+          "sha256": "2f70baa086affc5e84ac5899da134fa6b9ed44fa6cb525a8a97e9c03a7feba8e",
+          "size_bytes": 1574,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "70c297789c0f80c924bb3506"
+          ],
+          "source_sha256": "2f70baa086affc5e84ac5899da134fa6b9ed44fa6cb525a8a97e9c03a7feba8e",
+          "source_role": "native-response",
+          "source_schema": "UserSim external runtime"
+        },
+        {
+          "id": "2959a56ae97d59cc71fbc6fc",
+          "sha256": "5c027c7eaf08f85ce6b7c28b69b7ef2e7a4b29690104bf8c5e427a5a8c55507f",
+          "size_bytes": 7431,
+          "captured_at": "2026-11-22T11:54:22.895770+00:00",
+          "role": "native-response",
+          "schema": "UserSim external runtime",
+          "access": "private"
+        },
+        {
+          "id": "6491c66c1e7c445f73ec4e69",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/2959a56ae97d59cc71fbc6fc-public-conversation.projection.json",
+          "sha256": "1226c48aa79b373307931d6d6543d5b501e547e6fb87ba1a08efaa4208ea610e",
+          "size_bytes": 7377,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "2959a56ae97d59cc71fbc6fc"
+          ],
+          "source_sha256": "5c027c7eaf08f85ce6b7c28b69b7ef2e7a4b29690104bf8c5e427a5a8c55507f",
+          "source_role": "native-response",
+          "source_schema": "UserSim external runtime"
+        },
+        {
+          "id": "4ebf6213381d9582415bb145",
+          "sha256": "70264adca133b638ef13fe90b85c8a8b9196ffb701241cbd63f627b6681badb8",
+          "size_bytes": 18395,
+          "captured_at": "2026-11-22T11:54:24.400210+00:00",
+          "role": "native-response",
+          "schema": "UserSim external runtime",
+          "access": "private"
+        },
+        {
+          "id": "84838bd123c352be7b74fc2a",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/4ebf6213381d9582415bb145-usersim-result.projection.json",
+          "sha256": "a283c60bff434d5231fdbdee8f91ef407ca575208c72c3d363979163ff2493d4",
+          "size_bytes": 768,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "4ebf6213381d9582415bb145"
+          ],
+          "source_sha256": "70264adca133b638ef13fe90b85c8a8b9196ffb701241cbd63f627b6681badb8",
+          "source_role": "native-response",
+          "source_schema": "UserSim external runtime"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "projection"
+    },
+    {
+      "id": "CAP-US-05",
+      "module": "UserSim",
+      "lessons": [
+        6
+      ],
+      "operation": "optional post-loop evaluation/report",
+      "scenario_ids": [],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "not-used",
+      "required": false,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-us-05",
+      "turn": null,
+      "model_role": null,
+      "description": "Separate UserSim eval/report settings and output",
+      "artifacts": [],
+      "access": "private",
+      "publication_availability": "not-used",
+      "publication_kind": null
+    },
+    {
+      "id": "CAP-FAB-01",
+      "module": "Fabric",
+      "lessons": [
+        3
+      ],
+      "operation": "assemble native configuration",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-fab-01",
+      "turn": null,
+      "model_role": null,
+      "description": "Native fabric-config.json",
+      "artifacts": [
+        {
+          "id": "04e291481af5c740cf23e9ed",
+          "sha256": "8df625fa92d3900c1aa998be109fa823383c93561ebafb85a36e67c734487a9c",
+          "size_bytes": 4660,
+          "captured_at": "2026-11-22T11:54:24.822345+00:00",
+          "role": "native-effective-configuration",
+          "schema": "FabricConfig",
+          "access": "private"
+        },
+        {
+          "id": "9fc50394e0d51857c2bf2bcc",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/04e291481af5c740cf23e9ed-fabric-config.projection.json",
+          "sha256": "7abc654ea17f11239ea7ea864246d7bf4b2a397d713831a2c725e9128bfad7d6",
+          "size_bytes": 2268,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "04e291481af5c740cf23e9ed"
+          ],
+          "source_sha256": "8df625fa92d3900c1aa998be109fa823383c93561ebafb85a36e67c734487a9c",
+          "source_role": "native-effective-configuration",
+          "source_schema": "FabricConfig"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "projection"
+    },
+    {
+      "id": "CAP-FAB-02",
+      "module": "Fabric / teaching projection",
+      "lessons": [
+        3
+      ],
+      "operation": "publish selected settings",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-fab-02",
+      "turn": null,
+      "model_role": null,
+      "description": "Public fabric-config.json; companion framework-config.json",
+      "artifacts": [
+        {
+          "id": "04e291481af5c740cf23e9ed",
+          "sha256": "8df625fa92d3900c1aa998be109fa823383c93561ebafb85a36e67c734487a9c",
+          "size_bytes": 4660,
+          "captured_at": "2026-11-22T11:54:24.822345+00:00",
+          "role": "native-effective-configuration",
+          "schema": "FabricConfig",
+          "access": "private"
+        },
+        {
+          "id": "9fc50394e0d51857c2bf2bcc",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/04e291481af5c740cf23e9ed-fabric-config.projection.json",
+          "sha256": "7abc654ea17f11239ea7ea864246d7bf4b2a397d713831a2c725e9128bfad7d6",
+          "size_bytes": 2268,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "04e291481af5c740cf23e9ed"
+          ],
+          "source_sha256": "8df625fa92d3900c1aa998be109fa823383c93561ebafb85a36e67c734487a9c",
+          "source_role": "native-effective-configuration",
+          "source_schema": "FabricConfig"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "projection"
+    },
+    {
+      "id": "CAP-FAB-03",
+      "module": "Fabric",
+      "lessons": [
+        3
+      ],
+      "operation": "resolve adapter and check prerequisites",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-fab-03",
+      "turn": null,
+      "model_role": null,
+      "description": "fabric-plan.json; fabric-doctor.json",
+      "artifacts": [
+        {
+          "id": "74fc4aa3cbd2419f5f2aca6b",
+          "sha256": "f40d85fc8a741d8eb1e8d722e1e6f8b4b0093ca696005c085c8509f2d478f10e",
+          "size_bytes": 20752,
+          "captured_at": "2026-11-22T11:54:24.824042+00:00",
+          "role": "native-response",
+          "schema": "ResolvedPlan / DoctorReport",
+          "access": "private"
+        },
+        {
+          "id": "2eb6edb0bc079d9017981b15",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/74fc4aa3cbd2419f5f2aca6b-fabric-plan.projection.json",
+          "sha256": "8fe3a230ecece6909e731edae6d7a46eb8a1bbadd6c1946e341e537d1908b5eb",
+          "size_bytes": 3780,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "74fc4aa3cbd2419f5f2aca6b"
+          ],
+          "source_sha256": "f40d85fc8a741d8eb1e8d722e1e6f8b4b0093ca696005c085c8509f2d478f10e",
+          "source_role": "native-response",
+          "source_schema": "ResolvedPlan / DoctorReport"
+        },
+        {
+          "id": "644361175ff7ea0c59b00841",
+          "sha256": "3e1c0af8ffaf8b9641ea3c5e489a78dbc4befb1ba187e67b1af5d1b5c8f5f3e6",
+          "size_bytes": 590,
+          "captured_at": "2026-11-22T11:54:24.822903+00:00",
+          "role": "native-response",
+          "schema": "ResolvedPlan / DoctorReport",
+          "access": "private"
+        },
+        {
+          "id": "25697e9f8d5389ec05c50318",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/644361175ff7ea0c59b00841-fabric-doctor.projection.json",
+          "sha256": "371bfd54db60a7ee54eccefb0945dc3d8181b151d93b647e3d2bc58b8818146d",
+          "size_bytes": 752,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "644361175ff7ea0c59b00841"
+          ],
+          "source_sha256": "3e1c0af8ffaf8b9641ea3c5e489a78dbc4befb1ba187e67b1af5d1b5c8f5f3e6",
+          "source_role": "native-response",
+          "source_schema": "ResolvedPlan / DoctorReport"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "projection"
+    },
+    {
+      "id": "CAP-FAB-04",
+      "module": "Fabric / application instrumentation",
+      "lessons": [
+        3,
+        9
+      ],
+      "operation": "start/close persistent runtime",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-fab-04",
+      "turn": null,
+      "model_role": null,
+      "description": "fabric-lifecycle.jsonl; runtime-receipt.json",
+      "artifacts": [
+        {
+          "id": "6f559d8ffd95581f8123ba0b",
+          "sha256": "8fa645fd5a8a5015d8c9f003c4bf470c6f9aa768554dbfbf555d6375fe55c72e",
+          "size_bytes": 901,
+          "captured_at": "2026-11-22T11:54:24.823406+00:00",
+          "role": "application-lifecycle",
+          "schema": "application/v1",
+          "access": "private"
+        },
+        {
+          "id": "c17bb434f6c5ca6fb959195f",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/6f559d8ffd95581f8123ba0b-fabric-lifecycle.projection.jsonl",
+          "sha256": "8fa645fd5a8a5015d8c9f003c4bf470c6f9aa768554dbfbf555d6375fe55c72e",
+          "size_bytes": 901,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "6f559d8ffd95581f8123ba0b"
+          ],
+          "source_sha256": "8fa645fd5a8a5015d8c9f003c4bf470c6f9aa768554dbfbf555d6375fe55c72e",
+          "source_role": "application-lifecycle",
+          "source_schema": "application/v1"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "projection"
+    },
+    {
+      "id": "CAP-FAB-05",
+      "module": "Fabric",
+      "lessons": [
+        4
+      ],
+      "operation": "retain exact invocation input",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-fab-05",
+      "turn": null,
+      "model_role": null,
+      "description": "Proposed fabric-run-requests.jsonl",
+      "artifacts": [
+        {
+          "id": "8a8101c50beb1736b5710003",
+          "sha256": "e41eee6fa1f5c243ef6bac943352846b8eafe4bf7686b88e73cd2530df1445cf",
+          "size_bytes": 641,
+          "captured_at": "2026-11-22T11:54:24.825086+00:00",
+          "role": "native-request",
+          "schema": "RunRequest",
+          "access": "private"
+        },
+        {
+          "id": "7288b4887b361f1540b5a86e",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/8a8101c50beb1736b5710003-fabric-run-requests.projection.jsonl",
+          "sha256": "c3bf57ab05f268b3a703b772d116110725a0c613bfb70de8ac3944070b30e937",
+          "size_bytes": 661,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "8a8101c50beb1736b5710003"
+          ],
+          "source_sha256": "e41eee6fa1f5c243ef6bac943352846b8eafe4bf7686b88e73cd2530df1445cf",
+          "source_role": "native-request",
+          "source_schema": "RunRequest"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "projection"
+    },
+    {
+      "id": "CAP-FAB-06",
+      "module": "Fabric",
+      "lessons": [
+        4
+      ],
+      "operation": "retain complete normalized return",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-fab-06",
+      "turn": null,
+      "model_role": null,
+      "description": "Proposed fabric-run-results.jsonl",
+      "artifacts": [
+        {
+          "id": "fd1bdec1889488da55bc60fd",
+          "sha256": "c6f88393e52cf235a1040b9bb2f6ca14e829cd891d89e73cd775251997ee07ba",
+          "size_bytes": 18303,
+          "captured_at": "2026-11-22T11:54:24.825712+00:00",
+          "role": "native-response",
+          "schema": "RunResult / terminal exception",
+          "access": "private"
+        },
+        {
+          "id": "bb182d29969f014841275d20",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/fd1bdec1889488da55bc60fd-fabric-run-results.projection.jsonl",
+          "sha256": "f56992375e747cf29d6ca0e245ce5a1df4ddf479b58080d2b3c1e4ee88612e99",
+          "size_bytes": 2258,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "fd1bdec1889488da55bc60fd"
+          ],
+          "source_sha256": "c6f88393e52cf235a1040b9bb2f6ca14e829cd891d89e73cd775251997ee07ba",
+          "source_role": "native-response",
+          "source_schema": "RunResult / terminal exception"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "projection"
+    },
+    {
+      "id": "CAP-FAB-07",
+      "module": "Fabric / application result handling",
+      "lessons": [
+        4
+      ],
+      "operation": "inspect retained response and result fields",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-fab-07",
+      "turn": null,
+      "model_role": null,
+      "description": "reply-outcomes.jsonl; fabric-invocations.json",
+      "artifacts": [
+        {
+          "id": "9e7758c5f370e840f34edf60",
+          "sha256": "90b14d16360412c5e1076ba72ba9bc45600c2cf2b9f6cf9e4c8b8f0b773ff80a",
+          "size_bytes": 13251,
+          "captured_at": "2026-11-22T11:54:24.830828+00:00",
+          "role": "application-projection",
+          "schema": "application/v1",
+          "access": "private"
+        },
+        {
+          "id": "bb16a0691d0dc4f771cf6117",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/9e7758c5f370e840f34edf60-reply-outcomes.projection.jsonl",
+          "sha256": "949a20c7d17573fb4976e41f1ce0bcc72a3ecb851cf29a4bfe54bbf87a031517",
+          "size_bytes": 427,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "9e7758c5f370e840f34edf60"
+          ],
+          "source_sha256": "90b14d16360412c5e1076ba72ba9bc45600c2cf2b9f6cf9e4c8b8f0b773ff80a",
+          "source_role": "application-projection",
+          "source_schema": "application/v1"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "projection"
+    },
+    {
+      "id": "CAP-DA-01",
+      "module": "Deep Agents",
+      "lessons": [
+        3,
+        4
+      ],
+      "operation": "configure and execute harness",
+      "scenario_ids": [
+        "photography",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-da-01",
+      "turn": null,
+      "model_role": null,
+      "description": "Harness settings inside native fabric-config.json and fabric-plan.json",
+      "artifacts": [
+        {
+          "id": "04e291481af5c740cf23e9ed",
+          "sha256": "8df625fa92d3900c1aa998be109fa823383c93561ebafb85a36e67c734487a9c",
+          "size_bytes": 4660,
+          "captured_at": "2026-11-22T11:54:24.822345+00:00",
+          "role": "native-effective-configuration",
+          "schema": "Fabric Deep Agents adapter",
+          "access": "private"
+        },
+        {
+          "id": "9fc50394e0d51857c2bf2bcc",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/04e291481af5c740cf23e9ed-fabric-config.projection.json",
+          "sha256": "7abc654ea17f11239ea7ea864246d7bf4b2a397d713831a2c725e9128bfad7d6",
+          "size_bytes": 2268,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "04e291481af5c740cf23e9ed"
+          ],
+          "source_sha256": "8df625fa92d3900c1aa998be109fa823383c93561ebafb85a36e67c734487a9c",
+          "source_role": "native-effective-configuration",
+          "source_schema": "FabricConfig"
+        },
+        {
+          "id": "74fc4aa3cbd2419f5f2aca6b",
+          "sha256": "f40d85fc8a741d8eb1e8d722e1e6f8b4b0093ca696005c085c8509f2d478f10e",
+          "size_bytes": 20752,
+          "captured_at": "2026-11-22T11:54:24.824042+00:00",
+          "role": "native-effective-configuration",
+          "schema": "Fabric Deep Agents adapter",
+          "access": "private"
+        },
+        {
+          "id": "2eb6edb0bc079d9017981b15",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/74fc4aa3cbd2419f5f2aca6b-fabric-plan.projection.json",
+          "sha256": "8fe3a230ecece6909e731edae6d7a46eb8a1bbadd6c1946e341e537d1908b5eb",
+          "size_bytes": 3780,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "74fc4aa3cbd2419f5f2aca6b"
+          ],
+          "source_sha256": "f40d85fc8a741d8eb1e8d722e1e6f8b4b0093ca696005c085c8509f2d478f10e",
+          "source_role": "native-response",
+          "source_schema": "ResolvedPlan / DoctorReport"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "projection"
+    },
+    {
+      "id": "CAP-HER-01",
+      "module": "Hermes",
+      "lessons": [
+        3
+      ],
+      "operation": "configure managed harness policy",
+      "scenario_ids": [
+        "boardgames"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "not-used",
+      "required": false,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-her-01",
+      "turn": null,
+      "model_role": null,
+      "description": "config.yaml",
+      "artifacts": [],
+      "access": "private",
+      "publication_availability": "not-used",
+      "publication_kind": null
+    },
+    {
+      "id": "CAP-HER-02",
+      "module": "Hermes",
+      "lessons": [
+        3,
+        4
+      ],
+      "operation": "inspect resolved native settings",
+      "scenario_ids": [
+        "boardgames"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "not-used",
+      "required": false,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-her-02",
+      "turn": null,
+      "model_role": null,
+      "description": "reply-outcomes.jsonl → raw_output.hermes_native_config",
+      "artifacts": [],
+      "access": "private",
+      "publication_availability": "not-used",
+      "publication_kind": null
+    },
+    {
+      "id": "CAP-MCP-01",
+      "module": "Course MCP",
+      "lessons": [
+        3
+      ],
+      "operation": "connect server/transport and expose tools",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-mcp-01",
+      "turn": null,
+      "model_role": null,
+      "description": "MCP settings inside native fabric-config.json and fabric-plan.json",
+      "artifacts": [
+        {
+          "id": "04e291481af5c740cf23e9ed",
+          "sha256": "8df625fa92d3900c1aa998be109fa823383c93561ebafb85a36e67c734487a9c",
+          "size_bytes": 4660,
+          "captured_at": "2026-11-22T11:54:24.822345+00:00",
+          "role": "native-effective-configuration",
+          "schema": "Fabric MCP server settings",
+          "access": "private"
+        },
+        {
+          "id": "9fc50394e0d51857c2bf2bcc",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/04e291481af5c740cf23e9ed-fabric-config.projection.json",
+          "sha256": "7abc654ea17f11239ea7ea864246d7bf4b2a397d713831a2c725e9128bfad7d6",
+          "size_bytes": 2268,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "04e291481af5c740cf23e9ed"
+          ],
+          "source_sha256": "8df625fa92d3900c1aa998be109fa823383c93561ebafb85a36e67c734487a9c",
+          "source_role": "native-effective-configuration",
+          "source_schema": "FabricConfig"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "projection"
+    },
+    {
+      "id": "CAP-MCP-02",
+      "module": "Course MCP / provider boundary",
+      "lessons": [
+        3,
+        4
+      ],
+      "operation": "retain exact discovery and permitted schemas",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-mcp-02",
+      "turn": null,
+      "model_role": null,
+      "description": "Proposed mcp-tools-list.json; provider-tool-schemas.json",
+      "artifacts": [
+        {
+          "id": "7ded817bc105d3417af3ca92",
+          "sha256": "6f6b7e1969952be67694b48570faf282aacb3eb5fd11faebadcc86976e8fe990",
+          "size_bytes": 7593,
+          "captured_at": "2026-11-22T11:54:24.829551+00:00",
+          "role": "native-schema",
+          "schema": "MCP ListToolsResult / OpenAI tools",
+          "access": "private"
+        },
+        {
+          "id": "6401a0975a713dcc615f75c4",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/7ded817bc105d3417af3ca92-mcp-tools-list.jsonl",
+          "sha256": "6f6b7e1969952be67694b48570faf282aacb3eb5fd11faebadcc86976e8fe990",
+          "size_bytes": 7593,
+          "access": "public",
+          "role": "redacted-native-configuration",
+          "schema": "MCP ListToolsResult / OpenAI tools",
+          "source_artifact_ids": [
+            "7ded817bc105d3417af3ca92"
+          ],
+          "source_sha256": "6f6b7e1969952be67694b48570faf282aacb3eb5fd11faebadcc86976e8fe990",
+          "source_role": "native-schema",
+          "source_schema": "MCP ListToolsResult / OpenAI tools"
+        },
+        {
+          "id": "0ed8b8e1cba03d41a005e74d",
+          "sha256": "5abf39c16304c1f45a724ac2cb1599ebb27d1fb3ece959b9d7818e3ea0318128",
+          "size_bytes": 4388,
+          "captured_at": "2026-11-22T11:54:22.900626+00:00",
+          "role": "native-schema",
+          "schema": "MCP ListToolsResult / OpenAI tools",
+          "access": "private"
+        },
+        {
+          "id": "f7298ffb53180b69be119ec8",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/0ed8b8e1cba03d41a005e74d-provider-tool-schemas.jsonl",
+          "sha256": "5abf39c16304c1f45a724ac2cb1599ebb27d1fb3ece959b9d7818e3ea0318128",
+          "size_bytes": 4388,
+          "access": "public",
+          "role": "redacted-native-configuration",
+          "schema": "MCP ListToolsResult / OpenAI tools",
+          "source_artifact_ids": [
+            "0ed8b8e1cba03d41a005e74d"
+          ],
+          "source_sha256": "5abf39c16304c1f45a724ac2cb1599ebb27d1fb3ece959b9d7818e3ea0318128",
+          "source_role": "native-schema",
+          "source_schema": "MCP ListToolsResult / OpenAI tools"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "redacted-native-configuration"
+    },
+    {
+      "id": "CAP-MCP-03",
+      "module": "Course MCP / catalogue",
+      "lessons": [
+        4,
+        5
+      ],
+      "operation": "inspect actual tool input/result and frozen facts",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-mcp-03",
+      "turn": null,
+      "model_role": null,
+      "description": "native-tools.json; catalogue-snapshot.json",
+      "artifacts": [
+        {
+          "id": "9420dd84b6c983421ce87334",
+          "sha256": "2d147d0501085878e2ed7a1335ffe3f974d5ee241b0d67a44def0188c6a588ad",
+          "size_bytes": 117312,
+          "captured_at": "2026-11-22T11:54:24.828539+00:00",
+          "role": "native-events",
+          "schema": "Relay ATOF tool events",
+          "access": "private"
+        },
+        {
+          "id": "0cc7adcb7171bd6694a86f6e",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/9420dd84b6c983421ce87334-relay.projection.json",
+          "sha256": "ac2425088ef757921d9829bdf2b2d4c7bd4c6695d751065892d73566ff76d24b",
+          "size_bytes": 5301,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "9420dd84b6c983421ce87334"
+          ],
+          "source_sha256": "2d147d0501085878e2ed7a1335ffe3f974d5ee241b0d67a44def0188c6a588ad",
+          "source_role": "native-events",
+          "source_schema": "Relay ATOF tool events"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "projection"
+    },
+    {
+      "id": "CAP-MCP-04",
+      "module": "Course MCP / public preferences",
+      "lessons": [
+        4
+      ],
+      "operation": "retain effective public preferences for each turn",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-mcp-04",
+      "turn": null,
+      "model_role": null,
+      "description": "Proposed preferences-by-turn.jsonl",
+      "artifacts": [
+        {
+          "id": "c53fb81f6aa25ba1c983305b",
+          "sha256": "586cb7d4a5f433cb35b66f8e8da7f9f8cf1e1d746e9efeb02f2dc1cc0e10203e",
+          "size_bytes": 442,
+          "captured_at": "2026-11-22T11:54:24.830110+00:00",
+          "role": "public-input",
+          "schema": "Preferences",
+          "access": "private"
+        },
+        {
+          "id": "b8b48596804207922d6ae321",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/c53fb81f6aa25ba1c983305b-preferences-by-turn.jsonl",
+          "sha256": "586cb7d4a5f433cb35b66f8e8da7f9f8cf1e1d746e9efeb02f2dc1cc0e10203e",
+          "size_bytes": 442,
+          "access": "public",
+          "role": "redacted-native-configuration",
+          "schema": "Preferences",
+          "source_artifact_ids": [
+            "c53fb81f6aa25ba1c983305b"
+          ],
+          "source_sha256": "586cb7d4a5f433cb35b66f8e8da7f9f8cf1e1d746e9efeb02f2dc1cc0e10203e",
+          "source_role": "public-input",
+          "source_schema": "Preferences"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "redacted-native-configuration"
+    },
+    {
+      "id": "CAP-GW-01",
+      "module": "Application model gateway",
+      "lessons": [
+        3,
+        4
+      ],
+      "operation": "configure call limits, filtering and dispatch",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-gw-01",
+      "turn": null,
+      "model_role": null,
+      "description": "Proposed gateway-effective-config.json",
+      "artifacts": [
+        {
+          "id": "fce9a94bdb3308adc7abd92e",
+          "sha256": "f5b6472855eefd5e62664e8e2d045933afa3e01bae995bde3c726f9282af7a11",
+          "size_bytes": 806,
+          "captured_at": "2026-11-22T11:54:22.900626+00:00",
+          "role": "native-effective-configuration",
+          "schema": "citizen-gateway-config/v1",
+          "access": "private"
+        },
+        {
+          "id": "e759884fb8f6427498b27e2b",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/fce9a94bdb3308adc7abd92e-gateway-effective-config.json",
+          "sha256": "45650e2be0365a6f089e017e879921d683f9e2157c9351355246950049651b1e",
+          "size_bytes": 904,
+          "access": "public",
+          "role": "redacted-native-configuration",
+          "schema": "citizen-gateway-config/v1",
+          "source_artifact_ids": [
+            "fce9a94bdb3308adc7abd92e"
+          ],
+          "source_sha256": "f5b6472855eefd5e62664e8e2d045933afa3e01bae995bde3c726f9282af7a11",
+          "source_role": "native-effective-configuration",
+          "source_schema": "citizen-gateway-config/v1"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "redacted-native-configuration"
+    },
+    {
+      "id": "CAP-GW-02",
+      "module": "Application model gateway",
+      "lessons": [
+        4,
+        5
+      ],
+      "operation": "retain admitted model calls and usage",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-gw-02",
+      "turn": null,
+      "model_role": null,
+      "description": "usage.json",
+      "artifacts": [
+        {
+          "id": "f276bf76b32efa1d1cb8d426",
+          "sha256": "15fc33a2609c631e79e59a90177b2aafb9577f17233a9e7d5e00518b95da5888",
+          "size_bytes": 4359,
+          "captured_at": "2026-11-22T11:54:24.392622+00:00",
+          "role": "application-accounting",
+          "schema": "application/v1",
+          "access": "private"
+        },
+        {
+          "id": "08cbc3e815a3d69ef42da9a8",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/f276bf76b32efa1d1cb8d426-gateway-calls.projection.jsonl",
+          "sha256": "6f7b35ffe8a1bb20b66b96248a194e5790f94579af6ed0c1a0f23c13b1d62a46",
+          "size_bytes": 4090,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "f276bf76b32efa1d1cb8d426"
+          ],
+          "source_sha256": "15fc33a2609c631e79e59a90177b2aafb9577f17233a9e7d5e00518b95da5888",
+          "source_role": "application-accounting",
+          "source_schema": "application/v1"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "projection"
+    },
+    {
+      "id": "CAP-LLM-01",
+      "module": "LiteLLM",
+      "lessons": [
+        3,
+        7
+      ],
+      "operation": "configure baseline aliases/providers",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-llm-01",
+      "turn": null,
+      "model_role": null,
+      "description": "litellm.yaml; compose.yaml",
+      "artifacts": [
+        {
+          "id": "037730a3b0fd00e2970d01ae",
+          "sha256": "5d666d79c8858c096088d3a56d0a3e2797e473497e9f8459c091a6d061b13f7e",
+          "size_bytes": 1049,
+          "captured_at": "2026-11-22T11:54:03.187678+00:00",
+          "role": "redacted-loaded-source",
+          "schema": "LiteLLM YAML",
+          "access": "private"
+        },
+        {
+          "id": "19f1d938b1672d88164e5837",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/037730a3b0fd00e2970d01ae-litellm-loaded.yaml",
+          "sha256": "5d666d79c8858c096088d3a56d0a3e2797e473497e9f8459c091a6d061b13f7e",
+          "size_bytes": 1049,
+          "access": "public",
+          "role": "redacted-native-configuration",
+          "schema": "LiteLLM YAML",
+          "source_artifact_ids": [
+            "037730a3b0fd00e2970d01ae"
+          ],
+          "source_sha256": "5d666d79c8858c096088d3a56d0a3e2797e473497e9f8459c091a6d061b13f7e",
+          "source_role": "redacted-loaded-source",
+          "source_schema": "LiteLLM YAML"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "redacted-native-configuration"
+    },
+    {
+      "id": "CAP-LLM-02",
+      "module": "LiteLLM",
+      "lessons": [
+        7
+      ],
+      "operation": "configure requested retail candidate pool",
+      "scenario_ids": [
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "not-used",
+      "required": false,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-llm-02",
+      "turn": null,
+      "model_role": null,
+      "description": "retail-litellm.yaml",
+      "artifacts": [],
+      "access": "private",
+      "publication_availability": "not-used",
+      "publication_kind": null
+    },
+    {
+      "id": "CAP-LLM-03",
+      "module": "LiteLLM",
+      "lessons": [
+        3,
+        7
+      ],
+      "operation": "retain actually loaded and resolved configuration",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-llm-03",
+      "turn": null,
+      "model_role": null,
+      "description": "Proposed run-bound YAML copies; litellm-effective-config.json",
+      "artifacts": [
+        {
+          "id": "037730a3b0fd00e2970d01ae",
+          "sha256": "5d666d79c8858c096088d3a56d0a3e2797e473497e9f8459c091a6d061b13f7e",
+          "size_bytes": 1049,
+          "captured_at": "2026-11-22T11:54:03.187678+00:00",
+          "role": "native-effective-configuration",
+          "schema": "LiteLLM resolved settings",
+          "access": "private"
+        },
+        {
+          "id": "19f1d938b1672d88164e5837",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/037730a3b0fd00e2970d01ae-litellm-loaded.yaml",
+          "sha256": "5d666d79c8858c096088d3a56d0a3e2797e473497e9f8459c091a6d061b13f7e",
+          "size_bytes": 1049,
+          "access": "public",
+          "role": "redacted-native-configuration",
+          "schema": "LiteLLM YAML",
+          "source_artifact_ids": [
+            "037730a3b0fd00e2970d01ae"
+          ],
+          "source_sha256": "5d666d79c8858c096088d3a56d0a3e2797e473497e9f8459c091a6d061b13f7e",
+          "source_role": "redacted-loaded-source",
+          "source_schema": "LiteLLM YAML"
+        },
+        {
+          "id": "98a8155cf6bf571cb878f3cb",
+          "sha256": "73561f882ba0b0ded871b03997c0d00e1df6791115e9b24f3fb8e174e2debc68",
+          "size_bytes": 27529,
+          "captured_at": "2026-11-22T11:54:03.190678+00:00",
+          "role": "native-effective-configuration",
+          "schema": "LiteLLM resolved settings",
+          "access": "private"
+        },
+        {
+          "id": "d6d79366c140598eeaf65ffa",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/98a8155cf6bf571cb878f3cb-litellm-effective-config.json",
+          "sha256": "4cdf7ddf51d17dac33931f7668ed1e8e230a955be91994046d69e43715a74cf4",
+          "size_bytes": 37171,
+          "access": "public",
+          "role": "redacted-native-configuration",
+          "schema": "LiteLLM resolved settings",
+          "source_artifact_ids": [
+            "98a8155cf6bf571cb878f3cb"
+          ],
+          "source_sha256": "73561f882ba0b0ded871b03997c0d00e1df6791115e9b24f3fb8e174e2debc68",
+          "source_role": "native-effective-configuration",
+          "source_schema": "LiteLLM resolved settings"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "redacted-native-configuration"
+    },
+    {
+      "id": "CAP-SW-01",
+      "module": "Switchyard",
+      "lessons": [
+        7
+      ],
+      "operation": "define candidates and routing policy",
+      "scenario_ids": [
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "not-used",
+      "required": false,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-sw-01",
+      "turn": null,
+      "model_role": null,
+      "description": "routing-configuration.json",
+      "artifacts": [],
+      "access": "private",
+      "publication_availability": "not-used",
+      "publication_kind": null
+    },
+    {
+      "id": "CAP-SW-02",
+      "module": "Switchyard",
+      "lessons": [
+        7
+      ],
+      "operation": "retain decision and comparison outcomes",
+      "scenario_ids": [
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "not-used",
+      "required": false,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-sw-02",
+      "turn": null,
+      "model_role": null,
+      "description": "routing-comparison.json",
+      "artifacts": [],
+      "access": "private",
+      "publication_availability": "not-used",
+      "publication_kind": null
+    },
+    {
+      "id": "CAP-REL-01",
+      "module": "Relay",
+      "lessons": [
+        3
+      ],
+      "operation": "activate instrumentation and export",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-rel-01",
+      "turn": null,
+      "model_role": null,
+      "description": "Generated fabric-relay.json",
+      "artifacts": [
+        {
+          "id": "5d1857622a8b18e7e6f41e5b",
+          "sha256": "1148f3a41b9992d2456fef7feb688ab6733bf888fea15f81305b0338a7ab98aa",
+          "size_bytes": 307,
+          "captured_at": "2026-11-22T11:54:24.824589+00:00",
+          "role": "native-effective-configuration",
+          "schema": "Relay plugin config v1 / observability v4",
+          "access": "private"
+        },
+        {
+          "id": "1197222c5e65feee0f089a41",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/5d1857622a8b18e7e6f41e5b-fabric-relay.json",
+          "sha256": "bb6ecf38c66e551f2736d5007907b06111a0792409bbbc17f01e3a911513c752",
+          "size_bytes": 606,
+          "access": "public",
+          "role": "redacted-native-configuration",
+          "schema": "Relay plugin config v1 / observability v4",
+          "source_artifact_ids": [
+            "5d1857622a8b18e7e6f41e5b"
+          ],
+          "source_sha256": "1148f3a41b9992d2456fef7feb688ab6733bf888fea15f81305b0338a7ab98aa",
+          "source_role": "native-effective-configuration",
+          "source_schema": "Relay plugin config v1 / observability v4"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "redacted-native-configuration"
+    },
+    {
+      "id": "CAP-REL-02",
+      "module": "Relay",
+      "lessons": [
+        4,
+        5
+      ],
+      "operation": "retain native model/tool/agent events",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-rel-02",
+      "turn": null,
+      "model_role": null,
+      "description": "relay.jsonl",
+      "artifacts": [
+        {
+          "id": "9420dd84b6c983421ce87334",
+          "sha256": "2d147d0501085878e2ed7a1335ffe3f974d5ee241b0d67a44def0188c6a588ad",
+          "size_bytes": 117312,
+          "captured_at": "2026-11-22T11:54:24.828539+00:00",
+          "role": "native-events",
+          "schema": "Relay ATOF",
+          "access": "private"
+        },
+        {
+          "id": "0cc7adcb7171bd6694a86f6e",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/9420dd84b6c983421ce87334-relay.projection.json",
+          "sha256": "ac2425088ef757921d9829bdf2b2d4c7bd4c6695d751065892d73566ff76d24b",
+          "size_bytes": 5301,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "9420dd84b6c983421ce87334"
+          ],
+          "source_sha256": "2d147d0501085878e2ed7a1335ffe3f974d5ee241b0d67a44def0188c6a588ad",
+          "source_role": "native-events",
+          "source_schema": "Relay ATOF tool events"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "projection"
+    },
+    {
+      "id": "CAP-REL-03",
+      "module": "Relay / teaching projection",
+      "lessons": [
+        5
+      ],
+      "operation": "publish interpretable execution evidence",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-rel-03",
+      "turn": null,
+      "model_role": null,
+      "description": "relay-scopes.json; native-tools.json",
+      "artifacts": [
+        {
+          "id": "9420dd84b6c983421ce87334",
+          "sha256": "2d147d0501085878e2ed7a1335ffe3f974d5ee241b0d67a44def0188c6a588ad",
+          "size_bytes": 117312,
+          "captured_at": "2026-11-22T11:54:24.828539+00:00",
+          "role": "native-events",
+          "schema": "Relay ATOF",
+          "access": "private"
+        },
+        {
+          "id": "0cc7adcb7171bd6694a86f6e",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/9420dd84b6c983421ce87334-relay.projection.json",
+          "sha256": "ac2425088ef757921d9829bdf2b2d4c7bd4c6695d751065892d73566ff76d24b",
+          "size_bytes": 5301,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "9420dd84b6c983421ce87334"
+          ],
+          "source_sha256": "2d147d0501085878e2ed7a1335ffe3f974d5ee241b0d67a44def0188c6a588ad",
+          "source_role": "native-events",
+          "source_schema": "Relay ATOF tool events"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "projection"
+    },
+    {
+      "id": "CAP-REL-04",
+      "module": "Relay / collector",
+      "lessons": [
+        5
+      ],
+      "operation": "optional collector/Phoenix export",
+      "scenario_ids": [],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "not-used",
+      "required": false,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-rel-04",
+      "turn": null,
+      "model_role": null,
+      "description": "OTLP/Phoenix settings and trace output",
+      "artifacts": [],
+      "access": "private",
+      "publication_availability": "not-used",
+      "publication_kind": null
+    },
+    {
+      "id": "CAP-EVAL-01",
+      "module": "Application assertions",
+      "lessons": [
+        6
+      ],
+      "operation": "evaluate saved answers and facts",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-eval-01",
+      "turn": null,
+      "model_role": null,
+      "description": "evaluation.json",
+      "artifacts": [
+        {
+          "id": "98a3be4ff76d69b545553fa9",
+          "sha256": "9810b6d72d3f78f61730c3d9ad7ce9344791e32f839fbee44e9d47dd004a4c33",
+          "size_bytes": 4618,
+          "captured_at": "2026-11-22T11:54:25.506149+00:00",
+          "role": "application-result",
+          "schema": "application/v1",
+          "access": "private"
+        },
+        {
+          "id": "42ad154c9ec084c1bc96f653",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/98a3be4ff76d69b545553fa9-evaluation.projection.json",
+          "sha256": "96bc5675c0cca8708d0864b96354f9392b94229ca4d5f000050840f8457e3ad1",
+          "size_bytes": 4612,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "98a3be4ff76d69b545553fa9"
+          ],
+          "source_sha256": "9810b6d72d3f78f61730c3d9ad7ce9344791e32f839fbee44e9d47dd004a4c33",
+          "source_role": "application-result",
+          "source_schema": "application/v1"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "projection"
+    },
+    {
+      "id": "CAP-HX-01",
+      "module": "Helix Evals",
+      "lessons": [
+        6
+      ],
+      "operation": "retain criteria and local native results",
+      "scenario_ids": [
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "not-used",
+      "required": false,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-hx-01",
+      "turn": null,
+      "model_role": null,
+      "description": "helix-criteria.json; helix-evaluation.json; evaluation.json",
+      "artifacts": [],
+      "access": "private",
+      "publication_availability": "not-used",
+      "publication_kind": null
+    },
+    {
+      "id": "CAP-HX-02",
+      "module": "Helix Evals",
+      "lessons": [
+        6
+      ],
+      "operation": "preserve exact evaluator definition",
+      "scenario_ids": [
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "not-used",
+      "required": false,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-hx-02",
+      "turn": null,
+      "model_role": null,
+      "description": "Proposed helix-evaluator-config.json",
+      "artifacts": [],
+      "access": "private",
+      "publication_availability": "not-used",
+      "publication_kind": null
+    },
+    {
+      "id": "CAP-HX-03",
+      "module": "Helix durable evaluation",
+      "lessons": [
+        6
+      ],
+      "operation": "retain submitted job definition and outcome",
+      "scenario_ids": [
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "not-used",
+      "required": false,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-hx-03",
+      "turn": null,
+      "model_role": null,
+      "description": "helix-job.json",
+      "artifacts": [],
+      "access": "private",
+      "publication_availability": "not-used",
+      "publication_kind": null
+    },
+    {
+      "id": "CAP-GR-01",
+      "module": "Guardrails",
+      "lessons": [
+        3,
+        8
+      ],
+      "operation": "load policy and flows",
+      "scenario_ids": [
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "not-used",
+      "required": false,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-gr-01",
+      "turn": null,
+      "model_role": null,
+      "description": "config.yml; rails.co; guardrails-config.json",
+      "artifacts": [],
+      "access": "private",
+      "publication_availability": "not-used",
+      "publication_kind": null
+    },
+    {
+      "id": "CAP-GR-02",
+      "module": "Guardrails",
+      "lessons": [
+        8
+      ],
+      "operation": "retain legitimate boundary decisions and separate negative probe",
+      "scenario_ids": [
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "not-used",
+      "required": false,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-gr-02",
+      "turn": null,
+      "model_role": null,
+      "description": "guardrails-decisions.jsonl; guardrails-probe.json",
+      "artifacts": [],
+      "access": "private",
+      "publication_availability": "not-used",
+      "publication_kind": null
+    },
+    {
+      "id": "CAP-PLAT-01",
+      "module": "Helix Platform",
+      "lessons": [
+        9
+      ],
+      "operation": "configure server and executor",
+      "scenario_ids": [
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": null,
+      "episode_id": null,
+      "purpose": "managed",
+      "availability": "not-used",
+      "required": false,
+      "execution_status": "unavailable",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-plat-01",
+      "turn": null,
+      "model_role": null,
+      "description": "config.local.yaml; private openshell-config.yaml; proposed run-bound effective settings",
+      "artifacts": [],
+      "access": "private",
+      "publication_availability": "not-used",
+      "publication_kind": null
+    },
+    {
+      "id": "CAP-PLAT-02",
+      "module": "Helix Platform",
+      "lessons": [
+        9
+      ],
+      "operation": "package agent",
+      "scenario_ids": [
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": null,
+      "episode_id": null,
+      "purpose": "managed",
+      "availability": "not-used",
+      "required": false,
+      "execution_status": "unavailable",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-plat-02",
+      "turn": null,
+      "model_role": null,
+      "description": "agent.yaml; proposed final run-bound agent.yaml copy",
+      "artifacts": [],
+      "access": "private",
+      "publication_availability": "not-used",
+      "publication_kind": null
+    },
+    {
+      "id": "CAP-PLAT-03",
+      "module": "Helix Platform",
+      "lessons": [
+        9
+      ],
+      "operation": "define provider/environment and related resources",
+      "scenario_ids": [
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": null,
+      "episode_id": null,
+      "purpose": "managed",
+      "availability": "not-used",
+      "required": false,
+      "execution_status": "unavailable",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-plat-03",
+      "turn": null,
+      "model_role": null,
+      "description": "platform-setup.json; proposed sanitized creation request/response snapshots",
+      "artifacts": [],
+      "access": "private",
+      "publication_availability": "not-used",
+      "publication_kind": null
+    },
+    {
+      "id": "CAP-PLAT-04",
+      "module": "Helix Platform",
+      "lessons": [
+        9
+      ],
+      "operation": "register and deploy",
+      "scenario_ids": [
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": null,
+      "episode_id": null,
+      "purpose": "managed",
+      "availability": "not-used",
+      "required": false,
+      "execution_status": "unavailable",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-plat-04",
+      "turn": null,
+      "model_role": null,
+      "description": "platform-registration.json; platform-deployment.json; platform-package.json",
+      "artifacts": [],
+      "access": "private",
+      "publication_availability": "not-used",
+      "publication_kind": null
+    },
+    {
+      "id": "CAP-PLAT-05",
+      "module": "Helix Platform",
+      "lessons": [
+        9
+      ],
+      "operation": "create session, invoke, observe and clean up",
+      "scenario_ids": [
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": null,
+      "episode_id": null,
+      "purpose": "managed",
+      "availability": "not-used",
+      "required": false,
+      "execution_status": "unavailable",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-plat-05",
+      "turn": null,
+      "model_role": null,
+      "description": "platform-condition.json; platform-session.json; platform-invocation.json; platform-trace.json; platform-cleanup.json",
+      "artifacts": [],
+      "access": "private",
+      "publication_availability": "not-used",
+      "publication_kind": null
+    },
+    {
+      "id": "CAP-OS-01",
+      "module": "OpenShell",
+      "lessons": [
+        9
+      ],
+      "operation": "submit intended workload policy",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-os-01",
+      "turn": null,
+      "model_role": null,
+      "description": "policy.yaml; per-execution requested-policy.yaml",
+      "artifacts": [
+        {
+          "id": "ae8edac563c24a1a2d129a74",
+          "sha256": "1fe86907484257fe8d96adf9e6d14bbd7d19838c58770e40fb694ca3e5b455e2",
+          "size_bytes": 863,
+          "captured_at": "2026-11-22T11:54:03.200622+00:00",
+          "role": "requested-policy",
+          "schema": "OpenShell policy YAML",
+          "access": "private"
+        },
+        {
+          "id": "351f3b536c36051d1dcb59c4",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/ae8edac563c24a1a2d129a74-requested-policy.yaml",
+          "sha256": "8c9df90fc4c1bb58f94be5207fd7d7f5311d7b14b8d8fe097ce01bcd39531d9b",
+          "size_bytes": 665,
+          "access": "public",
+          "role": "redacted-native-configuration",
+          "schema": "OpenShell policy YAML",
+          "source_artifact_ids": [
+            "ae8edac563c24a1a2d129a74"
+          ],
+          "source_sha256": "1fe86907484257fe8d96adf9e6d14bbd7d19838c58770e40fb694ca3e5b455e2",
+          "source_role": "requested-policy",
+          "source_schema": "OpenShell policy YAML"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "redacted-native-configuration"
+    },
+    {
+      "id": "CAP-OS-02",
+      "module": "OpenShell",
+      "lessons": [
+        9
+      ],
+      "operation": "inspect loaded policy and observed enforcement/cleanup",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": "e33b14ef-8d3c-43fd-bf1b-679279c18f61",
+      "episode_id": "840212bf-f3e5-4ac1-8216-341837d703b1",
+      "purpose": "baseline",
+      "availability": "exists",
+      "required": true,
+      "execution_status": "completed",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-os-02",
+      "turn": null,
+      "model_role": null,
+      "description": "effective-policy.yaml; effective-policy.json; boundary-probes.json; cleanup.json; sandbox-identity.json",
+      "artifacts": [
+        {
+          "id": "9f978f570f3bac87921d7f9f",
+          "sha256": "3fdc2478636d002576956575ccf65c404835420f25b1cc88eda3952b04b2a530",
+          "size_bytes": 745,
+          "captured_at": "2026-11-22T11:54:06.781833+00:00",
+          "role": "enforcement-receipt",
+          "schema": "application/v1",
+          "access": "private"
+        },
+        {
+          "id": "946e8c5ea45828c033225240",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/9f978f570f3bac87921d7f9f-effective-policy.yaml",
+          "sha256": "de63fc7a7346ebb1ba8a857ec71e125f1a6accb492000447bb7bb6f914f4d6c6",
+          "size_bytes": 688,
+          "access": "public",
+          "role": "redacted-native-configuration",
+          "schema": "application/v1",
+          "source_artifact_ids": [
+            "9f978f570f3bac87921d7f9f"
+          ],
+          "source_sha256": "3fdc2478636d002576956575ccf65c404835420f25b1cc88eda3952b04b2a530",
+          "source_role": "enforcement-receipt",
+          "source_schema": "application/v1"
+        },
+        {
+          "id": "60d5ff5cd0737fa29a59ff25",
+          "sha256": "1610556d5cc915740834277ee144b212ac7042af7dcd23e03ca0fec29f1d7b6c",
+          "size_bytes": 952,
+          "captured_at": "2026-11-22T11:54:06.822259+00:00",
+          "role": "enforcement-receipt",
+          "schema": "application/v1",
+          "access": "private"
+        },
+        {
+          "id": "b24be6000d470e484a8b083d",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/60d5ff5cd0737fa29a59ff25-effective-policy.json",
+          "sha256": "f5cc1b422d4e68f3c647aede0d5dc3f30b6d35b91b7a4c76b7672dcfe018f942",
+          "size_bytes": 1492,
+          "access": "public",
+          "role": "redacted-native-configuration",
+          "schema": "application/v1",
+          "source_artifact_ids": [
+            "60d5ff5cd0737fa29a59ff25"
+          ],
+          "source_sha256": "1610556d5cc915740834277ee144b212ac7042af7dcd23e03ca0fec29f1d7b6c",
+          "source_role": "enforcement-receipt",
+          "source_schema": "application/v1"
+        },
+        {
+          "id": "554edc4cfb104d18c48cae50",
+          "sha256": "9ad067cb69cae3fb34e7d18f7e20ddc0708abc0a288cc83f2bbff769ea7775c2",
+          "size_bytes": 191,
+          "captured_at": "2026-11-22T11:54:06.966660+00:00",
+          "role": "enforcement-receipt",
+          "schema": "application/v1",
+          "access": "private"
+        },
+        {
+          "id": "2be3e015c057b88d810214fe",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/554edc4cfb104d18c48cae50-boundary-probes.projection.json",
+          "sha256": "6432573dcd45a9d6eae0e402c1832e06365cdbbbac83cdb761ee94eec49cd20f",
+          "size_bytes": 261,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "554edc4cfb104d18c48cae50"
+          ],
+          "source_sha256": "9ad067cb69cae3fb34e7d18f7e20ddc0708abc0a288cc83f2bbff769ea7775c2",
+          "source_role": "enforcement-receipt",
+          "source_schema": "application/v1"
+        },
+        {
+          "id": "96678e5405de85ccff7ad180",
+          "sha256": "c9528ab0e959a1368cdb159f36e4eecb55c770cd01a293a0b7bed065db3e5805",
+          "size_bytes": 1233,
+          "captured_at": "2026-11-22T11:54:25.493199+00:00",
+          "role": "enforcement-receipt",
+          "schema": "application/v1",
+          "access": "private"
+        },
+        {
+          "id": "a4fc0917afeba43a72e49819",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/96678e5405de85ccff7ad180-cleanup.projection.json",
+          "sha256": "f6b86f6f9334cdcc2d01c4b0cf7c41e19ede108a16f87aa6616f6add14084a69",
+          "size_bytes": 1293,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "96678e5405de85ccff7ad180"
+          ],
+          "source_sha256": "c9528ab0e959a1368cdb159f36e4eecb55c770cd01a293a0b7bed065db3e5805",
+          "source_role": "enforcement-receipt",
+          "source_schema": "application/v1"
+        },
+        {
+          "id": "35117e3f6f1e7a24053ef71e",
+          "sha256": "9861db7cbbab57eefd6040e4b37bd0cbc65df39c4ee974f2975ee0f9c2a7f9e9",
+          "size_bytes": 530,
+          "captured_at": "2026-11-22T11:54:06.745669+00:00",
+          "role": "enforcement-receipt",
+          "schema": "application/v1",
+          "access": "private"
+        },
+        {
+          "id": "5c6a7f5123c36aded7a13b99",
+          "location": "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/35117e3f6f1e7a24053ef71e-sandbox-identity.projection.json",
+          "sha256": "3f1769b8a4ec912da88b9028bbe1b0ac804404378bcd92c7a6a0fc86c3ab100c",
+          "size_bytes": 576,
+          "access": "public",
+          "role": "application-projection",
+          "schema": "citizen-capture-projection/v1",
+          "source_artifact_ids": [
+            "35117e3f6f1e7a24053ef71e"
+          ],
+          "source_sha256": "9861db7cbbab57eefd6040e4b37bd0cbc65df39c4ee974f2975ee0f9c2a7f9e9",
+          "source_role": "enforcement-receipt",
+          "source_schema": "application/v1"
+        }
+      ],
+      "access": "public",
+      "publication_availability": "exists",
+      "publication_kind": "projection"
+    },
+    {
+      "id": "CAP-OS-03",
+      "module": "Helix-managed OpenShell",
+      "lessons": [
+        9
+      ],
+      "operation": "inspect managed boundary",
+      "scenario_ids": [
+        "dreamjob"
+      ],
+      "scenario_id": "photography",
+      "run_id": "94e49df8-7dfa-445b-9614-d79e31f2c024",
+      "condition_id": null,
+      "episode_id": null,
+      "purpose": "managed",
+      "availability": "not-used",
+      "required": false,
+      "execution_status": "unavailable",
+      "producer_revision": "c229e1ef9d6ed6665f20fa9aef9b57a8b2817a02",
+      "operation_id": "cap-os-03",
+      "turn": null,
+      "model_role": null,
+      "description": "platform-effective-policy.json; platform-boundary-probes.json; platform-cleanup.json; private effective YAML",
+      "artifacts": [],
+      "access": "private",
+      "publication_availability": "not-used",
+      "publication_kind": null
+    }
+  ],
+  "files": {
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/037730a3b0fd00e2970d01ae-litellm-loaded.yaml": "5d666d79c8858c096088d3a56d0a3e2797e473497e9f8459c091a6d061b13f7e",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/04e291481af5c740cf23e9ed-fabric-config.projection.json": "7abc654ea17f11239ea7ea864246d7bf4b2a397d713831a2c725e9128bfad7d6",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/0ed8b8e1cba03d41a005e74d-provider-tool-schemas.jsonl": "5abf39c16304c1f45a724ac2cb1599ebb27d1fb3ece959b9d7818e3ea0318128",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/2959a56ae97d59cc71fbc6fc-public-conversation.projection.json": "1226c48aa79b373307931d6d6543d5b501e547e6fb87ba1a08efaa4208ea610e",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/35117e3f6f1e7a24053ef71e-sandbox-identity.projection.json": "3f1769b8a4ec912da88b9028bbe1b0ac804404378bcd92c7a6a0fc86c3ab100c",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/3ffa5c0ea8b2a92249d3f937-situation.projection.json": "59d748f21c5be5ad28cc9a6268581903234a11247a5eafa85cf3c674601a7654",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/4ebf6213381d9582415bb145-usersim-result.projection.json": "a283c60bff434d5231fdbdee8f91ef407ca575208c72c3d363979163ff2493d4",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/554edc4cfb104d18c48cae50-boundary-probes.projection.json": "6432573dcd45a9d6eae0e402c1832e06365cdbbbac83cdb761ee94eec49cd20f",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/5d1857622a8b18e7e6f41e5b-fabric-relay.json": "bb6ecf38c66e551f2736d5007907b06111a0792409bbbc17f01e3a911513c752",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/60d5ff5cd0737fa29a59ff25-effective-policy.json": "f5cc1b422d4e68f3c647aede0d5dc3f30b6d35b91b7a4c76b7672dcfe018f942",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/644361175ff7ea0c59b00841-fabric-doctor.projection.json": "371bfd54db60a7ee54eccefb0945dc3d8181b151d93b647e3d2bc58b8818146d",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/6a9a1b00a785759d80a29be1-usersim-model-config.projection.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/6f559d8ffd95581f8123ba0b-fabric-lifecycle.projection.jsonl": "8fa645fd5a8a5015d8c9f003c4bf470c6f9aa768554dbfbf555d6375fe55c72e",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/70c297789c0f80c924bb3506-usersim-activations.projection.jsonl": "2f70baa086affc5e84ac5899da134fa6b9ed44fa6cb525a8a97e9c03a7feba8e",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/74fc4aa3cbd2419f5f2aca6b-fabric-plan.projection.json": "8fe3a230ecece6909e731edae6d7a46eb8a1bbadd6c1946e341e537d1908b5eb",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/7ded817bc105d3417af3ca92-mcp-tools-list.jsonl": "6f6b7e1969952be67694b48570faf282aacb3eb5fd11faebadcc86976e8fe990",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/8a8101c50beb1736b5710003-fabric-run-requests.projection.jsonl": "c3bf57ab05f268b3a703b772d116110725a0c613bfb70de8ac3944070b30e937",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/9420dd84b6c983421ce87334-relay.projection.json": "ac2425088ef757921d9829bdf2b2d4c7bd4c6695d751065892d73566ff76d24b",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/96678e5405de85ccff7ad180-cleanup.projection.json": "f6b86f6f9334cdcc2d01c4b0cf7c41e19ede108a16f87aa6616f6add14084a69",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/98a3be4ff76d69b545553fa9-evaluation.projection.json": "96bc5675c0cca8708d0864b96354f9392b94229ca4d5f000050840f8457e3ad1",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/98a8155cf6bf571cb878f3cb-litellm-effective-config.json": "4cdf7ddf51d17dac33931f7668ed1e8e230a955be91994046d69e43715a74cf4",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/9dd6d6666e474e7126a04806-source-lock.projection.json": "2a4e2b2cbde47ffe84500ae494796c3e11777df954b3e6fb0102c25c9300034b",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/9e7758c5f370e840f34edf60-reply-outcomes.projection.jsonl": "949a20c7d17573fb4976e41f1ce0bcc72a3ecb851cf29a4bfe54bbf87a031517",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/9f978f570f3bac87921d7f9f-effective-policy.yaml": "de63fc7a7346ebb1ba8a857ec71e125f1a6accb492000447bb7bb6f914f4d6c6",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/ae8edac563c24a1a2d129a74-requested-policy.yaml": "8c9df90fc4c1bb58f94be5207fd7d7f5311d7b14b8d8fe097ce01bcd39531d9b",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/c53fb81f6aa25ba1c983305b-preferences-by-turn.jsonl": "586cb7d4a5f433cb35b66f8e8da7f9f8cf1e1d746e9efeb02f2dc1cc0e10203e",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/f2527583a8b561d0e95ee10c-resolved-inputs.projection.json": "555f3f6b0aa642bd0aa2ef97b25f2f9f6f07c2cdf5e094e4b0a5f4d6a2838740",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/f276bf76b32efa1d1cb8d426-gateway-calls.projection.jsonl": "6f7b35ffe8a1bb20b66b96248a194e5790f94579af6ed0c1a0f23c13b1d62a46",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/fce9a94bdb3308adc7abd92e-gateway-effective-config.json": "45650e2be0365a6f089e017e879921d683f9e2157c9351355246950049651b1e",
+    "baseline/e33b14ef-8d3c-43fd-bf1b-679279c18f61/fd1bdec1889488da55bc60fd-fabric-run-results.projection.jsonl": "f56992375e747cf29d6ca0e245ce5a1df4ddf479b58080d2b3c1e4ee88612e99"
+  },
+  "notice": "Offline publication. Private native captures are represented by opaque IDs/hashes without local locations. Public projections are explicitly labelled; complete capture does not imply successful execution."
+}

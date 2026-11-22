@@ -1,0 +1,12 @@
+{
+  "providers": [
+    {
+      "name": "lab-gateway",
+      "endpoint": "http://127.0.0.1:33513/v1",
+      "provider_type": "openai",
+      "api_key": "[redacted]",
+      "extra_body": null,
+      "extra_headers": null
+    }
+  ]
+}

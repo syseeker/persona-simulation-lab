@@ -1,0 +1,17 @@
+{
+  "configuration": {
+    "name": "conversation",
+    "locale": "en_SG",
+    "max_turns": 1,
+    "max_steps": 10,
+    "max_query_attempts": 1,
+    "max_assistant_attempts": 1,
+    "enforce_user_language": true,
+    "context_compression": false,
+    "persona_grounding_ratio": 1.0
+  },
+  "source_distribution": "ngc",
+  "source_revision": "0.0.1",
+  "probe_type": "learning_advisor",
+  "private_preamble_published": false
+}

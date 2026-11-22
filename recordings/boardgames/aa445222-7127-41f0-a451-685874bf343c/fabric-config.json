@@ -1,0 +1,31 @@
+{
+  "projection": "Allowlisted native fields; not a byte-for-byte original.",
+  "schema_version": "fabric.agent/v1alpha1",
+  "metadata": {
+    "name": "singapore-learning-advisor",
+    "description": null
+  },
+  "harness": {
+    "adapter_id": "nvidia.fabric.hermes",
+    "resolution": "preinstalled",
+    "settings": {
+      "reasoning_config": {
+        "enabled": false,
+        "effort": "none"
+      },
+      "save_trajectories": false
+    }
+  },
+  "runtime": {
+    "input_schema": "chat",
+    "output_schema": "message",
+    "artifacts": null,
+    "timeout_seconds": 120.0,
+    "max_turns": 24
+  },
+  "tools": {
+    "enabled": [
+      "mcp-catalogue"
+    ]
+  }
+}

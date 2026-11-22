@@ -1,0 +1,146 @@
+[
+  {
+    "case_id": "three-turns",
+    "condition": "retail-learning",
+    "expected": "[3, 3]",
+    "output": "[3, 3]"
+  },
+  {
+    "case_id": "valid-answers",
+    "condition": "retail-learning",
+    "expected": "true",
+    "output": "true"
+  },
+  {
+    "case_id": "original-lock",
+    "condition": "retail-learning",
+    "expected": "true",
+    "output": "true"
+  },
+  {
+    "case_id": "salary-disclosure",
+    "condition": "retail-learning",
+    "expected": "2",
+    "output": "2"
+  },
+  {
+    "case_id": "salary-request-boundary",
+    "condition": "retail-learning",
+    "expected": "true",
+    "output": "true"
+  },
+  {
+    "case_id": "salary-not-budget",
+    "condition": "retail-learning",
+    "expected": "null",
+    "output": "null"
+  },
+  {
+    "case_id": "salary-only-advice",
+    "condition": "retail-learning",
+    "expected": "[]",
+    "output": "[]"
+  },
+  {
+    "case_id": "explicit-final-constraints",
+    "condition": "retail-learning",
+    "expected": "{\"budget_sgd\": 3000.0, \"days\": [5, 6]}",
+    "output": "{\"budget_sgd\": 3000.0, \"days\": [5, 6]}"
+  },
+  {
+    "case_id": "published-full-fee",
+    "condition": "retail-learning",
+    "expected": "true",
+    "output": "true"
+  },
+  {
+    "case_id": "published-duration",
+    "condition": "retail-learning",
+    "expected": "true",
+    "output": "true"
+  },
+  {
+    "case_id": "persistent-thread",
+    "condition": "retail-learning",
+    "expected": "true",
+    "output": "true"
+  },
+  {
+    "case_id": "sources-1",
+    "condition": "retail-learning",
+    "expected": "true",
+    "output": "true"
+  },
+  {
+    "case_id": "assurances-1",
+    "condition": "retail-learning",
+    "expected": "false",
+    "output": "false"
+  },
+  {
+    "case_id": "concise-reply-1",
+    "condition": "retail-learning",
+    "expected": "true",
+    "output": "true"
+  },
+  {
+    "case_id": "sources-2",
+    "condition": "retail-learning",
+    "expected": "true",
+    "output": "true"
+  },
+  {
+    "case_id": "assurances-2",
+    "condition": "retail-learning",
+    "expected": "false",
+    "output": "false"
+  },
+  {
+    "case_id": "concise-reply-2",
+    "condition": "retail-learning",
+    "expected": "true",
+    "output": "true"
+  },
+  {
+    "case_id": "sources-3",
+    "condition": "retail-learning",
+    "expected": "true",
+    "output": "true"
+  },
+  {
+    "case_id": "assurances-3",
+    "condition": "retail-learning",
+    "expected": "false",
+    "output": "false"
+  },
+  {
+    "case_id": "concise-reply-3",
+    "condition": "retail-learning",
+    "expected": "true",
+    "output": "true"
+  },
+  {
+    "case_id": "unpublished-funding-figures",
+    "condition": "retail-learning",
+    "expected": "[]",
+    "output": "[]"
+  },
+  {
+    "case_id": "output-completion",
+    "condition": "retail-learning",
+    "expected": "true",
+    "output": "true"
+  },
+  {
+    "case_id": "unknowns-retained",
+    "condition": "retail-learning",
+    "expected": "true",
+    "output": "true"
+  },
+  {
+    "case_id": "native-course-search",
+    "condition": "retail-learning",
+    "expected": "true",
+    "output": "true"
+  }
+]

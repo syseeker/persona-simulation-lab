@@ -1,0 +1,44 @@
+[
+  {
+    "name": "mcp__catalogue__search_courses",
+    "arguments": {
+      "goal": "board games"
+    },
+    "result": {
+      "snapshot_date": "2026-11-10",
+      "as_of": "2026-11-22",
+      "matches": [],
+      "excluded": [
+        {
+          "id": "CC-004",
+          "reason": "Registration closed for this listed intake"
+        }
+      ],
+      "notice": "Curated snapshot. Check the official listing before acting; individual eligibility is unknown."
+    },
+    "scope_uuid": "01a20328-1859-7642-997f-36e673810178",
+    "status": "completed",
+    "evidence_origin": "native_relay"
+  },
+  {
+    "name": "mcp__catalogue__search_courses",
+    "arguments": {
+      "goal": "video game design"
+    },
+    "result": {
+      "snapshot_date": "2026-11-10",
+      "as_of": "2026-11-22",
+      "matches": [],
+      "excluded": [
+        {
+          "id": "CC-004",
+          "reason": "Registration closed for this listed intake"
+        }
+      ],
+      "notice": "Curated snapshot. Check the official listing before acting; individual eligibility is unknown."
+    },
+    "scope_uuid": "01a20328-3391-7233-947c-e910f2896e7c",
+    "status": "completed",
+    "evidence_origin": "native_relay"
+  }
+]

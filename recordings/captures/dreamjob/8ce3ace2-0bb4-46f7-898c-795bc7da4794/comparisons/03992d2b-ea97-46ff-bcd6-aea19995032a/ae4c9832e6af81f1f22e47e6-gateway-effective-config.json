@@ -1,0 +1,33 @@
+{
+  "schema": "citizen-gateway-config/v1",
+  "mode": "live",
+  "attempt_limit": 120,
+  "output_token_ceiling": 1024,
+  "tool_round_limit_per_turn": 4,
+  "request_timeout_seconds": 50,
+  "connect_timeout_seconds": 10,
+  "provider_retries": 0,
+  "model_route": "fixed",
+  "assistant_alias": "lab-support",
+  "support_alias": "lab-support",
+  "allowed_tool_names": [
+    "compare_courses",
+    "get_course_details",
+    "search_courses"
+  ],
+  "schema_filter_owner": "application gateway",
+  "buffered_upstream_response": true,
+  "fail_on_truncated_output": true,
+  "application_rate_limit_recovery": {
+    "enabled": false,
+    "status_codes": [
+      429
+    ],
+    "retry_delays_seconds": [],
+    "max_retries": 0,
+    "maximum_wait_seconds": 60,
+    "attempts_count_toward_budget": true,
+    "total_request_deadline_seconds": 50,
+    "scope": "Assistant calls only; SDK/provider retries remain disabled."
+  }
+}

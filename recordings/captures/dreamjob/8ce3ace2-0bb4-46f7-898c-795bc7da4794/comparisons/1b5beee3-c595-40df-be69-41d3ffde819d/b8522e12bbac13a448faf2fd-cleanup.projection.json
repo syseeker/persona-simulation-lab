@@ -1,0 +1,24 @@
+{
+  "run_id": "1b5beee3-c595-40df-be69-41d3ffde819d",
+  "sandbox_name": "cl-1b5beee3c59540df",
+  "native_absence_confirmed": true,
+  "runtime_process_exited": true,
+  "native_artifact_sha256": {
+    "fabric-config.json": "e3db112873876cac5de1f39d9b359daf7285fce0c60f5aafaa4ba8adf52a82c8",
+    "fabric-doctor.json": "3e1c0af8ffaf8b9641ea3c5e489a78dbc4befb1ba187e67b1af5d1b5c8f5f3e6",
+    "fabric-lifecycle.jsonl": "7ed69c84387b6957afadf79d34286e046097002aa47057c12b1012ad24f7a6a4",
+    "fabric-plan.json": "007cae173e9281ef2ad605af513d7b68c056f4137c7a89e7624e21ae58aaf8ac",
+    "fabric-relay.json": "1148f3a41b9992d2456fef7feb688ab6733bf888fea15f81305b0338a7ab98aa",
+    "guardrails-config.json": "6e62fbc544a2459922ec08f37e564fb8b4925dea229fd3b97e074ed82bb4d7bb",
+    "mcp-tools-list.jsonl": "0f96c20f2df79d265c7d0938e61a6029ed6405d7d4de2d76b7e1e3084646dcf9",
+    "retail-response-config.json": "de15b97973045d60d2bd51fdee518799e9c550a8800d05161f6047904258533f",
+    "fabric-run-requests.jsonl": "a032d5af20ce799bb54a658f0293ccc3fb6f4c909e96b77a0f9a269f2dd493a2",
+    "fabric-run-results.jsonl": "d134cf4c774769ba19046c27f1638566b6440072221dd1f5034c904784ec4b88",
+    "fabric-traces/runtime-1795349656250-88-2/relay.jsonl": "7fe5232797d28aa4bc663aaa4ca2ad69da0b742d02a6179a1793e35d69b2822a",
+    "guardrails-decisions.jsonl": "782f1fddf5410290f6671bf3e20754847647cb74be2a855398653ef096926b0e",
+    "preferences-by-turn.jsonl": "f3e4e5f477aaa35c776ce1f67f9e1772f7b7e315a9c68c2b29b1416aa093c821",
+    "reply-outcomes.jsonl": "da49ca5ad5489da49c01cc2a525b59f3d883d29d48623df2e62354453ac33ad9",
+    "retail-model-proposals.jsonl": "cee13339ca015a2f145241e3c4a078a621a31908f14c43364ce509b6bdf2cdb5",
+    "retail-response-decisions.jsonl": "dc7c9edf4ffc4c649dd25fe59e4c19228e07258666dafe63686043a4dbe6f6ec"
+  }
+}

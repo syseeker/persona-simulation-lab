@@ -1,0 +1,10 @@
+{"at": "2026-11-22T12:10:42.233802+00:00", "event": "configuration_saved", "thread_id": "bd3f41a6-eb9c-42b2-961c-8cbea6d2bbe6", "harness": "deepagents", "model_route": "switchyard"}
+{"at": "2026-11-22T12:10:42.336967+00:00", "event": "plan_created"}
+{"at": "2026-11-22T12:10:42.420719+00:00", "event": "doctor_completed", "status": "pass"}
+{"at": "2026-11-22T12:10:47.815441+00:00", "event": "runtime_started", "thread_id": "bd3f41a6-eb9c-42b2-961c-8cbea6d2bbe6"}
+{"at": "2026-11-22T12:10:47.837176+00:00", "event": "invocation_started", "thread_id": "bd3f41a6-eb9c-42b2-961c-8cbea6d2bbe6"}
+{"at": "2026-11-22T12:10:53.708460+00:00", "event": "invocation_finished", "status": "succeeded", "runtime_id": "runtime-1795349442520-88-2", "invocation_id": "invocation-1795349447839-88-5"}
+{"at": "2026-11-22T12:10:53.745044+00:00", "event": "application_clarification_prepared", "public_turn": 2, "agent_invoked": false, "application_response_id": "application-0187391edbf94dd98f6743e92067f71a"}
+{"at": "2026-11-22T12:10:53.784507+00:00", "event": "invocation_started", "thread_id": "bd3f41a6-eb9c-42b2-961c-8cbea6d2bbe6"}
+{"at": "2026-11-22T12:11:33.117618+00:00", "event": "invocation_finished", "status": "succeeded", "runtime_id": "runtime-1795349442520-88-2", "invocation_id": "invocation-1795349453786-88-9"}
+{"at": "2026-11-22T12:11:33.540956+00:00", "event": "runtime_closed", "thread_id": "bd3f41a6-eb9c-42b2-961c-8cbea6d2bbe6"}

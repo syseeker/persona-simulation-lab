@@ -6,6 +6,7 @@ export const learningResources: Record<StageId, { label: string; url: string }[]
     { label: 'Singapore Extended · NGC catalogue', url: 'https://catalog.ngc.nvidia.com/orgs/nvidia/teams/nemotron-personas/resources/nemotron-personas-dataset-en_sg' }
   ],
   situation: [
+    { label: 'UserSim documentation', url: 'https://github.com/NVIDIA-NeMo/UserSim/blob/v0.3.0/architecture/overview.md' },
     { label: 'Data Designer documentation', url: 'https://docs.nvidia.com/nemo/datadesigner/latest/getting-started/welcome' }
   ],
   build: [

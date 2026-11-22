@@ -1,0 +1,496 @@
+[
+  {
+    "turn": 1,
+    "role": "user",
+    "content": "Hi, I work in retail and want sales and inventory analysis skills — could you tell me about the SMU Academy's SCTP Advanced Certificate in Data Communications and Visualisation for Business Analyst, like its content, duration and full fee?"
+  },
+  {
+    "turn": 1,
+    "role": "assistant",
+    "content": "(SCTP) Advanced Certificate in Data Communications and Visualisation for Business Analyst (SF-007), SMU Academy.\n\nData visualisation, data preparation, charts, storytelling, dashboards and a capstone. Tools include Tableau, Excel and Python libraries. The published duration is 330 hours over three months; this is not the hypothetical six-month programme.\n\nPublished full fee: S$20,928. Duration: 3 months, 330 hours.\n\nConfirm additional costs, intake and study timetable with the provider. Personal funding eligibility is unknown.\n\nOfficial source: https://academy.smu.edu.sg/courses/sctp-adv-cert-data-comm-and-visual-biz-analyst",
+    "outcome": {
+      "status": "valid",
+      "code": "public_answer",
+      "reason": "A nonempty public answer was saved; factual checks are separate."
+    },
+    "tools": [
+      {
+        "name": "get_course_details",
+        "arguments": {
+          "course_id": "SF-007"
+        },
+        "result": {
+          "id": "SF-007",
+          "title": "(SCTP) Advanced Certificate in Data Communications and Visualisation for Business Analyst",
+          "provider": "SMU Academy",
+          "kind": "skillsfuture",
+          "summary": "Data visualisation, data preparation, charts, storytelling, dashboards and a capstone. Tools include Tableau, Excel and Python libraries. The published duration is 330 hours over three months; this is not the hypothetical six-month programme.",
+          "tags": [
+            "data",
+            "analytics",
+            "visualisation",
+            "visualization",
+            "excel",
+            "python",
+            "dashboards",
+            "storytelling"
+          ],
+          "source_url": "https://academy.smu.edu.sg/courses/sctp-adv-cert-data-comm-and-visual-biz-analyst",
+          "captured_on": "2026-11-21",
+          "venue": null,
+          "planning_area": null,
+          "price_min_sgd": 20928.0,
+          "price_max_sgd": 20928.0,
+          "extra_cost_sgd": null,
+          "cost_note": "Published full headline fee. Confirm all costs with the provider; reduced fees depend on eligibility.",
+          "start_date": null,
+          "end_date": null,
+          "registration_closes": null,
+          "weekdays": null,
+          "schedule_note": "330 hours over 3 months (12 weeks), including asynchronous, synchronous, classroom and assessment hours. Next start is to be advised; weekend-only attendance is not established.",
+          "duration_hours": 330.0,
+          "duration_months": 3,
+          "prerequisites": [],
+          "prerequisite_note": "Published application conditions include Singapore Citizen, Permanent Resident or LTVP+ holder; at least 21 years old; self-sponsored. Personal eligibility is not established.",
+          "languages": null,
+          "funding_note": "Provider lists conditional funded fees. Salary, a synthetic persona or a brand ambition does not establish eligibility or entitlement.",
+          "availability": "unknown",
+          "constraint_notes": []
+        },
+        "content": "{\"id\": \"SF-007\", \"title\": \"(SCTP) Advanced Certificate in Data Communications and Visualisation for Business Analyst\", \"provider\": \"SMU Academy\", \"kind\": \"skillsfuture\", \"summary\": \"Data visualisation, data preparation, charts, storytelling, dashboards and a capstone. Tools include Tableau, Excel and Python libraries. The published duration is 330 hours over three months; this is not the hypothetical six-month programme.\", \"tags\": [\"data\", \"analytics\", \"visualisation\", \"visualization\", \"excel\", \"python\", \"dashboards\", \"storytelling\"], \"source_url\": \"https://academy.smu.edu.sg/courses/sctp-adv-cert-data-comm-and-visual-biz-analyst\", \"captured_on\": \"2026-11-21\", \"venue\": null, \"planning_area\": null, \"price_min_sgd\": 20928.0, \"price_max_sgd\": 20928.0, \"extra_cost_sgd\": null, \"cost_note\": \"Published full headline fee. Confirm all costs with the provider; reduced fees depend on eligibility.\", \"start_date\": null, \"end_date\": null, \"registration_closes\": null, \"weekdays\": null, \"schedule_note\": \"330 hours over 3 months (12 weeks), including asynchronous, synchronous, classroom and assessment hours. Next start is to be advised; weekend-only attendance is not established.\", \"duration_hours\": 330.0, \"duration_months\": 3, \"prerequisites\": [], \"prerequisite_note\": \"Published application conditions include Singapore Citizen, Permanent Resident or LTVP+ holder; at least 21 years old; self-sponsored. Personal eligibility is not established.\", \"languages\": null, \"funding_note\": \"Provider lists conditional funded fees. Salary, a synthetic persona or a brand ambition does not establish eligibility or entitlement.\", \"availability\": \"unknown\", \"constraint_notes\": []}",
+        "scope_uuid": "01a20328-ffb7-7762-a932-7d2e9a8b72cd",
+        "status": "completed",
+        "evidence_origin": "native_relay"
+      }
+    ],
+    "preferences": {
+      "goal": "retail sales inventory data analytics visualisation Excel",
+      "budget_sgd": null,
+      "days": null,
+      "planning_area": null,
+      "known_skills": null,
+      "kind": null
+    },
+    "thread_id": "021cf296-2655-499b-8750-2f6183c7aa90",
+    "public_turn": 1,
+    "fabric": {
+      "status": "succeeded",
+      "runtime_id": "runtime-1795349336751-88-2",
+      "invocation_id": "invocation-1795349347414-88-5",
+      "artifacts": [
+        "artifacts",
+        "root"
+      ]
+    },
+    "response_origin": "application_source_summary",
+    "response_policy": {
+      "schema_version": 1,
+      "public_turn": 1,
+      "owner": "application",
+      "execution_kind": "native_agent",
+      "agent_invoked": true,
+      "model_proposal_sha256": "030ca0e90e7cd6dae648b32a618c0fd2ed9d8c1a1760c436e5948872b2ae2cee",
+      "original_word_count": 164,
+      "model_proposal_rule_failures": [],
+      "model_proposal_rule_status": "passed_selected_rules",
+      "model_proposal_rule_coverage": "word limit + frozen catalogue URL/ID membership only; financial prose not semantically certified",
+      "model_proposal_semantically_certified": false,
+      "source_ids": [
+        "SF-007"
+      ],
+      "source_hashes": {
+        "SF-007": "1e66bb3b30ffe4a15ed1e8d8e7f86c3038cb303f829df84f1cc199850c722a0c"
+      },
+      "native_tool_evidence": [
+        {
+          "name": "get_course_details",
+          "origin": "native_relay",
+          "native_id": "01a20328-ffb7-7762-a932-7d2e9a8b72cd",
+          "status": "returned",
+          "source_ids": [
+            "SF-007"
+          ],
+          "result_sha256": "37d773a1fee04333efb51d21d0af414f3f63594a62b47b5b8589104f2a5da3f6"
+        }
+      ],
+      "response_origin": "application_source_summary",
+      "delivered_word_count": 74,
+      "delivered_content_sha256": "f2caf1e0e24f5bc420abcae8350fcaf9bcf38d7f53c61007da72af4bb19c522c",
+      "source_provenance": {
+        "SF-007": {
+          "public_turn": 1,
+          "native_ids": [
+            "01a20328-ffb7-7762-a932-7d2e9a8b72cd"
+          ]
+        }
+      },
+      "excluded_source_ids": [],
+      "status": "delivered"
+    }
+  },
+  {
+    "turn": 2,
+    "role": "user",
+    "content": "Wow, that's a lot to take in — could you clarify if there are any payment plans or financial aid options for someone with a monthly salary in the S$2,500–3,499 range?"
+  },
+  {
+    "turn": 2,
+    "role": "assistant",
+    "content": "Salary alone does not establish a training budget, affordability or funding eligibility. What is your total training budget in Singapore dollars? On which days of the week can you study?\n\nPreviously retrieved programme: (SCTP) Advanced Certificate in Data Communications and Visualisation for Business Analyst (SF-007). Official source: https://academy.smu.edu.sg/courses/sctp-adv-cert-data-comm-and-visual-biz-analyst",
+    "thread_id": "021cf296-2655-499b-8750-2f6183c7aa90",
+    "public_turn": 2,
+    "application_response_id": "application-c89e08ec1ee24fd28d34773fc26f0168",
+    "tools": [],
+    "response_origin": "application_constraint_clarification",
+    "response_policy": {
+      "schema_version": 1,
+      "owner": "application",
+      "public_turn": 2,
+      "application_response_id": "application-c89e08ec1ee24fd28d34773fc26f0168",
+      "execution_kind": "application_clarification",
+      "agent_invoked": false,
+      "inference_calls": 0,
+      "missing_constraints": [
+        "budget_sgd",
+        "days"
+      ],
+      "public_preferences": {
+        "goal": "retail sales inventory data analytics visualisation Excel",
+        "budget_sgd": null,
+        "days": null,
+        "planning_area": null,
+        "known_skills": null,
+        "kind": null
+      },
+      "model_proposal_sha256": null,
+      "original_word_count": null,
+      "model_proposal_rule_status": "not_invoked",
+      "model_proposal_rule_failures": [],
+      "model_proposal_semantically_certified": false,
+      "response_origin": "application_constraint_clarification",
+      "delivered_word_count": 48,
+      "delivered_content_sha256": "04708e6861cd384839ce1d8247e794f950fa193c69b4114787a6b4a88427f304",
+      "source_ids": [
+        "SF-007"
+      ],
+      "source_hashes": {
+        "SF-007": "1e66bb3b30ffe4a15ed1e8d8e7f86c3038cb303f829df84f1cc199850c722a0c"
+      },
+      "source_provenance": {
+        "SF-007": {
+          "public_turn": 1,
+          "native_ids": [
+            "01a20328-ffb7-7762-a932-7d2e9a8b72cd"
+          ]
+        }
+      },
+      "native_tool_evidence": [],
+      "excluded_source_ids": [],
+      "status": "delivered"
+    },
+    "preferences": {
+      "goal": "retail sales inventory data analytics visualisation Excel",
+      "budget_sgd": null,
+      "days": null,
+      "planning_area": null,
+      "known_skills": null,
+      "kind": null
+    },
+    "outcome": {
+      "status": "valid",
+      "code": "application_clarification",
+      "reason": "The application asks for missing constraints before agent execution."
+    }
+  },
+  {
+    "turn": 3,
+    "role": "user",
+    "content": "My total training budget is S$3,000, I can study on weekends only and I prefer a shorter option. Do you have any alternatives for retail sales and inventory analysis?"
+  },
+  {
+    "turn": 3,
+    "role": "assistant",
+    "content": "Returned course facts for your stated budget and study days; fit remains unconfirmed.\n\n- IT Literacy - Basic Microsoft Excel (SF-006), Institute of Technical Education: 7 hours; published fee full fee unconfirmed; study days unconfirmed. https://www.aic.sg/Age-Well/Learning-and-Volunteerism/Learning-Opportunities/Computer-Skills\n\n- Fundamentals of Data Analytics & Visualization using Python (SF-003), National University of Singapore: duration unconfirmed; published fee full fee unconfirmed; study days unconfirmed. https://www.stat.nus.edu.sg/fundamentals-of-data-analytics-visualization-using-python/\n\n- Data Analytics Begins With Me (SF-002), National University of Singapore: duration unconfirmed; published fee full fee unconfirmed; study days unconfirmed. https://www.stat.nus.edu.sg/education/cet/short-course/\n\nUnknown fees, additional costs, timetables or places prevent a guaranteed fit. Confirm full costs, study days, availability and personal funding eligibility with each provider.",
+    "outcome": {
+      "status": "valid",
+      "code": "public_answer",
+      "reason": "A nonempty public answer was saved; factual checks are separate."
+    },
+    "tools": [
+      {
+        "name": "search_courses",
+        "arguments": {
+          "budget_sgd": 3000,
+          "days": [
+            5,
+            6
+          ],
+          "goal": "retail sales inventory data analytics visualisation Excel"
+        },
+        "result": {
+          "snapshot_date": "2026-11-21",
+          "as_of": "2026-11-22",
+          "matches": [
+            {
+              "course": {
+                "id": "SF-006",
+                "title": "IT Literacy - Basic Microsoft Excel",
+                "provider": "Institute of Technical Education",
+                "kind": "skillsfuture",
+                "summary": "Develop foundational spreadsheet and Excel skills.",
+                "tags": [
+                  "excel",
+                  "spreadsheet",
+                  "computer",
+                  "digital",
+                  "office",
+                  "data"
+                ],
+                "source_url": "https://www.aic.sg/Age-Well/Learning-and-Volunteerism/Learning-Opportunities/Computer-Skills",
+                "captured_on": "2026-11-10",
+                "venue": null,
+                "planning_area": null,
+                "price_min_sgd": null,
+                "price_max_sgd": null,
+                "extra_cost_sgd": null,
+                "cost_note": "Total unsubsidised fee has not been verified; confirm with the provider.",
+                "start_date": null,
+                "end_date": null,
+                "registration_closes": null,
+                "weekdays": null,
+                "schedule_note": "Confirm the next intake and timetable.",
+                "duration_hours": 7.0,
+                "duration_months": null,
+                "prerequisites": [],
+                "prerequisite_note": "AIC Age Well directory listing; confirm provider age, entry and intake requirements.",
+                "languages": null,
+                "funding_note": "AIC lists SkillsFuture Credit eligibility. Its published subsidised fee does not establish this learner’s entitlement.",
+                "availability": "unknown"
+              },
+              "score": 40,
+              "matched_terms": [
+                "data",
+                "excel",
+                "office",
+                "spreadsheet"
+              ],
+              "confirm": [
+                "Confirm a place is still available",
+                "Confirm personal funding eligibility",
+                "Next intake is unknown",
+                "Total fee is unknown; budget fit is unconfirmed",
+                "Timetable fit is unconfirmed"
+              ]
+            },
+            {
+              "course": {
+                "id": "SF-003",
+                "title": "Fundamentals of Data Analytics & Visualization using Python",
+                "provider": "National University of Singapore",
+                "kind": "skillsfuture",
+                "summary": "Practise Python data preparation, descriptive statistics and visualisation.",
+                "tags": [
+                  "python",
+                  "data",
+                  "analytics",
+                  "visualisation",
+                  "coding"
+                ],
+                "source_url": "https://www.stat.nus.edu.sg/fundamentals-of-data-analytics-visualization-using-python/",
+                "captured_on": "2026-11-10",
+                "venue": null,
+                "planning_area": null,
+                "price_min_sgd": null,
+                "price_max_sgd": null,
+                "extra_cost_sgd": null,
+                "cost_note": "Total unsubsidised fee has not been verified; confirm with the provider.",
+                "start_date": null,
+                "end_date": null,
+                "registration_closes": null,
+                "weekdays": null,
+                "schedule_note": "Confirm the next intake and timetable.",
+                "duration_hours": null,
+                "duration_months": null,
+                "prerequisites": [],
+                "prerequisite_note": "Confirm entry requirements with the provider.",
+                "languages": null,
+                "funding_note": "NUS lists SSG funding. Individual subsidy and credit eligibility require official confirmation.",
+                "availability": "unknown"
+              },
+              "score": 30,
+              "matched_terms": [
+                "analytics",
+                "data",
+                "visualisation"
+              ],
+              "confirm": [
+                "Confirm a place is still available",
+                "Confirm personal funding eligibility",
+                "Next intake is unknown",
+                "Total fee is unknown; budget fit is unconfirmed",
+                "Timetable fit is unconfirmed"
+              ]
+            },
+            {
+              "course": {
+                "id": "SF-002",
+                "title": "Data Analytics Begins With Me",
+                "provider": "National University of Singapore",
+                "kind": "skillsfuture",
+                "summary": "Build an introductory understanding of data analytics.",
+                "tags": [
+                  "data",
+                  "analytics",
+                  "business",
+                  "workplace"
+                ],
+                "source_url": "https://www.stat.nus.edu.sg/education/cet/short-course/",
+                "captured_on": "2026-11-10",
+                "venue": null,
+                "planning_area": null,
+                "price_min_sgd": null,
+                "price_max_sgd": null,
+                "extra_cost_sgd": null,
+                "cost_note": "Total unsubsidised fee has not been verified; confirm with the provider.",
+                "start_date": null,
+                "end_date": null,
+                "registration_closes": null,
+                "weekdays": null,
+                "schedule_note": "Confirm the next intake and timetable.",
+                "duration_hours": null,
+                "duration_months": null,
+                "prerequisites": [],
+                "prerequisite_note": "Confirm entry requirements with the provider.",
+                "languages": null,
+                "funding_note": "NUS lists SSG funding. Individual subsidy and credit eligibility require official confirmation.",
+                "availability": "unknown"
+              },
+              "score": 20,
+              "matched_terms": [
+                "analytics",
+                "data"
+              ],
+              "confirm": [
+                "Confirm a place is still available",
+                "Confirm personal funding eligibility",
+                "Next intake is unknown",
+                "Total fee is unknown; budget fit is unconfirmed",
+                "Timetable fit is unconfirmed"
+              ]
+            }
+          ],
+          "excluded": [
+            {
+              "id": "CC-002",
+              "reason": "Published class days conflict with availability"
+            },
+            {
+              "id": "CC-004",
+              "reason": "Published class days conflict with availability"
+            },
+            {
+              "id": "CC-006",
+              "reason": "Published class days conflict with availability"
+            },
+            {
+              "id": "SF-007",
+              "reason": "Published upper fee including known extras exceeds the budget"
+            }
+          ],
+          "notice": "Curated snapshot. Check the official listing before acting; individual eligibility is unknown."
+        },
+        "content": "{\"snapshot_date\": \"2026-11-21\", \"as_of\": \"2026-11-22\", \"matches\": [{\"course\": {\"id\": \"SF-006\", \"title\": \"IT Literacy - Basic Microsoft Excel\", \"provider\": \"Institute of Technical Education\", \"kind\": \"skillsfuture\", \"summary\": \"Develop foundational spreadsheet and Excel skills.\", \"tags\": [\"excel\", \"spreadsheet\", \"computer\", \"digital\", \"office\", \"data\"], \"source_url\": \"https://www.aic.sg/Age-Well/Learning-and-Volunteerism/Learning-Opportunities/Computer-Skills\", \"captured_on\": \"2026-11-10\", \"venue\": null, \"planning_area\": null, \"price_min_sgd\": null, \"price_max_sgd\": null, \"extra_cost_sgd\": null, \"cost_note\": \"Total unsubsidised fee has not been verified; confirm with the provider.\", \"start_date\": null, \"end_date\": null, \"registration_closes\": null, \"weekdays\": null, \"schedule_note\": \"Confirm the next intake and timetable.\", \"duration_hours\": 7.0, \"duration_months\": null, \"prerequisites\": [], \"prerequisite_note\": \"AIC Age Well directory listing; confirm provider age, entry and intake requirements.\", \"languages\": null, \"funding_note\": \"AIC lists SkillsFuture Credit eligibility. Its published subsidised fee does not establish this learner’s entitlement.\", \"availability\": \"unknown\"}, \"score\": 40, \"matched_terms\": [\"data\", \"excel\", \"office\", \"spreadsheet\"], \"confirm\": [\"Confirm a place is still available\", \"Confirm personal funding eligibility\", \"Next intake is unknown\", \"Total fee is unknown; budget fit is unconfirmed\", \"Timetable fit is unconfirmed\"]}, {\"course\": {\"id\": \"SF-003\", \"title\": \"Fundamentals of Data Analytics & Visualization using Python\", \"provider\": \"National University of Singapore\", \"kind\": \"skillsfuture\", \"summary\": \"Practise Python data preparation, descriptive statistics and visualisation.\", \"tags\": [\"python\", \"data\", \"analytics\", \"visualisation\", \"coding\"], \"source_url\": \"https://www.stat.nus.edu.sg/fundamentals-of-data-analytics-visualization-using-python/\", \"captured_on\": \"2026-11-10\", \"venue\": null, \"planning_area\": null, \"price_min_sgd\": null, \"price_max_sgd\": null, \"extra_cost_sgd\": null, \"cost_note\": \"Total unsubsidised fee has not been verified; confirm with the provider.\", \"start_date\": null, \"end_date\": null, \"registration_closes\": null, \"weekdays\": null, \"schedule_note\": \"Confirm the next intake and timetable.\", \"duration_hours\": null, \"duration_months\": null, \"prerequisites\": [], \"prerequisite_note\": \"Confirm entry requirements with the provider.\", \"languages\": null, \"funding_note\": \"NUS lists SSG funding. Individual subsidy and credit eligibility require official confirmation.\", \"availability\": \"unknown\"}, \"score\": 30, \"matched_terms\": [\"analytics\", \"data\", \"visualisation\"], \"confirm\": [\"Confirm a place is still available\", \"Confirm personal funding eligibility\", \"Next intake is unknown\", \"Total fee is unknown; budget fit is unconfirmed\", \"Timetable fit is unconfirmed\"]}, {\"course\": {\"id\": \"SF-002\", \"title\": \"Data Analytics Begins With Me\", \"provider\": \"National University of Singapore\", \"kind\": \"skillsfuture\", \"summary\": \"Build an introductory understanding of data analytics.\", \"tags\": [\"data\", \"analytics\", \"business\", \"workplace\"], \"source_url\": \"https://www.stat.nus.edu.sg/education/cet/short-course/\", \"captured_on\": \"2026-11-10\", \"venue\": null, \"planning_area\": null, \"price_min_sgd\": null, \"price_max_sgd\": null, \"extra_cost_sgd\": null, \"cost_note\": \"Total unsubsidised fee has not been verified; confirm with the provider.\", \"start_date\": null, \"end_date\": null, \"registration_closes\": null, \"weekdays\": null, \"schedule_note\": \"Confirm the next intake and timetable.\", \"duration_hours\": null, \"duration_months\": null, \"prerequisites\": [], \"prerequisite_note\": \"Confirm entry requirements with the provider.\", \"languages\": null, \"funding_note\": \"NUS lists SSG funding. Individual subsidy and credit eligibility require official confirmation.\", \"availability\": \"unknown\"}, \"score\": 20, \"matched_terms\": [\"analytics\", \"data\"], \"confirm\": [\"Confirm a place is still available\", \"Confirm personal funding eligibility\", \"Next intake is unknown\", \"Total fee is unknown; budget fit is unconfirmed\", \"Timetable fit is unconfirmed\"]}], \"excluded\": [{\"id\": \"CC-002\", \"reason\": \"Published class days conflict with availability\"}, {\"id\": \"CC-004\", \"reason\": \"Published class days conflict with availability\"}, {\"id\": \"CC-006\", \"reason\": \"Published class days conflict with availability\"}, {\"id\": \"SF-007\", \"reason\": \"Published upper fee including known extras exceeds the budget\"}], \"notice\": \"Curated snapshot. Check the official listing before acting; individual eligibility is unknown.\"}",
+        "scope_uuid": "01a20329-34f2-72d0-8118-31070dd1265a",
+        "status": "completed",
+        "evidence_origin": "native_relay"
+      }
+    ],
+    "preferences": {
+      "goal": "retail sales inventory data analytics visualisation Excel",
+      "budget_sgd": 3000.0,
+      "days": [
+        5,
+        6
+      ],
+      "planning_area": null,
+      "known_skills": null,
+      "kind": null
+    },
+    "thread_id": "021cf296-2655-499b-8750-2f6183c7aa90",
+    "public_turn": 3,
+    "fabric": {
+      "status": "succeeded",
+      "runtime_id": "runtime-1795349336751-88-2",
+      "invocation_id": "invocation-1795349361192-88-9",
+      "artifacts": [
+        "artifacts",
+        "root"
+      ]
+    },
+    "response_origin": "application_source_summary",
+    "response_policy": {
+      "schema_version": 1,
+      "public_turn": 3,
+      "owner": "application",
+      "execution_kind": "native_agent",
+      "agent_invoked": true,
+      "model_proposal_sha256": "7ad3f66e1c4383846847d20395b6605a1a3a8e8f229cd30cd3cbcf0fd997dc47",
+      "original_word_count": 237,
+      "model_proposal_rule_failures": [
+        "word_limit"
+      ],
+      "model_proposal_rule_status": "failed",
+      "model_proposal_rule_coverage": "word limit + frozen catalogue URL/ID membership only; financial prose not semantically certified",
+      "model_proposal_semantically_certified": false,
+      "source_ids": [
+        "SF-006",
+        "SF-003",
+        "SF-002"
+      ],
+      "source_hashes": {
+        "SF-006": "64fab086df4e7c1a06de092446297fd72ac07d73b15870a74a5a015e08fc6b87",
+        "SF-003": "227dae621f4dad58b349ae197f692f3d1ebaa26ca17c0292bbb00a876e99ae65",
+        "SF-002": "3885c197e7aad695760356ed99097406b5c4de8dd69048a5bf140f7ce04db4d7"
+      },
+      "native_tool_evidence": [
+        {
+          "name": "search_courses",
+          "origin": "native_relay",
+          "native_id": "01a20329-34f2-72d0-8118-31070dd1265a",
+          "status": "returned",
+          "source_ids": [
+            "SF-006",
+            "SF-003",
+            "SF-002"
+          ],
+          "result_sha256": "d147ef31c301eae9fd58c23b29235d1da3c937edb7f4e3505b2103d1acebbf09"
+        }
+      ],
+      "response_origin": "application_source_summary",
+      "delivered_word_count": 102,
+      "delivered_content_sha256": "ee08385c43c672cd670e6968463c47ede8eee3dc6a149788f4d4d1dd34178932",
+      "source_provenance": {
+        "SF-006": {
+          "public_turn": 3,
+          "native_ids": [
+            "01a20329-34f2-72d0-8118-31070dd1265a"
+          ]
+        },
+        "SF-003": {
+          "public_turn": 3,
+          "native_ids": [
+            "01a20329-34f2-72d0-8118-31070dd1265a"
+          ]
+        },
+        "SF-002": {
+          "public_turn": 3,
+          "native_ids": [
+            "01a20329-34f2-72d0-8118-31070dd1265a"
+          ]
+        }
+      },
+      "excluded_source_ids": [],
+      "status": "delivered"
+    }
+  }
+]

@@ -1,0 +1,6 @@
+agent:
+  api_max_retries: 1
+  auto_recovery_cycles: 0
+tools:
+  tool_search:
+    enabled: 'off'

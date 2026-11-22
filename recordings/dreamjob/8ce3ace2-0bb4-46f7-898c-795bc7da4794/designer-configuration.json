@@ -1,0 +1,44 @@
+{
+  "engine": "NeMo Data Designer",
+  "schema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "preferred_brands": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "UNIQLO",
+            "Decathlon"
+          ]
+        },
+        "minItems": 1,
+        "maxItems": 2,
+        "uniqueItems": true
+      },
+      "monthly_salary_range_sgd": {
+        "type": "string",
+        "enum": [
+          "2500-3499"
+        ]
+      },
+      "learning_situation": {
+        "type": "string",
+        "minLength": 20,
+        "maxLength": 800
+      }
+    },
+    "required": [
+      "preferred_brands",
+      "monthly_salary_range_sgd",
+      "learning_situation"
+    ]
+  },
+  "column": "retail_situation",
+  "sdk_call": "DataDesigner.create",
+  "seed_count": 1,
+  "seed_sha256": "0ef70355417745611d26f1469d35728c1430454f8f10936a34682e38726451dc",
+  "model": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning",
+  "configuration_sha256": "0dda9ca575135648a2a3e053981fcbebd2150a277bfb219ce32d5a22c3a2fd56"
+}

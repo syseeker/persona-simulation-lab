@@ -1,0 +1,43 @@
+{
+  "schema_version": "fabric.agent/v1alpha1",
+  "harness": {
+    "adapter_id": "nvidia.fabric.langchain.deepagents",
+    "resolution": "preinstalled",
+    "settings": {
+      "reasoning_effort": "none"
+    }
+  },
+  "runtime": {
+    "input_schema": "chat",
+    "output_schema": "message",
+    "artifacts": null,
+    "timeout_seconds": 600.0,
+    "max_turns": 24
+  },
+  "tools": {
+    "enabled": [
+      "search_courses",
+      "get_course_details",
+      "compare_courses"
+    ]
+  },
+  "models": {
+    "default": {
+      "provider": "openai-compatible",
+      "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+      "max_tokens": 1024,
+      "temperature": 0.0
+    }
+  },
+  "model_transport": "In-sandbox loopback bridge to the host budget gateway; credentials remain on the host.",
+  "relay": {
+    "enabled": true,
+    "observability": {
+      "version": 4,
+      "enable_full_payloads": false
+    },
+    "export": "Native ATOF JSONL file sink; no collector-backed streaming requested."
+  },
+  "instructions_sha256": "d4a2075d6c729f6c0c53ed65b0e45511cc51ae12186700d3d089a44342aca72d",
+  "configuration_notice": "Allowlisted values from the native saved configuration. Host addresses, credentials and prompt text are omitted."
+}
