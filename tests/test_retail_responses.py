@@ -71,7 +71,8 @@ def test_clarification_uses_previous_returned_facts_without_another_tool_call(se
     boundary, rows, folder, _ = setup_boundary
     first = boundary.apply('SMU programme?', Preferences(goal='retail data'), proposal([native(rows[:1])]))
     boundary.confirm_delivery(first)
-    result = boundary.apply('My salary is S$2,500–3,499.', Preferences(goal='retail data'), proposal([]))
+    result = boundary.prepare_clarification('My salary is S$2,500–3,499.',
+        Preferences(goal='retail data'), thread_id='fixture-thread')
     assert result['response_origin'] == 'application_constraint_clarification'
     assert 'What is your total training budget' in result['content']
     assert 'On which days of the week' in result['content']
@@ -79,12 +80,15 @@ def test_clarification_uses_previous_returned_facts_without_another_tool_call(se
     assert 'SF-007' in result['content'] and result['response_policy']['public_turn'] == 2
     assert result['response_policy']['source_provenance']['SF-007'] == {
         'public_turn': 1, 'native_ids': ['fixture-scope']}
+    assert result['response_policy']['agent_invoked'] is False
+    assert result['response_policy']['inference_calls'] == 0
+    assert result['tools'] == [] and 'fabric' not in result
     assert boundary.last_delivery_record['public_turn'] == 1
     boundary.confirm_delivery(result)
     assert boundary.last_delivery_record['public_turn'] == 2
     records = [json.loads(line) for line in (folder / 'retail-model-proposals.jsonl').read_text().splitlines()]
-    assert records[1]['original_content'] == 'Native proposal retained separately.'
-    assert records[1]['native_identity']['fabric']['invocation_id'] == 'fixture-invocation'
+    assert len(records) == 1
+    assert records[0]['native_identity']['fabric']['invocation_id'] == 'fixture-invocation'
 
 
 @pytest.mark.parametrize('known, missing, absent', [
@@ -92,9 +96,64 @@ def test_clarification_uses_previous_returned_facts_without_another_tool_call(se
     ({'days': [0]}, 'What is your total training budget', 'On which days'),
 ])
 def test_clarification_asks_only_missing_constraints(setup_boundary, known, missing, absent):
-    boundary, rows, _, _ = setup_boundary
-    delivered = boundary.apply('My salary is context.', Preferences(goal='retail', **known), proposal([native(rows[:1])]))
+    boundary, _, _, _ = setup_boundary
+    delivered = boundary.prepare_clarification('My salary is context.',
+        Preferences(goal='retail', **known), thread_id='fixture-thread')
     assert missing in delivered['content'] and absent not in delivered['content']
+
+
+@pytest.mark.parametrize('known, missing', [
+    ({}, ['budget_sgd', 'days']),
+    ({'budget_sgd': 0}, ['days']),
+    ({'days': [0]}, ['budget_sgd']),
+    ({'days': []}, ['budget_sgd', 'days']),
+    ({'budget_sgd': 300, 'days': []}, ['days']),
+])
+def test_pre_agent_clarification_is_truthfully_application_owned_without_a_model_proposal(
+    setup_boundary, known, missing
+):
+    boundary, _, folder, _ = setup_boundary
+    prefs = Preferences(goal='retail data', **known)
+    result = boundary.prepare_clarification('My income is context.', prefs, thread_id='public-thread')
+    assert result['response_origin'] == 'application_constraint_clarification'
+    assert result['public_turn'] == 1 and result['thread_id'] == 'public-thread'
+    assert result['application_response_id'] and result['tools'] == []
+    assert all(key not in result for key in ('fabric', 'raw_output', 'invocation_id', 'proposal_content'))
+    policy = result['response_policy']
+    assert policy['execution_kind'] == 'application_clarification'
+    assert policy['agent_invoked'] is False and policy['inference_calls'] == 0
+    assert policy['missing_constraints'] == missing
+    assert policy['public_preferences'] == prefs.model_dump(mode='json')
+    assert policy['model_proposal_sha256'] is None and policy['original_word_count'] is None
+    assert policy['model_proposal_rule_status'] == 'not_invoked'
+    assert policy['source_ids'] == []  # No previously returned course is invented for a question.
+    assert policy['status'] == 'validated' and boundary.last_delivery_record is None
+    assert not (folder / 'retail-model-proposals.jsonl').exists()
+    confirmed = boundary.confirm_delivery(result)
+    assert confirmed['response_policy']['status'] == 'delivered'
+    assert boundary.last_delivery_record['content'] == result['content']
+    assert boundary.last_delivery_record['public_turn'] == 1
+
+
+@pytest.mark.parametrize('known', [{'budget_sgd': 300}, {'days': [5, 6]}])
+def test_one_public_constraint_is_enough_to_ask_for_the_other_without_income_context(setup_boundary, known):
+    boundary, _, _, _ = setup_boundary
+    result = boundary.prepare_clarification('Help me choose an option.',
+        Preferences(goal='retail', **known), thread_id='fixture-thread')
+    assert result is not None and result['response_policy']['agent_invoked'] is False
+
+
+@pytest.mark.parametrize('message, known', [
+    ('Tell me about the SMU programme.', {}),
+    ('Find an option for my stated constraints.', {'budget_sgd': 300, 'days': [5, 6]}),
+])
+def test_requests_needing_course_facts_still_reach_the_agent(setup_boundary, message, known):
+    boundary, _, folder, _ = setup_boundary
+    assert boundary.prepare_clarification(message, Preferences(goal='retail', **known),
+        thread_id='fixture-thread') is None
+    assert boundary.turn == 0 and boundary.pending_delivery is None
+    assert not (folder / 'retail-response-decisions.jsonl').exists()
+    assert not (folder / 'retail-model-proposals.jsonl').exists()
 
 
 @pytest.mark.parametrize('budget, days, included, excluded', [
@@ -221,6 +280,38 @@ def test_confirmation_rejects_a_different_candidate(setup_boundary, changes):
     assert boundary.pending_delivery is None
 
 
+@pytest.mark.parametrize('changes', [
+    {'application_response_id': 'different-application-response'},
+    {'thread_id': 'different-thread'},
+    {'public_turn': 999},
+    {'fabric': {'status': 'succeeded', 'invocation_id': 'invented-native-invocation'}},
+    {'tools': [{'name': 'search_courses', 'result': {'matches': []}}]},
+])
+def test_no_agent_confirmation_rejects_changed_identity_or_invented_native_execution(setup_boundary, changes):
+    boundary, _, folder, _ = setup_boundary
+    candidate = boundary.prepare_clarification('My salary is context.', Preferences(goal='retail'),
+                                               thread_id='original-thread')
+    original = deepcopy(candidate)
+    pending = deepcopy(boundary.pending_delivery)
+    with pytest.raises(ValueError, match='does not match'):
+        boundary.confirm_delivery({**deepcopy(candidate), **changes})
+    assert boundary.pending_delivery == pending and boundary.last_delivery_record is None
+    assert candidate == original
+    decisions = [json.loads(line) for line in (folder / 'retail-response-decisions.jsonl').read_text().splitlines()]
+    assert [decision['status'] for decision in decisions] == ['validated']
+
+    confirmed = boundary.confirm_delivery(candidate)
+    assert confirmed['application_response_id'] == original['application_response_id']
+    assert confirmed['thread_id'] == 'original-thread'
+    assert confirmed['public_turn'] == confirmed['response_policy']['public_turn'] == 1
+    assert confirmed['tools'] == [] and 'fabric' not in confirmed
+    assert confirmed['response_policy']['agent_invoked'] is False
+    assert confirmed['response_policy']['status'] == 'delivered'
+    assert boundary.pending_delivery is None and candidate == original
+    assert boundary.last_delivery_record['content'] == original['content']
+    assert not (folder / 'retail-model-proposals.jsonl').exists()
+
+
 def test_blocked_candidate_never_advances_public_delivery_state(setup_boundary):
     boundary, rows, folder, _ = setup_boundary
     candidate = boundary.apply('SMU programme?', Preferences(goal='retail'), proposal([native(rows[:1])]))
@@ -240,10 +331,29 @@ def test_unconfirmed_candidate_must_be_resolved_before_another_turn(setup_bounda
     first = boundary.apply('SMU programme?', Preferences(goal='retail'), proposal([native(rows[:1])]))
     with pytest.raises(ValueError, match='still unconfirmed'):
         boundary.apply('My salary is context.', Preferences(goal='retail'), proposal([]))
+    with pytest.raises(ValueError, match='still unconfirmed'):
+        boundary.prepare_clarification('My salary is context.', Preferences(goal='retail'),
+                                       thread_id='fixture-thread')
     assert boundary.turn == 1
     boundary.confirm_delivery(first)
     with pytest.raises(ValueError, match='no validated'):
         boundary.confirm_delivery(first)
+
+
+def test_rejected_pre_agent_clarification_never_replaces_the_last_confirmed_delivery(setup_boundary):
+    boundary, rows, folder, _ = setup_boundary
+    first = boundary.apply('SMU programme?', Preferences(goal='retail'), proposal([native(rows[:1])]))
+    boundary.confirm_delivery(first)
+    previous = deepcopy(boundary.last_delivery_record)
+    candidate = boundary.prepare_clarification('My salary is context.', Preferences(goal='retail'),
+                                               thread_id='fixture-thread')
+    assert candidate['public_turn'] == 2
+    boundary.reject_delivery('Native output Guardrails blocked this application clarification.')
+    assert boundary.last_delivery_record == previous and boundary.pending_delivery is None
+    decisions = [json.loads(line) for line in (folder / 'retail-response-decisions.jsonl').read_text().splitlines()]
+    assert decisions[-1]['status'] == 'rejected'
+    assert decisions[-1]['agent_invoked'] is False
+    assert len((folder / 'retail-model-proposals.jsonl').read_text().splitlines()) == 1
 
 
 @pytest.mark.parametrize('alteration', [

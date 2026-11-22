@@ -1,6 +1,7 @@
 """Explicit criteria over saved retail replies/facts; Helix scores these rows."""
 from __future__ import annotations
 
+import hashlib
 import json
 from pathlib import Path
 import re
@@ -71,6 +72,100 @@ def _salary_only_findings(text: str) -> list[dict]:
                     else _nonasserting_prefix(plain, match.start()))]
 
 
+def _public_execution(conversation: list, replies: list, constraints: list, advisor: list) -> tuple[bool, dict]:
+    """Verify native continuity without relabelling an application reply as an invocation."""
+    explicit = any(any(key in reply for key in ('fabric', 'public_turn', 'application_response_id', 'response_policy'))
+        or reply.get('response_origin') == 'application_constraint_clarification' for reply in replies)
+    failures = []
+    if [row.get('role') for row in conversation] != ['user', 'assistant'] * 3:
+        failures.append('Three ordered public learner/advisor pairs are required')
+    threads = [reply.get('thread_id') for reply in replies]
+    if len(replies) != 3 or any(not isinstance(value, str) or not value.strip() for value in threads):
+        failures.append('Every public reply needs its actual conversation thread')
+    elif len(set(threads)) != 1:
+        failures.append('Public replies do not share the same conversation thread')
+    if any(isinstance(reply.get('outcome'), dict) and reply['outcome'].get('status') != 'valid'
+           for reply in replies):
+        failures.append('A public reply retains a failed outcome')
+    observed = {'association': 'explicit execution metadata' if explicit else 'historical thread-only metadata',
+        'public_reply_count': len(replies), 'native_public_turns': [], 'application_public_turns': [],
+        'native_invocation_count': None, 'failures': failures}
+    if not explicit:
+        # Older published recordings retain thread IDs but omit Fabric envelopes.
+        # Keep their original continuity test; do not invent a native-call count.
+        return not failures, observed
+
+    native, confirmed_native, application = [], [], []
+    for index, reply in enumerate(replies, 1):
+        policy = reply.get('response_policy') or {}
+        if not isinstance(policy, dict):
+            failures.append(f'Public turn {index} has malformed response policy')
+            policy = {}
+        public_turn = reply.get('public_turn', reply.get('turn'))
+        if type(public_turn) is not int or public_turn != index:
+            failures.append(f'Public reply {index} is not associated with its actual public turn')
+        for public in conversation[(index - 1) * 2:index * 2]:
+            if 'turn' in public and (type(public['turn']) is not int or public['turn'] != index):
+                failures.append(f'Public pair {index} has a mismatched turn')
+        if 'public_turn' in policy and (type(policy['public_turn']) is not int or policy['public_turn'] != index):
+            failures.append(f'Public turn {index} has a mismatched policy turn')
+        if policy.get('execution_kind') == 'application_clarification' or policy.get('agent_invoked') is False:
+            application.append(index)
+            response_id = reply.get('application_response_id')
+            context = next((row for row in constraints if row.get('turn') == index), {})
+            preferences = context.get('preferences') or {}
+            missing = (['budget_sgd'] if preferences.get('budget_sgd') is None else [])
+            missing += ['days'] if not preferences.get('days') else []
+            valid = (index == 2 and policy.get('execution_kind') == 'application_clarification'
+                and policy.get('agent_invoked') is False
+                and type(policy.get('inference_calls')) is int and policy['inference_calls'] == 0
+                and policy.get('model_proposal_rule_status') == 'not_invoked'
+                and not policy.get('model_proposal_rule_failures')
+                and policy.get('model_proposal_sha256') is None and policy.get('original_word_count') is None
+                and policy.get('status') == 'delivered' and policy.get('public_turn') == index
+                and reply.get('public_turn') == index
+                and policy.get('delivered_content_sha256') == hashlib.sha256(reply['content'].encode()).hexdigest()
+                and policy.get('public_preferences', preferences) == preferences
+                and isinstance(response_id, str) and bool(response_id.strip())
+                and policy.get('application_response_id') == response_id
+                and reply.get('response_origin') == policy.get('response_origin') == 'application_constraint_clarification'
+                and bool(context) and bool(missing) and policy.get('missing_constraints') == missing
+                and not any(key in reply for key in ('fabric', 'raw_output', 'runtime_id', 'invocation_id', 'request_id'))
+                and not reply.get('tools'))
+            if not valid:
+                failures.append(f'Public turn {index} lacks a confirmed application-only clarification receipt')
+            # A zero-call declaration must agree with actual per-turn accounting.
+            # Unscoped calls cannot establish that this public turn made no call.
+            if not advisor or any(type(call.get('public_turn')) is not int or call['public_turn'] == index
+                                  for call in advisor):
+                failures.append(f'Public turn {index} has missing or contradictory zero-inference accounting')
+        else:
+            native.append(reply)
+            fabric = reply.get('fabric')
+            if (policy.get('execution_kind') not in (None, 'native_agent')
+                    or ('agent_invoked' in policy and policy['agent_invoked'] is not True)
+                    or (policy and policy.get('status') != 'delivered')
+                    or not isinstance(fabric, dict) or fabric.get('status') != 'succeeded'
+                    or any(not isinstance(fabric.get(key), str) or not fabric[key].strip()
+                           for key in ('runtime_id', 'invocation_id'))):
+                failures.append(f'Public turn {index} lacks a successful actual native invocation')
+            else:
+                confirmed_native.append(reply)
+    observed.update(native_public_turns=[reply.get('public_turn', reply.get('turn')) for reply in confirmed_native],
+                    application_public_turns=application, native_invocation_count=len(confirmed_native))
+    if len(confirmed_native) < 2:
+        failures.append('A complete retail conversation needs at least two actual native replies')
+    runtimes = [(reply.get('fabric') or {}).get('runtime_id') for reply in native
+                if isinstance(reply.get('fabric'), dict) and isinstance(reply['fabric'].get('runtime_id'), str)]
+    invocations = [(reply.get('fabric') or {}).get('invocation_id') for reply in native
+                   if isinstance(reply.get('fabric'), dict) and isinstance(reply['fabric'].get('invocation_id'), str)]
+    if len(runtimes) != len(native) or len(set(runtimes)) != 1:
+        failures.append('Actual native replies do not share one persistent runtime')
+    if len(invocations) != len(native) or len(set(invocations)) != len(native):
+        failures.append('Actual native replies do not have distinct invocation identities')
+    return not failures, observed
+
+
 def evaluate_retail(conversation: list, catalogue: Path, tools: list, source_lock: dict, folder: Path) -> dict:
     rows = []
 
@@ -91,6 +186,9 @@ def evaluate_retail(conversation: list, catalogue: Path, tools: list, source_loc
     users = [m for m in conversation if m['role'] == 'user']
     replies = [m for m in conversation if m['role'] == 'assistant']
     constraints, audit = lines('public-constraints.jsonl'), lines('disclosure-audit.jsonl')
+    usage_path = folder / 'usage.json'
+    advisor = [row for row in json.loads(usage_path.read_text()).get('records', [])
+               if row.get('role') == 'assistant'] if usage_path.is_file() else []
     check('three-turns', 'Three public learner/advisor pairs completed', [3, 3], [len(users), len(replies)],
           'Native early stops and incomplete replies are preserved rather than filled in.', ['public-conversation.json'])
     check('valid-answers', 'All three replies contain valid public answers', True,
@@ -140,9 +238,14 @@ def evaluate_retail(conversation: list, catalogue: Path, tools: list, source_loc
     check('published-duration', 'The opening preserves the actual three-month duration', True,
           bool(re.search(r'\b(?:3|three)[ -]months?\b|\b12[ -]weeks?\b', first, re.I)),
           f'Frozen fact: {smu.duration_months} months / {smu.duration_hours:g} hours. A hypothetical six months cannot replace it.', ['public-conversation.json', 'catalogue-snapshot.json'])
-    check('persistent-thread', 'The three turns use one persistent native thread', True,
-          len(replies) == 3 and len({r.get('thread_id') for r in replies}) == 1 and bool(replies[0].get('thread_id')),
-          'This checks the local three-turn condition; managed execution starts a new session.', ['public-conversation.json'])
+    persistent, execution = _public_execution(conversation, replies, constraints, advisor)
+    check('persistent-thread', 'Actual native replies share one persistent thread across three public turns', True,
+          persistent,
+          'Native invocation identities establish agent continuity. A confirmed application-only clarification '
+          'can occupy public turn 2 without fabricating a third native call. Managed execution starts a new session.',
+          ['public-conversation.json', 'usage.json'], observed=execution,
+          coverage='Explicit execution metadata is checked when present. Older published recordings support only '
+                   'their original thread-ID continuity check; no missing native invocation count is inferred.')
     for index, reply in enumerate(replies):
         text = reply['content']
         urls = {url.rstrip('.,;') for url in re.findall(r'https://[^\s)\]>]+', text)}
@@ -172,8 +275,6 @@ def evaluate_retail(conversation: list, catalogue: Path, tools: list, source_loc
     check('unpublished-funding-figures', 'No unlisted numerical funding rates or annual credit amount', [],
           sorted(set(funding)), 'This frozen catalogue publishes no subsidy percentages or annual credit cap. Narrow numerical-claim coverage; other claims need review.',
           ['public-conversation.json', 'catalogue-snapshot.json'])
-    usage_path = folder / 'usage.json'
-    advisor = [row for row in json.loads(usage_path.read_text()).get('records', []) if row.get('role') == 'assistant'] if usage_path.is_file() else []
     completed = [row for row in advisor if row.get('status') == 'completed']
     check('output-completion', 'Advisor model outputs did not exhaust their token ceiling', True,
           bool(completed) and all(row.get('finish_reason') not in {None, 'length'} for row in completed),
@@ -185,11 +286,20 @@ def evaluate_retail(conversation: list, catalogue: Path, tools: list, source_loc
     check('native-course-search', 'A completed actual MCP search is attributable', True,
           any(valid_native_search(tool) for tool in tools),
           'The frozen catalogue and an application intent log alone are insufficient.', ['native-tools.json'])
-    delivery_review = [{'public_turn': index + 1,
-        'response_origin': reply.get('response_origin', 'native_model_reply'),
-        'model_proposal_rule_status': reply.get('response_policy', {}).get('model_proposal_rule_status', 'not_captured'),
-        'model_proposal_rule_failures': reply.get('response_policy', {}).get('model_proposal_rule_failures', []),
-        'model_proposal_semantically_certified': False} for index, reply in enumerate(replies)]
+    delivery_review = []
+    for index, reply in enumerate(replies, 1):
+        policy = reply.get('response_policy') or {}
+        policy = policy if isinstance(policy, dict) else {}
+        review = {'public_turn': reply.get('public_turn', index),
+            'response_origin': reply.get('response_origin', 'native_model_reply'),
+            'model_proposal_rule_status': policy.get('model_proposal_rule_status', 'not_captured'),
+            'model_proposal_rule_failures': policy.get('model_proposal_rule_failures', []),
+            'model_proposal_semantically_certified': False}
+        review.update({key: policy[key] for key in ('execution_kind', 'agent_invoked', 'inference_calls',
+                       'missing_constraints', 'application_response_id') if key in policy})
+        if 'status' in policy:
+            review['delivery_status'] = policy['status']
+        delivery_review.append(review)
     return {'kind': 'Helix Evals SDK · application-defined criteria', 'rows': rows,
         'evaluation_scope': 'Delivered public application responses and observed execution; native model prose is not certified.',
         'delivery_review': delivery_review,

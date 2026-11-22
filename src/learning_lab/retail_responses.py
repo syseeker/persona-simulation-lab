@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 import re
 from typing import Literal
+import uuid
 
 from pydantic import BaseModel, ConfigDict
 
@@ -25,6 +26,7 @@ class ResponseConfiguration(BaseModel):
     original_prose_semantically_certified: Literal[False] = False
     catalogue_sha256: str
     clarification: str = 'Ask missing total training budget/study days; salary establishes neither affordability nor eligibility.'
+    clarification_dispatch: str = 'Before Fabric/model/tool execution for salary or partially supplied decision constraints; programme-information questions still use native tools.'
     tool_evidence: str = 'Successful native Relay or Helix Intake result; previous facts only for clarification.'
     unknowns: str = 'Unknown full costs, timetable, duration and personal eligibility remain unconfirmed.'
     guardrails_relationship: str = 'Application delivery policy, separate from native behavioural Guardrails.'
@@ -144,7 +146,7 @@ class RetailResponseBoundary:
         missing = []
         if preferences.budget_sgd is None:
             missing.append('What is your total training budget in Singapore dollars?')
-        if preferences.days is None:
+        if not preferences.days:
             missing.append('On which days of the week can you study?')
         text = ('Salary alone does not establish a training budget, affordability or funding eligibility. '
                 + ' '.join(missing))
@@ -153,6 +155,46 @@ class RetailResponseBoundary:
         if course:
             text += f'\n\nPreviously retrieved programme: {course.title} ({course.id}). Official source: {course.source_url}'
         return text, [course] if course else []
+
+    def prepare_clarification(self, message: str, preferences: Preferences, *, thread_id: str) -> dict | None:
+        """Ask for decision constraints before dispatch; never repair a native failure."""
+        if self.pending_delivery is not None:
+            raise ValueError('Previous retail delivery is still unconfirmed')
+        missing = (["budget_sgd"] if preferences.budget_sgd is None else [])
+        missing += ["days"] if not preferences.days else []
+        salary_context = bool(re.search(r'\bsalary|\bincome|\bearn|\bmonthly pay|\bper month', message, re.I))
+        if not missing or not (salary_context or preferences.budget_sgd is not None or preferences.days is not None):
+            return None
+        if hashlib.sha256(self.catalogue.read_bytes()).hexdigest() != self.configuration.catalogue_sha256:
+            raise ValueError('Frozen catalogue changed before retail clarification')
+        content, used = self._clarify(preferences)
+        if _words(content) > self.configuration.maximum_words:
+            raise ValueError('Application clarification exceeds the 180-word limit')
+        self.turn += 1
+        response_id = 'application-' + uuid.uuid4().hex
+        decision = {'schema_version': 1, 'owner': 'application', 'public_turn': self.turn,
+            'application_response_id': response_id, 'execution_kind': 'application_clarification',
+            'agent_invoked': False, 'inference_calls': 0, 'missing_constraints': missing,
+            'public_preferences': preferences.model_dump(mode='json'),
+            'model_proposal_sha256': None, 'original_word_count': None,
+            'model_proposal_rule_status': 'not_invoked', 'model_proposal_rule_failures': [],
+            'model_proposal_semantically_certified': False,
+            'response_origin': 'application_constraint_clarification',
+            'delivered_word_count': _words(content),
+            'delivered_content_sha256': hashlib.sha256(content.encode()).hexdigest(),
+            'source_ids': [course.id for course in used],
+            'source_hashes': {course.id: _hash(course.model_dump(mode='json')) for course in used},
+            'source_provenance': {course.id: deepcopy(self.provenance[course.id]) for course in used},
+            'native_tool_evidence': [], 'excluded_source_ids': [], 'status': 'validated'}
+        candidate = {'content': content, 'thread_id': thread_id, 'public_turn': self.turn,
+            'application_response_id': response_id, 'tools': [],
+            'response_origin': decision['response_origin'], 'response_policy': decision,
+            'preferences': preferences.model_dump(mode='json'),
+            'outcome': {'status': 'valid', 'code': 'application_clarification',
+                        'reason': 'The application asks for missing constraints before agent execution.'}}
+        save_evidence(self.folder / 'retail-response-decisions.jsonl', decision, append=True)
+        self.pending_delivery = {'candidate': deepcopy(candidate), 'decision': deepcopy(decision)}
+        return candidate
 
     def _options(self, preferences: Preferences, current: dict[str, Course]) -> tuple[str, list[Course], list[str]]:
         if not preferences.days or any(day not in range(7) for day in preferences.days):
@@ -194,6 +236,7 @@ class RetailResponseBoundary:
         if ids - self.facts.keys():
             failures.append('unsupported_course_id')
         decision = {'schema_version': 1, 'public_turn': self.turn, 'owner': 'application',
+                    'execution_kind': 'native_agent', 'agent_invoked': True,
                     'model_proposal_sha256': hashlib.sha256(proposal.encode()).hexdigest(),
                     'original_word_count': _words(proposal), 'model_proposal_rule_failures': failures,
                     'model_proposal_rule_status': 'failed' if failures else 'passed_selected_rules',
@@ -262,9 +305,10 @@ class RetailResponseBoundary:
         """Acknowledge only after the caller's output safeguards permit delivery."""
         if self.pending_delivery is None:
             raise ValueError('There is no validated retail delivery to confirm')
+        candidate = self.pending_delivery['candidate']
         decision = deepcopy(self.pending_delivery['decision'])
         content = result.get('content') if isinstance(result, dict) else None
-        if (not isinstance(content, str)
+        if (not isinstance(result, dict) or result != candidate or not isinstance(content, str)
                 or hashlib.sha256(content.encode()).hexdigest() != decision['delivered_content_sha256']
                 or result.get('response_origin') != decision['response_origin']
                 or not isinstance(result.get('response_policy'), dict)
@@ -272,7 +316,7 @@ class RetailResponseBoundary:
             raise ValueError('Retail delivery confirmation does not match the validated candidate')
         decision['status'] = 'delivered'
         save_evidence(self.folder / 'retail-response-decisions.jsonl', decision, append=True)
-        confirmed = deepcopy(result)
+        confirmed = deepcopy(candidate)
         confirmed['response_policy'] = decision
         self.last_delivery_record = {'content': content, 'response_origin': decision['response_origin'],
                                      'public_turn': decision['public_turn']}

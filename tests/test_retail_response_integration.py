@@ -13,13 +13,14 @@ import httpx
 from nemo_fabric import RunResult
 import pytest
 
-from learning_lab.catalogue import Preferences
+from learning_lab.catalogue import Course, Preferences
 from learning_lab.fabric_target import FabricTarget
 from learning_lab.inference import Budget, Gateway
+from learning_lab.retail_responses import RetailResponseBoundary
 
 
 def records(path):
-    return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
+    return [json.loads(line) for line in path.read_text().splitlines() if line.strip()] if path.exists() else []
 
 
 def make_target(tmp_path, *, status='succeeded', content='A native model proposal.'):
@@ -54,6 +55,9 @@ async def test_three_native_invocations_keep_proposals_and_acknowledge_exact_pub
         def __init__(self):
             self.inputs = []
             self.pending = None
+
+        def prepare_clarification(self, *_args, **_kwargs):
+            return None  # This fixture verifies the native path when no early branch is selected.
 
         def apply(self, message, preferences, result):
             # Raw SDK evidence must already exist before application rendering.
@@ -117,7 +121,8 @@ async def test_three_native_invocations_keep_proposals_and_acknowledge_exact_pub
 ])
 async def test_invalid_or_failed_native_proposal_cannot_be_rendered_into_success(tmp_path, status, content):
     target, requests = make_target(tmp_path, status=status, content=content)
-    boundary = SimpleNamespace(last_delivery_record=None, apply=AsyncMock())
+    boundary = SimpleNamespace(last_delivery_record=None, apply=AsyncMock(),
+                               prepare_clarification=lambda *_args, **_kwargs: None)
     target.response_boundary = boundary
     with pytest.raises(RuntimeError):
         await target.reply('Retail learning?', Preferences(goal='retail'))
@@ -126,6 +131,69 @@ async def test_invalid_or_failed_native_proposal_cannot_be_rendered_into_success
     result = records(tmp_path / 'fabric-run-results.jsonl')[0]['result']
     assert result['status'] == status and result['output']['response'] == content
     assert records(tmp_path / 'reply-outcomes.jsonl')[0]['outcome']['status'] == 'invalid'
+
+
+async def test_real_pre_agent_clarification_keeps_three_public_turns_but_only_two_native_invocations(
+    tmp_path, monkeypatch,
+):
+    from learning_lab import fabric_target
+
+    course = Course.model_validate({'id': 'SF-007', 'title': 'SMU Retail data programme',
+        'provider': 'SMU Academy', 'kind': 'skillsfuture', 'summary': 'Practise retail data analysis.',
+        'tags': ['retail', 'data'], 'source_url': 'https://example.edu/SF-007',
+        'captured_on': '2026-11-22', 'duration_hours': 330, 'duration_months': 3,
+        'price_min_sgd': 20928, 'price_max_sgd': 20928, 'weekdays': None}).model_dump(mode='json')
+    catalogue = tmp_path / 'catalogue.json'
+    catalogue.write_text(json.dumps({'courses': [course]}))
+    tool = {'name': 'get_course_details', 'result': course, 'status': 'completed',
+            'scope_uuid': 'offline-course-result', 'evidence_origin': 'native_relay'}
+    monkeypatch.setattr(fabric_target, 'native_tool_records', lambda *_args, **_kwargs: [tool])
+    native_proposal = 'Native proposal retained only as native evidence.'
+    target, requests = make_target(tmp_path, content=native_proposal)
+    boundary = target.response_boundary = RetailResponseBoundary(tmp_path, catalogue)
+    first = await target.reply('Tell me about the SMU programme.', Preferences(goal='retail'))
+    boundary.confirm_delivery(first)
+    receipts_before = {name: (tmp_path / name).read_bytes() for name in (
+        'fabric-run-requests.jsonl', 'fabric-run-results.jsonl',
+        'reply-outcomes.jsonl', 'preferences-by-turn.jsonl', 'retail-model-proposals.jsonl')}
+    lifecycle_before = records(tmp_path / 'fabric-lifecycle.jsonl')
+
+    clarification = await target.reply('My salary is S$2,500–3,499.', Preferences(goal='retail'))
+    assert len(requests) == target.invocation_count == 1
+    assert clarification['response_origin'] == 'application_constraint_clarification'
+    assert clarification['public_turn'] == clarification['response_policy']['public_turn'] == 2
+    assert clarification['tools'] == [] and 'fabric' not in clarification
+    for name, before in receipts_before.items():
+        assert (tmp_path / name).read_bytes() == before
+    lifecycle = records(tmp_path / 'fabric-lifecycle.jsonl')
+    assert lifecycle[:-1] == lifecycle_before
+    assert lifecycle[-1]['event'] == 'application_clarification_prepared'
+    assert lifecycle[-1]['public_turn'] == 2 and lifecycle[-1]['agent_invoked'] is False
+    assert boundary.last_delivery_record['public_turn'] == 1
+    boundary.confirm_delivery(clarification)
+
+    final = await target.reply('My total training budget is S$3,000. Weekends only.',
+                               Preferences(goal='retail', budget_sgd=3000, days=[5, 6]))
+    boundary.confirm_delivery(final)
+    assert len(requests) == target.invocation_count == 2
+    assert len({request.relay_session_root for request in requests}) == 1
+    assert final['response_policy']['public_turn'] == 3
+    ack = requests[1].input.split('\nAPPLICATION_DELIVERY_RECORD=', 1)[1].split('\nLAB_PREFERENCES=', 1)[0]
+    acknowledgement = json.loads(ack)
+    assert acknowledgement['content'] == clarification['content']
+    assert acknowledgement['public_turn'] == 2
+    assert native_proposal not in ack and '2,500' not in requests[1].input
+    for name in ('fabric-run-requests.jsonl', 'fabric-run-results.jsonl', 'preferences-by-turn.jsonl'):
+        native = records(tmp_path / name)
+        assert [row['turn'] for row in native] == [1, 3]
+        assert [row['public_turn'] for row in native] == [1, 3]
+        assert [row['invocation_sequence'] for row in native] == [1, 2]
+    assert [row['result']['output']['response'] for row in records(
+        tmp_path / 'fabric-run-results.jsonl')] == [native_proposal, native_proposal]
+    assert len(records(tmp_path / 'retail-model-proposals.jsonl')) == 2
+    delivered = [row for row in records(tmp_path / 'retail-response-decisions.jsonl')
+                 if row['status'] == 'delivered']
+    assert [row['public_turn'] for row in delivered] == [1, 2, 3]
 
 
 async def test_default_nonretail_fabric_path_keeps_original_answer_and_inputs(tmp_path):
@@ -173,17 +241,22 @@ async def test_retail_gateway_stops_truncation_without_losing_usage_or_changing_
         await gateway._client.aclose()
 
 
-@pytest.mark.parametrize('scenario,harness,rendered,output_status', [
-    ('photography', 'deepagents', False, 'passed'), ('boardgames', 'hermes', False, 'passed'),
-    ('dreamjob', 'deepagents', True, 'passed'), ('dreamjob', 'deepagents', True, 'blocked'),
+@pytest.mark.parametrize('scenario,harness,rendered,output_status,early,input_status', [
+    ('photography', 'deepagents', False, 'passed', False, 'passed'),
+    ('boardgames', 'hermes', False, 'passed', False, 'passed'),
+    ('dreamjob', 'deepagents', True, 'passed', False, 'passed'),
+    ('dreamjob', 'deepagents', True, 'blocked', False, 'passed'),
+    ('dreamjob', 'deepagents', True, 'passed', True, 'passed'),
+    ('dreamjob', 'deepagents', True, 'blocked', True, 'passed'),
+    ('dreamjob', 'deepagents', True, 'passed', True, 'blocked'),
 ])
 async def test_sandbox_enables_retail_boundary_only_and_checks_delivered_output(
-    tmp_path, monkeypatch, scenario, harness, rendered, output_status,
+    tmp_path, monkeypatch, scenario, harness, rendered, output_status, early, input_status,
 ):
     from learning_lab import sandbox_runtime
 
     events, emitted, targets = [], [], []
-    raw_catalogue = '{"fixture": true}'
+    raw_catalogue = '{"courses": []}' if early else '{"fixture": true}'
     incoming = deque([json.dumps({'id': 'init', 'method': 'init', 'scenario_id': scenario,
         'harness': harness, 'model': 'offline-scripted', 'catalogue': raw_catalogue,
         'catalogue_sha256': hashlib.sha256(raw_catalogue.encode()).hexdigest()}) + '\n'])
@@ -195,7 +268,8 @@ async def test_sandbox_enables_retail_boundary_only_and_checks_delivered_output(
         def emit(self, value):
             emitted.append(value)
             if value.get('id') == 'init':
-                incoming.append(json.dumps({'id': 'invoke', 'method': 'invoke', 'message': 'Public learning request',
+                message = 'My salary is context.' if early else 'Public learning request'
+                incoming.append(json.dumps({'id': 'invoke', 'method': 'invoke', 'message': message,
                     'preferences': {'goal': 'retail' if rendered else 'photography'}}) + '\n')
             if value.get('id') == 'invoke':
                 incoming.append('{"id": "close", "method": "close"}\n')
@@ -205,6 +279,9 @@ async def test_sandbox_enables_retail_boundary_only_and_checks_delivered_output(
             events.append('boundary-enabled')
             self.last_delivery_record = None
             self.pending = None
+
+        def prepare_clarification(self, *_args, **_kwargs):
+            return None
 
         def apply(self, *_args):
             events.append('render')
@@ -222,6 +299,23 @@ async def test_sandbox_enables_retail_boundary_only_and_checks_delivered_output(
             events.append(('reject-delivery', reason))
             self.pending = None
 
+    class EarlyBoundary(RetailResponseBoundary):
+        def __init__(self, *args):
+            events.append('boundary-enabled')
+            super().__init__(*args)
+
+        def prepare_clarification(self, *args, **kwargs):
+            events.append('prepare-clarification')
+            return super().prepare_clarification(*args, **kwargs)
+
+        def confirm_delivery(self, result):
+            events.append('confirm-delivery')
+            return super().confirm_delivery(result)
+
+        def reject_delivery(self, reason):
+            events.append(('reject-delivery', reason))
+            return super().reject_delivery(reason)
+
     class Target(FabricTarget):
         def __init__(self, *args, **kwargs):
             super().__init__(*args, **kwargs)
@@ -230,6 +324,7 @@ async def test_sandbox_enables_retail_boundary_only_and_checks_delivered_output(
             class Runtime:
                 async def invoke(_self, *, request):
                     events.append('native-invocation')
+                    assert not early, 'Application clarification must never invoke the native runtime'
                     return RunResult.from_mapping({'agent_name': 'offline-sandbox', 'harness': harness,
                         'adapter_kind': 'python', 'runtime_id': 'fixture-persistent-runtime',
                         'invocation_id': request.request_id, 'request_id': request.request_id,
@@ -256,7 +351,7 @@ async def test_sandbox_enables_retail_boundary_only_and_checks_delivered_output(
 
         async def check(self, boundary, text):
             events.append((boundary, text))
-            decision = {'native_result': {'status': output_status if boundary == 'output' else 'passed',
+            decision = {'native_result': {'status': output_status if boundary == 'output' else input_status,
                                           'content': 'Configured Guardrails response'}}
             with (tmp_path / 'guardrails-decisions.jsonl').open('a') as output:
                 output.write(json.dumps({'boundary': boundary, 'content': text, **decision}) + '\n')
@@ -284,7 +379,8 @@ async def test_sandbox_enables_retail_boundary_only_and_checks_delivered_output(
     monkeypatch.setattr(sandbox_runtime, 'Path', lambda _path: manifest)
     monkeypatch.setattr(sandbox_runtime.asyncio, 'to_thread', next_line)
     monkeypatch.setattr(sys, 'stdin', SimpleNamespace(readline=incoming.popleft))
-    monkeypatch.setitem(sys.modules, 'learning_lab.retail_responses', SimpleNamespace(RetailResponseBoundary=Boundary))
+    monkeypatch.setitem(sys.modules, 'learning_lab.retail_responses', SimpleNamespace(
+        RetailResponseBoundary=EarlyBoundary if early else Boundary))
     monkeypatch.setitem(sys.modules, 'learning_lab.behavioural_safeguards', SimpleNamespace(BehaviouralSafeguards=Rails))
     original_stdout = sys.stdout
     try:
@@ -295,6 +391,42 @@ async def test_sandbox_enables_retail_boundary_only_and_checks_delivered_output(
     assert (targets[0].response_boundary is not None) is rendered
     invocation = next(value for value in emitted if value.get('id') == 'invoke')
     native = records(tmp_path / 'fabric-run-results.jsonl')
+    if early:
+        assert not native and targets[0].invocation_count == 0
+        assert 'native-invocation' not in events
+        assert not (tmp_path / 'retail-model-proposals.jsonl').exists()
+        assert not (tmp_path / 'fabric-run-requests.jsonl').exists()
+        assert not (tmp_path / 'preferences-by-turn.jsonl').exists()
+        checked = records(tmp_path / 'guardrails-decisions.jsonl')
+        assert checked[0]['boundary'] == 'input'
+        if input_status == 'blocked':
+            assert invocation['result']['guardrails_blocked'] is True
+            assert len(checked) == 1 and 'prepare-clarification' not in events
+            assert targets[0].response_boundary.last_delivery_record is None
+            assert not (tmp_path / 'retail-response-decisions.jsonl').exists()
+            return
+        assert [row['boundary'] for row in checked] == ['input', 'output']
+        clarification = checked[1]['content']
+        assert 'What is your total training budget' in clarification
+        assert 'On which days of the week' in clarification
+        assert events.index(('input', 'My salary is context.')) < events.index('prepare-clarification')
+        assert events.index('prepare-clarification') < events.index(('output', clarification))
+        decisions = records(tmp_path / 'retail-response-decisions.jsonl')
+        if output_status == 'blocked':
+            assert 'error' in invocation and 'result' not in invocation
+            assert [row['status'] for row in decisions] == ['validated', 'rejected']
+            assert 'confirm-delivery' not in events
+            assert targets[0].response_boundary.pending_delivery is None
+            assert targets[0].response_boundary.last_delivery_record is None
+        else:
+            assert [row['status'] for row in decisions] == ['validated', 'delivered']
+            result = invocation['result']
+            assert result['content'] == clarification and 'fabric' not in result
+            assert result['response_policy']['agent_invoked'] is False
+            assert result['response_policy']['inference_calls'] == 0
+            assert events.index(('output', clarification)) < events.index('confirm-delivery')
+            assert targets[0].response_boundary.last_delivery_record['content'] == clarification
+        return
     assert len(native) == 1 and native[0]['result']['output']['response'] == 'Native proposal'
     if output_status != 'passed':
         assert 'error' in invocation and 'result' not in invocation

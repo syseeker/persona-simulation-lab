@@ -166,6 +166,7 @@ class FabricTarget:
         self.old_tool_names = None
         self.old_harness_env: dict[str, str | None] = {}
         self.invocation_count = 0
+        self.public_turn = 0
         # Only the selected retail application enables its source-only public
         # presentation boundary. Native Fabric outputs stay unchanged below.
         self.response_boundary = None
@@ -309,8 +310,17 @@ class FabricTarget:
 
     async def reply(self, message: str, preferences: Preferences | None = None) -> dict:
         self.gateway.tool_rounds = 0
-        self.invocation_count += 1
+        self.public_turn += 1
         user_message = message
+        boundary = getattr(self, 'response_boundary', None)
+        if boundary is not None and preferences is not None:
+            clarification = boundary.prepare_clarification(message, preferences, thread_id=self.thread_id)
+            if clarification is not None:
+                lifecycle(self.workspace.parent, 'application_clarification_prepared',
+                          public_turn=self.public_turn, agent_invoked=False,
+                          application_response_id=clarification['application_response_id'])
+                return clarification
+        self.invocation_count += 1
         path = self.workspace.parent / "preferences.json"
         if preferences:
             path.write_text(preferences.model_dump_json())
@@ -318,7 +328,6 @@ class FabricTarget:
             path.unlink(missing_ok=True)
         if preferences:
             message += "\nLAB_PREFERENCES=" + preferences.model_dump_json(exclude_none=True)
-        boundary = getattr(self, 'response_boundary', None)
         if boundary is not None and boundary.last_delivery_record is not None:
             # Keep the harness aware of the response actually shown by the app,
             # since its native memory also retains the unpresented proposal.
@@ -326,7 +335,8 @@ class FabricTarget:
             acknowledgement = '\nAPPLICATION_DELIVERY_RECORD=' + json.dumps(boundary.last_delivery_record)
             message = original + acknowledgement + separator + encoded if separator else message + acknowledgement
         request = RunRequest(input=message, relay_session_root=self.thread_id)
-        capture = {"turn": self.invocation_count, "thread_id": self.thread_id,
+        capture = {"turn": self.public_turn, "public_turn": self.public_turn,
+                   "invocation_sequence": self.invocation_count, "thread_id": self.thread_id,
                    "request_id": request.request_id}
         save_evidence(self.workspace.parent / "preferences-by-turn.jsonl", {
             "schema": "citizen-public-preferences/v1", **capture,
@@ -354,6 +364,7 @@ class FabricTarget:
             save_evidence(
                 self.workspace.parent / "reply-outcomes.jsonl",
                 {
+                    **capture,
                     "user": user_message,
                     "preferences": preferences.model_dump(mode="json") if preferences else None,
                     "runtime_status": "failed",
@@ -385,6 +396,7 @@ class FabricTarget:
             save_evidence(
                 self.workspace.parent / "reply-outcomes.jsonl",
                 {
+                    **capture,
                     "user": user_message,
                     "preferences": preferences.model_dump(mode="json") if preferences else None,
                     "runtime_status": result.status,
@@ -413,6 +425,7 @@ class FabricTarget:
         save_evidence(
             self.workspace.parent / "reply-outcomes.jsonl",
             {
+                **capture,
                 "user": user_message,
                 "content": content,
                 "raw_output": output,
@@ -436,6 +449,7 @@ class FabricTarget:
             "tools": tools,
             "preferences": preferences.model_dump(mode="json") if preferences else None,
             "thread_id": self.thread_id,
+            "public_turn": self.public_turn,
             "fabric": {
                 "status": result.status,
                 "runtime_id": result.runtime_id,

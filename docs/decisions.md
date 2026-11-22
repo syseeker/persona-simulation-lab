@@ -1,5 +1,11 @@
 # Architecture Decisions
 
+## 22 November 2026: Clarify decision constraints before agent dispatch
+
+The user approved an early clarification path after the baseline model made four searches using invented budgets and returned malformed tool-call text. Retail now asks for missing budget/study days before Fabric/model/tool execution when the learner supplies income or only part of the decision constraints. An opening request for programme information still runs the real course-tool path without first requiring a spending budget. The earlier invalid result remains invalid and unchanged; this branch is selected before dispatch, never after catching a native error.
+
+`RetailResponseBoundary` owns the clarification and pending/confirmed delivery state. Input and output Guardrails still run. The branch records an application response ID, missing public constraints, zero advisor inference calls and no model proposal. Previously returned source context can be cited with its original provenance, while a pure question needs no new lookup. Only output-approved delivery becomes the next acknowledgement. Three public turns can therefore contain two real Fabric invocations, tagged with public turns 1/3 and native sequences 1/2. Native requests/results/preferences and Relay evidence remain actual-only; the clarification has no invented native result or span. Evaluation and publication distinguish these paths and keep their existing factual criteria.
+
 ## 22 November 2026: Keep comparison reasoning policy with each model deployment
 
 Our Fabric configuration builder applied Deep Agents `reasoning_effort: none` to every model. The installed maintained adapter forwards that value into the request. This application-owned default can override a LiteLLM deployment's provider-specific policy; the selected Mistral endpoint rejected none while high passed controlled serving probes. The user authorized correcting the builder and verifying the actual Fabric path before another full retail run. No upstream Fabric defect is established by the SDK forwarding supplied settings.

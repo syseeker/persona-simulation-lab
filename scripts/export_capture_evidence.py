@@ -38,9 +38,15 @@ CALL_FIELDS = ['call', 'role', 'mode', 'status', 'model', 'requested_model', 'se
                'thread_id', 'transport', 'public_turn', 'logical_request_id', 'attempt', 'retry_of_call',
                'retry_status', 'retry_delay_seconds', 'retry_wait_seconds', 'retry_after_seconds',
                'rate_limit_headers', 'rate_limit_header_source']
-BOUNDARY_FIELDS = ['schema', 'turn', 'thread_id', 'request_id', 'captured_at']
+BOUNDARY_FIELDS = ['schema', 'turn', 'public_turn', 'invocation_sequence', 'thread_id', 'request_id', 'captured_at']
 REPLY_FIELDS = ['adapter', 'harness', 'mode', 'model', 'completed', 'event_count', 'message_count',
                 'runtime_id', 'thread_id', 'resumed', 'response', 'enabled_toolsets']
+DECISION_FIELDS = ['schema_version', 'public_turn', 'owner', 'status', 'response_origin',
+    'execution_kind', 'agent_invoked', 'inference_calls', 'application_response_id', 'missing_constraints',
+    'model_proposal_sha256', 'original_word_count', 'model_proposal_rule_failures',
+    'model_proposal_rule_status', 'model_proposal_rule_coverage', 'model_proposal_semantically_certified',
+    'delivered_word_count', 'delivered_content_sha256', 'source_ids', 'source_hashes',
+    'native_tool_evidence', 'excluded_source_ids', 'error_type']
 
 
 def pick(value, names):
@@ -133,14 +139,36 @@ def public_messages(folder, row):
     return values
 
 
+def public_turn(value):
+    """Preserve public position independently of the native invocation count."""
+    turn = value.get('public_turn', value.get('turn'))
+    if type(turn) is not int or turn < 1 or ('turn' in value and value['turn'] != turn):
+        raise ValueError('Native capture has no consistent explicit public turn')
+    return turn
+
+
+def project_decisions(values):
+    result = []
+    for value in values:
+        row = pick(value, DECISION_FIELDS)
+        if 'public_preferences' in value:
+            row['public_preferences'] = pick(value['public_preferences'], PUBLIC_PREFERENCES)
+        if 'source_provenance' in value:
+            row['source_provenance'] = {course_id: pick(provenance, ['public_turn', 'native_ids'])
+                for course_id, provenance in value['source_provenance'].items()}
+        result.append(row)
+    return result
+
+
 def project_requests(values, conversation):
     users = {row['turn']: row['content'] for row in conversation if row.get('role') == 'user'}
     replies = {row['turn']: row for row in conversation if row.get('role') == 'assistant'}
     result = []
     for value in values:
+        turn = public_turn(value)
         request = value['request']
         supplied = request.get('input')
-        if not isinstance(supplied, str) or value['turn'] not in users:
+        if not isinstance(supplied, str) or turn not in users:
             raise ValueError('Fabric request has no matching public learner turn')
         message, separator, encoded = supplied.rpartition('\nLAB_PREFERENCES=')
         if separator:
@@ -148,16 +176,16 @@ def project_requests(values, conversation):
             public_message, delivery_separator, delivery_encoded = message.rpartition('\nAPPLICATION_DELIVERY_RECORD=')
             if delivery_separator:
                 delivery = json.loads(delivery_encoded)
-                previous = replies.get(value['turn'] - 1, {})
+                previous = replies.get(turn - 1, {})
                 if (not isinstance(delivery, dict) or set(delivery) != {'content', 'response_origin', 'public_turn'}
                         or delivery['content'] != previous.get('content')
                         or delivery['response_origin'] != previous.get('response_origin')
-                        or delivery['public_turn'] != value['turn'] - 1):
+                        or delivery['public_turn'] != turn - 1):
                     raise ValueError('Fabric delivery acknowledgement does not match the previous public response')
                 message = public_message
-            if message != users[value['turn']] or not isinstance(preferences, dict) or set(preferences) - set(PUBLIC_PREFERENCES):
+            if message != users[turn] or not isinstance(preferences, dict) or set(preferences) - set(PUBLIC_PREFERENCES):
                 raise ValueError('Fabric request contains input outside the public boundary')
-        elif supplied != users[value['turn']]:
+        elif supplied != users[turn]:
             raise ValueError('Fabric request does not match the public learner message')
         # Context and overrides can contain arbitrary SDK payloads. The public
         # receipt retains their presence without publishing their contents.
@@ -167,16 +195,17 @@ def project_requests(values, conversation):
 
 
 def project_results(values, conversation):
-    replies = {row['content'] for row in conversation if row.get('role') == 'assistant'}
+    replies = {row['turn']: row['content'] for row in conversation if row.get('role') == 'assistant'}
     result = []
     for value in values:
+        turn = public_turn(value)
         native = value.get('result')
         row = {**pick(value, BOUNDARY_FIELDS), **pick(value, ['boundary_status'])}
         if native is None:
             row.update(result=None, error=pick(value.get('error'), ['type', 'code']))
         else:
             output = pick(native.get('output'), REPLY_FIELDS)
-            if 'response' in output and (not isinstance(output['response'], str) or output['response'] not in replies):
+            if 'response' in output and (not isinstance(output['response'], str) or output['response'] != replies.get(turn)):
                 # Invalid/partial answers can be absent from the public transcript.
                 # Preserve their status; the original payload stays private.
                 output.pop('response')
@@ -229,7 +258,8 @@ def projection(path, value, folder, row):
     if name == 'fabric-run-results.jsonl':
         return project_results(value, public_messages(folder, row)), 'application-projection'
     if name == 'reply-outcomes.jsonl':
-        return [pick(item, ['runtime_status', 'runtime_id', 'invocation_id', 'outcome']) for item in value], 'application-projection'
+        return [pick(item, BOUNDARY_FIELDS + ['runtime_status', 'runtime_id', 'invocation_id', 'outcome'])
+                for item in value], 'application-projection'
     if name == 'relay.jsonl':
         return project_relay(path), 'application-projection'
     if name == 'configuration.json' and path.parent.name == 'designer-private':
@@ -281,11 +311,7 @@ def projection(path, value, folder, row):
         return [pick(item, ['role', 'runtime_id', 'status', 'reason', 'byte_exact', 'source_sha256', 'sha256'])
                 for item in value], 'application-projection'
     if name == 'retail-response-decisions.jsonl':
-        return [pick(item, ['schema_version', 'public_turn', 'owner', 'status', 'response_origin',
-            'model_proposal_sha256', 'original_word_count', 'model_proposal_rule_failures',
-            'model_proposal_rule_status', 'model_proposal_rule_coverage', 'model_proposal_semantically_certified',
-            'delivered_word_count', 'delivered_content_sha256', 'source_ids', 'source_hashes',
-            'native_tool_evidence', 'excluded_source_ids', 'error_type']) for item in value], 'application-projection'
+        return project_decisions(value), 'application-projection'
     native_configs = {'hermes-managed-config.yaml', 'hermes-native-config.yaml', 'fabric-relay.json',
         'preferences-by-turn.jsonl', 'gateway-effective-config.json', 'mcp-tools-list.json', 'mcp-tools-list.jsonl',
         'provider-tool-schemas.jsonl', 'litellm-loaded.yaml', 'litellm-effective-config.json',

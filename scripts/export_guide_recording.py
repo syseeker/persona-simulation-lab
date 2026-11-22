@@ -105,7 +105,8 @@ def export(run_id, *, note, destination=None):
         ],
     )
     conversation = [
-        pick(row, ["turn", "role", "content", "outcome", "thread_id", "preferences", "response_origin", "response_policy"])
+        pick(row, ["turn", "public_turn", "role", "content", "outcome", "thread_id", "preferences",
+                   "response_origin", "response_policy", "application_response_id"])
         for row in trace["conversation"]
     ]
     scopes = [

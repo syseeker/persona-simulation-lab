@@ -13,7 +13,42 @@ from pathlib import Path
 from learning_lab import recordings
 from learning_lab.guide_lessons import CANONICAL_DEMOS, CONTEXT_ROOT
 from learning_lab.settings import ROOT, load_environment
+from scripts.export_capture_evidence import BOUNDARY_FIELDS, project_decisions, public_turn
 from scripts.export_guide_recording import clean, pick
+
+
+def application_only(reply):
+    policy = reply.get('response_policy') or {}
+    return policy.get('execution_kind') == 'application_clarification' or policy.get('agent_invoked') is False
+
+
+def application_turns(replies, decisions):
+    """Publish a clarification only after matching its confirmed delivery receipt."""
+    result = []
+    required = {'public_turn', 'application_response_id', 'execution_kind', 'agent_invoked', 'inference_calls',
+        'response_origin', 'status', 'delivered_content_sha256', 'model_proposal_sha256', 'original_word_count',
+        'missing_constraints', 'public_preferences', 'source_ids', 'source_hashes', 'source_provenance'}
+    for turn, reply in replies.items():
+        candidates = [row for row in decisions if row.get('public_turn') == turn and row.get('status') == 'delivered']
+        policy = reply.get('response_policy') or {}
+        if len(candidates) != 1:
+            raise ValueError('Application clarification receipt is missing or ambiguous')
+        receipt = candidates[0]
+        if (required - receipt.keys() or receipt.get('execution_kind') != 'application_clarification'
+                or receipt.get('agent_invoked') is not False or type(receipt.get('inference_calls')) is not int
+                or receipt['inference_calls'] != 0 or receipt.get('model_proposal_sha256') is not None
+                or receipt.get('original_word_count') is not None
+                or not isinstance(receipt.get('application_response_id'), str) or not receipt['application_response_id']
+                or reply.get('application_response_id') != receipt['application_response_id']
+                or type(reply.get('public_turn')) is not int or reply['public_turn'] != turn
+                or 'fabric' in reply or ('tools' in reply and reply['tools'] != [])
+                or receipt.get('response_origin') != 'application_constraint_clarification'
+                or reply.get('response_origin') != receipt['response_origin']
+                or receipt['delivered_content_sha256'] != hashlib.sha256(reply['content'].encode()).hexdigest()
+                or project_decisions([receipt])[0] != project_decisions([policy])[0]):
+            raise ValueError('Application clarification receipt does not match the confirmed public response')
+        result.append({'turn': turn, 'content': reply['content'], **project_decisions([receipt])[0]})
+    return result
 
 
 def export(scenario_id='photography', *, run_root: Path | None = None, destination: Path | None = None,
@@ -59,7 +94,7 @@ def export(scenario_id='photography', *, run_root: Path | None = None, destinati
     setup = {'probe': usersim['probe_type'], 'configuration': sim_config, 'outcome': sim_outcome,
              'behaviour_basis': 'Original NGC Extended behavioural fields interpreted by the native UserSim preamble.',
              'private_context_published': False,
-             'counting_notice': 'One UserSim assistant activation delegates a whole Fabric agent turn. UserSim simulated-tool counts do not count the advisor\'s real MCP calls.',
+             'counting_notice': 'A UserSim assistant activation calls the application, which may clarify without invoking an agent. Fabric invocations, model calls and course MCP calls are counted separately.',
              'evaluation_notice': 'Native in-loop judges ran. The optional post-loop UserSim eval/report commands were not invoked.'}
     framework = {
         'schema_version': config['schema_version'], 'harness': config['harness'], 'runtime': config['runtime'],
@@ -72,39 +107,65 @@ def export(scenario_id='photography', *, run_root: Path | None = None, destinati
         'configuration_notice': 'Allowlisted values from the native saved configuration. Host addresses, credentials and prompt text are omitted.',
     }
     conversation = json.loads(recordings.read(run_id, 'public-conversation.json'))
-    replies = [m['content'] for m in conversation if m['role'] == 'assistant']
     delivered_replies = [m for m in conversation if m['role'] == 'assistant']
+    replies = {public_turn(reply): reply for reply in delivered_replies}
+    if len(replies) != len(delivered_replies):
+        raise ValueError('Public assistant turn identities must be unique')
+    application_replies = {turn: reply for turn, reply in replies.items() if application_only(reply)}
+    native_rows = read(native / 'reply-outcomes.jsonl', lines=True)
+    legacy = not any('public_turn' in row or 'turn' in row for row in native_rows)
+    # Old recordings used positional rows only when every public turn invoked
+    # the agent. That fallback must never guess across an application-only turn.
+    if native_rows and legacy and (application_replies or len(native_rows) != len(replies)
+                                  or list(replies) != list(range(1, len(replies) + 1))):
+        raise ValueError('Native outcomes require an explicit public turn when public and native counts differ')
     invocations = []
-    for row in read(native / 'reply-outcomes.jsonl', lines=True):
+    seen_turns = set()
+    for sequence, row in enumerate(native_rows, start=1):
+        turn = sequence if legacy else public_turn(row)
+        if (turn not in replies or turn in seen_turns or turn in application_replies
+                or row.get('invocation_sequence', sequence) != sequence):
+            raise ValueError('Native invocation identity conflicts with the public conversation')
+        seen_turns.add(turn)
         raw = row.get('raw_output', {})
         if not isinstance(raw, dict) or not isinstance(raw.get('response'), str):
             raise ValueError('Publish only normalized replies matching the immutable public conversation')
         output = pick(raw, ['adapter', 'harness', 'mode', 'model', 'completed', 'event_count',
                             'message_count', 'runtime_id', 'thread_id', 'resumed', 'response', 'enabled_toolsets'])
-        delivered = delivered_replies[len(invocations)] if len(invocations) < len(delivered_replies) else {}
-        if delivered.get('response_origin', '').startswith('application_') or raw['response'] not in replies:
+        delivered = replies[turn]
+        if delivered.get('response_origin', '').startswith('application_') or raw['response'] != delivered['content']:
             policy = delivered.get('response_policy') or {}
             proposal_hash = hashlib.sha256(raw['response'].encode()).hexdigest()
             if (policy.get('status') != 'delivered' or policy.get('model_proposal_sha256') != proposal_hash
-                    or policy.get('public_turn') != len(invocations) + 1
+                    or policy.get('public_turn') != turn
                     or policy.get('delivered_content_sha256') != hashlib.sha256(delivered.get('content', '').encode()).hexdigest()):
                 raise ValueError('Native proposal has no matching confirmed application delivery')
             output.pop('response')
             output.update(native_response_sha256=proposal_hash, native_response_published=False,
                           response_origin=delivered.get('response_origin'),
                           delivered_content_sha256=policy['delivered_content_sha256'])
-        invocations.append({**pick(row, ['runtime_status', 'runtime_id', 'invocation_id', 'outcome']),
-                            'public_turn': len(invocations) + 1,
+        invocations.append({**pick(row, BOUNDARY_FIELDS + ['runtime_status', 'runtime_id', 'invocation_id', 'outcome']),
+                            'turn': turn, 'public_turn': turn, 'invocation_sequence': sequence,
                             'tool_scope_uuids': [tool['scope_uuid'] for tool in row.get('tools', []) if tool.get('scope_uuid')],
                             'normalized_output_fields': list(raw),
                             'output': output,
                             'usage': pick(raw.get('usage') or {}, ['prompt_tokens', 'completion_tokens', 'total_tokens', 'cost'])})
+    if set(replies) != seen_turns | application_replies.keys():
+        raise ValueError('Public replies have no matching native invocation or application clarification receipt')
+    clarifications = []
+    if application_replies:
+        path = native / 'retail-response-decisions.jsonl'
+        if not path.is_file():
+            raise ValueError('Application clarification receipt is missing')
+        clarifications = application_turns(application_replies, read(path, lines=True))
     lifecycle = [pick(row, ['at', 'event', 'status', 'harness', 'model_route', 'thread_id', 'runtime_id', 'invocation_id', 'error_type'])
                  for row in read(native / 'fabric-lifecycle.jsonl', lines=True)]
     files = {
         'usersim-setup.json': setup, 'framework-config.json': framework,
         'fabric-invocations.json': invocations, 'fabric-lifecycle.jsonl': lifecycle,
     }
+    if clarifications:
+        files['application-turns.json'] = clarifications
     traces = usersim.get('simulation_traces', [])
     if isinstance(traces, str):
         traces = json.loads(traces)
