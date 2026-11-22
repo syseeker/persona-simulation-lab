@@ -12,10 +12,14 @@ import uuid
 from .course_mcp import TOOL_NAMES
 from .evidence import native_tool_records, save_evidence
 from .inference import Gateway
+from .journey_checks import valid_native_search
 from .retail import RetailPublicContext
 from .retail_checks import evaluate_retail
 from .sandbox import NativeSandbox
 from .settings import ROOT
+
+COMPARISON_LABELS = ('fixed-candidate', 'switchyard', 'capable-access',
+                     'available-fixed', 'available-switchyard')
 
 
 async def routing_configuration(folder: Path) -> dict:
@@ -97,6 +101,91 @@ async def durable_evaluation(folder: Path) -> dict:
     return json.loads((folder / 'helix-job.json').read_text())
 
 
+def evaluation_verified(evaluation: dict) -> bool:
+    """Only a complete set of passing native scores verifies these criteria."""
+    criteria = evaluation.get('rows') or []
+    return bool(evaluation.get('helix_used') and criteria
+        and evaluation.get('total') == len(criteria) and evaluation.get('passed') == len(criteria)
+        and all(row.get('status') == 'pass' and row.get('helix_score') == 1 for row in criteria))
+
+
+def condition_verification(receipt: dict, tools: list[dict]) -> dict:
+    """Keep execution, criteria, native tools and observed model coverage distinct."""
+    evaluated = evaluation_verified(receipt.get('evaluation') or {})
+    searches = [tool for tool in tools if valid_native_search(tool)]
+    calls = [row for row in receipt.get('usage', [])
+             if row.get('role') == 'assistant' and row.get('status') == 'completed']
+    selected = sorted({row['selected_model'] for row in calls if row.get('selected_model')})
+    executed = receipt.get('execution_status') == 'completed'
+    routed = receipt.get('route') == 'switchyard'
+    return {'execution_verified': executed, 'evaluation_verified': evaluated,
+        'evaluation_scope': 'Application-delivered responses, not native proposal quality or a model ranking.',
+        'proposal_review': (receipt.get('evaluation') or {}).get('delivery_review', []),
+        'native_course_searches': len(searches),
+        'native_course_scope_uuids': [tool['scope_uuid'] for tool in searches if tool.get('scope_uuid')],
+        'actual_selected_models': selected,
+        'verified': bool(executed and evaluated and searches and selected and receipt.get('cleanup_confirmed')
+                         and (not routed or receipt.get('native_decisions')))}
+
+
+def comparison_summary(receipts: list[dict], configuration: dict) -> dict:
+    """A successful routing comparison does not prove every candidate was invoked."""
+    configured = configuration['inventories']['citizen-retail-proxy-v1']['models']
+    by_label = {row['label']: row for row in receipts}
+
+    def provider_model(model):
+        return model.removeprefix('openai/')
+
+    candidates = {provider_model(configured[role]) for role in ['EFFICIENT', 'CAPABLE']}
+    requested = [by_label[label] for label in ['fixed-candidate', 'switchyard', 'capable-access']
+                 if label in by_label]
+    observed = {provider_model(model) for row in requested
+                for model in row.get('actual_selected_models', [])}
+
+    def verified(labels):
+        return all(label in by_label and by_label[label].get('verified') for label in labels)
+
+    access = []
+    for role, label in [('EFFICIENT', 'fixed-candidate'), ('CAPABLE', 'capable-access')]:
+        row = by_label.get(label, {})
+        model = provider_model(configured[role])
+        selected = {provider_model(value) for value in row.get('actual_selected_models', [])}
+        access.append({'model': model, 'condition': label, 'actual_selected_models': sorted(selected),
+                       'verified': bool(row.get('verified') and selected == {model})})
+    policy_verified = verified(['fixed-candidate', 'switchyard'])
+    access_verified = all(row['verified'] for row in access)
+    stopped = next((row for row in receipts if not row.get('verified')), None)
+    planned = [{'label': label, 'required': label in COMPARISON_LABELS[:3],
+                'status': by_label[label].get('status', 'unavailable') if label in by_label else 'not_run',
+                'blocked_by': stopped['label'] if stopped and label not in by_label else None}
+               for label in COMPARISON_LABELS]
+    diagnostic = [by_label[label] for label in COMPARISON_LABELS[3:] if label in by_label]
+    diagnostic_status = ('not_run' if not diagnostic else
+                         'cancelled' if any(row.get('status') == 'cancelled' for row in diagnostic) else
+                         'failed' if any(not row.get('verified') for row in diagnostic) else
+                         'passed' if len(diagnostic) == 2 else 'partial')
+    return {'conditions': receipts,
+        'condition_plan': planned,
+        'status': ('cancelled' if stopped and stopped.get('status') == 'cancelled' else
+                   'failed' if stopped else 'completed' if len(receipts) == len(COMPARISON_LABELS) else 'running'),
+        'stopped_at': stopped['label'] if stopped else None,
+        'requires_user_review': bool(stopped),
+        'stop_reason': stopped.get('stop_reason') if stopped else None,
+        'verified': policy_verified and access_verified,
+        'routing_policy_verified': policy_verified,
+        'requested_access_verified': access_verified,
+        'requested_model_access': access,
+        'diagnostic_verified': verified(['available-fixed', 'available-switchyard']),
+        'diagnostic_status': diagnostic_status,
+        'requested_model_coverage': {'configured_models': sorted(candidates),
+            'observed_models': sorted(observed), 'unexercised_models': sorted(candidates - observed),
+            'all_candidates_observed': candidates <= observed,
+            'meaning': 'Only completed requests with returned model identity establish execution. A configured or unselected candidate has no execution proof.'},
+        'comparison': 'Within each named inventory: one fixed efficient candidate versus the same pool with Switchyard; identical public inputs/catalogue/harness, fresh memory. A separate fixed capable-access condition replays all three public inputs to verify GLM access; it does not force a routed selection. The available Nemotron inventory remains a separate diagnostic.',
+        'baseline_notice': 'The main Nemotron baseline changes model inventory, so it is not a routing-policy-only comparison. Fixed and routed requested-pool conditions share the 1,024-token ceiling and the same per-model provider settings.',
+        'provider_notice': 'Each verified condition requires completed execution, passing criteria, native course search and cleanup; routed execution also requires native decisions. Overall verification additionally requires full fixed-condition access to each requested model. Candidate call coverage remains separate.'}
+
+
 async def compare_routing(state: dict, folder: Path, budget, conversation: list, catalogue: Path) -> dict:
     messages = [row['content'] for row in conversation if row['role'] == 'user']
     if len(messages) != 3:
@@ -107,10 +196,11 @@ async def compare_routing(state: dict, folder: Path, budget, conversation: list,
     diagnostic_proxy = os.getenv('LAB_PROXY_BASE_URL', '').rstrip('/')
     if proxy != 'http://127.0.0.1:4001/v1' or diagnostic_proxy not in {'http://127.0.0.1:4000', 'http://127.0.0.1:4000/v1'}:
         raise ValueError('The recorded comparison requires its two explicitly selected local proxies')
-    await routing_configuration(folder)
+    configuration = await routing_configuration(folder)
     conditions = [
         ('fixed-candidate', 'lab-advisor-candidate', 'fixed', proxy, 'requested Gemma/GLM pool'),
         ('switchyard', 'lab-advisor-routed', 'switchyard', proxy, 'requested Gemma/GLM pool'),
+        ('capable-access', 'lab-advisor-capable', 'fixed', proxy, 'requested Gemma/GLM pool: explicit capable-model access'),
         ('available-fixed', 'lab-support', 'fixed', diagnostic_proxy, 'separate available-inventory diagnostic'),
         ('available-switchyard', 'lab-advisor-routed', 'switchyard', diagnostic_proxy, 'separate available-inventory diagnostic'),
     ]
@@ -122,15 +212,19 @@ async def compare_routing(state: dict, folder: Path, budget, conversation: list,
         rows, native = [], None
         before = budget.calls
         receipt = {'condition_id': identity, 'label': label, 'harness': 'deepagents', 'alias': alias,
-            'route': route, 'purpose': purpose, 'status': 'running', 'input_sha256': hashlib.sha256(json.dumps(messages).encode()).hexdigest(),
+            'route': route, 'purpose': purpose, 'status': 'running',
+            'execution_status': 'running', 'evaluation_status': 'not_run',
+            'input_sha256': hashlib.sha256(json.dumps(messages).encode()).hexdigest(),
             'catalogue_sha256': state['catalogue_sha256'], 'fresh_memory': True,
             'public_inputs': messages, 'input_basis': 'Exact public messages saved from the baseline; no new UserSim generation'}
         state.setdefault('comparison_conditions', []).append(identity)
         save_evidence(work / 'condition.json', receipt)
+        cancellation = None
         try:
             async with Gateway(budget, mode='live', model_route=route, assistant_alias=alias,
                                proxy_url=endpoint, allowed_tool_names=TOOL_NAMES, on_request=public.audit,
-                               request_timeout=300 if purpose.startswith('requested') else 50).serving() as gateway:
+                               request_timeout=300 if purpose.startswith('requested') else 50,
+                               evidence_dir=work, fail_on_truncated_output=True).serving() as gateway:
                 native = NativeSandbox(identity, work / 'runtime', gateway, catalogue=catalogue,
                                        scenario_id='dreamjob', harness='deepagents', model_route=route,
                                        model=alias if purpose.startswith('requested') else None)
@@ -142,13 +236,28 @@ async def compare_routing(state: dict, folder: Path, budget, conversation: list,
                         reply = await native.reply(message, preferences)
                         rows.append({'turn': index + 1, 'role': 'assistant', **reply})
                         save_evidence(work / 'public-conversation.json', rows)
+            receipt.update(execution_status='completed', evaluation_status='running')
             tools = native_tool_records(work / 'runtime/native')
+            save_evidence(work / 'native-tools.json', tools)
             save_evidence(work / 'usage.json', {'calls': budget.calls - before, 'records': budget.records[before:]})
             evaluation = await score_with_helix(evaluate_retail(rows, catalogue, tools, source_lock, work), work)
             save_evidence(work / 'evaluation.json', evaluation)
-            receipt.update(status='completed', conversation=rows, evaluation=evaluation)
+            receipt.update(status='completed', conversation=rows, evaluation=evaluation,
+                           evaluation_status='passed' if evaluation_verified(evaluation) else 'failed')
+        except asyncio.CancelledError as exc:
+            cancellation = exc
+            receipt.update(status='cancelled', error_type='CancelledError',
+                           error='Cancelled explicitly; partial evidence is preserved.', conversation=rows)
+            if receipt['execution_status'] == 'running':
+                receipt['execution_status'] = 'cancelled'
+            if receipt['evaluation_status'] == 'running':
+                receipt['evaluation_status'] = 'cancelled'
         except Exception as exc:
             receipt.update(status='failed', error_type=type(exc).__name__, error=str(exc)[:600], conversation=rows)
+            if receipt['execution_status'] == 'running':
+                receipt['execution_status'] = 'failed'
+            if receipt['evaluation_status'] == 'running':
+                receipt['evaluation_status'] = 'failed'
         config_path = work / 'runtime/native/fabric-config.json'
         if config_path.is_file():
             config = json.loads(config_path.read_text())
@@ -165,14 +274,22 @@ async def compare_routing(state: dict, folder: Path, budget, conversation: list,
         receipt['calls'] = budget.calls - before
         receipt['usage'] = budget.records[before:]
         receipt['native_decisions'] = [row['routing_decision'] for row in receipt['usage'] if row.get('routing_decision')]
+        tools = native_tool_records(work / 'runtime/native')
+        save_evidence(work / 'native-tools.json', tools)
+        save_evidence(work / 'usage.json', {'calls': receipt['calls'], 'records': receipt['usage']})
+        receipt.update(condition_verification(receipt, tools))
+        if not receipt['verified']:
+            reason = ('A comparison retains unresolved native ownership; resolve cleanup before continuing.'
+                      if not receipt['cleanup_confirmed'] else
+                      receipt.get('error') or f'Comparison {label} failed verification; review its saved evidence before continuing.')
+            receipt.update(stopped_at=label, requires_user_review=True, stop_reason=reason)
+            if receipt['status'] != 'cancelled':
+                receipt['status'] = 'failed'
         save_evidence(work / 'condition.json', receipt)
         receipts.append(receipt)
-        save_evidence(folder / 'routing-comparison.json', {'conditions': receipts,
-            'comparison': 'Within each named inventory: one fixed efficient candidate versus the same pool with Switchyard; identical public inputs/catalogue/harness, fresh memory. The available Nemotron inventory is a separate diagnostic, not verification of Gemma/GLM access.',
-            'baseline_notice': 'The main Nemotron condition also changes model inventory and output ceiling (1024 versus 384 in the requested pool); it is not a routing-policy-only comparison. Both requested-pool conditions share the lower ceiling and low reasoning setting.'})
-        if not receipt['cleanup_confirmed']:
-            raise RuntimeError('A comparison retains unresolved native ownership; stop before another condition')
-    return {'conditions': receipts,
-            'verified': all(row['status'] == 'completed' for row in receipts[:2]) and bool(receipts[1]['native_decisions']),
-            'diagnostic_verified': all(row['status'] == 'completed' for row in receipts[2:]) and bool(receipts[3]['native_decisions']),
-            'provider_notice': 'Gemma/GLM access and the separate available-inventory diagnostic retain independent verification states.'}
+        save_evidence(folder / 'routing-comparison.json', comparison_summary(receipts, configuration))
+        if cancellation is not None:
+            raise cancellation
+        if not receipt['verified']:
+            raise RuntimeError(receipt['stop_reason'])
+    return comparison_summary(receipts, configuration)

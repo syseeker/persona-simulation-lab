@@ -57,9 +57,15 @@ class ExecGateway(Gateway):
 
 def export_artifacts(channel):
     """Copy native bytes unchanged, one bounded chunk per protocol frame."""
+    # Keep this small producer allowlist aligned with sandbox.EXPORT_FILES.
+    # Importing the host lifecycle module would widen the sandbox image bundle.
     allowed = {'fabric-config.json', 'fabric-plan.json', 'fabric-doctor.json',
                'fabric-lifecycle.jsonl', 'reply-outcomes.jsonl', 'relay.jsonl',
-               'guardrails-config.json', 'guardrails-decisions.jsonl'}
+               'fabric-relay.json', 'fabric-run-requests.jsonl', 'fabric-run-results.jsonl',
+               'preferences-by-turn.jsonl', 'mcp-tools-list.jsonl',
+               'hermes-managed-config.yaml', 'hermes-native-config.yaml', 'hermes-config-capture.jsonl',
+               'guardrails-config.json', 'guardrails-decisions.jsonl',
+               'retail-response-config.json', 'retail-response-decisions.jsonl', 'retail-model-proposals.jsonl'}
     total = 0
     for path in sorted(RUN.rglob('*')):
         if not path.is_file() or path.is_symlink() or path.name not in allowed:
@@ -114,14 +120,12 @@ async def serve():
                         if scenario == 'dreamjob':
                             target.config.runtime.timeout_seconds = 600
                             channel.model_timeout = 185
-                            if request['model'] in {'lab-advisor-candidate', 'lab-advisor-routed'}:
-                                # The comparison pool includes GLM, whose public
-                                # API accepts low/high/max rather than "none".
-                                # Apply the same supported adapter setting to
-                                # both comparison conditions and retain it in
-                                # the native Fabric configuration receipt.
-                                target.config.harness.settings['reasoning_effort'] = 'low'
-                                target.config.models['default'].max_tokens = 384
+                            if request['model'] in {'lab-advisor-candidate', 'lab-advisor-capable', 'lab-advisor-routed'}:
+                                # The candidate group has different native
+                                # reasoning controls. Its selected LiteLLM
+                                # deployment supplies those settings; a shared
+                                # request override must not replace them.
+                                target.config.harness.settings.pop('reasoning_effort', None)
                                 channel.model_timeout = 305
                         if scenario != 'photography':
                             from .behavioural_safeguards import BehaviouralSafeguards
@@ -144,7 +148,9 @@ async def serve():
                             )
                         else:
                             from .retail_policy import instructions
+                            from .retail_responses import RetailResponseBoundary
                             target.config.instructions.system.content += instructions()
+                            target.response_boundary = RetailResponseBoundary(RUN, RUN / 'catalogue-snapshot.json')
                         await target.__aenter__()
                         manifest = json.loads(Path('/opt/lab/image-manifest.json').read_text())
                         channel.emit({'id': key, 'result': {'ready': True, 'thread_id': target.thread_id,
@@ -167,10 +173,16 @@ async def serve():
                                 if safeguards:
                                     decision = await safeguards.check('output', result['content'])
                                     if decision['native_result']['status'] != 'passed':
+                                        if target.response_boundary is not None:
+                                            raise ValueError('The retail application response did not pass output Guardrails')
                                         result = {**result, 'content': decision['native_result']['content'],
                                                   'guardrails_decision': decision['native_result']['status']}
+                                if target.response_boundary is not None:
+                                    result = target.response_boundary.confirm_delivery(result)
                                 channel.emit({'id': reply_id, 'result': result})
                             except BaseException as exc:
+                                if target.response_boundary is not None:
+                                    target.response_boundary.reject_delivery(type(exc).__name__ + ': ' + str(exc)[:400])
                                 channel.emit({'id': reply_id, 'error': type(exc).__name__ + ': ' + str(exc)[:800]})
                             finally:
                                 export_artifacts(channel)

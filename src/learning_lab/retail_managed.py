@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import asyncio
+from datetime import datetime, timezone
 import hashlib
 import json
 import os
@@ -16,6 +17,7 @@ from .evidence import save_evidence
 from .inference import Gateway
 from .outcomes import require_valid_answer
 from .retail import RetailPublicContext
+from .retail_responses import RetailResponseBoundary
 from .sandbox import NativeSandbox
 from .settings import ROOT
 
@@ -91,16 +93,41 @@ async def run_managed_retail(state: dict, folder: Path, budget, catalogue: Path)
     session_id, registered, deployed, configured, inspector = None, False, False, False, None
     cleanup_errors = []
     public_context = RetailPublicContext(work)
+    response_boundary = RetailResponseBoundary(work, catalogue)
     message = ('I want to learn retail sales and inventory analysis. For this new managed condition, '
                'my explicitly selected total training budget is S$3,000 and I can study on weekends only. '
                'Please compare the SMU data communications/visualisation programme with shorter analysis or Excel options. '
                'Use published facts and explain what still needs confirmation; no job or funding outcome is assumed.')
     preferences = public_context.accept(message)
+    operation_sequence = 0
+
+    async def recorded_call(operation, **arguments):
+        nonlocal operation_sequence
+        operation_sequence += 1
+        sequence = operation_sequence
+        save_evidence(work / 'platform-operation-requests.jsonl', {
+            'sequence': sequence, 'at': datetime.now(timezone.utc).isoformat(),
+            'condition_id': condition, 'operation': operation, 'arguments': arguments,
+        }, append=True)
+        try:
+            result = await bridge.call(operation, **arguments)
+        except BaseException as exc:
+            save_evidence(work / 'platform-operation-results.jsonl', {
+                'sequence': sequence, 'at': datetime.now(timezone.utc).isoformat(),
+                'condition_id': condition, 'operation': operation, 'status': 'failed',
+                'error_type': type(exc).__name__, 'error': str(exc)[:1200],
+            }, append=True)
+            raise
+        save_evidence(work / 'platform-operation-results.jsonl', {
+            'sequence': sequence, 'at': datetime.now(timezone.utc).isoformat(),
+            'condition_id': condition, 'operation': operation, 'status': 'returned', 'result': result,
+        }, append=True)
+        return result
 
     async def mutate(operation, remember=None, **arguments):
         # Do not lose a resource identity if cancellation arrives after the
         # server has created it but before its response reaches this caller.
-        pending = asyncio.create_task(bridge.call(operation, **arguments))
+        pending = asyncio.create_task(recorded_call(operation, **arguments))
         cancelled = False
         try:
             result = await asyncio.shield(pending)
@@ -118,6 +145,9 @@ async def run_managed_retail(state: dict, folder: Path, budget, catalogue: Path)
         registered = not result.get('registration_reused', False)
         receipt['registration_created'] = registered
         save_evidence(folder / 'platform-registration.json', result)
+        submitted_yaml = result.get('submitted_agent_yaml')
+        if submitted_yaml is not None:
+            (work / 'agent.yaml').write_text(submitted_yaml)
         persist()
 
     def remember_session(result):
@@ -128,7 +158,8 @@ async def run_managed_retail(state: dict, folder: Path, budget, catalogue: Path)
         persist()
 
     try:
-        async with Gateway(budget, mode='live', allowed_tool_names=TOOL_NAMES, on_request=public_context.audit).serving() as gateway:
+        async with Gateway(budget, mode='live', allowed_tool_names=TOOL_NAMES, on_request=public_context.audit,
+                           evidence_dir=work, fail_on_truncated_output=True).serving() as gateway:
             admission = DeploymentInferenceBridge(key=key, model_aliases=['citizen-retail-advisor'])
             async with admission.serving(port=8876):
                 await admission.activate(condition, gateway, preferences.model_dump(mode='json'))
@@ -140,6 +171,11 @@ async def run_managed_retail(state: dict, folder: Path, budget, catalogue: Path)
                     persist()
                     setup = await mutate('retail_setup', run_id=condition, provider_url=admission.url)
                     save_evidence(folder / 'platform-setup.json', setup)
+                    save_evidence(work / 'platform-effective-config.json', {
+                        'client': setup.get('client_settings'),
+                        'server_executor': setup.get('configured_server_executor'),
+                        'condition_id': condition,
+                    })
                     receipt['stage'] = 'registration'
                     persist()
                     await mutate('register', remember=remember_registration, harness='deepagents', scenario_id='dreamjob',
@@ -155,7 +191,7 @@ async def run_managed_retail(state: dict, folder: Path, budget, catalogue: Path)
                         if deployment_result.get('deployment', {}).get('status') == 'failed':
                             raise RuntimeError('The managed deployment failed; inspect its native status')
                         await asyncio.sleep(2)
-                        deployment_result = await bridge.call('deployment', name=deployment)
+                        deployment_result = await recorded_call('deployment', name=deployment)
                         save_evidence(folder / 'platform-deployment.json', deployment_result)
                     if not deployment_result.get('ready'):
                         raise TimeoutError('The managed deployment did not become ready within its bounded window')
@@ -188,31 +224,59 @@ async def run_managed_retail(state: dict, folder: Path, budget, catalogue: Path)
                             raise ValueError('The managed public input did not pass its configured check')
                         receipt['stage'] = 'invoke'
                         persist()
-                        result = await bridge.call('invoke', deployment=deployment, session_id=session_id, input=message)
+                        result = await recorded_call('invoke', deployment=deployment, session_id=session_id, input=message)
                         response = result['response']
                         content = (response.get('choices') or [{}])[0].get('message', {}).get('content')
                         content = require_valid_answer(content)
+                        save_evidence(folder / 'platform-invocation.json', {
+                            'public_input': message, **result, 'application_delivery_required': True})
+                        logs = await recorded_call('logs', name=deployment, session_id=session_id, tail=100)
+                        save_evidence(work / 'native-platform-logs.json', logs)
+                        intake = logs.get('intake') or {}
+                        if (intake.get('status') != 'observed' or intake.get('truncated')
+                                or intake.get('session_identity', {}).get('resource_name') != session_id):
+                            raise ValueError('Complete tool evidence for the exact managed session is unavailable')
+                        trace = publishable_intake(logs)
+                        save_evidence(folder / 'platform-trace.json', trace)
+                        delivered = response_boundary.apply(message, preferences, {
+                            'content': content, 'tools': trace['tools'], 'thread_id': session_id,
+                            'managed_response_id': response.get('id'),
+                        })
+                        content = delivered['content']
                         checked = await rails.check('output', content, purpose='separate managed condition')
                         if checked['native_result']['status'] != 'passed':
                             raise ValueError('The managed reply did not pass its configured check')
-                    save_evidence(folder / 'platform-invocation.json', {'public_input': message, **result})
-                    logs = await bridge.call('logs', name=deployment, session_id=session_id, tail=100)
-                    save_evidence(work / 'native-platform-logs.json', logs)
-                    save_evidence(folder / 'platform-trace.json', publishable_intake(logs))
-                    receipt.update(status='completed', reply=content, session_id=session_id, stage='cleanup')
+                        delivered = response_boundary.confirm_delivery(delivered)
+                    save_evidence(folder / 'platform-invocation.json', {
+                        'public_input': message, **result, 'application_delivery_required': True,
+                        'application_delivery': delivered})
+                    # Export only the known, bounded discovery receipt. The
+                    # Helix lifecycle still owns this sandbox and its cleanup.
+                    discovery = await inspector.cli('sandbox', 'exec', inspector.name, '--no-login-shell',
+                        '--timeout', '10', '--', '/workspace/.venv/bin/python', '-c',
+                        "from pathlib import Path; p=Path('/workspace/artifacts/mcp-tools-list.jsonl'); "
+                        "assert p.is_file() and not p.is_symlink() and p.stat().st_size < 1048576; print(p.read_text())",
+                        timeout=15)
+                    for line in discovery.splitlines():
+                        if line.strip():
+                            save_evidence(work / 'mcp-tools-list.jsonl', json.loads(line), append=True)
+                    receipt.update(status='completed', reply=content, response_origin=delivered['response_origin'],
+                                   response_policy=delivered['response_policy'], session_id=session_id, stage='cleanup')
                     persist()
                 finally:
                     await admission.deactivate(condition)
     except asyncio.CancelledError:
+        response_boundary.reject_delivery('Managed invocation cancelled before confirmed public delivery')
         receipt.update(status='cancelled', stage='cleanup')
         persist()
         raise
     except Exception as exc:
+        response_boundary.reject_delivery(type(exc).__name__ + ': ' + str(exc)[:400])
         receipt.update(status='failed', error_type=type(exc).__name__, error=str(exc)[:1200])
         persist()
         if deployed:
             try:
-                logs = await bridge.call('logs', name=deployment,
+                logs = await recorded_call('logs', name=deployment,
                                          **({'session_id': session_id} if session_id else {}), tail=100)
                 save_evidence(work / 'native-platform-logs.json', logs)
                 save_evidence(folder / 'platform-trace.json', publishable_intake(logs))
@@ -222,20 +286,20 @@ async def run_managed_retail(state: dict, folder: Path, budget, catalogue: Path)
     finally:
         if session_id:
             try:
-                closed = await bridge.call('sessions_close', session_id=session_id, require_runtime_drain=True)
+                closed = await recorded_call('sessions_close', session_id=session_id, require_runtime_drain=True)
                 save_evidence(folder / 'platform-session-close.json', closed)
             except Exception as exc:
                 cleanup_errors.append('session: ' + str(exc)[:400])
         if deployed:
             try:
                 try:
-                    await bridge.call('undeploy', name=deployment)
+                    await recorded_call('undeploy', name=deployment)
                 except PlatformUnavailable as exc:
                     if not any(marker in str(exc).lower() for marker in ['not found', 'notfound', '404']):
                         raise
                 for _ in range(30):
                     try:
-                        await bridge.call('deployment', name=deployment)
+                        await recorded_call('deployment', name=deployment)
                     except PlatformUnavailable as exc:
                         if any(marker in str(exc).lower() for marker in ['not found', 'notfound', '404']):
                             break
@@ -251,10 +315,10 @@ async def run_managed_retail(state: dict, folder: Path, budget, catalogue: Path)
                 cleanup_errors.append('deployment: ' + str(exc)[:400])
         if registered and not cleanup_errors:
             try:
-                await bridge.call('delete_agent', name=agent)
+                await recorded_call('delete_agent', name=agent)
                 for _ in range(30):
                     try:
-                        await bridge.call('agent', name=agent)
+                        await recorded_call('agent', name=agent)
                     except PlatformUnavailable as exc:
                         if any(marker in str(exc).lower() for marker in ['not found', 'notfound', '404']):
                             break
@@ -266,7 +330,7 @@ async def run_managed_retail(state: dict, folder: Path, budget, catalogue: Path)
                 cleanup_errors.append('registration: ' + str(exc)[:400])
         if configured and not cleanup_errors:
             try:
-                cleanup = await bridge.call('retail_cleanup', run_id=condition)
+                cleanup = await recorded_call('retail_cleanup', run_id=condition)
                 save_evidence(work / 'resource-cleanup.json', cleanup)
             except Exception as exc:
                 cleanup_errors.append('resources: ' + str(exc)[:400])

@@ -295,6 +295,9 @@ async def execute(client, operation: str, args: dict) -> dict:
                 "source_files": list(source_files),
                 "host_contract_check": clean(doctor),
                 "image_readiness_verified": False,
+                'submitted_agent_yaml': source_contents['agent.yaml'].decode(),
+                'native_operation': {'operation': 'get_agent', 'creation_submitted': False,
+                                     'response': clean(observed)},
             }
         await files.create_fileset(
             body=CreateFilesetRequest(
@@ -304,14 +307,13 @@ async def execute(client, operation: str, args: dict) -> dict:
         )
         for relative, content in source_contents.items():
             await files.upload_file(name=fileset, path=relative, content=content)
-        response = await client.register_agent(
-            body=RegisterAgentRequest(
+        body = RegisterAgentRequest(
                 name=name,
                 config=config,
                 config_format="nemo-agents-spec-v1",
                 description=config.get("description", ""),
             )
-        )
+        response = await client.register_agent(body=body)
         created = response.data()
         observed = (await client.get_agent(name=name)).data()
         return {
@@ -323,6 +325,9 @@ async def execute(client, operation: str, args: dict) -> dict:
             "source_files": list(source_files),
             "image_readiness_verified": False,
             "bundle_delivery": "Supporting code and skills must be installed in the selected image.",
+            'submitted_agent_yaml': source_contents['agent.yaml'].decode(),
+            'native_operation': {'operation': 'register_agent', 'request': clean(body),
+                                 'response': clean(created)},
         }
     if operation == "agent":
         return {"agent": clean((await client.get_agent(name=name_of(args))).data())}
@@ -351,6 +356,8 @@ async def execute(client, operation: str, args: dict) -> dict:
             "deployment": clean(deployment),
             "ready": deployment.status == "running",
             "next": "Poll deployment status; no inference has been performed.",
+            'native_operation': {'operation': 'create_deployment', 'request': clean(body),
+                                 'response': clean(deployment)},
         }
     if operation == "deployment":
         result = (await client.get_deployment(name=name_of(args))).data()
@@ -440,17 +447,16 @@ async def execute(client, operation: str, args: dict) -> dict:
             and catalogue_env.get("LAB_REQUIRE_PREFERENCES") == "1"
         ):
             preferences_mode = "trusted-callback"
-        session = (
-            await client.create_session(
-                body=CreateSessionRequest(
+        body = CreateSessionRequest(
                     deployment_id=identity,
                     name=name_of(args) if args.get("name") else None,
                 )
-            )
-        ).data()
+        session = (await client.create_session(body=body)).data()
         return {
             "session": clean(session),
             "session_identity": native_session_identity(session),
+            'native_operation': {'operation': 'create_session', 'request': clean(body),
+                                 'response': clean(session)},
             "deployment": {
                 "id": identity,
                 "name": deployment.name,
@@ -481,16 +487,20 @@ async def execute(client, operation: str, args: dict) -> dict:
         scoped = client.with_options(
             headers={"X-Nemo-Session-Id": identities["header_identity"]}, timeout=150
         )
+        body = InvokeAgentRequest(messages=[{"role": "user", "content": text}], stream=False)
         result = (
             await scoped.invoke_deployment(
                 name=deployment_name,
-                body=InvokeAgentRequest(messages=[{"role": "user", "content": text}], stream=False),
+                body=body,
             )
         ).data()
         return {
             "response": clean(result),
             "session_id": identities["resource_name"],
             "session_identity": identities,
+            'native_operation': {'operation': 'invoke_deployment', 'deployment_name': deployment_name,
+                                 'session_header_identity': identities['header_identity'],
+                                 'timeout_seconds': 150, 'request': clean(body), 'response': clean(result)},
         }
     if operation == "sessions_close":
         from session_drain import close_session
@@ -544,7 +554,26 @@ async def run(request: dict) -> dict:
         timeout=15,
     ) as client:
         args = {**request.get("arguments", {}), "target": platform.get("target", "local")}
-        return await execute(client, request["operation"], args)
+        result = await execute(client, request["operation"], args)
+        if request['operation'] == 'retail_setup':
+            result['client_settings'] = {
+                'base_url': platform['base_url'], 'workspace': platform['workspace'],
+                'target': platform.get('target', 'local'), 'token_env': token_name,
+                'authentication_configured': bool(token), 'max_retries': 0, 'timeout_seconds': 15,
+                'sdk_versions': observed,
+            }
+            executor_path = os.getenv('NHX_CONFIG_FILE_PATH')
+            if executor_path:
+                import hashlib
+                import yaml
+
+                loaded = Path(executor_path).read_bytes()
+                result['configured_server_executor'] = {
+                    'source': executor_path, 'source_sha256': hashlib.sha256(loaded).hexdigest(),
+                    'settings': clean(yaml.safe_load(loaded)),
+                    'scope': 'local executor configuration selected for this SDK process; remote server state is not introspected',
+                }
+        return result
 
 
 def main():

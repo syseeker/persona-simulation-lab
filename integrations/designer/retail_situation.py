@@ -9,6 +9,7 @@ import sys
 import data_designer.config as dd
 from data_designer.interface import DataDesigner
 from data_designer.interface.errors import DataDesignerProfilingError
+from learning_preferences import capture_profiling, capture_settings
 
 
 def generate(request_path: Path, output: Path):
@@ -30,12 +31,15 @@ def generate(request_path: Path, output: Path):
         name='lab-gateway', endpoint=os.environ['LAB_DESIGNER_GATEWAY_URL'], api_key=os.environ['LAB_DESIGNER_GATEWAY_KEY'])])
     designer.set_run_config(dd.RunConfig(max_conversation_restarts=0, max_conversation_correction_steps=0,
         max_concurrent_row_groups=1, max_in_flight_tasks=1, async_trace=True, otel_metrics_port=None))
+    capture_settings(designer, output.parent)
     designer.validate(builder)
     batches, warnings = [], []
     try:
         result = designer.create(builder, num_records=1, dataset_name='retail', on_batch_complete=lambda path: batches.append(path))
         rows = json.loads(result.load_dataset().to_json(orient='records'))
+        capture_profiling(output.parent, result=result, batches=batches)
     except DataDesignerProfilingError as exc:
+        capture_profiling(output.parent, error=exc, batches=batches)
         if 'NAType' not in str(exc) or not batches:
             raise
         import pandas as pd

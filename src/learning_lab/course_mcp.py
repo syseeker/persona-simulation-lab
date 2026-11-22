@@ -9,8 +9,33 @@ import re
 import httpx
 from pydantic import Field
 from .catalogue import Preferences, get_course, search_courses as match
+from .evidence import save_evidence
 
-mcp = FastMCP("Singapore learning catalogue")
+
+class CatalogueMCP(FastMCP):
+    async def list_tools(self):
+        """Retain the native discovery response when a real client requests it.
+
+        This public FastMCP hook is also the handler registered for tools/list.
+        It does not open an additional client or perform an extra discovery.
+        """
+        tools = await super().list_tools()
+        destination = os.getenv("LAB_MCP_EVIDENCE_FILE")
+        if destination:
+            save_evidence(
+                Path(destination),
+                {
+                    "schema": "citizen-mcp-discovery/v1",
+                    "method": "tools/list",
+                    "server_request_id": str(self.get_context().request_id),
+                    "result": {"tools": [tool.model_dump(mode="json", by_alias=True) for tool in tools]},
+                },
+                append=True,
+            )
+        return tools
+
+
+mcp = CatalogueMCP("Singapore learning catalogue")
 TOOL_NAMES = ["search_courses", "get_course_details", "compare_courses"]
 
 

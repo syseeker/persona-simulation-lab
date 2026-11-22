@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from contextlib import AsyncExitStack
 import copy
+from dataclasses import asdict
 import json
 from pathlib import Path
 import uuid
@@ -32,6 +33,11 @@ def host_models(mode="live"):
         )
         for role in ["user", "assistant", "judge", "summary"]
     }
+
+
+def host_model_settings(models):
+    """Serialize the actual external-runtime role declarations, not inferred defaults."""
+    return {role: asdict(model) for role, model in models.items()}
 
 
 def prepare_rows(
@@ -89,9 +95,11 @@ def prepare_rows(
         overlay = selection.get("overlays", {}).get(person.get("uuid"))
         if overlay:
             data["learning_overlay"] = overlay
-        row = construct_episode_preamble(data, config=config, models=host_models()).to_row()
+        models = host_models()
+        row = construct_episode_preamble(data, config=config, models=models).to_row()
         row.update(
             usersim_config=config.model_dump(mode="json"),
+            usersim_host_models=host_model_settings(models),
             source_distribution=selection.get("source_distribution", source),
             source_revision=selection.get("source_revision", REVISION),
             source_dataset=selection.get("source_dataset", selection.get("dataset", DATASET)),
@@ -162,9 +170,19 @@ def bind_scenario(
 
 async def hosted_episode(
     row: dict, gateway: Gateway, target, on_event, preferences=None, constraint_overrides=None,
-    on_activation=None,
+    on_activation=None, model_config_path: Path | None = None,
 ) -> dict:
-    runtime = ProbeEpisodeRuntime.from_resolved_row(copy.deepcopy(row), models=host_models(gateway.mode))
+    models = host_models(gateway.mode)
+    if model_config_path is not None:
+        from .evidence import save_evidence
+
+        save_evidence(model_config_path, {
+            'native_type': 'usersim.engine.external.HostRoleModel',
+            'models': host_model_settings(models),
+            'execution_mode': gateway.mode,
+            'dispatch': 'assistant messages go to the external application; other roles use the host gateway',
+        })
+    runtime = ProbeEpisodeRuntime.from_resolved_row(copy.deepcopy(row), models=models)
     try:
         event = await runtime.advance()
         while isinstance(event, ActivationRequest):
@@ -362,6 +380,7 @@ async def run_experiment(
                             emit,
                             scenario_preferences,
                             binding["constraint_overrides"],
+                            model_config_path=episode_folder / 'usersim-model-config.json',
                         )
                         (episode_folder / "usersim-result.json").write_text(
                             json.dumps(result, indent=2, default=str)

@@ -34,6 +34,7 @@ GENERATED_FILES = {
     "src/learning_lab/__init__.py",
     "src/learning_lab/catalogue.py",
     "src/learning_lab/course_mcp.py",
+    "src/learning_lab/evidence.py",
     "src/learning_lab/settings.py",
     "src/learning_lab/retail_policy.py",
 }
@@ -63,7 +64,7 @@ def prepare_bundle(harness: str, scenario_id='photography') -> Path:
     # Copy an explicit allowlist; never copy .env, personas, runs or the root
     # dependency manifest (which would pull UserSim into the Platform image).
     copied = {}
-    for name in ("catalogue.py", "course_mcp.py", "settings.py", *(['retail_policy.py'] if scenario_id == 'dreamjob' else [])):
+    for name in ("catalogue.py", "course_mcp.py", "evidence.py", "settings.py", *(['retail_policy.py'] if scenario_id == 'dreamjob' else [])):
         source = ROOT / "src/learning_lab" / name
         shutil.copyfile(source, package / name)
         copied[f"src/learning_lab/{name}"] = hashlib.sha256(source.read_bytes()).hexdigest()
@@ -143,7 +144,8 @@ packages = ["src/learning_lab"]
             "catalogue": {
                 "transport": "stdio",
                 "url": "/workspace/.venv/bin/learning-lab-courses",
-                "env": {"LAB_CATALOGUE_FILE": "/workspace/catalogue/courses.json"},
+                "env": {"LAB_CATALOGUE_FILE": "/workspace/catalogue/courses.json",
+                        'LAB_MCP_EVIDENCE_FILE': '/workspace/artifacts/mcp-tools-list.jsonl'},
             }
         }
     }

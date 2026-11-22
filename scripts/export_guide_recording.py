@@ -50,6 +50,12 @@ def export(run_id, *, note, destination=None):
         or not state.get("cleanup_confirmed")
     ):
         raise ValueError("Export only terminal scenario conditions with verified cleanup")
+    if state.get('capture_schema'):
+        from learning_lab.captures import verify_capture_manifest
+        path = original / 'capture-manifest.json'
+        if not path.is_file():
+            raise ValueError('This capture-enabled run has no capture manifest')
+        verify_capture_manifest(original, json.loads(path.read_text()))
     trace = service.trace(run_id)
     scenario_id = state['scenario_id']
     target = destination or ROOT / 'recordings' / scenario_id / run_id
@@ -92,11 +98,14 @@ def export(run_id, *, note, destination=None):
             "evaluation_total",
             "usersim_notice",
             "verification",
+            "baseline_status",
+            "capture_schema",
+            "capture_coverage",
             "error",
         ],
     )
     conversation = [
-        pick(row, ["turn", "role", "content", "outcome", "thread_id", "preferences"])
+        pick(row, ["turn", "role", "content", "outcome", "thread_id", "preferences", "response_origin", "response_policy"])
         for row in trace["conversation"]
     ]
     scopes = [

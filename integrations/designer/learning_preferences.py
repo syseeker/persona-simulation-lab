@@ -20,6 +20,35 @@ sys.path.insert(0, str(ROOT / "src"))
 PIPELINE_VERSION = "learning-overlay-v1"
 
 
+def capture_settings(designer: DataDesigner, folder: Path):
+    """Snapshot public native settings, with provider authentication removed."""
+    from learning_lab.evidence import save_evidence
+
+    save_evidence(folder / 'designer-run-config.json', designer.run_config.model_dump(mode='json'))
+    save_evidence(folder / 'designer-model-providers.json',
+                  designer.model_provider_registry.model_dump(mode='json'))
+
+
+def capture_profiling(folder: Path, *, result=None, error=None, batches=()):
+    """Keep an actual profiling outcome; a saved batch is not an analysis report."""
+    from learning_lab.evidence import save_evidence
+
+    report = None
+    if result is not None:
+        report = result.load_analysis()
+        if report is not None:
+            save_evidence(folder / 'designer-analysis.json', report.model_dump(mode='json'))
+    save_evidence(folder / 'designer-profiling.json', {
+        'stage': 'native Data Designer post-generation profiling',
+        'status': 'failed' if error is not None else 'completed',
+        'error_type': type(error).__name__ if error is not None else None,
+        'error': str(error) if error is not None else None,
+        'completed_batch_paths': [str(path) for path in batches],
+        'analysis_report': 'designer-analysis.json' if report is not None else None,
+        'replayed_generation': False,
+    })
+
+
 def prepare_seed(destination: Path) -> Path:
     panel = json.loads((ROOT / "data/persona-review-panel.json").read_text())
     first = [next(p for p in panel if p["group"] == group) for group in ["early", "mid", "older"]]
@@ -220,6 +249,7 @@ def generate_workbench(request_path: Path, output: Path):
             otel_metrics_port=None,
         )
     )
+    capture_settings(designer, output.parent)
     designer.validate(builder)
     from data_designer.interface.errors import DataDesignerProfilingError
 
@@ -236,7 +266,9 @@ def generate_workbench(request_path: Path, output: Path):
             on_batch_complete=lambda path: completed_batches.append(path),
         )
         records = json.loads(preview.load_dataset().to_json(orient="records"))
+        capture_profiling(output.parent, result=preview, batches=completed_batches)
     except DataDesignerProfilingError as exc:
+        capture_profiling(output.parent, error=exc, batches=completed_batches)
         if request["record_count"] != 1 or "NAType" not in str(exc) or not completed_batches:
             raise
         import pandas as pd

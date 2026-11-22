@@ -21,7 +21,11 @@ from .settings import ROOT
 IMAGE = 'citizen-learning-advisor:0.8.0'
 EXPORT_FILES = {'fabric-config.json', 'fabric-plan.json', 'fabric-doctor.json',
                 'fabric-lifecycle.jsonl', 'reply-outcomes.jsonl', 'relay.jsonl',
+                'fabric-relay.json', 'fabric-run-requests.jsonl', 'fabric-run-results.jsonl',
+                'preferences-by-turn.jsonl', 'mcp-tools-list.jsonl',
+                'hermes-managed-config.yaml', 'hermes-native-config.yaml', 'hermes-config-capture.jsonl',
                 'guardrails-config.json', 'guardrails-decisions.jsonl'}
+EXPORT_FILES |= {'retail-response-config.json', 'retail-response-decisions.jsonl', 'retail-model-proposals.jsonl'}
 
 
 def native_environment() -> dict:
@@ -102,6 +106,7 @@ class NativeSandbox:
         self.closing = False
         self.image_verified = False
         self.creation_uncertain = False
+        self.invocation_count = 0
 
     def event(self, event, **values):
         save_evidence(self.folder / 'sandbox-lifecycle.jsonl',
@@ -177,7 +182,7 @@ class NativeSandbox:
                 required += ['src/learning_lab/behavioural_safeguards.py', 'integrations/guardrails/runner.py',
                              'integrations/guardrails/config.yml', 'integrations/guardrails/rails.co']
             if self.scenario_id == 'dreamjob':
-                required.append('src/learning_lab/retail_policy.py')
+                required += ['src/learning_lab/retail_policy.py', 'src/learning_lab/retail_responses.py']
             if manifest.get('version') != 1 or any(
                 manifest.get('files', {}).get(relative) != hashlib.sha256((ROOT / relative).read_bytes()).hexdigest()
                 for relative in required
@@ -217,7 +222,10 @@ class NativeSandbox:
         try:
             if self.closing or not self.image_verified:
                 raise RuntimeError('This workload is closing or its image is unverified; no model call was admitted')
-            result = await self.gateway.complete(message['payload'], role='assistant')
+            result = await self.gateway.complete(message['payload'], role='assistant', evidence_context={
+                'control_request_id': message['id'], 'thread_id': self.thread_id,
+                'transport': 'openshell-native-exec', 'public_turn': self.invocation_count,
+            })
             self.gateway.budget.records[-1].update(control_request_id=message['id'],
                                                   thread_id=self.thread_id, transport='openshell-native-exec')
             await self.send({'type': 'model_result', 'id': message['id'], 'result': result})
@@ -281,6 +289,7 @@ class NativeSandbox:
 
     async def reply(self, message, preferences):
         self.gateway.tool_rounds = 0
+        self.invocation_count += 1
         return await self.request('invoke', message=message, preferences=preferences.model_dump(mode='json'))
 
     async def probe_boundary(self, python='/opt/lab/.venv/bin/python'):

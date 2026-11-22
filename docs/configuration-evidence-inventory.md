@@ -4,6 +4,8 @@ This is the supporting specification for **Workstream 1 (execution fixes and com
 
 The learner should be able to follow a decision from application code to effective library settings and then to an attributable result. Some libraries consume Python objects, not YAML/JSON files. Do not invent a mandatory YAML file merely to populate a table. Retain actual authored inputs, generated settings, native results and useful application projections, and identify which role each plays.
 
+**Implementation amendment, 22 November:** the 51 stable requirements below remain the baseline audit. The active registry and capture rules add retail application presentation artifacts under **CAP-FAB-07** (standalone baseline/comparisons) and **CAP-PLAT-05** (managed caller): generated `retail-response-config.json`, `retail-response-decisions.jsonl` and private `retail-model-proposals.jsonl`. They distinguish validated candidates, confirmed public delivery and original native proposals. Public projections expose response origin, source hashes and selected proposal-rule failures; original unpresented prose stays private. Their presence does not establish successful execution or change a selected demo.
+
 ## Current demos and location keys
 
 These remain the selected demos until Workstream 1 verifies and publishes replacements. Newer development/regression runs do not become demos automatically.

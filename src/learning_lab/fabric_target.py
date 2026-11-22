@@ -4,9 +4,12 @@ from __future__ import annotations
 
 import os
 import json
+import hashlib
+from datetime import datetime, timezone
 from pathlib import Path
 import sys
 import uuid
+import yaml
 
 from nemo_fabric import (
     DiscoveryConfig,
@@ -97,6 +100,7 @@ def build_config(
         env={
             "LAB_PREFERENCES_FILE": str(workspace.parent / "preferences.json"),
             "LAB_CATALOGUE_FILE": str(catalogue_path or workspace.parent / "catalogue-snapshot.json"),
+            "LAB_MCP_EVIDENCE_FILE": str(workspace.parent / "mcp-tools-list.jsonl"),
         },
     )
     config.add_skill_path(str(ROOT / "runtime-skills/course-advisor"))
@@ -156,6 +160,52 @@ class FabricTarget:
         self.old_adapter = None
         self.old_tool_names = None
         self.old_harness_env: dict[str, str | None] = {}
+        self.invocation_count = 0
+        # Only the selected retail application enables its source-only public
+        # presentation boundary. Native Fabric outputs stay unchanged below.
+        self.response_boundary = None
+
+    def _capture_yaml(self, source: Path, name: str, *, role: str, runtime_id=None):
+        """Copy a generated policy, preserving bytes unless a secret is redacted.
+
+        The generated Hermes file is owned by the adapter. Read its native bytes
+        rather than rebuilding a YAML file from our typed Fabric configuration.
+        """
+        record = {"role": role, "source": str(source), "runtime_id": runtime_id}
+        if not source.is_file() or source.is_symlink():
+            record.update(status="unavailable", reason="The native file was not present at capture time.")
+        else:
+            raw = source.read_bytes()
+            if len(raw) > 1024 * 1024:
+                raise ValueError("Hermes configuration exceeds the capture bound")
+            native = yaml.safe_load(raw)
+            redacted = sanitize(native)
+            exact = native == redacted
+            captured = raw if exact else yaml.safe_dump(redacted, sort_keys=False).encode()
+            destination = self.workspace.parent / name
+            destination.write_bytes(captured)
+            record.update(status="captured", destination=name, byte_exact=exact,
+                          source_sha256=hashlib.sha256(raw).hexdigest(),
+                          sha256=hashlib.sha256(captured).hexdigest())
+        save_evidence(self.workspace.parent / "hermes-config-capture.jsonl", record, append=True)
+
+    def _capture_hermes_native_config(self, output=None):
+        if self.harness != "hermes" or self.runtime is None:
+            return
+        runtime_id = getattr(self.runtime, "runtime_id", None)
+        if not isinstance(runtime_id, str) or Path(runtime_id).name != runtime_id:
+            return  # Offline fixtures may not provide a native runtime identity.
+        root = self.config.environment.artifacts
+        root = Path(root) if root else self.base_dir / "artifacts"
+        if not root.is_absolute():
+            root = self.base_dir / root
+        expected = root / ".fabric" / "hermes" / "runtimes" / runtime_id / "config.yaml"
+        # The result provides the actual adapter path. Validate it against this
+        # runtime's documented layout before reading anything from disk.
+        source = Path(output["hermes_config_path"]) if isinstance(output, dict) and output.get("hermes_config_path") else expected
+        if source.resolve() != expected.resolve() or any(part.is_symlink() for part in [source, *source.parents]):
+            raise ValueError("Hermes configuration does not belong to the selected runtime")
+        self._capture_yaml(source, "hermes-native-config.yaml", role="native-effective", runtime_id=runtime_id)
 
     async def __aenter__(self):
         self.old_tool_names = self.gateway.allowed_tool_names
@@ -183,6 +233,8 @@ class FabricTarget:
                     "Install the isolated Hermes runtime with integrations/hermes/bootstrap.py before selecting Fabric + Hermes"
                 )
             runtime_environment = hermes_runtime_environment()
+            self._capture_yaml(Path(runtime_environment["HERMES_MANAGED_DIR"]) / "config.yaml",
+                               "hermes-managed-config.yaml", role="source-policy")
         if self.config.relay:
             # The 0.6.1 wheel requires an explicit plugin-file path at adapter start.
             # Derive it from the same typed config; the native adapter still attaches Relay once.
@@ -231,6 +283,7 @@ class FabricTarget:
                 self.gateway.allowed_tool_names = frozenset(TOOL_NAMES)
             self.runtime = await self.fabric.start_runtime(self.config, base_dir=self.base_dir)
             await self.runtime.__aenter__()
+            self._capture_hermes_native_config()
             lifecycle(self.workspace.parent, "runtime_started", thread_id=self.thread_id)
             return self
         except BaseException as exc:
@@ -251,6 +304,7 @@ class FabricTarget:
 
     async def reply(self, message: str, preferences: Preferences | None = None) -> dict:
         self.gateway.tool_rounds = 0
+        self.invocation_count += 1
         user_message = message
         path = self.workspace.parent / "preferences.json"
         if preferences:
@@ -259,13 +313,38 @@ class FabricTarget:
             path.unlink(missing_ok=True)
         if preferences:
             message += "\nLAB_PREFERENCES=" + preferences.model_dump_json(exclude_none=True)
+        boundary = getattr(self, 'response_boundary', None)
+        if boundary is not None and boundary.last_delivery_record is not None:
+            # Keep the harness aware of the response actually shown by the app,
+            # since its native memory also retains the unpresented proposal.
+            original, separator, encoded = message.rpartition('\nLAB_PREFERENCES=')
+            acknowledgement = '\nAPPLICATION_DELIVERY_RECORD=' + json.dumps(boundary.last_delivery_record)
+            message = original + acknowledgement + separator + encoded if separator else message + acknowledgement
+        request = RunRequest(input=message, relay_session_root=self.thread_id)
+        capture = {"turn": self.invocation_count, "thread_id": self.thread_id,
+                   "request_id": request.request_id}
+        save_evidence(self.workspace.parent / "preferences-by-turn.jsonl", {
+            "schema": "citizen-public-preferences/v1", **capture,
+            "preferences": preferences.model_dump(mode="json") if preferences else None,
+            "present": path.is_file(),
+            "file_sha256": hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else None,
+        }, append=True)
+        save_evidence(self.workspace.parent / "fabric-run-requests.jsonl", {
+            "schema": "citizen-fabric-request/v1", **capture,
+            "captured_at": datetime.now(timezone.utc).isoformat(),
+            "request": request.model_dump(mode="json"),
+        }, append=True)
         before = {scope["uuid"] for scope in relay_scopes(self.workspace.parent)["scopes"]}
         lifecycle(self.workspace.parent, "invocation_started", thread_id=self.thread_id)
         try:
-            result = await self.runtime.invoke(
-                request=RunRequest(input=message, relay_session_root=self.thread_id)
-            )
+            result = await self.runtime.invoke(request=request)
         except BaseException as exc:
+            save_evidence(self.workspace.parent / "fabric-run-results.jsonl", {
+                "schema": "citizen-fabric-result/v1", **capture,
+                "captured_at": datetime.now(timezone.utc).isoformat(),
+                "boundary_status": "raised", "result": None,
+                "error": {"type": type(exc).__name__, "message": str(exc)},
+            }, append=True)
             lifecycle(self.workspace.parent, "invocation_failed", error_type=type(exc).__name__)
             save_evidence(
                 self.workspace.parent / "reply-outcomes.jsonl",
@@ -283,6 +362,12 @@ class FabricTarget:
                 append=True,
             )
             raise
+        save_evidence(self.workspace.parent / "fabric-run-results.jsonl", {
+            "schema": "citizen-fabric-result/v1", **capture,
+            "captured_at": datetime.now(timezone.utc).isoformat(),
+            "boundary_status": "returned", "result": result,
+        }, append=True)
+        self._capture_hermes_native_config(result.output.to_dict() if hasattr(result.output, "to_dict") else None)
         lifecycle(
             self.workspace.parent,
             "invocation_finished",
@@ -340,7 +425,7 @@ class FabricTarget:
                 self.workspace.parent, "answer_rejected", outcome=outcome, invocation_id=result.invocation_id
             )
         content = require_valid_answer(content)
-        return {
+        public_result = {
             "content": content,
             "outcome": outcome,
             "tools": tools,
@@ -353,6 +438,7 @@ class FabricTarget:
                 "artifacts": [str(a) for a in result.artifacts],
             },
         }
+        return boundary.apply(user_message, preferences, public_result) if boundary is not None else public_result
 
     def _restore_key(self):
         self.gateway.allowed_tool_names = self.old_tool_names

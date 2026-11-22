@@ -20,6 +20,15 @@ def evaluate(criteria: Path, output: Path, spec: dict):
     token = os.getenv(spec.get('token_env') or '')
     receipt = {'engine': 'NeMo Helix Platform Evals', 'mode': 'saved-output durable job',
                'inference_calls': 0, 'criteria': len(rows), 'status': 'not_submitted'}
+    metric = ExactMatchMetric(reference='{{item.expected}}', candidate='{{item.output}}')
+    config = RunConfig(parallelism=1)
+    definition = {'metric': metric.model_dump(mode='json'), 'run_config': config.model_dump(mode='json'),
+                  'dataset_file': criteria.name, 'dataset_rows': len(rows),
+                  'client': {'base_url': spec['base_url'], 'workspace': spec['workspace'],
+                             'token_env': spec.get('token_env'), 'max_retries': 0, 'timeout_seconds': 20},
+                  'wait': {'poll_interval_seconds': 2, 'job_timeout_seconds': 240, 'pending_timeout_seconds': 90}}
+    output.parent.mkdir(parents=True, exist_ok=True)
+    (output.parent / 'helix-job-config.json').write_text(json.dumps(definition, indent=2) + '\n')
 
     def save():
         output.write_text(json.dumps(receipt, indent=2, default=str) + '\n')
@@ -27,8 +36,7 @@ def evaluate(criteria: Path, output: Path, spec: dict):
     with NemoClient(base_url=spec['base_url'], workspace=spec['workspace'], auth=token,
                     retry=RetryPolicy(max_retries=0), timeout=20) as client:
         evaluator = Evaluator.from_client(client)
-        job = evaluator.submit(metric=ExactMatchMetric(reference='{{item.expected}}', candidate='{{item.output}}'),
-                               dataset=rows, config=RunConfig(parallelism=1))
+        job = evaluator.submit(metric=metric, dataset=rows, config=config)
         receipt.update(status='submitted', job_name=job.name, submission=job.job.model_dump(mode='json'))
         save()
         try:

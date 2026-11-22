@@ -109,8 +109,13 @@ def test_companion_rejects_unsafe_names_and_symlinks(tmp_path, monkeypatch):
 
 
 def test_exact_operation_links_resolve_committed_symbols_and_compare_captured_hashes():
+    import subprocess
     from learning_lab.settings import ROOT
-    captured = {'src/learning_lab/fabric_target.py': hashlib.sha256((ROOT / 'src/learning_lab/fabric_target.py').read_bytes()).hexdigest()}
+    # GitHub links point at committed bytes even during an implementation round.
+    # Model the captured revision explicitly, rather than requiring a clean tree.
+    relative = 'src/learning_lab/fabric_target.py'
+    captured = {relative: hashlib.sha256(subprocess.check_output(
+        ['git', 'show', 'HEAD:' + relative], cwd=ROOT)).hexdigest()}
     links = operation_links(captured)
     assert set(links) == set(OPERATIONS)
     assert all(link['available'] and link['line'] and '/blob/' in link['url'] for link in links.values())

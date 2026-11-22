@@ -255,6 +255,7 @@ class JourneyService:
                  'designer': spec.scenario_id == 'dreamjob', 'guardrails': spec.scenario_id != 'photography',
                  'helix': spec.scenario_id == 'dreamjob', 'turn_limit': preset.public_turns,
                  'model_call_limit': 120, 'output_tokens': 1024}, 'calls': 0, 'cleanup_confirmed': False}
+        state['capture_schema'] = 'citizen-captures/v1'
         sources = {component: source_excerpt(component) for component in SOURCES if '/' not in component}
         state['source_revision'] = next((r.get('revision') for r in sources.values() if r.get('revision')), None)
         state['source_hashes'] = {r['path']: r['sha256'] for r in sources.values() if r.get('available')}
@@ -276,6 +277,12 @@ class JourneyService:
         folder, budget, native = self.folder(run_id), Budget(), None
         conversation = []
         catalogue = folder / 'catalogue-snapshot.json'
+        if state['scenario_id'] == 'dreamjob':
+            state['verification'] = {key: {'status': 'not_run', 'verified': False}
+                                     for key in ['helix_job', 'routing', 'managed']}
+
+        def stop_for_review(operation, reason):
+            state.update(stopped_at=operation, requires_user_review=True, stop_reason=reason)
 
         def persist(stage=None):
             if stage:
@@ -333,7 +340,8 @@ class JourneyService:
             allowed_tools = TOOL_NAMES if preset.harness == 'deepagents' else [f'mcp__catalogue__{name}' for name in TOOL_NAMES]
             public_context = RetailPublicContext(folder) if retail else None
             async with Gateway(budget, mode='live', model_route='fixed', allowed_tool_names=allowed_tools,
-                               on_request=public_context.audit if public_context else None).serving() as gateway:
+                               on_request=public_context.audit if public_context else None,
+                               evidence_dir=folder, fail_on_truncated_output=retail).serving() as gateway:
                 selected = await create_retail_situation(lock, folder, gateway) if retail else lock
                 rows = prepare_rows(state['spec']['source'], 1, preset.public_turns, source_ids=[source['source_id']],
                                     story_id=state['scenario_id'], profiles_selection=selected)
@@ -344,7 +352,8 @@ class JourneyService:
                     state['native_thread_id'] = native.thread_id
                     persist('run')
                     result = await hosted_episode(rows[0], gateway, PublicTarget(native, folder, state['scenario_id'], public_context), event,
-                                                   on_activation=activation)
+                                                   on_activation=activation,
+                                                   model_config_path=folder / 'usersim-model-config.json')
                     write_json(folder / 'usersim-result.json', result)
                     outcome = result.get('simulation_outcome', {})
                     if isinstance(outcome, str):
@@ -362,28 +371,46 @@ class JourneyService:
             tools = native_tool_records(folder / state['episode_id'] / 'native')
             if retail:
                 from .retail_checks import evaluate_retail
-                from .retail_experiments import score_with_helix, durable_evaluation, compare_routing
+                from .retail_experiments import score_with_helix, durable_evaluation, compare_routing, evaluation_verified
                 from .retail_managed import run_managed_retail
                 evaluation = await score_with_helix(evaluate_retail(conversation, catalogue, tools,
                     json.loads((folder / 'source-lock.json').read_text()), folder), folder)
                 write_json(folder / 'evaluation.json', evaluation)
+                state.update(baseline_status='completed' if evaluation_verified(evaluation) else 'failed',
+                             evaluation_passed=evaluation['passed'], evaluation_total=evaluation['total'])
+                if state['baseline_status'] != 'completed':
+                    reason = 'Retail baseline evaluation failed; review its criteria before any later condition.'
+                    stop_for_review('baseline', reason)
+                    persist()
+                    raise RuntimeError(reason)
                 # Saved scoring, routing and managed execution each retain their
-                # own condition/evidence. A failure never becomes a mock pass.
-                state['verification'] = {}
+                # own evidence. Every failed condition stops later execution.
                 for key, operation in [('helix_job', lambda: durable_evaluation(folder)),
                     ('routing', lambda: compare_routing(state, folder, budget, conversation, catalogue)),
                     ('managed', lambda: run_managed_retail(state, folder, budget, catalogue))]:
                     persist('routing' if key == 'routing' else 'deploy' if key == 'managed' else 'evaluate')
+                    state['verification'][key] = {'status': 'running', 'verified': False}
+                    persist()
                     try:
                         evidence = await operation()
                         state['verification'][key] = {'verified': evidence.get('verified', evidence.get('status') == 'completed'),
                                                        'status': evidence.get('status', 'recorded'),
                                                        **{name: evidence[name] for name in ['diagnostic_verified', 'provider_notice'] if name in evidence}}
+                        if not state['verification'][key]['verified']:
+                            state['verification'][key]['status'] = 'failed'
+                            raise RuntimeError(f'Retail {key} verification failed; review its saved evidence before continuing.')
+                    except asyncio.CancelledError:
+                        state['verification'][key] = {'status': 'cancelled', 'verified': False}
+                        stop_for_review(key, 'Execution was cancelled; later conditions were not started.')
+                        persist()
+                        raise
                     except Exception as exc:
-                        state['verification'][key] = {'verified': False, 'error_type': type(exc).__name__,
+                        state['verification'][key] = {**state['verification'][key], 'verified': False,
+                                                       'status': 'failed', 'error_type': type(exc).__name__,
                                                        'error': str(sanitize(str(exc)))[:1000]}
-                        if key in {'routing', 'managed'} and not self._auxiliary_cleanup(state, folder):
-                            raise
+                        stop_for_review(key, str(sanitize(str(exc)))[:1000])
+                        persist()
+                        raise
                     persist()
             else:
                 evaluator = evaluate_photography if state['scenario_id'] == 'photography' else evaluate_boardgames
@@ -392,12 +419,20 @@ class JourneyService:
             write_json(folder / 'evaluation.json', evaluation)
             state.update(status='completed' if all(r['status'] == 'pass' for r in evaluation['rows']) else 'failed',
                          evaluation_passed=evaluation['passed'], evaluation_total=evaluation['total'])
+            state.setdefault('baseline_status', state['status'])
             if retail and not all(result.get('verified') for result in state.get('verification', {}).values()):
                 state['status'] = 'failed'
+            if state['status'] == 'failed' and not state.get('requires_user_review'):
+                stop_for_review('baseline', 'Application evaluation failed; review the saved criteria before continuing.')
         except asyncio.CancelledError:
             state.update(status='cancelled', error='Cancelled explicitly; partial evidence is preserved.')
+            if not state.get('requires_user_review'):
+                stop_for_review(state['stage'], state['error'])
         except Exception as exc:
             state.update(status='failed', error=str(sanitize(type(exc).__name__ + ': ' + str(exc)))[:1200])
+            state.setdefault('baseline_status', 'failed')
+            if not state.get('requires_user_review'):
+                stop_for_review(state['stage'], state['error'])
         finally:
             watcher.cancel()
             await asyncio.gather(watcher, return_exceptions=True)
@@ -410,7 +445,22 @@ class JourneyService:
             state.update(cleanup_confirmed=confirmed, ended_at=now())
             if not confirmed:
                 state.update(status='failed', recovery_required=True)
-            persist('deploy')
+                if not state.get('requires_user_review'):
+                    stop_for_review(state['stage'], 'Native cleanup is unconfirmed; resolve ownership before continuing.')
+            if state.get('capture_schema'):
+                from .captures import write_capture_manifest
+                try:
+                    capture = write_capture_manifest(folder, state)
+                    state['capture_coverage'] = capture['coverage']
+                    if not capture['coverage']['complete'] and state['status'] == 'completed':
+                        state['status'] = 'failed'
+                        stop_for_review('capture', 'Required captures are incomplete; inspect coverage before continuing.')
+                except Exception as exc:
+                    state['capture_coverage'] = {'complete': False, 'error_type': type(exc).__name__}
+                    if state['status'] == 'completed':
+                        state['status'] = 'failed'
+                        stop_for_review('capture', 'Capture manifest generation failed; inspect the saved run before continuing.')
+            persist('deploy' if state['status'] == 'completed' else None)
             self._release(run_id, confirmed)
 
     @staticmethod

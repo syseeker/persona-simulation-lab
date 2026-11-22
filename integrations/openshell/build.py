@@ -12,7 +12,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 RUNTIME_FILES = ('__init__.py', 'settings.py', 'catalogue.py', 'course_mcp.py', 'target.py',
                  'fabric_target.py', 'inference.py', 'outcomes.py', 'evidence.py',
-                 'runtime_profiles.py', 'sandbox_runtime.py', 'behavioural_safeguards.py', 'retail_policy.py')
+                 'runtime_profiles.py', 'sandbox_runtime.py', 'behavioural_safeguards.py', 'retail_policy.py',
+                 'retail_responses.py')
 
 
 def source_manifest() -> dict:

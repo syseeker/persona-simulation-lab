@@ -53,7 +53,7 @@ def start():
             response = httpx.get('http://127.0.0.1:4001/v1/models', headers={'Authorization': 'Bearer ' + key}, timeout=2)
             if response.is_success:
                 aliases = {row['id'] for row in response.json()['data']}
-                if {'lab-advisor-candidate', 'lab-advisor-routed', 'lab-advisor-fixed', 'lab-support'} <= aliases:
+                if {'lab-advisor-candidate', 'lab-advisor-capable', 'lab-advisor-routed', 'lab-advisor-fixed', 'lab-support'} <= aliases:
                     receipt = {'container': NAME, 'endpoint': 'http://127.0.0.1:4001/v1', 'models': models,
                         'configuration_sha256': configuration_hash, 'inference_calls': 0,
                         'notice': 'A separately owned service; model inventory is not proof of successful inference.'}

@@ -16,9 +16,10 @@ from learning_lab.settings import ROOT, load_environment
 from scripts.export_guide_recording import clean, pick
 
 
-def export(scenario_id='photography', *, run_root: Path | None = None, destination: Path | None = None):
+def export(scenario_id='photography', *, run_root: Path | None = None, destination: Path | None = None,
+           run_id: str | None = None):
     load_environment()
-    run_id = CANONICAL_DEMOS[scenario_id]
+    run_id = run_id or CANONICAL_DEMOS[scenario_id]
     if not run_id:
         raise ValueError('This scenario has no executed demo')
     pack = recordings.load(run_id)
@@ -72,17 +73,31 @@ def export(scenario_id='photography', *, run_root: Path | None = None, destinati
     }
     conversation = json.loads(recordings.read(run_id, 'public-conversation.json'))
     replies = [m['content'] for m in conversation if m['role'] == 'assistant']
+    delivered_replies = [m for m in conversation if m['role'] == 'assistant']
     invocations = []
     for row in read(native / 'reply-outcomes.jsonl', lines=True):
         raw = row.get('raw_output', {})
-        if not isinstance(raw, dict) or raw.get('response') not in replies:
+        if not isinstance(raw, dict) or not isinstance(raw.get('response'), str):
             raise ValueError('Publish only normalized replies matching the immutable public conversation')
+        output = pick(raw, ['adapter', 'harness', 'mode', 'model', 'completed', 'event_count',
+                            'message_count', 'runtime_id', 'thread_id', 'resumed', 'response', 'enabled_toolsets'])
+        delivered = delivered_replies[len(invocations)] if len(invocations) < len(delivered_replies) else {}
+        if delivered.get('response_origin', '').startswith('application_') or raw['response'] not in replies:
+            policy = delivered.get('response_policy') or {}
+            proposal_hash = hashlib.sha256(raw['response'].encode()).hexdigest()
+            if (policy.get('status') != 'delivered' or policy.get('model_proposal_sha256') != proposal_hash
+                    or policy.get('public_turn') != len(invocations) + 1
+                    or policy.get('delivered_content_sha256') != hashlib.sha256(delivered.get('content', '').encode()).hexdigest()):
+                raise ValueError('Native proposal has no matching confirmed application delivery')
+            output.pop('response')
+            output.update(native_response_sha256=proposal_hash, native_response_published=False,
+                          response_origin=delivered.get('response_origin'),
+                          delivered_content_sha256=policy['delivered_content_sha256'])
         invocations.append({**pick(row, ['runtime_status', 'runtime_id', 'invocation_id', 'outcome']),
                             'public_turn': len(invocations) + 1,
                             'tool_scope_uuids': [tool['scope_uuid'] for tool in row.get('tools', []) if tool.get('scope_uuid')],
                             'normalized_output_fields': list(raw),
-                            'output': pick(raw, ['adapter', 'harness', 'mode', 'model', 'completed', 'event_count',
-                                                 'message_count', 'runtime_id', 'thread_id', 'resumed', 'response', 'enabled_toolsets']),
+                            'output': output,
                             'usage': pick(raw.get('usage') or {}, ['prompt_tokens', 'completion_tokens', 'total_tokens', 'cost'])})
     lifecycle = [pick(row, ['at', 'event', 'status', 'harness', 'model_route', 'thread_id', 'runtime_id', 'invocation_id', 'error_type'])
                  for row in read(native / 'fabric-lifecycle.jsonl', lines=True)]
@@ -116,4 +131,6 @@ def export(scenario_id='photography', *, run_root: Path | None = None, destinati
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--scenario', default='photography', choices=CANONICAL_DEMOS)
-    print(json.dumps(export(parser.parse_args().scenario)))
+    parser.add_argument('--run-id', help='Explicit new recording to export before changing the tagged demo')
+    arguments = parser.parse_args()
+    print(json.dumps(export(arguments.scenario, run_id=arguments.run_id)))

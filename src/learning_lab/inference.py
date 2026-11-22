@@ -10,6 +10,7 @@ from dataclasses import dataclass, field
 import json
 import os
 import secrets
+from pathlib import Path
 from typing import Any, Iterable
 import uuid
 import time
@@ -156,13 +157,14 @@ def scripted_completion(payload: dict) -> dict:
 class Gateway:
     def __init__(self, budget: Budget, mode: str = "live", model_route: str = "fixed",
                  allowed_tool_names: Iterable[str] | None = None, *, proxy_url: str | None = None,
-                 assistant_alias: str | None = None, on_request=None, request_timeout: float = 50):
+                 assistant_alias: str | None = None, on_request=None, request_timeout: float = 50,
+                 evidence_dir: Path | None = None, fail_on_truncated_output: bool = False):
         self.budget = budget
         self.mode = mode
         if model_route not in {"fixed", "switchyard"}:
             raise ValueError("Choose fixed or switchyard model routing")
         self.model_route = model_route
-        if assistant_alias not in {None, 'lab-advisor-fixed', 'lab-advisor-candidate', 'lab-advisor-routed', 'lab-support'}:
+        if assistant_alias not in {None, 'lab-advisor-fixed', 'lab-advisor-candidate', 'lab-advisor-capable', 'lab-advisor-routed', 'lab-support'}:
             raise ValueError('Choose an allowlisted advisor alias')
         self.proxy_url, self.assistant_alias, self.on_request = proxy_url, assistant_alias, on_request
         self.key = secrets.token_urlsafe(24)
@@ -176,10 +178,45 @@ class Gateway:
         if not 1 <= request_timeout <= 300:
             raise ValueError('Model requests must have a one-to-300-second timeout')
         self.request_timeout = request_timeout
+        self.evidence_dir = evidence_dir
+        self.fail_on_truncated_output = fail_on_truncated_output
         self._client = httpx.AsyncClient(timeout=httpx.Timeout(request_timeout, connect=10))
 
-    async def complete(self, payload: dict, role="assistant") -> dict:
+    def configuration(self):
+        """Application controls, distinct from downstream LiteLLM/provider settings."""
+        return {
+            'schema': 'citizen-gateway-config/v1', 'mode': self.mode,
+            'attempt_limit': self.budget.limit, 'output_token_ceiling': 1024,
+            'tool_round_limit_per_turn': MAX_TOOL_ROUNDS, 'request_timeout_seconds': self.request_timeout,
+            'connect_timeout_seconds': 10, 'provider_retries': 0,
+            'model_route': self.model_route, 'assistant_alias': self.assistant_alias,
+            'support_alias': 'lab-support', 'allowed_tool_names': sorted(self.allowed_tool_names)
+            if self.allowed_tool_names is not None else None,
+            'schema_filter_owner': 'application gateway', 'buffered_upstream_response': True,
+            'fail_on_truncated_output': self.fail_on_truncated_output,
+        }
+
+    def capture(self, name, value, *, append=False):
+        if self.evidence_dir is not None:
+            from .evidence import save_evidence
+            save_evidence(self.evidence_dir / name, value, append=append)
+
+    async def complete(self, payload: dict, role="assistant", *, evidence_context: dict | None = None) -> dict:
         record = await self.budget.admit(role, self.mode)
+        if evidence_context:
+            record.update({key: evidence_context[key] for key in
+                           ('control_request_id', 'thread_id', 'transport', 'public_turn') if key in evidence_context})
+        try:
+            return await self._complete_admitted(payload, role, record)
+        except BaseException as exc:
+            if record['status'] == 'started':
+                record.update(status='cancelled' if isinstance(exc, asyncio.CancelledError) else 'failed',
+                              error_type=type(exc).__name__)
+            raise
+        finally:
+            self.capture('gateway-calls.jsonl', record, append=True)
+
+    async def _complete_admitted(self, payload: dict, role: str, record: dict) -> dict:
         record["model"] = payload.get("model")
         started = time.perf_counter()
         # Fabric's maintained OpenAI adapter supplies max_completion_tokens;
@@ -229,6 +266,15 @@ class Gateway:
                 *payload["messages"],
             ]
         try:
+            # Capture the final provider-visible schema after allowlist/round-limit
+            # filtering. This is not the server's MCP discovery response.
+            self.capture('gateway-effective-config.json', self.configuration())
+            self.capture('provider-tool-schemas.jsonl', {
+                'call': record['call'], 'role': role, 'tools': payload.get('tools', []),
+                'tool_choice': payload.get('tool_choice'), 'mode': self.mode,
+                'schema': 'OpenAI chat completions tools',
+                'context': {key: record[key] for key in ('control_request_id', 'thread_id', 'public_turn') if key in record},
+            }, append=True)
             if self.mode == "demo":
                 result = scripted_completion(payload)
             else:
@@ -289,6 +335,9 @@ class Gateway:
                         record["routing_notice"] = "The proxy returned an invalid native routing evidence header"
             # Provider usage is evidence even if its returned tool call is invalid.
             record["usage"] = result.get("usage") if self.mode == "live" else None
+            record['finish_reason'] = result['choices'][0].get('finish_reason')
+            if role == 'assistant' and self.fail_on_truncated_output and record['finish_reason'] == 'length':
+                raise ValueError('Advisor output reached its token ceiling; no partial proposal was released')
             if role == "assistant" and self.allowed_tool_names is not None:
                 effective = set(record["tool_surface"]["exposed"])
                 returned = [call.get("function", {}).get("name")
@@ -370,6 +419,13 @@ class Gateway:
         await site.start()
         self.url = f"http://127.0.0.1:{runner.addresses[0][1]}/v1"
         try:
+            self.capture('gateway-effective-config.json', self.configuration())
+            if self.evidence_dir is not None and self.mode == 'live':
+                from .proxy_capture import capture_proxy
+                load_environment()
+                endpoint = self.proxy_url if self.proxy_url is not None else os.getenv('LAB_PROXY_BASE_URL', '')
+                if endpoint:
+                    await capture_proxy(self.evidence_dir, endpoint)
             yield self
         finally:
             await runner.cleanup()

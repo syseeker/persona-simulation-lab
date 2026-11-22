@@ -1,0 +1,682 @@
+{
+  "schema": "citizen-capture-registry/v1",
+  "requirements": [
+    {
+      "id": "CAP-PER-01",
+      "module": "Nemotron Personas / application selection",
+      "lessons": [
+        1
+      ],
+      "operation": "preserve the selected original",
+      "description": "source-lock.json; resolved-inputs.json",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-SIT-01",
+      "module": "Authored situation",
+      "lessons": [
+        2
+      ],
+      "operation": "supply goal, constraints and disclosure rules",
+      "description": "situation.json",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-DD-01",
+      "module": "Data Designer",
+      "lessons": [
+        2
+      ],
+      "operation": "configure seed and generated columns",
+      "description": "designer-private/configuration.json; designer-private/artifacts/retail/builder_config.json",
+      "scenario_ids": [
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-DD-02",
+      "module": "Data Designer",
+      "lessons": [
+        2
+      ],
+      "operation": "inspect selected generation settings",
+      "description": "designer-configuration.json",
+      "scenario_ids": [
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-DD-03",
+      "module": "Data Designer",
+      "lessons": [
+        2
+      ],
+      "operation": "configure execution and provider",
+      "description": "Proposed designer-runtime-config.json; designer-provider-config.json",
+      "scenario_ids": [
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-DD-04",
+      "module": "Data Designer / application lineage",
+      "lessons": [
+        2
+      ],
+      "operation": "retain generated fields, completion and lineage",
+      "description": "designer-output.json; designer-generation.json; designer-lineage.json",
+      "scenario_ids": [
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-DD-05",
+      "module": "Data Designer",
+      "lessons": [
+        2
+      ],
+      "operation": "retain profiling outcome",
+      "description": "Native profiling report JSON, if produced",
+      "scenario_ids": [
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-US-01",
+      "module": "UserSim",
+      "lessons": [
+        2
+      ],
+      "operation": "resolve persona, behaviour and probe",
+      "description": "resolved-inputs.json; usersim-result.json",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-US-02",
+      "module": "UserSim",
+      "lessons": [
+        2
+      ],
+      "operation": "inspect safe configuration summary",
+      "description": "usersim-setup.json",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-US-03",
+      "module": "UserSim / model access",
+      "lessons": [
+        2,
+        4
+      ],
+      "operation": "configure learner and judge models",
+      "description": "Proposed usersim-role-models.json",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-US-04",
+      "module": "UserSim",
+      "lessons": [
+        4
+      ],
+      "operation": "generate turns and finalize trajectory",
+      "description": "usersim-activations.jsonl; public-conversation.json; usersim-result.json; usersim-quality-flags.json",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-US-05",
+      "module": "UserSim",
+      "lessons": [
+        6
+      ],
+      "operation": "optional post-loop evaluation/report",
+      "description": "Separate UserSim eval/report settings and output",
+      "scenario_ids": []
+    },
+    {
+      "id": "CAP-FAB-01",
+      "module": "Fabric",
+      "lessons": [
+        3
+      ],
+      "operation": "assemble native configuration",
+      "description": "Native fabric-config.json",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-FAB-02",
+      "module": "Fabric / teaching projection",
+      "lessons": [
+        3
+      ],
+      "operation": "publish selected settings",
+      "description": "Public fabric-config.json; companion framework-config.json",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-FAB-03",
+      "module": "Fabric",
+      "lessons": [
+        3
+      ],
+      "operation": "resolve adapter and check prerequisites",
+      "description": "fabric-plan.json; fabric-doctor.json",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-FAB-04",
+      "module": "Fabric / application instrumentation",
+      "lessons": [
+        3,
+        9
+      ],
+      "operation": "start/close persistent runtime",
+      "description": "fabric-lifecycle.jsonl; runtime-receipt.json",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-FAB-05",
+      "module": "Fabric",
+      "lessons": [
+        4
+      ],
+      "operation": "retain exact invocation input",
+      "description": "Proposed fabric-run-requests.jsonl",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-FAB-06",
+      "module": "Fabric",
+      "lessons": [
+        4
+      ],
+      "operation": "retain complete normalized return",
+      "description": "Proposed fabric-run-results.jsonl",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-FAB-07",
+      "module": "Fabric / application result handling",
+      "lessons": [
+        4
+      ],
+      "operation": "inspect retained response and result fields",
+      "description": "reply-outcomes.jsonl; fabric-invocations.json",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-DA-01",
+      "module": "Deep Agents",
+      "lessons": [
+        3,
+        4
+      ],
+      "operation": "configure and execute harness",
+      "description": "Harness settings inside native fabric-config.json and fabric-plan.json",
+      "scenario_ids": [
+        "photography",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-HER-01",
+      "module": "Hermes",
+      "lessons": [
+        3
+      ],
+      "operation": "configure managed harness policy",
+      "description": "config.yaml",
+      "scenario_ids": [
+        "boardgames"
+      ]
+    },
+    {
+      "id": "CAP-HER-02",
+      "module": "Hermes",
+      "lessons": [
+        3,
+        4
+      ],
+      "operation": "inspect resolved native settings",
+      "description": "reply-outcomes.jsonl \u2192 raw_output.hermes_native_config",
+      "scenario_ids": [
+        "boardgames"
+      ]
+    },
+    {
+      "id": "CAP-MCP-01",
+      "module": "Course MCP",
+      "lessons": [
+        3
+      ],
+      "operation": "connect server/transport and expose tools",
+      "description": "MCP settings inside native fabric-config.json and fabric-plan.json",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-MCP-02",
+      "module": "Course MCP / provider boundary",
+      "lessons": [
+        3,
+        4
+      ],
+      "operation": "retain exact discovery and permitted schemas",
+      "description": "Proposed mcp-tools-list.json; provider-tool-schemas.json",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-MCP-03",
+      "module": "Course MCP / catalogue",
+      "lessons": [
+        4,
+        5
+      ],
+      "operation": "inspect actual tool input/result and frozen facts",
+      "description": "native-tools.json; catalogue-snapshot.json",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-MCP-04",
+      "module": "Course MCP / public preferences",
+      "lessons": [
+        4
+      ],
+      "operation": "retain effective public preferences for each turn",
+      "description": "Proposed preferences-by-turn.jsonl",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-GW-01",
+      "module": "Application model gateway",
+      "lessons": [
+        3,
+        4
+      ],
+      "operation": "configure call limits, filtering and dispatch",
+      "description": "Proposed gateway-effective-config.json",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-GW-02",
+      "module": "Application model gateway",
+      "lessons": [
+        4,
+        5
+      ],
+      "operation": "retain admitted model calls and usage",
+      "description": "usage.json",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-LLM-01",
+      "module": "LiteLLM",
+      "lessons": [
+        3,
+        7
+      ],
+      "operation": "configure baseline aliases/providers",
+      "description": "litellm.yaml; compose.yaml",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-LLM-02",
+      "module": "LiteLLM",
+      "lessons": [
+        7
+      ],
+      "operation": "configure requested retail candidate pool",
+      "description": "retail-litellm.yaml",
+      "scenario_ids": [
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-LLM-03",
+      "module": "LiteLLM",
+      "lessons": [
+        3,
+        7
+      ],
+      "operation": "retain actually loaded and resolved configuration",
+      "description": "Proposed run-bound YAML copies; litellm-effective-config.json",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-SW-01",
+      "module": "Switchyard",
+      "lessons": [
+        7
+      ],
+      "operation": "define candidates and routing policy",
+      "description": "routing-configuration.json",
+      "scenario_ids": [
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-SW-02",
+      "module": "Switchyard",
+      "lessons": [
+        7
+      ],
+      "operation": "retain decision and comparison outcomes",
+      "description": "routing-comparison.json",
+      "scenario_ids": [
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-REL-01",
+      "module": "Relay",
+      "lessons": [
+        3
+      ],
+      "operation": "activate instrumentation and export",
+      "description": "Generated fabric-relay.json",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-REL-02",
+      "module": "Relay",
+      "lessons": [
+        4,
+        5
+      ],
+      "operation": "retain native model/tool/agent events",
+      "description": "relay.jsonl",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-REL-03",
+      "module": "Relay / teaching projection",
+      "lessons": [
+        5
+      ],
+      "operation": "publish interpretable execution evidence",
+      "description": "relay-scopes.json; native-tools.json",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-REL-04",
+      "module": "Relay / collector",
+      "lessons": [
+        5
+      ],
+      "operation": "optional collector/Phoenix export",
+      "description": "OTLP/Phoenix settings and trace output",
+      "scenario_ids": []
+    },
+    {
+      "id": "CAP-EVAL-01",
+      "module": "Application assertions",
+      "lessons": [
+        6
+      ],
+      "operation": "evaluate saved answers and facts",
+      "description": "evaluation.json",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-HX-01",
+      "module": "Helix Evals",
+      "lessons": [
+        6
+      ],
+      "operation": "retain criteria and local native results",
+      "description": "helix-criteria.json; helix-evaluation.json; evaluation.json",
+      "scenario_ids": [
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-HX-02",
+      "module": "Helix Evals",
+      "lessons": [
+        6
+      ],
+      "operation": "preserve exact evaluator definition",
+      "description": "Proposed helix-evaluator-config.json",
+      "scenario_ids": [
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-HX-03",
+      "module": "Helix durable evaluation",
+      "lessons": [
+        6
+      ],
+      "operation": "retain submitted job definition and outcome",
+      "description": "helix-job.json",
+      "scenario_ids": [
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-GR-01",
+      "module": "Guardrails",
+      "lessons": [
+        3,
+        8
+      ],
+      "operation": "load policy and flows",
+      "description": "config.yml; rails.co; guardrails-config.json",
+      "scenario_ids": [
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-GR-02",
+      "module": "Guardrails",
+      "lessons": [
+        8
+      ],
+      "operation": "retain legitimate boundary decisions and separate negative probe",
+      "description": "guardrails-decisions.jsonl; guardrails-probe.json",
+      "scenario_ids": [
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-PLAT-01",
+      "module": "Helix Platform",
+      "lessons": [
+        9
+      ],
+      "operation": "configure server and executor",
+      "description": "config.local.yaml; private openshell-config.yaml; proposed run-bound effective settings",
+      "scenario_ids": [
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-PLAT-02",
+      "module": "Helix Platform",
+      "lessons": [
+        9
+      ],
+      "operation": "package agent",
+      "description": "agent.yaml; proposed final run-bound agent.yaml copy",
+      "scenario_ids": [
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-PLAT-03",
+      "module": "Helix Platform",
+      "lessons": [
+        9
+      ],
+      "operation": "define provider/environment and related resources",
+      "description": "platform-setup.json; proposed sanitized creation request/response snapshots",
+      "scenario_ids": [
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-PLAT-04",
+      "module": "Helix Platform",
+      "lessons": [
+        9
+      ],
+      "operation": "register and deploy",
+      "description": "platform-registration.json; platform-deployment.json; platform-package.json",
+      "scenario_ids": [
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-PLAT-05",
+      "module": "Helix Platform",
+      "lessons": [
+        9
+      ],
+      "operation": "create session, invoke, observe and clean up",
+      "description": "platform-condition.json; platform-session.json; platform-invocation.json; platform-trace.json; platform-cleanup.json",
+      "scenario_ids": [
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-OS-01",
+      "module": "OpenShell",
+      "lessons": [
+        9
+      ],
+      "operation": "submit intended workload policy",
+      "description": "policy.yaml; per-execution requested-policy.yaml",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-OS-02",
+      "module": "OpenShell",
+      "lessons": [
+        9
+      ],
+      "operation": "inspect loaded policy and observed enforcement/cleanup",
+      "description": "effective-policy.yaml; effective-policy.json; boundary-probes.json; cleanup.json; sandbox-identity.json",
+      "scenario_ids": [
+        "photography",
+        "boardgames",
+        "dreamjob"
+      ]
+    },
+    {
+      "id": "CAP-OS-03",
+      "module": "Helix-managed OpenShell",
+      "lessons": [
+        9
+      ],
+      "operation": "inspect managed boundary",
+      "description": "platform-effective-policy.json; platform-boundary-probes.json; platform-cleanup.json; private effective YAML",
+      "scenario_ids": [
+        "dreamjob"
+      ]
+    }
+  ]
+}
