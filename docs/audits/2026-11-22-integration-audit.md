@@ -415,3 +415,31 @@ Earlier “wireframe only / scenarios illustrative / stop before foundation” r
 10. **Fixed — A10 managed layout-reset timing.** Reset waits for the overview layout scope before removing its saved key.
 
 This correction round passed **50 focused Python archive/guide tests, 45 web unit tests and all 39 browser cases**, including the three actual selected-demo reviews and the actual installed HF/NGC check, with zero skips. Svelte reported **zero errors/warnings** and the production build passed with its pre-existing bundle-size advisory. Browser inspection used read-only calls. The prior 727-test full Python suite is historical verification and was not rerun for these UI/docs/housekeeping changes. Archive hashes, all 389 current native files and the original audit prefix were independently rechecked. Passing tests do not close findings 4, 5 or A9, or establish UX acceptance.
+
+
+## Publication receipt — 22 November 2026
+
+The scoped implementation is committed as
+[`4881f79166c5b751ecb5200c82391c53a1cc41cb`](https://github.com/syseeker/persona-simulation-lab/commit/4881f79166c5b751ecb5200c82391c53a1cc41cb)
+and was successfully pushed to `origin/dev`. This completes original findings
+**1, 2, 3 and 6**, together with supporting corrections A8 and A10. The original
+report and its findings remain above; the full updated assessment begins at
+[Updated complete report](#updated-complete-report--scoped-corrections-verified-22-november-2026).
+
+The original **22,452-byte** report prefix still has SHA-256
+`b61bd657e66a49cc627672933aea3b87eb95cb78aac9513e214cc4270dcc5c47`.
+The publication review found no forbidden raw-output paths or configured
+credentials in the staged changes. The implementation commit contains 15 scoped
+files. `main` remains at `b49cd85b506848e2d3ac64372387b7c9408adb33`.
+The subsequent documentation completion commit is the Git commit containing this
+receipt and the completed A1 ledger entry; it changes no application behaviour.
+
+Verification remains **50 focused Python tests, 45 web unit tests and 39 browser
+cases**, with zero skipped browser cases, zero Svelte errors/warnings and a
+successful production build. All 2,207 output archive entries, 156 private archive
+entries and 389 retained native files were hash-verified. No new scenario,
+inference or deployment was executed during this correction round.
+
+**Still open:** UserSim authoring/Sim2Real teaching (4), convenient private-original
+evidence navigation (5), managed component-proof scope (A9), and your acceptance
+of the teaching experience (7). Completion of A1 does not close those findings.

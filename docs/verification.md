@@ -338,3 +338,12 @@ The read-only guide worker runs in **`--datasets-only`** mode and never initiali
 The [19–20 November review journal](history/guide-reviews-2026-11-19-20.md) preserves earlier UI, dataset and retained-backend test accounts with their original scope and limitations. Earlier counts are not today's test counts.
 
 The immutable [v0.2 verification record](history/v0.2/docs/verification.md) preserves its live application/generation trials, native Platform/OpenShell receipts, failures and limitations. The [v0.1 record](history/v0.1/docs/verification.md) remains separate. Neither establishes readiness or acceptance of the new journey. Future backend acceptance must identify its own frozen inputs, configuration/source revision, actual calls, native evidence, errors and cleanup according to the [current plan](../PLAN.md).
+
+
+## Audit correction publication receipt · 22 November 2026
+
+Scoped implementation `4881f79166c5b751ecb5200c82391c53a1cc41cb` was pushed to
+`origin/dev`. The [append-only audit publication receipt](audits/2026-11-22-integration-audit.md#publication-receipt--22-november-2026)
+records the actual revision, preserved original hash and remaining findings. A1 is
+complete in the master plan; this documentation completion entry changes no
+application behaviour. `main` remains `b49cd85b506848e2d3ac64372387b7c9408adb33`.

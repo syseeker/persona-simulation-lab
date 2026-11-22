@@ -46,7 +46,7 @@ Before a round, read this plan and the relevant specification, preserve a recove
 | W1 | Complete captures, fix execution and rerun S1–S3 | Complete | W0 | Fresh selected S1/S2/S3 passed with complete captures and cleanup; source `99914ca`, sanitized publications/bindings `c96d904`; [verification](docs/verification.md). |
 | W2 | Comprehensive teaching UX revision | Partial; user review pending | W1 | Core redesign is implemented. The [append-only audit](docs/audits/2026-11-22-integration-audit.md) retains unfinished UserSim teaching (4) and managed component-proof scope (A9); technical coverage does not establish all teaching requirements or user acceptance. |
 | W3 | Add the Metadata tab | Verified with usability finding open | W1 and W2 | Shared resolver, requested table and current inventories are verified; private-original navigation (5) and user acceptance remain open. |
-| A1 | Correct audit findings 1, 2, 3 and 6 | Verified; publication pending | Read-only audit of `a4a5f73` | [Original and full updated reports](docs/audits/2026-11-22-integration-audit.md); four scoped corrections and supporting reset fix pass. Findings 4/5/A9 and user acceptance remain open. |
+| A1 | Correct audit findings 1, 2, 3 and 6 | Complete | Read-only audit of `a4a5f73` | [Implementation 4881f79](https://github.com/syseeker/persona-simulation-lab/commit/4881f79166c5b751ecb5200c82391c53a1cc41cb) is pushed to `dev`; [original and full updated reports](docs/audits/2026-11-22-integration-audit.md) include the publication receipt. Findings 4/5/A9 and user acceptance remain open. |
 
 ### A1 — Scoped audit corrections
 
@@ -58,7 +58,7 @@ The user authorized storing the full read-only audit and correcting only outstan
 - [x] Persist and validate the selected routing condition against the selected scenario and recording, including reload and legacy preference handling.
 - [x] Archive verified superseded output with ownership/reference checks, original paths, hashes and restore verification; remove verified stale PID files, preserve live/unknown resources and correct obsolete wireframe wording.
 - [x] Verify focused behaviour, read-only navigation, archive integrity, unchanged recordings/dependencies and frozen-baseline diff; append the complete updated report and verification.
-- [ ] Commit and push the verified round to `dev`; keep `main` unchanged.
+- [x] Commit and push the verified round to `dev`; keep `main` unchanged. Implementation: `4881f79166c5b751ecb5200c82391c53a1cc41cb`; the subsequent documentation completion commit contains the appended publication receipt.
 
 Newly identified stale Q&A answers also describe the implemented guide as an inert wireframe with no recordings or dataset access. Correcting those specific false statements belongs to item 6's obsolete wording cleanup; preserve unrelated Q&A content, structure and styling. No new UserSim feature, private-file browser, scenario execution or SDK upgrade is authorized by A1.
 
