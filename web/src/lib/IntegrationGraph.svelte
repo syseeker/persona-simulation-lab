@@ -5,11 +5,11 @@
   import '@xyflow/svelte/dist/style.css';
   import ComponentNode from './ComponentNode.svelte';
   import ZoneNode from './ZoneNode.svelte';
-  import { components, componentById, operationById, componentTitle, componentUsed, simpleBlocks, edgesFor, preset } from './lessonArchitecture';
+  import { components, componentById, operationById, componentTitle, componentUsed, simpleBlocks, edgesFor, preset, hostCallerPosition } from './lessonArchitecture';
   import {conceptOperations} from './teaching/selection';
 
-  let { applicationOnly=false,detailed=false, scenarioId='photography', active=[], focused=false, search='', labels=true, selected=null, oninspect=()=>{} }:
-    { detailed?:boolean; applicationOnly?:boolean; scenarioId?:string; active?:string[]; focused?:boolean; search?:string; labels?:boolean; selected?:string|null;
+  let { applicationOnly=false,managedCondition=false,detailed=false, scenarioId='photography', active=[], focused=false, search='', labels=true, selected=null, oninspect=()=>{} }:
+    { detailed?:boolean; applicationOnly?:boolean; managedCondition?:boolean; scenarioId?:string; active?:string[]; focused?:boolean; search?:string; labels?:boolean; selected?:string|null;
       oninspect?:(component:string,operation?:string)=>void } = $props();
   const nodeTypes={component:ComponentNode,zone:ZoneNode};
   let nodes=$state.raw<Node[]>([]), edges=$state.raw<Edge[]>([]);
@@ -28,22 +28,24 @@
       dragHandle:'.zone-drag-handle',selectable:false,deletable:false,connectable:false,zIndex:0,
       data:{title,caption,kind,overlay:kind==='deployment'}};
   }
-  function baseNodes(detail:boolean):Node[] {
+  function baseNodes(detail:boolean,managed:boolean):Node[] {
     if(!detail) return [
       zone('zone-sandbox','OpenShell · sandboxed advisor and course tools',580,-32,310,626,'deployment','Host simulator and model gateway stay outside'),
+      ...(managed?[zone('zone-caller','Host caller · managed session',580,-204,310,144,'runtime','Checks stay outside OpenShell')]:[]),
       card('person',0,0,250,177),card('situation-block',0,212,250,177),card('learner',290,106,250,194),
       card('advisor',18,167,274,190,'zone-sandbox'),card('courses',18,390,274,188,'zone-sandbox'),
-      card('guardrails',18,47,274,92,'zone-sandbox'),card('models',942,174,280,200),
+      card('guardrails',18,managed?43:47,274,92,managed?'zone-caller':'zone-sandbox'),card('models',942,174,280,200),
       card('evidence',290,440,250,202),card('openshell',580,662,310,150),card('platform',942,440,280,202)
     ];
     return [
       zone('zone-inputs','Test inputs and simulated learner',0,0,280,1030,'data'),
       zone('zone-sandbox','OpenShell · sandboxed workload',308,0,552,920,'deployment','Advisor + selected harness + course tools'),
+      ...(managed?[zone('zone-caller','Host caller · managed session',308,-194,552,166,'runtime','Input/output checks outside OpenShell')]:[]),
       zone('zone-models','Host-side model access',888,0,280,708,'models','Credentials remain here'),
       zone('zone-evidence','Execution evidence and evaluation',1196,0,310,800,'evidence'),
       card('personas',12,46,256,210,'zone-inputs'),card('situation',12,282,256,166,'zone-inputs'),
       card('designer',12,474,256,220,'zone-inputs'),card('usersim',12,720,256,290,'zone-inputs'),
-      card('guardrails',16,46,520,120,'zone-sandbox'),card('fabric',16,194,520,264,'zone-sandbox'),
+      card('guardrails',16,managed?40:46,520,120,managed?'zone-caller':'zone-sandbox'),card('fabric',16,194,520,264,'zone-sandbox'),
       card('harness',16,486,250,205,'zone-sandbox'),card('mcp',286,486,250,205,'zone-sandbox'),
       card('catalogue',16,725,520,145,'zone-sandbox'),
       card('gateway',12,46,256,206,'zone-models'),card('litellm',12,280,256,160,'zone-models'),
@@ -104,7 +106,11 @@
       const color=palette[e.kind][animated?1:0];
       const vertical=options.detail?['personas-situation','personas-designer','designer-situation','situation-usersim','fabric-harness','mcp-catalogue','gateway-litellm','litellm-routing','relay-records','records-checks','records-helix'].some(pair=>id.startsWith(pair)):
         id.startsWith('person-situation-block')||id.startsWith('advisor-courses');
-      return {id,source:e.source,target:e.target,sourceHandle:vertical?'out-bottom':'out-right',targetHandle:vertical?'in-top':'in-left',
+      const guard=e.source==='guardrails',fromAdvisor=['fabric','advisor'].includes(e.source)&&e.target==='guardrails';
+      const toAdvisor=guard&&['fabric','advisor'].includes(e.target),toLearner=guard&&['usersim','learner'].includes(e.target);
+      return {id,source:e.source,target:e.target,
+        sourceHandle:toAdvisor?'out-bottom':fromAdvisor?'out-top':toLearner?'out-left':vertical?'out-bottom':'out-right',
+        targetHandle:toAdvisor?'in-top':fromAdvisor?'in-right':toLearner?'in-bottom':vertical?'in-top':'in-left',
         type:'smoothstep',animated,selectable:false,deletable:false,label:options.labels?e.label:undefined,zIndex:1,data:{kind:e.kind},
         class:`integration-edge kind-${e.kind}${animated?' is-active':''}${dim?' is-dim':''}`,
         style:`stroke:${color};stroke-width:${animated?2.2:1.15};opacity:${dim?.16:.8};stroke-dasharray:${e.kind==='control'?'2 5':e.kind==='telemetry'?'7 4':animated?'6 5':'none'}`,
@@ -112,9 +118,19 @@
         markerEnd:{type:MarkerType.ArrowClosed,width:12,height:12,color}} as Edge;
     });
   }
-  function readLayout(detail:boolean){
-    const key=storagePrefix+(detail?'detailed':'simple');
-    let initial=baseNodes(detail),savedView:Viewport|null=null;
+  const layoutKey=(detail:boolean,managed:boolean)=>storagePrefix+(detail?'detailed':'simple')+(managed?':managed':'');
+  function keepHostCallerOutside(initial:Node[]):Node[] {
+    const caller=initial.find(n=>n.id==='zone-caller'),sandbox=initial.find(n=>n.id==='zone-sandbox');
+    if(!caller||!sandbox)return initial;
+    const position=hostCallerPosition({...caller.position,width:caller.width!,height:caller.height!},
+      {...sandbox.position,width:sandbox.width!,height:sandbox.height!});
+    return initial.map(n=>n.id===caller.id?{...n,position}:n.id==='guardrails'?{...n,position:{
+      x:Math.max(0,Math.min(n.position.x,caller.width!-n.width!)),
+      y:Math.max(40,Math.min(n.position.y,caller.height!-n.height!))}}:n);
+  }
+  function readLayout(detail:boolean,managed:boolean){
+    const key=layoutKey(detail,managed);
+    let initial=baseNodes(detail,managed),savedView:Viewport|null=null;
     try{
       const saved=JSON.parse(localStorage.getItem(key)||'null');
       if(saved?.version===2&&Array.isArray(saved.positions)){
@@ -125,14 +141,14 @@
         if(v&&Number.isFinite(v.x)&&Number.isFinite(v.y)&&v.zoom>=.2&&v.zoom<=1.8)savedView=v;
       }
     }catch{/* Optional browser layout. */}
-    nodes=initial;currentView=key;restoredViewport=!!savedView;
+    nodes=keepHostCallerOutside(initial);currentView=key;restoredViewport=!!savedView;
     if(savedView)viewport=savedView;else void tick().then(()=>fit());
   }
-  $effect(()=>{const detail=detailed;if(mounted)untrack(()=>{readLayout(detail);updateEmphasis({detail,scenario:scenarioId,operations:active,focus:focused,query:search,labels,selection:selected});});});
+  $effect(()=>{const detail=detailed,managed=managedCondition;if(mounted)untrack(()=>{readLayout(detail,managed);updateEmphasis({detail,scenario:scenarioId,operations:active,focus:focused,query:search,labels,selection:selected});});});
   $effect(()=>{const options={detail:detailed,scenario:scenarioId,operations:[...active],focus:focused,query:search,labels,selection:selected};untrack(()=>updateEmphasis(options));});
   onMount(()=>{mounted=true;});
   export function saveLayout(){if(!currentView)return false;try{localStorage.setItem(currentView,JSON.stringify({version:2,positions:nodes.map(n=>({id:n.id,x:n.position.x,y:n.position.y})),viewport}));return true;}catch{return false;}}
-  export function resetLayout(){try{localStorage.removeItem(storagePrefix+(detailed?'detailed':'simple'));}catch{/* Optional browser layout. */}readLayout(detailed);updateEmphasis({detail:detailed,scenario:scenarioId,operations:active,focus:focused,query:search,labels,selection:selected});void tick().then(()=>fit());}
+  export function resetLayout(){try{localStorage.removeItem(layoutKey(detailed,managedCondition));}catch{/* Optional browser layout. */}readLayout(detailed,managedCondition);updateEmphasis({detail:detailed,scenario:scenarioId,operations:active,focus:focused,query:search,labels,selection:selected});void tick().then(()=>fit());}
   export function fit(){
     if(!width||!height||!nodes.length)return;
     // Children are constrained to their groups. Root rectangles therefore bound
@@ -144,7 +160,7 @@
   function inspectNode({node,event}:{node:Node;event:MouseEvent|TouchEvent}){if(node.type!=='component'||(event.target instanceof Element&&event.target.closest('button')))return;inspect((node.data.inspectId as string)||node.id);}
 </script>
 
-<div class="integration-map" class:detailed bind:clientWidth={width} bind:clientHeight={height} data-testid="integration-graph" data-view={detailed ? 'detailed' : 'simple'}>
+<div class="integration-map" class:detailed bind:clientWidth={width} bind:clientHeight={height} data-testid="integration-graph" data-view={detailed ? 'detailed' : 'simple'} data-boundary={managedCondition ? 'managed' : 'standalone'}>
   <SvelteFlow
     id="citizen-integration-map"
     bind:nodes bind:edges bind:viewport {nodeTypes}
@@ -152,6 +168,7 @@
     deleteKey={null} zoomOnDoubleClick={false} panOnScroll={false}
     nodeDragThreshold={4} elevateNodesOnSelect={false} zIndexMode="manual" defaultMarkerColor="#9dafb9"
     onnodeclick={inspectNode}
+    onnodedragstop={() => { if(managedCondition)nodes=keepHostCallerOutside(nodes); }}
     oninit={() => { if (!restoredViewport) void tick().then(() => fit()); }}
     aria-label="Interactive NeMo integration map"
   >

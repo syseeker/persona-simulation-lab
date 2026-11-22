@@ -1,5 +1,54 @@
 # Verification Record
 
+## Audit corrections and append-only report · 22 November 2026
+
+The user authorized original audit findings **1, 2, 3 and 6** only. A hash-verified
+Git archive preserves `a4a5f73`. The [full original audit](audits/2026-11-22-integration-audit.md)
+is retained as an unchanged prefix, followed by new findings and the same complete
+report with updated statuses. UserSim teaching (4), private-file navigation (5),
+newly identified managed component-proof scope (A9) and UX acceptance remain open.
+
+Both map levels now show request and checked-reply paths through Guardrails.
+Recorded retail managed inspection puts checks in a host-caller group outside
+OpenShell; standalone placement stays unchanged. Separate managed layout keys,
+overlap protection and an awaited overview reset preserve layout meaning. Step 9
+keeps its managed boundary during component/action inspection. Generic component
+proof links can still resolve baseline evidence; this separate gap is recorded,
+not hidden by changing native labels.
+
+Selection preferences now retain comparison ID and producing-run identity,
+validate them against the loaded scenario/recording and reject stale/foreign
+conditions. Legacy selections migrate. Scenario/lesson/playback resets clear both
+identities. Only obsolete inert-wireframe descriptions and false active Q&A claims
+were corrected; unrelated teaching, dataset components, styles and dependencies
+were preserved.
+
+**45 web unit tests**, Svelte with **zero errors/warnings**, production build,
+and **39 browser cases with zero skips** passed: 35 fixture/service/visual cases,
+three actual selected-demo reviews and the actual installed HF/NGC browser check.
+The browser suite checks both message directions, managed/standalone containment,
+inspection scope, layout reset, saved comparison/proof after reload, stale/run
+rejection and migration. **50 focused Python archive/Metadata/lesson tests** also
+passed. The historical full 727-test Python suite was not rerun for this scoped
+UI/docs/housekeeping change. An initial restricted `vitest` process timed out
+without reporting tests; the same suite passed with host access. The pre-existing
+production chunk-size advisory remains. No scenario, inference or deployment ran.
+
+The [housekeeping receipt](output-housekeeping.md#audit-follow-up-cleanup--22-november-2026)
+records **2,207 output files / 42,093,475 bytes** and **156 private review files /
+9,372,415 bytes** archived with hashes, original paths, modes, timestamps and a
+complete fresh restore before removal. Eighteen old journeys and seven focused
+retail roots left active output. Three host-verified stale PID files were removed;
+live services/logs, unknown databases, recovery locks, current demos, data and
+environments were preserved. Both archive manifests and all **389 current native
+files** were independently rechecked. Published recording bytes are unchanged.
+
+Read-only screenshots of both managed map levels and board-games return flow were
+visually inspected. Inspection used only permitted guide GET requests. Current
+links, source-archive hashes, original audit preservation and final diff scope
+passed. Publication is recorded in the commit containing this completion entry;
+`main` remains unchanged. This is correction verification, not user acceptance.
+
 ## Final guide, Metadata and selected-demo review gate · 22 November 2026
 
 Guide/publication checkpoint `c96d904` contains the complete redesign and three explicit replacement demos. The final offline suite passes **727 Python tests**. Two old recording assumptions initially failed after promotion: the historical retail test required the former failed demo, and a substring privacy check confused public course `source_ids` with a private persona `source_id`. The historical test is now explicitly pinned to its unchanged pack; a separate regression verifies the completed canonical retail scenario. Recursive privacy checks still reject the private identity and validate every public source ID against frozen courses. Native proposals remain unpublished, with delivered-content hashes matched to the public conversation. No application criterion or privacy boundary was relaxed.

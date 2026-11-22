@@ -1,6 +1,6 @@
 import {describe, expect, it} from 'vitest';
 import {components, scenarioIds, simpleBlocks} from '../lessonArchitecture';
-import {conceptOperations, validConcept, validSelection} from './selection';
+import {conceptOperations, validConcept, validSelection, recordedRoutingCondition, recordedManagedSelection} from './selection';
 
 describe('semantic teaching selections', () => {
   it('keeps conceptual identities independent from their several technical members', () => {
@@ -41,5 +41,35 @@ describe('semantic teaching selections', () => {
         expect(validSelection(scenario, true, other.id, operation.id)).toBe(false);
       }
     }
+  });
+
+  it('binds a restored comparison to the actual scenario and producing recording', () => {
+    const context={state:'recorded',scenario_id:'dreamjob',run_id:'retail-run',context:{
+      'routing-comparison.json':{conditions:[{condition_id:'retail-fixed'},{condition_id:'retail-routed'}]},
+    }};
+    expect(recordedRoutingCondition('dreamjob',context,'retail-routed','retail-run')).toBe(true);
+    expect(recordedRoutingCondition('dreamjob',context,'retail-routed')).toBe(true);
+    expect(recordedRoutingCondition('dreamjob',context,'retail-routed','previous-run')).toBe(false);
+    expect(recordedRoutingCondition('dreamjob',context,'foreign-condition','retail-run')).toBe(false);
+    expect(recordedRoutingCondition('photography',context,'retail-routed','retail-run')).toBe(false);
+    expect(recordedRoutingCondition('dreamjob',{...context,state:'planned'},'retail-routed')).toBe(false);
+    expect(recordedRoutingCondition('dreamjob',null,'retail-routed')).toBe(false);
+    expect(recordedRoutingCondition('dreamjob',{...context,context:{}},'retail-routed')).toBe(false);
+  });
+
+  it('shows managed placement only for an actual recorded managed selection', () => {
+    const context={state:'recorded',scenario_id:'dreamjob',run_id:'retail-run',context:{
+      'platform-condition.json':{condition_id:'managed-session',status:'completed'},
+    }};
+    expect(recordedManagedSelection('dreamjob','deploy',null,context)).toBe(true);
+    expect(recordedManagedSelection('dreamjob','build','platform',context)).toBe(true);
+    expect(recordedManagedSelection('dreamjob','build',null,context)).toBe(false);
+    expect(recordedManagedSelection('dreamjob','deploy','guardrails',context)).toBe(true);
+    expect(recordedManagedSelection('dreamjob','deploy','openshell',context)).toBe(true);
+    expect(recordedManagedSelection('dreamjob','safeguards','guardrails',context)).toBe(false);
+    expect(recordedManagedSelection('photography','deploy',null,context)).toBe(false);
+    expect(recordedManagedSelection('dreamjob','deploy',null,{...context,context:{}})).toBe(false);
+    expect(recordedManagedSelection('dreamjob','deploy',null,{...context,state:'planned'})).toBe(false);
+    expect(recordedManagedSelection('dreamjob','deploy',null,null)).toBe(false);
   });
 });

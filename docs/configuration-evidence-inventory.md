@@ -26,6 +26,13 @@ The retail capture pack exposes 198 Metadata rows across seven conditions, inclu
 
 The P/B/R keys and 51 requirement rows below refer only to the original audit. Their run identities, locations and findings remain unchanged so a newly complete capture cannot be mistaken for an older run's evidence.
 
+**Housekeeping location amendment, 22 November:** the old retail run `8542330d…`
+and other superseded terminal output were subsequently archived with original
+paths and verified recovery. The baseline table below retains its original
+locations as dated provenance; use the [audit follow-up recovery map](output-housekeeping.md#audit-follow-up-cleanup--22-november-2026)
+to locate those historical raw bytes. The three current demo roots above and all
+immutable public packs remain unchanged.
+
 ### Baseline demos and location keys
 
 | Key | Scenario | Current demo run | Published recording | Published teaching companion | Ignored private original |

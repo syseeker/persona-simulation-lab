@@ -1,7 +1,7 @@
 /**
- * Authored content for the isolated UX wireframe.
- * Conversations and characters are illustrative, not dataset rows, model output,
- * recorded executions, provider claims or verified course recommendations.
+ * Authored navigation, scenario outlines and Q&A for the integration guide.
+ * Static example characters/messages are not evidence. The teaching panel reads
+ * the selected demo's source-resolved profile and separately recorded execution.
  */
 
 export type NodeId =
@@ -36,7 +36,7 @@ export interface Scenario {
   preset: {
     persona: string;
     harness: 'deepagents' | 'hermes';
-    /** Planned teaching configuration, not evidence that a job or route executed. */
+    /** Teaching preset; scenario-owned recording evidence establishes execution. */
     designer: boolean;
     routing: 'fixed' | 'switchyard';
     guardrails: boolean;
@@ -78,10 +78,10 @@ export const stages: Stage[] = [
     pain: 'How do I test people with different backgrounds without changing the learner at every step?',
     component: 'Nemotron Personas · application selection',
     journey: 'Define who the application should help',
-    description: 'Inspect, sample and lock one synthetic source profile. Keep source background separate from application constraints and generated hypotheses. These wireframe characters are authored examples; no source dataset row is loaded here.',
+    description: 'Inspect and lock one synthetic source profile. Keep original background separate from application constraints and generated hypotheses. The guide resolves the selected demo’s original from its recorded source identity; static example characters are not source records.',
     input: 'A country distribution and a deliberate profile selection.',
     output: 'One locked synthetic profile with its source identity and unchanged original fields.',
-    evidence: 'Required for implementation: source distribution, revision, selected record and original hash. This wireframe contains no actual source record.',
+    evidence: 'Recorded source distribution, revision, selected original and content hash. An unavailable installed source must not be replaced with a different profile.',
     reference: 'personas',
     active: ['personas'],
     edges: [],
@@ -92,10 +92,10 @@ export const stages: Stage[] = [
     pain: 'How do I turn background data into a meaningful test without presenting invented traits as facts?',
     component: 'UserSim preparation · authored constraints · Data Designer',
     journey: 'Prepare data and simulate interaction',
-    description: 'Photography and board games use authored requests and explicit constraints, with no Designer step. Only the dream-job preset illustrates Designer preparation of hypothetical brand preferences and a salary band. Preserve original records and derived lineage; no generation occurs in this wireframe.',
+    description: 'Photography and board games use authored requests and explicit constraints, with no Designer generation. Retail learning uses a separately generated hypothetical overlay with brand preferences and a salary band. The guide inspects saved preparation without regenerating it.',
     input: 'The preset’s authored request and constraints; only dream job adds a closed generation schema.',
     output: 'A resolved authored situation, or a separately labelled hypothetical overlay for the dream-job story.',
-    evidence: 'Required: the source request and resolved scenario. Only Designer preparation additionally needs a generation specification, validation, lineage and job ledger. No job runs here.',
+    evidence: 'Saved authored situation and resolved UserSim preparation. Designer preparation additionally retains generation settings, validation, output and lineage. Inspection starts no new job.',
     reference: 'designer',
     active: ['personas', 'designer', 'usersim', 'gateway', 'records'],
     edges: ['personas-designer', 'designer-usersim', 'designer-records'],
@@ -108,7 +108,7 @@ export const stages: Stage[] = [
   "journey": "Assemble the application",
   "description": "Inspect the selected Fabric configuration, adapter, tools, fixed or routed model access and isolated conversation state. One chosen harness stays alive across public turns. Building and inspecting this configuration starts no inference.",
   "input": "The preset, selected harness, dated catalogue and bounded model/tool configuration.",
-  "output": "A planned application runtime with one supported harness and read-only course tools.",
+  "output": "A configured persistent runtime with the selected harness and read-only course tools.",
   "evidence": "Required: configuration revision, Fabric plan/Doctor outcome, selected adapter and effective tool surface. No runtime is started here.",
   "reference": "fabric",
   "active": [
@@ -136,9 +136,9 @@ export const stages: Stage[] = [
   "pain": "Can the assembled application handle this learner and retain context?",
   "component": "UserSim · Fabric · selected harness · course tools",
   "journey": "Execute the selected conversation",
-  "description": "UserSim exchanges public turns with one persistent advisor session. The harness uses the configured model and read-only course MCP. All planned live runs place the application and its course tools inside OpenShell. These authored messages are not execution evidence.",
+  "description": "UserSim exchanges public turns with the citizen advisor. Native agent turns use the configured model and read-only course MCP inside OpenShell; retail’s salary-only turn uses an application clarification before agent dispatch. The selected recording, rather than static example messages, establishes the execution.",
   "input": "One locked situation and its public learner messages.",
-  "output": "A bounded conversation with actual tool, model and lifecycle records when implemented.",
+  "output": "A saved bounded conversation with attributable tool, model and lifecycle records, plus distinct application-only turns.",
   "evidence": "Required: activation roles, public transcript, Fabric runtime identity and per-turn invoke outcomes. Private simulator context must not enter advisor inputs.",
   "reference": "usersim",
   "active": [
@@ -187,7 +187,7 @@ export const stages: Stage[] = [
   "description": "Choose a saved public turn, model call or MCP request and inspect its attributable native evidence. Relay covers target execution; application records also account for simulator, checker and judge roles. Missing correlations stay explicit.",
   "input": "The selected condition, episode, public turn and saved records.",
   "output": "An attributable path from public input through tools and model calls to the reply.",
-  "evidence": "Required: native scope identities/parents, saved tool results, role-labelled call records, failures and correlation limits. No observed trace is loaded.",
+  "evidence": "Native scope identities/parents, saved tool results, model-call accounting, failures and explicit correlation limits for the selected recording.",
   "reference": "relay",
   "active": [
     "usersim",
@@ -268,8 +268,8 @@ export const stages: Stage[] = [
   "journey": "Inspect and test behavioural policy",
   "description": "Photography keeps the application tool allowlist without native Guardrails. Board games introduces native input/output checks through a separate policy demonstration; legitimate no-match conversations stay allowed. Retail learning reuses the safeguards. Checker failure must not become an allow decision.",
   "input": "The behavioural policy, a legitimate public request and a separately selected policy probe.",
-  "output": "An allowed, blocked or failed check with its actual decision evidence when implemented.",
-  "evidence": "Required: policy revision, explicit check type, input/output identity, native decision and failures. This wireframe runs no checker or safety model.",
+  "output": "An allowed, blocked or failed check with its actual recorded decision evidence where the preset enables Guardrails.",
+  "evidence": "Policy revision, explicit check type, input/output identity, native decision and failures. Photography does not use native Guardrails; inspecting decisions never runs another check.",
   "reference": "guardrails",
   "active": [
     "usersim",
@@ -295,10 +295,10 @@ export const stages: Stage[] = [
   "pain": "Can I operate the application with verified access controls?",
   "component": "Standalone OpenShell · Helix-managed operations in scenario 3",
   "journey": "Verify runtime access and lifecycle",
-  "description": "All planned live runs contain the advisor application, one selected persistent harness and its course tools inside OpenShell. The first two presets use standalone control; retail learning adds Helix registration, deployments, sessions and jobs. No persona or private salary is baked into an image.",
+  "description": "Recorded agent executions contain the advisor application, selected persistent harness and course tools inside OpenShell. The first two presets use standalone control; retail adds a separate Helix-managed session. No persona or private salary is baked into an image.",
   "input": "The reusable application package, runtime configuration and explicit native access policy.",
   "output": "Native sandbox identity, actual invocation/enforcement records and confirmed cleanup.",
-  "evidence": "Required: effective policy and loaded revision, allowed/denied probes, invocation and cleanup. Scenario 3 also needs actual Helix lifecycle identities. No deployment occurs in this wireframe.",
+  "evidence": "Effective policy and loaded revision, allowed/denied probes, invocation and cleanup. Retail’s managed condition also has its own Helix lifecycle identities. Inspection deploys nothing.",
   "reference": "openshell",
   "active": [
     "platform",
@@ -437,9 +437,9 @@ export const personas: PersonaExample[] = [
 export const scenarioDetails: Record<ScenarioId, Partial<Record<StageId, ScenarioDetail>>> = {
   photography: {
     persona: {
-      input: 'One authored beginner who wants to learn photography.',
+      input: 'The selected original and authored photography situation.',
       output: 'The same learner throughout all nine stages.',
-      description: 'Start with the learner, not a new simulation for each tool. In the connected app, inspect and lock an actual source row; retain its revision and hash. No row has been sampled by this wireframe.',
+      description: 'Start with the same selected original throughout the story. The guide resolves its recorded source revision and hash from the installed dataset rather than sampling another row when you navigate.',
     },
     situation: {
       input: '“Beginner photography, Saturday, within S$50 before funding.”',
@@ -448,35 +448,35 @@ export const scenarioDetails: Record<ScenarioId, Partial<Record<StageId, Scenari
     },
     run: {
       input: 'One public photography request; Fabric + Deep Agents; fixed model via LiteLLM.',
-      output: 'An authored reply using the saved CC-001 facts and preserving unknown material fees.',
-      description: 'Follow UserSim’s public message into Fabric and the harness. The harness calls the model through the gateway and separately queries Course MCP for catalogue facts before replying. The needed records are the actual request, tool result and public answer. No model or tool runs in this wireframe.',
+      output: 'The recorded reply using saved CC-001 facts and preserving unknown material fees.',
+      description: 'Follow UserSim’s recorded public message into Fabric and the harness. The saved request, native course-tool result and public answer establish what executed. Opening another teaching page makes no new model or tool call.',
     },
     investigate: {
       input: 'The photography request, then the corresponding model, MCP and catalogue exchanges.',
       output: 'A clear path from Saturday/S$50 constraints to the S$10 listing and unconfirmed material fee.',
-      description: 'Use Trace a Request to follow this one exchange. In implementation, open its saved search arguments, CC-001 result, source URL and attributable Relay scopes. Highlights here explain the intended flow; they are not observed logs.',
+      description: 'Use Trace a Request to follow the saved search arguments, CC-001 result, source URL and attributable Relay scopes. Highlights explain the flow; the matching recording establishes the observed execution.',
     },
     routing: {
       input: 'The photography preset’s fixed model through LiteLLM.',
       output: 'The fixed path stays unchanged; there is no Switchyard condition or decision.',
-      description: 'Keeping routing fixed is intentional: this story teaches sourced course facts. This stage explains the choice without another run. Select the dream-job story for the Switchyard comparison; nothing routes or executes in this wireframe.',
+      description: 'Keeping routing fixed is intentional: this story teaches sourced course facts. Inspect the saved fixed dispatch without starting another run. Retail learning has the separate Switchyard comparison.',
     },
     evaluate: {
       input: 'The saved reply, original Saturday/S$50 constraints and frozen CC-001 facts.',
-      output: 'Planned assertions for a supported ID/URL, schedule and honest fee uncertainty.',
-      description: 'Check the listing and material-fee caveat before reading a total. A S$10 published fee is not proof of a S$10 all-in cost. The needed artifact is each application-authored assertion with expected/actual values and supporting facts. This preset uses no Helix SDK or Platform; no score is supplied here.',
+      output: 'Recorded application assertions for a supported ID/URL, schedule and honest fee uncertainty.',
+      description: 'Check the listing and material-fee caveat before reading the recorded criterion results. A S$10 published fee is not proof of a S$10 all-in cost. Assertions retain expected/actual values and supporting facts. This preset uses no Helix SDK or Platform.',
     },
     deploy: {
       input: 'The reusable Deep Agents application and explicit standalone OpenShell policy.',
       output: 'A standalone sandbox with its own invocation, enforcement and cleanup evidence.',
-      description: 'Historical photography/OpenShell evidence exists in the project, but is not attached to this wireframe and does not establish current readiness. This preset requires standalone OpenShell evidence without Helix services. Opening this preview creates no resource.',
+      description: 'The selected photography recording includes standalone OpenShell policy, invocation, enforcement and cleanup evidence without Helix services. It establishes that recorded execution, rather than current service readiness. Inspection creates no resource.',
     },
   },
   boardgames: {
     persona: {
-      input: 'One authored learner who wants to play board games.',
+      input: 'The selected original and authored board-games situation.',
       output: 'A stable learner whose intent is not silently rewritten.',
-      description: 'Keep the request about playing board games. An implementation records the selected source identity and original hash; this illustrative persona is not an actual corpus row.',
+      description: 'Keep the request about playing board games. The selected recording retains its own original source identity and hash; static teaching characters are not substitutes for that profile.',
     },
     situation: {
       input: '“I want to learn how to play board games.”',
@@ -485,13 +485,13 @@ export const scenarioDetails: Record<ScenarioId, Partial<Record<StageId, Scenari
     },
     run: {
       input: 'Two public turns in one conversation; Fabric + Hermes; fixed model via LiteLLM.',
-      output: 'An authored no-match followed by a clear distinction between playing board games and designing digital games.',
-      description: 'Keep the original playing goal in the same conversation when the learner asks the follow-up. This exercises context without Designer or routing changes. A useful answer preserves the no-match and rejects the irrelevant substitute. No harness invocation occurs here.',
+      output: 'A recorded no-match followed by the distinction between playing board games and designing digital games.',
+      description: 'The saved conversation keeps the original playing goal across two Hermes invocations without Designer or routing changes. Review whether the follow-up preserves the no-match and explains the irrelevant substitute. Navigation starts no new invocation.',
     },
     investigate: {
       input: 'The original request, its search result and the follow-up exchange when actually recorded.',
       output: 'Evidence that the second answer retains the original goal without inventing a class.',
-      description: 'Inspect the saved tool result and both public turns. The learner’s mention of video-game design is a clarification, not permission to replace the goal. No native payload is installed here. Preserve the pinned managed-Hermes correlation limit rather than attach an unrelated trace.',
+      description: 'Inspect the selected recording’s native tool result and both public turns. The learner’s mention of video-game design is a clarification, not permission to replace the goal. Preserve missing native correlations rather than attaching an unrelated trace.',
     },
     routing: {
       input: 'The same fixed model through LiteLLM for both Hermes turns.',
@@ -500,13 +500,13 @@ export const scenarioDetails: Record<ScenarioId, Partial<Record<StageId, Scenari
     },
     evaluate: {
       input: 'Both saved public turns and the actual catalogue search evidence.',
-      output: 'Planned checks for the initial no-match and consistent intent through the follow-up.',
+      output: 'Recorded checks for the initial no-match and consistent intent through the follow-up.',
       description: 'A supported no-match can be useful. Check that the second answer explains the skill difference without inventing a video-game-design listing or treating it as a match. Missing search evidence is distinct from a confirmed empty result; no checks execute here.',
     },
     deploy: {
       input: 'The reusable Hermes application, public conversation context and restricted course tools.',
       output: 'A standalone OpenShell conversation; no Helix SDK or Platform is required.',
-      description: 'The historical native photography preset does not represent this story. A reusable harness-compatible package and real policy/invocation records are required before claiming standalone deployment. OpenShell restricts access; it does not create catalogue coverage.',
+      description: 'The board-games recording has its own Hermes runtime, effective policy, invocation, enforcement and cleanup records. Photography’s evidence cannot substitute for those records. OpenShell restricts access; it does not create catalogue coverage.',
     },
   },
   dreamjob: {
@@ -562,27 +562,27 @@ export const faqs: FAQ[] = [
   {
     id: 'nine-stages', group: 'The learning story', stage: 'run', component: 'usersim',
     question: 'Are the nine stages nine conversations or nine public turns?',
-    answer: 'Neither. They are nine views of one scenario. Photography shows one authored exchange; board games shows two turns to clarify the original goal; dream job shows three turns for salary and budget disclosure. All retain nine stages. Designer, Switchyard and Helix are introduced in retail learning; native Guardrails starts with board games. Reading another stage never requires another run.',
+    answer: 'Neither. They are nine views of one scenario. Photography has one recorded UserSim exchange; board games has two turns to clarify the original goal; retail learning has three turns for salary and budget disclosure. All retain nine stages. Designer, Switchyard and Helix are introduced in retail; native Guardrails starts with board games. Reading another stage never requires another run.',
   },
   {
     id: 'trace-without-execution', group: 'The learning story', stage: 'investigate', component: 'records',
-    question: 'Why can I trace a request when nothing has executed?',
-    answer: 'This wireframe traces an explanatory route through the diagram. It contains no observed model call, tool payload or native span. A connected trace viewer must use attributable saved records and clearly distinguish them from this authored flow.',
+    question: 'Why can I trace a request without starting a new run?',
+    answer: 'The guide reads the selected scenario’s saved execution. The highlighted route explains component cooperation; the accompanying native scopes, tool results and invocation records establish what actually happened. Reading those records makes no model or deployment call.',
   },
   {
     id: 'live-disabled', group: 'The learning story', stage: 'run', component: 'fabric',
-    question: 'Why is live simulation disabled?',
-    answer: 'This phase reviews the UI only. The wireframe reads no persona dataset and connects to no SDK, model endpoint or runtime. Live simulation can be added only as an explicit prerequisite-checked action that creates a new saved condition.',
+    question: 'How is live simulation separate from recorded review?',
+    answer: 'Trace a Request reads one fixed demo per scenario. Simulate a Session opens separate execution controls: check prerequisites, lock a source persona and explicitly start a new saved condition. Browsing datasets, changing lessons or opening evidence never starts that execution.',
   },
   {
     id: 'source-personas', group: 'Data and context', stage: 'persona', component: 'personas',
     question: 'Are the selected personas actual Nemotron records?',
-    answer: 'No. These are authored synthetic examples. Real corpus selection must retain distribution, revision, original record and hash. Public HF profiles have no OCEAN conditioning; Singapore NGC Extended is a separate distribution.',
+    answer: 'Step 1 resolves the selected demo’s original synthetic Nemotron record against the installed distribution, revision and content hash. If it cannot match that source, the profile is unavailable; it does not display a substitute. Public HF profiles have no OCEAN conditioning; Singapore NGC Extended is a separate distribution. Static scenario examples are not source records.',
   },
   {
     id: 'designer-optional', group: 'Data and context', stage: 'situation', component: 'designer',
     question: 'Which scenario uses Designer?',
-    answer: 'Only the dream-job story illustrates Designer generation of labelled brand preferences and a salary band with lineage. Photography and board games use authored requests and explicit constraints; they have no Designer job. Reusing saved generated inputs should not regenerate them. This wireframe generates nothing.',
+    answer: 'Retail learning uses recorded Designer generation of labelled brand preferences and a salary band with lineage. Photography and board games use authored requests and explicit constraints; they have no Designer generation job. The guide reads the saved generated inputs without regenerating them.',
   },
   {
     id: 'salary-only-third', group: 'Data and context', stage: 'run', component: 'usersim',
@@ -596,13 +596,13 @@ export const faqs: FAQ[] = [
   },
   {
     id: 'hypothetical-programme', group: 'Data and context', stage: 'situation', component: 'designer',
-    question: 'Is the six-month, S$20,000 programme a sourced listing?',
-    answer: 'No. Both figures are illustrative assumptions in the third scenario, not a provider’s duration or fee. Monthly salary alone does not establish affordability, and dividing a fee over six months does not establish a payment plan.',
+    question: 'Which retail programme facts come from the source?',
+    answer: 'The selected retail snapshot records the SMU programme SF-007 as three months with a full fee of S$20,928. Check that dated source separately from the learner’s stated budget and availability. Monthly salary does not establish affordability, and a fee divided across months does not establish a payment plan or funding eligibility.',
   },
   {
     id: 'photography-fees', group: 'Execution and evidence', stage: 'investigate', component: 'catalogue',
     question: 'Does the photography listing establish a S$10 all-in price?',
-    answer: 'No. The dated CC-001 snapshot records a published S$10 course fee and a Saturday session, but its material fee is unconfirmed. The authored reply must preserve that uncertainty and cannot guarantee the total or personal funding eligibility.',
+    answer: 'No. The dated CC-001 snapshot records a published S$10 course fee and a Saturday session, but its material fee is unconfirmed. The advisor’s reply must preserve that uncertainty and cannot guarantee the total or personal funding eligibility.',
   },
   {
     id: 'boardgame-nomatch', group: 'Execution and evidence', stage: 'evaluate', component: 'mcp',
@@ -627,7 +627,7 @@ export const faqs: FAQ[] = [
   {
     id: 'app-code', group: 'Execution and evidence', stage: 'investigate', component: 'records',
     question: 'What should each internal module’s code and log links show?',
-    answer: 'Open the exact committed application call or configuration in this repository, then the selected scenario’s fixed recording. Each operation explains what to compare and whether the code hash matches the recording. Application-owned selection and validation remain labelled; missing logs never inherit another scenario’s evidence.',
+    answer: 'Open the exact committed application call, the actual settings or a clearly labelled projection, and the selected scenario/condition’s result. The explanation distinguishes application-owned decisions from SDK work. Missing logs stay unavailable and never inherit another scenario’s evidence.',
   },
   {
     id: 'sourced-not-complete', group: 'Evaluation and boundaries', stage: 'evaluate', component: 'catalogue',
@@ -637,12 +637,12 @@ export const faqs: FAQ[] = [
   {
     id: 'helix-roles', group: 'Evaluation and boundaries', stage: 'evaluate', component: 'helix',
     question: 'How do local Helix Evals and Helix Platform differ?',
-    answer: 'Helix spans agent operations, evaluation, experiments and hardening. This guide introduces its local Evals SDK and managed registration, deployments, sessions and evaluation jobs in scenario 3; the first two scenarios use application assertions without Helix. Neither a deployment status nor a narrow passing assertion certifies the whole answer. No evaluation runs in this wireframe.',
+    answer: 'Helix spans agent operations, evaluation, experiments and hardening. Retail has recorded local Evals scoring, a durable evaluation job and a separate managed registration/deployment/session. The first two scenarios use application assertions without Helix. Neither deployment status nor narrow passing criteria certify the whole answer. Inspecting saved results runs no new evaluation.',
   },
   {
     id: 'openshell-history', group: 'Evaluation and boundaries', stage: 'deploy', component: 'openshell',
     question: 'Can I inspect historical photography/OpenShell evidence here?',
-    answer: 'The project has historical photography deployment and enforcement evidence, but no recording or running service is attached to this wireframe. That history does not establish current readiness. New acceptance needs the reusable application, the selected harness and actual scenario-matching records; no persona-specific image is required.',
+    answer: 'Yes. Step 9 opens the selected photography recording’s effective policy, invocation, allowed/denied probes and cleanup evidence. This demonstrates the saved standalone execution, not current service readiness. The reusable image contains application code and course tools, not a private persona.',
   },
   {
     id: 'policy-proof', group: 'Evaluation and boundaries', stage: 'deploy', component: 'openshell',

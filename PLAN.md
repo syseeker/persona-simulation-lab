@@ -44,8 +44,32 @@ Before a round, read this plan and the relevant specification, preserve a recove
 | --- | --- | --- | --- | --- |
 | W0 | Repair saved planning and progress tracking | Complete | None | [Saved and pushed in abbb6d2](https://github.com/syseeker/persona-simulation-lab/commit/abbb6d23e78d14decc73e48e5a5dd69dc9829a9d); [verification](docs/verification.md) |
 | W1 | Complete captures, fix execution and rerun S1–S3 | Complete | W0 | Fresh selected S1/S2/S3 passed with complete captures and cleanup; source `99914ca`, sanitized publications/bindings `c96d904`; [verification](docs/verification.md). |
-| W2 | Comprehensive teaching UX revision | Verified for user review | W1 | [Full specification](docs/ux-review-spec.md); all audience/destination content, explicit bindings and browser review complete in `c96d904`; user acceptance pending. |
-| W3 | Add the Metadata tab | Verified for user review | W1 and W2 | [Inventory and table contract](docs/configuration-evidence-inventory.md); shared resolver, six-column UI, scenario/condition links and actual 51/51/198-row inventories verified; user acceptance pending. |
+| W2 | Comprehensive teaching UX revision | Partial; user review pending | W1 | Core redesign is implemented. The [append-only audit](docs/audits/2026-11-22-integration-audit.md) retains unfinished UserSim teaching (4) and managed component-proof scope (A9); technical coverage does not establish all teaching requirements or user acceptance. |
+| W3 | Add the Metadata tab | Verified with usability finding open | W1 and W2 | Shared resolver, requested table and current inventories are verified; private-original navigation (5) and user acceptance remain open. |
+| A1 | Correct audit findings 1, 2, 3 and 6 | Verified; publication pending | Read-only audit of `a4a5f73` | [Original and full updated reports](docs/audits/2026-11-22-integration-audit.md); four scoped corrections and supporting reset fix pass. Findings 4/5/A9 and user acceptance remain open. |
+
+### A1 — Scoped audit corrections
+
+The user authorized storing the full read-only audit and correcting only outstanding items **1, 2, 3 and 6**, then reproducing the report with updated statuses. The original report must remain intact; append new findings, evidence and updated assessments. This report is an audit record, not another active plan. Preserve the prior scope and detailed specifications.
+
+- [x] Preserve a recoverable `a4a5f73` source baseline and save the original audit in full.
+- [x] Show both input and checked-reply directions through Guardrails for board games and retail learning.
+- [x] Represent recorded retail managed Guardrails at the host caller boundary while preserving standalone placement and saved layouts.
+- [x] Persist and validate the selected routing condition against the selected scenario and recording, including reload and legacy preference handling.
+- [x] Archive verified superseded output with ownership/reference checks, original paths, hashes and restore verification; remove verified stale PID files, preserve live/unknown resources and correct obsolete wireframe wording.
+- [x] Verify focused behaviour, read-only navigation, archive integrity, unchanged recordings/dependencies and frozen-baseline diff; append the complete updated report and verification.
+- [ ] Commit and push the verified round to `dev`; keep `main` unchanged.
+
+Newly identified stale Q&A answers also describe the implemented guide as an inert wireframe with no recordings or dataset access. Correcting those specific false statements belongs to item 6's obsolete wording cleanup; preserve unrelated Q&A content, structure and styling. No new UserSim feature, private-file browser, scenario execution or SDK upgrade is authorized by A1.
+
+Verification: 50 focused Python tests, 45 web unit tests and all 39 browser cases
+passed, including the three current-demo reviews and installed HF/NGC browsing
+with zero skips. Both archive manifests and 389 retained native-file hashes were
+rechecked. The original audit prefix is unchanged. The report appends A8 (stale
+Q&A, corrected), A9 (managed component-proof scope, open) and A10 (layout-reset
+timing, corrected); it does not erase the original findings. Earlier checked W2
+items below record the prior implementation checkpoint; the current ledger and
+audit identify remaining gaps instead of treating those checkmarks as acceptance.
 
 ### W0 — Repair saved planning and progress tracking
 

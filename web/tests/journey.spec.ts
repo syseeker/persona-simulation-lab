@@ -592,3 +592,146 @@ test('autoplay clears comparison scope before teaching the next lesson', async (
   await page.getByRole('button', {name: 'Explain NeMo Fabric: Build the typed FabricConfig', exact: true}).click();
   await expect(page.getByTestId('journey-panel').getByRole('link', {name: 'The captured typed settings ↗', exact: true})).toHaveAttribute('href', baseline.artifacts[0].url);
 });
+
+function savedComparisonFixture() {
+  const fixture=recording('dreamjob'),inventory=metadata('dreamjob');
+  const conditions=['offline-first-comparison','offline-second-comparison'];
+  fixture.context['routing-comparison.json']={conditions:conditions.map((id,index)=>({condition_id:id,
+    label:`Offline comparison ${index+1}`,purpose:'Saved comparison selection test',status:'failed',
+    cleanup_confirmed:true,calls:0,usage:[],native_decisions:[]}))};
+  const baseline=inventory.rows.find((row:Data)=>row.id==='CAP-FAB-01');
+  for(const condition of conditions){
+    inventory.conditions.push({id:condition,purpose:'fixed-candidate',execution_status:'failed'});
+    inventory.rows.push({...baseline,condition_id:condition,condition_purpose:'fixed-candidate',artifacts:[{
+      ...baseline.artifacts[0],path:`${condition}-fabric-config.json`,
+      url:`${repo}/blob/offline-saved-selection/recordings/dreamjob/${demos.dreamjob}/${condition}-fabric-config.json`,
+    }]});
+  }
+  return {fixture,inventory,conditions,baseline};
+}
+
+test('saved retail comparison restores its run-bound proof and semantic destination after reload',async({page})=>{
+  const {fixture,inventory,conditions}=savedComparisonFixture(),methods:string[]=[];
+  page.on('request',request=>{if(request.url().includes('/api/journey/'))methods.push(request.method());});
+  await page.route('**/api/journey/lesson?scenario_id=dreamjob',route=>route.fulfill({json:fixture}));
+  await page.route('**/api/journey/metadata?scenario_id=dreamjob',route=>route.fulfill({json:inventory}));
+  await page.goto('/');await page.getByLabel('Scenario',{exact:true}).selectOption('dreamjob');
+  await stage(page,4);await page.getByRole('button',{name:'Turn 3',exact:true}).click();
+  await stage(page,7);await page.getByRole('button',{name:'Detailed',exact:true}).click();
+  await page.getByLabel('Routing comparison condition',{exact:true}).selectOption(conditions[1]);
+  await page.getByRole('button',{name:'Explain NeMo Fabric: Build the typed FabricConfig',exact:true}).click();
+  await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('persona-lab-guide-wireframe:selection:v4')!)))
+    .toMatchObject({version:6,scenarioId:'dreamjob',stageId:'routing',turnIndex:2,selected:'fabric',operationId:'fabric.config',conditionId:conditions[1],conditionRunId:demos.dreamjob});
+  await page.reload();
+  await expect(page.locator('.step-title')).toHaveText('Build the typed FabricConfig');
+  await expect(page.getByTestId('step-counter')).toHaveText('Step 7 of 9');
+  await expect(page.getByTestId('journey-panel').getByRole('link',{name:'The captured typed settings ↗',exact:true}))
+    .toHaveAttribute('href',new RegExp(`${conditions[1]}-fabric-config\\.json$`));
+  await page.getByRole('button',{name:/Back to step 7/}).click();
+  await expect(page.getByLabel('Routing comparison condition',{exact:true})).toHaveValue(conditions[1]);
+  await page.getByLabel('Scenario',{exact:true}).selectOption('boardgames');
+  await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('persona-lab-guide-wireframe:selection:v4')!)))
+    .toMatchObject({scenarioId:'boardgames',conditionId:'',conditionRunId:''});
+  await page.getByLabel('Scenario',{exact:true}).selectOption('dreamjob');await stage(page,7);
+  await expect(page.getByLabel('Routing comparison condition',{exact:true})).toHaveValue(conditions[0]);
+  await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('persona-lab-guide-wireframe:selection:v4')!)))
+    .toMatchObject({scenarioId:'dreamjob',conditionId:conditions[0],conditionRunId:demos.dreamjob});
+  expect(methods.length).toBeGreaterThan(0);expect(methods.every(method=>method==='GET')).toBe(true);
+});
+
+for(const invalid of ['foreign-condition','previous-run'])test(`saved comparison rejects ${invalid} after the selected recording loads`,async({page})=>{
+  const {fixture,inventory,conditions,baseline}=savedComparisonFixture();
+  await page.route('**/api/journey/lesson?scenario_id=dreamjob',route=>route.fulfill({json:fixture}));
+  await page.route('**/api/journey/metadata?scenario_id=dreamjob',route=>route.fulfill({json:inventory}));
+  await page.addInitScript(({condition,run})=>localStorage.setItem('persona-lab-guide-wireframe:selection:v4',JSON.stringify({
+    version:6,page:'map',scenarioId:'dreamjob',stageId:'routing',detailed:true,focused:true,
+    selected:'fabric',operationId:'fabric.config',turnIndex:2,conditionId:condition,conditionRunId:run,
+  })),{condition:invalid==='foreign-condition'?'foreign-recording-condition':conditions[1],
+    run:invalid==='previous-run'?demos.photography:demos.dreamjob});
+  await page.goto('/');
+  await expect(page.locator('.step-title')).toHaveText('Build the typed FabricConfig');
+  await expect(page.getByTestId('journey-panel').getByRole('link',{name:'The captured typed settings ↗',exact:true}))
+    .toHaveAttribute('href',baseline.artifacts[0].url);
+  await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('persona-lab-guide-wireframe:selection:v4')!).conditionId)).toBe('');
+});
+
+test('version five semantic selections migrate without changing turn or destination',async({page})=>{
+  await page.addInitScript(()=>localStorage.setItem('persona-lab-guide-wireframe:selection:v4',JSON.stringify({
+    version:5,page:'map',scenarioId:'boardgames',stageId:'build',detailed:false,focused:true,
+    selected:'advisor',operationId:'advisor.0',turnIndex:1,
+  })));
+  await page.goto('/');
+  await expect(page.locator('.step-title')).toHaveText('Connect the selected agent');
+  await expect(page.getByTestId('step-counter')).toHaveText('Step 3 of 9');
+  await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('persona-lab-guide-wireframe:selection:v4')!)))
+    .toMatchObject({version:6,scenarioId:'boardgames',turnIndex:1,selected:'advisor',operationId:'advisor.0',conditionId:''});
+});
+
+test('guarded maps show both message directions while photography keeps its direct reply',async({page})=>{
+  await page.goto('/');
+  for(const scenario of ['photography','boardgames','dreamjob']){
+    await page.getByLabel('Scenario',{exact:true}).selectOption(scenario);
+    for(const audience of ['Simplified','Detailed']){
+      await page.getByRole('button',{name:audience,exact:true}).click();
+      const learner=audience==='Detailed'?'usersim':'learner',advisor=audience==='Detailed'?'fabric':'advisor';
+      for(const [source,target] of scenario==='photography'?[[learner,advisor],[advisor,learner]]:
+        [[learner,'guardrails'],['guardrails',advisor],[advisor,'guardrails'],['guardrails',learner]]){
+        await expect(page.locator(`.svelte-flow__edge[data-id="${source}-${target}-request"]`)).toHaveCount(1);
+      }
+      if(scenario!=='photography')await expect(page.locator(`.svelte-flow__edge[data-id="${advisor}-${learner}-request"]`)).toHaveCount(0);
+    }
+  }
+});
+
+test('only the recorded managed lesson or platform inspection changes the workload boundary',async({page})=>{
+  const methods:string[]=[];
+  page.on('request',request=>{if(request.url().includes('/api/journey/'))methods.push(request.method());});
+  await page.goto('/');await page.getByLabel('Scenario',{exact:true}).selectOption('dreamjob');
+  for(const audience of ['Simplified','Detailed']){
+    await page.getByRole('button',{name:audience,exact:true}).click();
+    const graph=page.getByTestId('integration-graph');
+    await expect(graph).toHaveAttribute('data-boundary','standalone');
+    const layoutKey=`persona-lab-guide-wireframe:integration-map:v2:${audience==='Detailed'?'detailed':'simple'}`;
+    await page.getByRole('button',{name:'Save layout',exact:true}).click();
+    await expect.poll(()=>page.evaluate(key=>localStorage.getItem(key),layoutKey)).not.toBeNull();
+    await stage(page,9);
+    if(await page.getByRole('button',{name:'Follow this step on the map →',exact:true}).count())
+      await page.getByRole('button',{name:'Follow this step on the map →',exact:true}).click();
+    await expect(graph).toHaveAttribute('data-boundary','managed');
+    const caller=await page.locator('.svelte-flow__node[data-id="zone-caller"]').boundingBox();
+    const sandbox=await page.locator('.svelte-flow__node[data-id="zone-sandbox"]').boundingBox();
+    const guard=await page.locator('.svelte-flow__node[data-id="guardrails"]').boundingBox();
+    expect(caller).not.toBeNull();expect(sandbox).not.toBeNull();expect(guard).not.toBeNull();
+    expect(caller!.y+caller!.height).toBeLessThanOrEqual(sandbox!.y);
+    expect(guard!.y).toBeGreaterThanOrEqual(caller!.y);
+    expect(guard!.y+guard!.height).toBeLessThanOrEqual(caller!.y+caller!.height);
+    await page.getByRole('button',{name:'Reset layout',exact:true}).click();
+    await expect(graph).toHaveAttribute('data-boundary','standalone');
+    await expect.poll(()=>page.evaluate(key=>localStorage.getItem(key),layoutKey)).toBeNull();
+    await page.getByRole('button',{name:`Inspect ${audience==='Detailed'?'Helix managed operations':'Managed operations'}`,exact:true}).click();
+    await expect(graph).toHaveAttribute('data-boundary','managed');
+    await page.getByRole('button',{name:`Inspect ${audience==='Detailed'?'NeMo Guardrails · input / output':'Behavioural safeguards'}`,exact:true}).click();
+    await expect(graph).toHaveAttribute('data-boundary','managed');
+    await page.getByRole('button',{name:`Inspect ${audience==='Detailed'?'OpenShell · trusted supervisor':'Controlled execution'}`,exact:true}).click();
+    await expect(graph).toHaveAttribute('data-boundary','managed');
+    await stage(page,8);
+    await expect(graph).toHaveAttribute('data-boundary','standalone');
+    await page.getByRole('button',{name:`Inspect ${audience==='Detailed'?'Helix managed operations':'Managed operations'}`,exact:true}).click();
+    await expect(graph).toHaveAttribute('data-boundary','managed');
+    await page.getByRole('button',{name:`Inspect ${audience==='Detailed'?'NeMo Guardrails · input / output':'Behavioural safeguards'}`,exact:true}).click();
+    await expect(graph).toHaveAttribute('data-boundary','standalone');
+  }
+  await page.getByLabel('Scenario',{exact:true}).selectOption('boardgames');
+  await stage(page,9);await expect(page.getByTestId('integration-graph')).toHaveAttribute('data-boundary','standalone');
+  expect(methods.length).toBeGreaterThan(0);expect(methods.every(method=>method==='GET')).toBe(true);
+});
+
+test('retail without a managed recording keeps its standalone boundary',async({page})=>{
+  const fixture=recording('dreamjob');delete fixture.context['platform-condition.json'];
+  await page.route('**/api/journey/lesson?scenario_id=dreamjob',route=>route.fulfill({json:fixture}));
+  await page.goto('/');await page.getByLabel('Scenario',{exact:true}).selectOption('dreamjob');
+  await stage(page,9);
+  await expect(page.getByTestId('integration-graph')).toHaveAttribute('data-boundary','standalone');
+  await page.getByRole('button',{name:'Inspect Managed operations',exact:true}).click();
+  await expect(page.getByTestId('integration-graph')).toHaveAttribute('data-boundary','standalone');
+});

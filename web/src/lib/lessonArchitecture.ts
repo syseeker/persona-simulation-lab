@@ -438,8 +438,10 @@ export const architectureEdges:ArchitectureEdge[]=[
   edge('learner-records','usersim','records','Public trajectory / activations','telemetry',['usersim.finalize','records.read']),
   edge('records-checks','records','checks','Saved replies + frozen facts','telemetry',['checks.evaluate']),
   edge('records-helix','records','helix','Evaluation input / results','telemetry',['helix.evaluate'],{managed:true}),
-  edge('input-guard','usersim','guardrails','Public input / checked reply','request',['guardrails.check'],{guard:true}),
-  edge('guard-advisor','guardrails','fabric','Allowed message / output check','request',['guardrails.check'],{guard:true}),
+  edge('input-guard','usersim','guardrails','Public learner message','request',['usersim.loop','guardrails.check'],{guard:true}),
+  edge('guard-advisor','guardrails','fabric','Allowed input → RunRequest','request',['guardrails.check','fabric.invoke'],{guard:true}),
+  edge('advisor-guard','fabric','guardrails','RunResult → output check','request',['fabric.result','guardrails.check'],{guard:true}),
+  edge('guard-learner','guardrails','usersim','Checked public reply','request',['guardrails.check','usersim.finalize'],{guard:true}),
   edge('supervisor-workload','openshell','fabric','Enforced workload boundary','control',['openshell.create','openshell.execute','openshell.probe']),
   edge('platform-supervisor','platform','openshell','Managed deployment / session','control',['platform.register','platform.session'],{managed:true}),
 ];
@@ -447,6 +449,14 @@ export function edgesFor(scenario:string) {
   const p=preset(scenario);
   return architectureEdges.filter(e=>(!e.guard||p.guardrails)&&(!e.routed||p.routing==='switchyard')&&(!e.managed||p.helix)
     && !(p.guardrails&&['learner-advisor','advisor-learner'].includes(e.id)));
+}
+
+export type ArchitectureBox = {x:number;y:number;width:number;height:number};
+/** A restored or dragged host group must not visually become sandboxed. */
+export function hostCallerPosition(caller:ArchitectureBox,sandbox:ArchitectureBox):{x:number;y:number} {
+  const overlaps=caller.x<sandbox.x+sandbox.width&&caller.x+caller.width>sandbox.x
+    &&caller.y<sandbox.y+sandbox.height&&caller.y+caller.height>sandbox.y;
+  return overlaps?{x:sandbox.x+(sandbox.width-caller.width)/2,y:sandbox.y-caller.height-28}:{x:caller.x,y:caller.y};
 }
 export function lessonsUsing(component:string,scenario:string) {
   return lessonIds.filter(id=>lessonFor(scenario,id).operations.some(op=>operationById[op].component===component));

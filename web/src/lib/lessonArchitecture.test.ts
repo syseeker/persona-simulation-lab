@@ -1,5 +1,5 @@
 import {describe,it,expect} from 'vitest';
-import {components,componentById,operationById,lessonFor,lessonIds,scenarioIds,simpleBlocks,edgesFor,componentUsed,sourceId} from './lessonArchitecture';
+import {components,componentById,operationById,lessonFor,lessonIds,scenarioIds,simpleBlocks,edgesFor,componentUsed,sourceId,hostCallerPosition} from './lessonArchitecture';
 
 describe('one architecture across all scenario lessons',()=>{
   it('gives all 27 combinations an explained operation path and verification contract',()=>{
@@ -46,5 +46,32 @@ describe('one architecture across all scenario lessons',()=>{
     expect(edgesFor('photography').find(e=>e.id==='harness-relay')?.kind).toBe('telemetry');
     expect(edgesFor('boardgames').some(e=>e.id==='learner-advisor')).toBe(false);
     expect(edgesFor('boardgames').some(e=>e.id==='guard-advisor')).toBe(true);
+  });
+  it('traces both public-message directions through native safeguards in each guarded preset',()=>{
+    for(const scenario of ['boardgames','dreamjob']){
+      const edges=edgesFor(scenario);
+      for(const [source,target] of [['usersim','guardrails'],['guardrails','fabric'],['fabric','guardrails'],['guardrails','usersim']]){
+        const edge=edges.find(e=>e.source===source&&e.target===target);
+        expect(edge,`${scenario}: ${source} → ${target}`).toBeDefined();
+        expect(edge?.operations).toContain('guardrails.check');
+      }
+      expect(edges.some(e=>e.source==='usersim'&&e.target==='fabric')).toBe(false);
+      expect(edges.some(e=>e.source==='fabric'&&e.target==='usersim')).toBe(false);
+    }
+    const photography=edgesFor('photography');
+    expect(photography.find(e=>e.id==='learner-advisor')).toMatchObject({source:'usersim',target:'fabric'});
+    expect(photography.find(e=>e.id==='advisor-learner')).toMatchObject({source:'fabric',target:'usersim'});
+    expect(photography.some(e=>e.source==='guardrails'||e.target==='guardrails')).toBe(false);
+  });
+  it('restores a host caller outside a moved sandbox while retaining valid custom positions',()=>{
+    const sandbox={x:900,y:200,width:552,height:920};
+    const overlapping={x:1000,y:250,width:552,height:166};
+    const restored=hostCallerPosition(overlapping,sandbox);
+    expect(restored).toEqual({x:900,y:6});
+    expect(restored.y+overlapping.height).toBeLessThan(sandbox.y);
+    const outside={x:200,y:250,width:552,height:166};
+    expect(hostCallerPosition(outside,sandbox)).toEqual({x:200,y:250});
+    const touching={x:900,y:34,width:552,height:166};
+    expect(hostCallerPosition(touching,sandbox)).toEqual({x:900,y:34});
   });
 });

@@ -7,7 +7,7 @@
   import PanelDivider from '#lib/PanelDivider.svelte';
   import DatasetsPage from '#lib/DatasetsPage.svelte';
   import MetadataPage from '#lib/MetadataPage.svelte';
-  import {conceptOperations,validSelection} from '../lib/teaching/selection';
+  import {conceptOperations,validSelection,recordedRoutingCondition,recordedManagedSelection} from '../lib/teaching/selection';
   import {stages,scenarios,faqs,legacyStageIds} from '#lib/content.ts';
   import {learningResources} from '#lib/learningResources.ts';
   import {lessonFor,componentById,operationById,resolveComponent} from '#lib/lessonArchitecture.ts';
@@ -17,6 +17,7 @@
   let liveRuns=$state<Record<string,string|null>>({photography:null,boardgames:null,dreamjob:null});
   let personaSource=$state('ngc'),lockedPersona=$state<Record<string,any>|null>(null);
   let reviewContext=$state<Record<string,any>|null>(null),metadataFocus=$state(''),metadataCondition=$state(''),conditionId=$state('');
+  let conditionRunId=$state('');
   let setupOpen=$state(true),detailed=$state(false),stageIndex=$state(0),turnIndex=$state(0),focused=$state(false);
   let search=$state(''),qaSearch=$state(''),qaGroup=$state('all'),labels=$state(true);
   let selected=$state<string|null>(null),operationId=$state(''),playing=$state(false),notice=$state(''),restored=$state(false),reducedMotion=$state(false);
@@ -35,29 +36,30 @@
   const lastStage=stages.length-1,faqGroups=[...new Set(faqs.map(f=>f.group))];
   const stage=$derived(stages[stageIndex]);
   const applicationOnly=$derived(focused&&!selected&&scenarioId==='dreamjob'&&['run','investigate'].includes(stage.id)&&!!reviewContext?.context?.['application-turns.json']?.some((r:Record<string,any>)=>r.public_turn===turnIndex+1));
+  const managedCondition=$derived(!liveMode&&focused&&recordedManagedSelection(scenarioId,stage.id,selected,reviewContext));
   const activeOperations=$derived(!focused?[]:applicationOnly?['usersim.loop','models.admit','models.request','models.alias','guardrails.check']:selected?detailed?(operationId?[operationId]:componentById[selected]?.operations.map(o=>o.id)||[]):conceptOperations(scenarioId,selected,operationId):lessonFor(scenarioId,stage.id).operations);
   const filteredFaqs=$derived(faqs.filter(f=>(qaGroup==='all'||f.group===qaGroup)&&`${f.question} ${f.answer}`.toLowerCase().includes(qaSearch.toLowerCase())));
   function stopPlayback(){playing=false;}
   function scrollInspectorTop(){void tick().then(()=>document.querySelector('.trace-inspector .inspector-content')?.scrollTo({top:0,behavior:'instant'}));}
   function overview(){focused=false;selected=null;operationId='';search='';}
   function changePage(next:Page){stopPlayback();page=next;if(next==='map')overview();}
-  async function locate(index:number,node?:string){stopPlayback();page='map';liveMode=false;stageIndex=Math.max(0,index);conditionId='';selected=null;operationId='';focused=true;
+  async function locate(index:number,node?:string){stopPlayback();page='map';liveMode=false;stageIndex=Math.max(0,index);conditionId='';conditionRunId='';selected=null;operationId='';focused=true;
     if(node&&componentById[resolveComponent(node)]&&!lessonFor(scenarioId,stage.id).operations.some(id=>operationById[id].component===resolveComponent(node)))selected=resolveComponent(node);
     await tick();graph?.fit();scrollInspectorTop();}
-  function chooseStage(index:number){stopPlayback();liveMode=false;stageIndex=Math.max(0,Math.min(lastStage,index));conditionId='';selected=null;operationId='';focused=true;scrollInspectorTop();}
+  function chooseStage(index:number){stopPlayback();liveMode=false;stageIndex=Math.max(0,Math.min(lastStage,index));conditionId='';conditionRunId='';selected=null;operationId='';focused=true;scrollInspectorTop();}
   function inspect(component:string,operation=''){stopPlayback();if(!validSelection(scenarioId,detailed,component,operation))return;selected=component;operationId=operation;focused=true;scrollInspectorTop();}
   function returnToPlayer(){selected=null;operationId='';scrollInspectorTop();}
-  function scenarioChanged(){stopPlayback();liveMode=false;stageIndex=0;turnIndex=0;conditionId='';if(reviewContext?.scenario_id!==scenarioId)reviewContext=null;metadataFocus='';overview();notice='';scrollInspectorTop();}
+  function scenarioChanged(){stopPlayback();liveMode=false;stageIndex=0;turnIndex=0;conditionId='';conditionRunId='';if(reviewContext?.scenario_id!==scenarioId)reviewContext=null;metadataFocus='';overview();notice='';scrollInspectorTop();}
   function changeDetail(value:boolean){stopPlayback();detailed=value;overview();scrollInspectorTop();}
   function saveLayout(){notice=graph?.saveLayout()?`${detailed?'Detailed':'Simplified'} layout saved in this browser.`:'Browser storage is unavailable. This layout has not been saved.';}
-  function resetLayout(){stopPlayback();overview();graph?.resetLayout();notice='Default layout restored for this view. The whole architecture is visible.';}
+  async function resetLayout(){stopPlayback();overview();await tick();graph?.resetLayout();notice='Default layout restored for this view. The whole architecture is visible.';}
   onMount(()=>{
     reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     try{
       const savedWidth=JSON.parse(localStorage.getItem(panelWidthKey)||'null');
       if(Number.isFinite(savedWidth)&&savedWidth>=panelMin&&savedWidth<=900)preferredPanelWidth=savedWidth;
       const saved=JSON.parse(localStorage.getItem(storageKey)||localStorage.getItem('persona-lab-guide-wireframe:selection:v3')||localStorage.getItem('persona-lab-guide-wireframe:selection:v2')||'null');
-      if([2,3,4,5].includes(saved?.version)){
+      if([2,3,4,5,6].includes(saved?.version)){
         if(['why','map','qa','datasets','metadata'].includes(saved.page))page=saved.page;
         if(scenarios.some(s=>s.id===saved.scenarioId))scenarioId=saved.scenarioId;
         if(typeof saved.setupOpen==='boolean')setupOpen=saved.setupOpen;
@@ -66,7 +68,11 @@
         if(Number.isInteger(saved.turnIndex)&&saved.turnIndex>=0&&saved.turnIndex<currentScenario.turns.length)turnIndex=saved.turnIndex;
         if(saved.version>=4){
           focused=saved.focused===true;
-          if(saved.version===5&&validSelection(scenarioId,detailed,saved.selected,saved.operationId||'')){selected=saved.selected;operationId=saved.operationId||'';}
+          if(saved.version>=5&&validSelection(scenarioId,detailed,saved.selected,saved.operationId||'')){selected=saved.selected;operationId=saved.operationId||'';}
+          if(saved.version>=6&&typeof saved.conditionId==='string'&&/^[a-zA-Z0-9-]{1,128}$/.test(saved.conditionId)
+            &&typeof saved.conditionRunId==='string'&&/^[a-f0-9-]{36}$/.test(saved.conditionRunId)){
+            conditionId=saved.conditionId;conditionRunId=saved.conditionRunId;
+          }
           if(saved.liveRuns&&typeof saved.liveRuns==='object')for(const candidate of scenarios){
             const id=saved.liveRuns[candidate.id];if(typeof id==='string'&&/^[a-f0-9-]{36}$/.test(id))liveRuns[candidate.id]=id;
           }
@@ -78,9 +84,16 @@
     }catch{/* Browser preferences are optional. */}
     restored=true;
   });
-  $effect(()=>{const snapshot={version:5,page,scenarioId,setupOpen,stageId:stage.id,turnIndex,detailed,selected,operationId,focused,liveRunId:liveRuns[scenarioId]||null,liveRuns};if(restored)try{localStorage.setItem(storageKey,JSON.stringify(snapshot));}catch{/* Optional preference. */}});
+  $effect(()=>{
+    const context=reviewContext,id=conditionId;
+    if(!context||context.scenario_id!==scenarioId)return;
+    if(id&&!recordedRoutingCondition(scenarioId,context,id,conditionRunId||undefined)){
+      conditionId='';conditionRunId='';
+    }else conditionRunId=id?context.run_id:'';
+  });
+  $effect(()=>{const snapshot={version:6,page,scenarioId,setupOpen,stageId:stage.id,turnIndex,detailed,selected,operationId,focused,conditionId,conditionRunId,liveRunId:liveRuns[scenarioId]||null,liveRuns};if(restored)try{localStorage.setItem(storageKey,JSON.stringify(snapshot));}catch{/* Optional preference. */}});
   $effect(()=>{const width=preferredPanelWidth;if(restored)try{if(width===null)localStorage.removeItem(panelWidthKey);else localStorage.setItem(panelWidthKey,JSON.stringify(width));}catch{/* Optional preference. */}});
-  $effect(()=>{if(!playing||page!=='map')return;const position=stageIndex;const timer=window.setTimeout(()=>{if(position<lastStage){stageIndex=position+1;conditionId='';selected=null;operationId='';scrollInspectorTop();}else playing=false;},4200);return()=>window.clearTimeout(timer);});
+  $effect(()=>{if(!playing||page!=='map')return;const position=stageIndex;const timer=window.setTimeout(()=>{if(position<lastStage){stageIndex=position+1;conditionId='';conditionRunId='';selected=null;operationId='';scrollInspectorTop();}else playing=false;},4200);return()=>window.clearTimeout(timer);});
 </script>
 
 <svelte:head><title>Building Citizen Apps with NeMo · Integration Guide</title></svelte:head>
@@ -155,7 +168,7 @@
       <div class="workspace" bind:clientWidth={workspaceWidth} style:--inspector-width={`${panelWidth}px`}>
         <div class="graph-column">
           <div class="canvas-caption"><span>{focused?'Highlighted paths explain the selected lesson or operation; logs establish what actually ran.':'Whole architecture · select a lesson or operation to follow its information flow.'}</span><span class="illustration-label">{hasDemo?'Curated scenario recording':'Planned scenario · no execution evidence'}</span></div>
-          <div class="graph-host"><IntegrationGraph bind:this={graph} {detailed} {scenarioId} {applicationOnly} active={activeOperations} {focused} {search} {labels} {selected} oninspect={inspect} /></div>
+          <div class="graph-host"><IntegrationGraph bind:this={graph} {detailed} {scenarioId} {applicationOnly} {managedCondition} active={activeOperations} {focused} {search} {labels} {selected} oninspect={inspect} /></div>
           <div class="graph-footer"><div class="flow-legend"><span><i class="prep"></i>Preparation</span><span><i class="request"></i>Request / response</span><span><i class="telemetry"></i>Evidence</span><span><i class="control"></i>Deployment control</span></div><span>{reducedMotion ? 'Reduced motion' : 'Arrows indicate direction'}</span></div>
           <div class="graph-context"><strong>{currentScenario.title}</strong><span>{managed?'Standalone baseline + separate Helix-managed OpenShell session':hasDemo?'Standalone OpenShell · no Helix':'Standalone OpenShell preview · no Helix'} · {routing==='switchyard'?'Fixed baseline + Switchyard comparisons':'Fixed model via LiteLLM'} · {harness==='deepagents'?'Fabric + Deep Agents':'Fabric + Hermes'}</span></div>
         </div>

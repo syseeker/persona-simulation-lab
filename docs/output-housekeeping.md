@@ -76,6 +76,50 @@ python3 .private/history/20261122T120816466155Z-superseded-publication-attempts/
 Choose a destination that does not exist. Recovery verifies data and writes files;
 it does not promote a demo, execute a probe or overwrite current recordings.
 
+## Audit follow-up cleanup · 22 November 2026
+
+The append-only [integration audit](audits/2026-11-22-integration-audit.md) found
+that generated history had accumulated again. The user authorized correcting
+that backlog. The verified archive is
+`.private/history/2026-11-22-audit-follow-up-housekeeping/`.
+
+- **2,207 output files / 42,093,475 bytes:** 18 superseded terminal journey runs,
+  seven focused retail replay/probe roots, old foundation smoke/check output and
+  dataset presentation captures. Failed and cancelled outcomes remain unchanged.
+- **156 private review files / 9,372,415 bytes:** obsolete screenshots and
+  verification material, with duplicate payloads retained once and every original
+  path preserved in the private manifest.
+- Three stale PID files were removed only after their owning-host processes were
+  confirmed absent. The live web-review PID/log, live services and their output,
+  live-owned run/job/workbench records, unknown runtime databases, recovery locks,
+  current configuration, data and compatible environments remain in place.
+- All **389 current demo-native files** remain byte-identical. The three selected
+  raw demos remain under `runs/journeys/`; published recording packs are unchanged.
+
+Owner and open-file checks were repeated immediately before removal. Every copied
+file was checked for hash, size, mode and timestamp, and restored into a fresh
+temporary directory before the active original was removed. The completion,
+eligibility, ownership and restore receipts remain beside the manifests.
+`runs/` decreased from 2,577 to 447 files; `artifacts/` from 171 to 94. These counts
+describe this cleanup checkpoint, not a permanent quota for future current work.
+
+Older verification entries and baseline inventory rows deliberately retain their
+original `runs/...` locations as historical provenance. For those archived paths,
+read `output-manifest.json` and `outputs/ORIGINAL_PATH` in this archive, or recover
+to a new destination. Private review paths are mapped by `private-manifest.json`;
+`reference-inventory.txt` records references found during the move. Never execute
+historical probe scripts merely to recover their output.
+
+```bash
+python3 scripts/check_output_archive.py .private/history/2026-11-22-audit-follow-up-housekeeping
+python3 .private/history/2026-11-22-audit-follow-up-housekeeping/recover.py .private/history/2026-11-22-audit-follow-up-housekeeping --restore /tmp/NEW_OUTPUT_DESTINATION
+python3 .private/history/2026-11-22-audit-follow-up-housekeeping/recover-private.py .private/history/2026-11-22-audit-follow-up-housekeeping --restore /tmp/NEW_PRIVATE_DESTINATION
+```
+
+Both recovery destinations must be absent. Recovery does not overwrite current
+files, promote evidence or start any application process. This archive is local
+and ignored; it is absent from a public clone.
+
 ## Current versus historical documentation
 
 README, plan, walkthrough, architecture, contracts and verification describe the

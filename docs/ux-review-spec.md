@@ -1,6 +1,13 @@
 # Integration Guide UX review specification
 
-Status: **Implemented and verified for developer review. User acceptance remains pending.**
+Status: **Core redesign implemented; audit gaps remain. User acceptance is pending.**
+
+The append-only [22 November audit](audits/2026-11-22-integration-audit.md) is the
+current requirement assessment. Its requested diagram, persistence and
+housekeeping corrections (1/2/3/6) are verified. UserSim explanation gaps (4),
+private-original navigation (5) and managed component-proof scope (A9) remain
+open. Earlier “Verified for review” labels below preserve the prior coverage
+assessment; they do not override those identified gaps or imply user acceptance.
 
 Recorded: 22 November 2026, Asia/Singapore. This is a supporting specification of the [single master plan](../PLAN.md), not an alternative plan or a new approval gate. Requirements marked Verified for review below have implementation and technical/editorial review evidence in the verification record. This is not a claim of user acceptance. The future UserSim extensions remain research items, rather than silently implemented features.
 

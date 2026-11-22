@@ -29,3 +29,21 @@ export function validSelection(scenario:string,detailed:boolean,block:string,act
   if(!action.startsWith(block+'.')||!/^(?:0|[1-9]\d*)$/.test(action.slice(block.length+1)))return false;
   return conceptOperations(scenario,block,action).length>0;
 }
+
+type RecordedContext = {state?:string;scenario_id?:string;run_id?:string;context?:Record<string,any>};
+
+/** A persisted comparison belongs to one recording, not just a scenario name. */
+export function recordedRoutingCondition(scenario:string,context:RecordedContext|null,id:string,runId?:string):boolean {
+  if(scenario!=='dreamjob'||context?.state!=='recorded'||context.scenario_id!==scenario||!context.run_id||!id
+    ||(runId!==undefined&&runId!==context.run_id))return false;
+  const conditions=context.context?.['routing-comparison.json']?.conditions;
+  return Array.isArray(conditions)&&conditions.some(condition=>condition.condition_id===id);
+}
+
+/** Inspect the managed boundary only when this recording actually contains it. */
+export function recordedManagedSelection(scenario:string,stage:string,component:string|null,context:RecordedContext|null):boolean {
+  if(scenario!=='dreamjob'||context?.state!=='recorded'||context.scenario_id!==scenario||!context.run_id)return false;
+  const managed=context.context?.['platform-condition.json'];
+  return typeof managed?.condition_id==='string'&&managed.condition_id.length>0
+    &&(component==='platform'||stage==='deploy');
+}

@@ -1,5 +1,26 @@
 # Architecture Decisions
 
+## 22 November 2026: Preserve audit history and correct the represented execution scope
+
+Keep the full original audit as an immutable prefix and append new findings and
+updated complete reports. The user selected findings 1, 2, 3 and 6 for this round;
+record additional gaps rather than silently expanding the implementation scope.
+Technical checks establish specific behaviour, not teaching quality or acceptance.
+
+Guarded presets need four directed message edges. Recorded managed retail checks
+belong to a host caller outside OpenShell, while standalone checks stay inside.
+Use separate saved managed layouts and retain the managed lesson scope during
+component inspection. An overview reset waits for its scope change before
+resetting the corresponding layout. Bind a persisted comparison to its producing
+recording, so a valid-looking condition from another run cannot select its proof.
+
+Move only verified superseded output after owning-host/open-file/reference checks,
+copy/hash verification and full restore verification. Preserve live-owned and
+unknown runtime state, failures, current demo sources and historical path maps.
+Correct false inert-wireframe copy without redesigning unrelated Q&A. UserSim
+authoring/Sim2Real teaching, private-original navigation and managed component
+proof propagation remain explicitly open.
+
 ## 22 November 2026: Accept an explicit board-games distinction without broad semantic claims
 
 The board-games assertion missed a valid reply that described video-game design/programming as a separate skill set from board-game playing/strategy. Accept that narrowly scoped, same-sentence contrast while rejecting direct negation and unrelated separate skills. Keep the actual no-match, native-tool and persistent-thread checks unchanged. The phrase check still does not certify complete semantic or pedagogical quality. Preserve the original failed evaluation; verify the revised detector against synthetic counterexamples and a fresh full conversation.
