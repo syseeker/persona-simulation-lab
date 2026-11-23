@@ -212,3 +212,15 @@ Code links resolve allowlisted identifiers and repository-relative paths; logs u
 The user subsequently requested `dev` from GitHub `main`, with each completed round committed and pushed. Fixed sanitized recording packs are checked in under `recordings/`, with scenario-specific GitHub log permalinks and interpreted proof facts in the panel. Separate manifest-verified companions add configuration/lifecycle/normalized-result projections from each matching run without changing immutable packs. Preserve private failures and originals outside Git. All three scenarios have independent packs; partial verification stays visible. Future live-log linking is deferred; keep `main` unchanged until requested.
 
 Update the current README, [walkthrough](docs/learning-guide.md), architecture, contracts, decisions and [verification](docs/verification.md) together. The [output housekeeping policy](docs/output-housekeeping.md) covers private archives and recovery; these are separate from the immutable public v0.1/v0.2 source archives. Raw profiles, conversations and traces remain outside Git.
+
+
+## Review-runtime amendment · 23 November 2026
+
+The reported review-server import overlay was investigated and the exact owned
+port-5189 Vite process restarted after preserving its log/PID and hashed source
+baseline. Browser rendering at the shared URL was checked for all three scenarios,
+both map levels, Detailed operations, five tabs and reload. The [append-only A11 record](docs/audits/2026-11-22-integration-audit.md#a11--review-server-error-overlay-and-readiness-check--23-november-2026)
+retains the failed HTTP-only readiness assumption and diagnostic cancellations.
+No application source, recordings, SDK versions or scenario execution changed.
+This completed runtime-recovery round is identified by the Git commit containing
+this entry; developer acceptance and findings 4, 5 and A9 remain open.

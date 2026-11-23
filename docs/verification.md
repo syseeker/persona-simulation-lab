@@ -347,3 +347,16 @@ Scoped implementation `4881f79166c5b751ecb5200c82391c53a1cc41cb` was pushed to
 records the actual revision, preserved original hash and remaining findings. A1 is
 complete in the master plan; this documentation completion entry changes no
 application behaviour. `main` remains `b49cd85b506848e2d3ac64372387b7c9408adb33`.
+
+
+## Review URL recovery · 23 November 2026
+
+The [A11 incident record](audits/2026-11-22-integration-audit.md#a11--review-server-error-overlay-and-readiness-check--23-november-2026)
+retains the reported Vite overlay, incomplete earlier HTTP-only check, likely
+stale-state diagnosis and owned review-server restart. A real Chromium check at
+port 5189 rendered three scenarios, both map levels, Detailed operation results,
+five tabs, Metadata and reload. No page/module/HTTP errors or API writes occurred.
+Two strict diagnostic assertions rejected three cancelled reader GETs; those
+cancellations and matching HTTP-200/rendered results remain in the private receipt.
+No source/dependency/recording changed and no inference/deployment ran. This is
+runtime recovery verification, not new scenario execution or UX acceptance.

@@ -443,3 +443,39 @@ inference or deployment was executed during this correction round.
 **Still open:** UserSim authoring/Sim2Real teaching (4), convenient private-original
 evidence navigation (5), managed component-proof scope (A9), and your acceptance
 of the teaching experience (7). Completion of A1 does not close those findings.
+
+
+## A11 — Review-server error overlay and readiness check · 23 November 2026
+
+**Reported:** the user opened the review URL and saw a Vite import-error overlay
+for `teaching/OperationObservation.svelte`. The preceding readiness check fetched
+the HTML and saved-run endpoints but did not render the application in a browser.
+That was insufficient to establish a usable review link.
+
+**Diagnosis and recovery:** the component is present, tracked and readable, and
+its import matches exactly. Both affected modules compiled with HTTP 200, and a
+fresh Chromium session rendered the map before restart. Stale Vite/HMR error
+state is the likely explanation; the original browser's internal state was not
+captured, so this is an inference rather than a proven source defect. The exact
+owned port-5189 Vite process, running since 20 November, was restarted after its
+command, directory and ownership were checked. The previous log/PID and a hashed
+source baseline were preserved. No simulation, provider or deployment service
+was restarted. No application source, dependency or recording changed.
+
+**Observed after recovery:** Chromium at the actual review URL rendered all three
+selected personas/scenarios, Simplified maps, Detailed Fabric configuration
+operations and their observed results, all five tabs, Metadata and reload. Both
+affected JavaScript modules loaded successfully. There were zero page exceptions,
+module-load errors, HTTP failures or API writes. Seven screenshots and request
+receipts remain under ignored `.private/review/` for this incident.
+
+Two diagnostic checks initially rejected three cancelled photography GET requests
+under a blanket zero-cancellations assertion. Those results remain recorded.
+Each cancelled reader also has a matching HTTP-200 response and its rendered
+output; the three `ERR_ABORTED` events are retained as cancellations, not erased
+or called successful requests. They do not reproduce the import-error overlay.
+
+**Status:** review rendering recovered and browser-verified. The user should
+hard-refresh the existing tab. Future link-readiness claims must include an actual
+browser module/render check at the exact shared URL. Findings 4, 5, A9 and teaching
+UX acceptance remain open; this incident does not change their status.
