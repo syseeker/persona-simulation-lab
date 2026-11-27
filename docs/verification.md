@@ -94,6 +94,19 @@ no exposures. Local screenshots, imported payloads, SQLite storage and process
 receipts remain ignored. Four final focused browser cases and the dragged-group
 layout case also passed after the full 42-case run.
 
+**Published:** implementation
+[`6ec971e64552e21ae5463e5f0c375f0c247dd7ea`](https://github.com/syseeker/persona-simulation-lab/commit/6ec971e64552e21ae5463e5f0c375f0c247dd7ea)
+is on `origin/dev`; remote `main` remains
+`b49cd85b506848e2d3ac64372387b7c9408adb33`. The stable local production review URL is
+`http://127.0.0.1:5193/`. Its credential-free guide worker and actual browser render
+were verified, and the committed source/new managed-companion links were read back
+from GitHub at that revision. The older review service was left untouched.
+An actual browser check with Phoenix stopped still displayed five photography
+scopes and the course-search evidence, with its local Phoenix link absent. After
+owned-service restart, the link returned and all 94 records remained unchanged;
+no import ran. Both managed configuration links rendered without unavailable
+states or page errors.
+
 ## Audit corrections and append-only report · 22 November 2026
 
 The user authorized original audit findings **1, 2, 3 and 6** only. A hash-verified

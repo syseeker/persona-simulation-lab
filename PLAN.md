@@ -4,7 +4,7 @@
 
 **Last amended: 27 November 2026. This is the single active delivery plan.** The [canonical North Star](docs/project-goals.md) remains unchanged. It defines why the project exists; this file defines what happens next and how progress is tracked.
 
-**Current round — W4, Verified; publication pending:** the v0.3.0 implementation addresses all 48 review corrections with the original titles preserved. The approved body style, condition-scoped evidence/navigation, orthogonal diagrams, Metadata provenance/consolidation, in-app execution viewer and local Phoenix historical import are technically verified. No scenario reruns or existing SDK upgrades occurred. The [dated feedback register](docs/ux-review-spec.md#27-november-2026-feedback-148--v030) retains every request, approved writing reference and implementation result. Baseline `7974db4`, all 389 retained native files, immutable recordings and the complete pre-round audit are protected by `.private/history/2026-11-27-v030-baseline/`. Current results are in the [verification receipt](docs/verification.md#v030-developer-review--27-november-2026). Earlier delivery/status entries below describe their dated checkpoints, not user acceptance of W4.
+**Current round — W4, Complete for developer review:** the v0.3.0 implementation addresses all 48 review corrections with the original titles preserved. The approved body style, condition-scoped evidence/navigation, orthogonal diagrams, Metadata provenance/consolidation, in-app execution viewer and local Phoenix historical import are technically verified and published on `dev` in `6ec971e64552e21ae5463e5f0c375f0c247dd7ea`. No scenario reruns or existing SDK upgrades occurred. The [dated feedback register](docs/ux-review-spec.md#27-november-2026-feedback-148--v030) retains every request, approved writing reference and implementation result. Baseline `7974db4`, all 389 retained native files, immutable recordings and the complete pre-round audit are protected by `.private/history/2026-11-27-v030-baseline/`. Current results are in the [verification receipt](docs/verification.md#v030-developer-review--27-november-2026). Earlier delivery/status entries below describe their dated checkpoints, not user acceptance of W4.
 
 The user is developer zero and a one-person development team. The guide must teach enough background to understand a mechanism, make an engineering decision, inspect how that decision becomes effective configuration and interpret an actual result. Quiet, coherent teaching and precise code review take precedence over product lists, repeated tables and decorative proof links.
 
@@ -245,7 +245,7 @@ collector exclusion for this round only.
 - [x] Implement read-only in-app execution viewer and isolated local Phoenix historical import.
 - [x] Verify all 94 historical spans, privacy, idempotence and zero model/deployment execution during inspection.
 - [x] Review all 54 lesson/view pages and reachable selections; run relevant automated/browser/archive checks.
-- [ ] Append actual verification/audit outcomes; scan final diff and staged data; commit/push verified round to dev.
+- [x] Append actual verification/audit outcomes; scan final diff and staged data; commit/push verified round to dev. Implementation: `6ec971e64552e21ae5463e5f0c375f0c247dd7ea`.
 
 Selected demos and SDK pins remain unchanged. The application now displays
 v0.3.0 · Developer review; protocol/storage/recording versions retain their own
@@ -253,5 +253,7 @@ identities. Main remains unchanged. Current checks: 759 Python tests, 69 web uni
 tests, 42 browser cases, zero Svelte errors/warnings, production build, Ruff,
 documentation/archive integrity and actual Phoenix read-back/browser review.
 Four final focused browser cases and the dragged-sandbox geometry case also
-passed. Publication follows the final staged-content scan. This checklist is
-implementation tracking, not a new approval gate or UX acceptance.
+passed. The final staged-content scan found no private-data/credential exposure;
+publication to origin/dev was verified, with origin/main still at
+`b49cd85b506848e2d3ac64372387b7c9408adb33`. This checklist is implementation tracking,
+not a new approval gate or UX acceptance.

@@ -558,3 +558,30 @@ all earlier follow-ups and A11, retains SHA-256
 The earlier 22,452-byte original prefix remains contained within that unchanged
 prefix. No new scenario, model experiment, SDK upgrade or deployment occurred.
 Publication is tracked in W4; `main` remains unchanged.
+
+
+## Publication receipt · 27 November 2026 · v0.3.0
+
+Implementation commit
+[`6ec971e64552e21ae5463e5f0c375f0c247dd7ea`](https://github.com/syseeker/persona-simulation-lab/commit/6ec971e64552e21ae5463e5f0c375f0c247dd7ea)
+was pushed to `origin/dev`. Remote `main` was read back unchanged at
+`b49cd85b506848e2d3ac64372387b7c9408adb33`. All 69 staged implementation files passed
+the publication scan; only three new sanitized review-companion files were added
+under `recordings/`. No private runtime output was published. All protected hashes
+and the complete pre-round audit prefix were reverified after the commit.
+
+A separate owned production review server at `http://127.0.0.1:5193/` renders the
+first-page version badge and execution viewer without inference credentials.
+Actual Chromium inspection found no page errors or execution requests. Committed
+source references and both new managed companion links resolve to the exact
+implementation revision and were fetched from GitHub. The older port-5189 review
+server timed out on guide APIs and was left untouched; it is not the delivery URL.
+Local ownership, screenshots and readiness receipts remain ignored. The subsequent
+documentation-only completion commit contains this receipt and closes W4's
+publication checklist. UX acceptance remains open.
+
+The final actual-browser outage check kept the in-app photography scopes and
+course-tool evidence usable while Phoenix was stopped. Its link disappeared and
+returned after the owned service restarted. All 94 records persisted with no
+import. Both new managed configuration links rendered without unavailable states
+or page errors. The guide and local Phoenix remain running for review.
