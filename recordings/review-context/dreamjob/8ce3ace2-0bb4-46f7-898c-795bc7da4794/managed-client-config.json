@@ -1,0 +1,41 @@
+{
+  "schema": "citizen-managed-configuration-review/v1",
+  "scenario_id": "dreamjob",
+  "run_id": "8ce3ace2-0bb4-46f7-898c-795bc7da4794",
+  "condition_id": "24dd1181-bcee-4f6c-83ca-55ade99262da",
+  "source_sha256": "ecd1e9a169408549d3ccb8f48ec122d24de1cb02a5c42300b10ce15618ebaf91",
+  "representation": "Sanitized configuration capture; omitted private connection material must be supplied locally.",
+  "configuration": {
+    "client": {
+      "base_url": "http://127.0.0.1:8080",
+      "workspace": "persona-lab",
+      "target": "local",
+      "authentication_configured": false,
+      "max_retries": 0,
+      "timeout_seconds": 15,
+      "sdk_versions": {
+        "nemo-helix": "0.10.0",
+        "nemo-fabric": "0.6.1",
+        "nemo-relay": "0.11.0"
+      }
+    },
+    "selected_executor": {
+      "name": "lab-openshell",
+      "backend": "openshell",
+      "config": {
+        "gateway_endpoint": "https://127.0.0.1:17670",
+        "platform_egress": {
+          "host": "host.docker.internal",
+          "port": 8080
+        },
+        "serve_workdir": "/tmp",
+        "landlock_compatibility": "hard_requirement"
+      },
+      "tls_configured": true
+    },
+    "executor_configuration_sha256": "6dd1b372c9d0bc6f40ef433b7898de6d32dbc88cef7145df4bb0e2c4a83ec5f2",
+    "scope": "local executor configuration selected for this SDK process; remote server state is not introspected",
+    "private_connection_material_published": false
+  },
+  "secondary_source_sha256": {}
+}

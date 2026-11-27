@@ -14,6 +14,8 @@ from urllib.parse import quote
 
 from .captures import REGISTRY, REQUIREMENTS, RULES
 from .guide_sources import _git, repository_url
+from .capture_semantics import artifact_semantics
+from .guide_review_context import companion as review_companion
 from .settings import ROOT
 
 PACKS = ROOT / 'recordings/captures'
@@ -204,6 +206,7 @@ def metadata(scenario_id='photography') -> dict:
                 raise ValueError('Unknown public capture publication kind')
             artifacts.append({'id': identity, 'path': name, 'url': links[name], 'kind': kind,
                 'source_kind': artifact.get('source_role'), 'sha256': digest,
+                'source_schema': artifact.get('source_schema') or private[source_ids[0]].get('schema'),
                 'privacy': 'projection' if kind == 'application-projection' else 'public',
                 'status': 'exists', 'link_status': 'committed' if links[name] else 'not-committed'})
         public = [artifact for artifact in artifacts if artifact['privacy'] != 'private']
@@ -219,6 +222,17 @@ def metadata(scenario_id='photography') -> dict:
             'artifacts': artifacts})
     if {row['id'] for row in rows} != set(REQUIREMENTS) or referenced != set(files):
         raise ValueError('Published inventory has missing requirements or unbound files')
+    supplement = review_companion(scenario_id, run_id, root=ROOT)
+    for artifact in supplement['artifacts']:
+        matches = [row for row in rows if row['id'] == artifact['requirement_id'] and row['condition_id'] == artifact['condition_id']]
+        if len(matches) != 1:
+            raise ValueError('Review-context capture has no matching condition')
+        matches[0]['artifacts'].append(artifact)
+        matches[0]['filenames'] = sorted(set(matches[0]['filenames'] + [artifact['path']]))
+    for item in rows:
+        for artifact in item['artifacts']:
+            if artifact['privacy'] != 'private':
+                artifact.update(artifact_semantics(item['id'], artifact))
     return {'schema': 'citizen-guide-metadata/v1', 'scenario_id': scenario_id, 'run_id': run_id,
         'available': True, 'inference_calls_for_inspection': 0, 'rows': rows,
         'conditions': list(conditions.values()),

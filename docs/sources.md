@@ -91,3 +91,12 @@ UserSim did not provide a repository skill file in the inspected tree; its publi
 ## Application Framework
 
 [SvelteKit 3 configuration](https://svelte.dev/docs/kit/@sveltejs-kit-vite), [Node adapter](https://svelte.dev/docs/kit/adapter-node), and installed types govern the web app. The build preserves SvelteKit 3.2.0, Svelte 5.57.3 and TypeScript 6.0.3, adding the accepted wireframe's Svelte Flow 2.0.1 graph package. Saved replies use the existing Marked/DOMPurify renderer with active-markup/image restrictions.
+
+
+## v0.3.0 inspection references · verified 27 November 2026
+
+- [Phoenix 22.1.0 release](https://github.com/Arize-ai/phoenix/releases/tag/arize-phoenix-v22.1.0): pinned in the new isolated historical-viewer environment.
+- [Phoenix configuration](https://github.com/Arize-ai/phoenix/blob/arize-phoenix-v22.1.0/src/phoenix/config.py): loopback binding, local SQLite storage and disabled external resources/telemetry.
+- [Helix evaluation](https://docs.nvidia.com/nemo-helix/v0.10/documentation/evaluate-models): local `nhx_evals_sdk` and durable `nemo_evals.sdk` APIs supplied by the Helix distribution.
+- [Helix evaluator rename](https://docs.nvidia.com/nemo-helix/v0.10/documentation/evaluate-models/upgrading-from-evaluator): Helix's own namespace migration. The separate [legacy Evaluator project](https://github.com/NVIDIA-NeMo/Evaluator) and Gym transition are not ownership of the installed Helix APIs.
+- [Data Designer releases](https://github.com/NVIDIA-NeMo/DataDesigner/releases): 1.0.1 is available; these recordings retain the tested 0.10.0 environment and UserSim's separately constrained 0.9.7. A documentation refresh is not an SDK upgrade.

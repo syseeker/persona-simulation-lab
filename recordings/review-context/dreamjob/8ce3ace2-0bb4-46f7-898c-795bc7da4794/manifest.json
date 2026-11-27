@@ -1,0 +1,28 @@
+{
+  "schema": "citizen-review-context/v1",
+  "scenario_id": "dreamjob",
+  "run_id": "8ce3ace2-0bb4-46f7-898c-795bc7da4794",
+  "recording_manifest_sha256": "6aa51d35d145f18dc79674950eebddc928e2638be0a00a473101f30dfa38a8ab",
+  "capture_manifest_sha256": "9227b68c956bea64366384f5b293c6906d55b464cb68e5b0e23f20a40d28c40e",
+  "files": {
+    "managed-client-config.json": {
+      "requirement_id": "CAP-PLAT-01",
+      "condition_id": "24dd1181-bcee-4f6c-83ca-55ade99262da",
+      "sha256": "be245762909a9d946816d76595c700fd1d0b145eaab1089fbc163c81616e8be1",
+      "source_artifact_id": "48fbf0cb914a1f83c406b34b",
+      "source_sha256": "ecd1e9a169408549d3ccb8f48ec122d24de1cb02a5c42300b10ce15618ebaf91",
+      "secondary_source_sha256": {}
+    },
+    "managed-agent-config.json": {
+      "requirement_id": "CAP-PLAT-02",
+      "condition_id": "24dd1181-bcee-4f6c-83ca-55ade99262da",
+      "sha256": "8d3d67e69ce223133fcb988229cf243dfcf25d8cf15745be0aaa95a966826788",
+      "source_artifact_id": "f6e743a8e173a5e02def10c8",
+      "source_sha256": "71d17aadc8af56c7ea1f3f7164f912da070c0fa0e02d8f1eede5ddbe3fb5e0bf",
+      "secondary_source_sha256": {
+        "platform-deployment.json": "60f246c1bb9fc6e4919adefd3c57065143cefaaac3429fa83b7b0f738282c306"
+      }
+    }
+  },
+  "notice": "Offline supplement from unchanged same-run captures. No model, agent, evaluation or deployment was executed."
+}

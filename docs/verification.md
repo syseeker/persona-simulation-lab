@@ -1,5 +1,99 @@
 # Verification Record
 
+## v0.3.0 developer review · 27 November 2026
+
+The approved feedback 1–48 revision is implemented against recoverable baseline
+`7974db434e78f1c7186274287ba6675e55066a84`. Existing lesson, component and operation
+titles remain unchanged. The approved body style now covers all **54 lesson/view
+pages**, **90 Simplified destinations** and **180 Detailed destinations**. The
+first page displays **v0.3.0 · Developer review** at its top right. Python/web
+release declarations and runtime status agree; SDK pins and protocol/schema
+versions retain their separate identities. This is technical verification, not
+the user's acceptance of teaching clarity.
+
+Completed checks:
+
+- **759 Python tests passed** with `.venv/bin/python -m pytest -q`, including
+  condition isolation, source/projection integrity, managed-companion tampering,
+  execution readers, privacy filters and idempotent historical imports.
+- **69 web unit tests passed** with `npm test` on the host. The sandbox's
+  `asyncio.to_thread` wakeup hung two worker tests; the unchanged suite passed on
+  the host. No worker behavior or deadline was weakened to obtain that result.
+- **42 Chromium browser cases passed**, using a fresh loopback review server and
+  the explicit three current demo IDs. They include all actual scenario/view
+  lessons, exact source/evidence links, original identity, installed HF/NGC
+  browsing, generated Designer fields, Turn 1 defaults, fixed/routed emphasis,
+  managed policy/configuration/Metadata scope, playback, saved node movement and
+  layout, panel resizing, reduced motion and read-only execution inspection.
+  Default geometry and actual DOM checks cover all six scenario/view maps;
+  managed and narrow views were also captured. No guide inspection issued an
+  inference, simulation, registration or deployment request.
+- Svelte/TypeScript reported **zero errors and warnings**; the production build
+  passed. Its existing large-bundle advisory remains. Ruff, local documentation
+  links/anchors and the **173-file / 3,773,514-byte** v0.2 source archive passed.
+
+Metadata defaults to the relevant condition and groups identical settings only
+by content hash, schema and semantic role. Retail retains its **198 authoritative
+inventory rows across seven conditions**; All conditions presents **51 requirement
+groups**, while its baseline filter has **45 relevant entries**. Distinct results
+and links remain condition-specific. The new sanitized managed client/agent
+companions verify both their original capture bindings and the secondary public
+deployment source before exposing configuration fields. Existing packs and their
+manifests were not rewritten.
+
+Routing figures were reconciled with recorded conditions: MiniMax fixed has four
+attempts; same-pool routing has five attempts, one retained HTTP 429, four routing
+decisions and a separately recorded **30.001-second** retry wait. The other three
+conditions retain five/four/four attempts respectively. Each successful comparison
+has **24 criterion results**, not 24 model calls. Tokens and summed request durations
+are displayed with unknown values preserved; they are neither end-to-end latency
+nor a benchmark ranking. Phoenix's optional monetary figures use bundled pricing
+estimates, rather than measured billing.
+
+The isolated **Phoenix 22.1.0** service imported **82 Relay spans plus 12 Helix
+Intake spans**, across **nine conditions / ten native trace groups**, directly as
+OTLP Protobuf. Read-back verified deterministic IDs, native parent relationships,
+statuses, timestamps and filtered payloads. Repeat import added **zero** spans.
+An actual owned stop/restart made guide links unavailable while stopped, preserved
+SQLite history and restored the same project/trace links. The in-app reader remains
+available independently; opening a page or link never starts/imports anything.
+Chromium also displayed the actual photography model → course search → model
+sequence, tool input/results and final reply in Phoenix. Local browser guards
+allowed reads and GraphQL queries and observed no external requests or mutations.
+
+The local import contains **51 filtered input/output pairs**: 48 Relay model/tool
+pairs and three managed tool pairs. Private original profiles, UserSim prompts,
+credentials, system/developer messages and reasoning fields were absent in the
+94-span read-back. Phoenix runs on loopback without inference credentials, with
+telemetry/external resources disabled and ignored local SQLite storage.
+
+Historical limits remain visible. The managed raw Intake file was not source-hash
+bound, so its 12 imported records come from the hash-bound public trace projection;
+managed model payloads remain unavailable. Six records lack end times and display
+explicit unknown-duration markers. Original timestamp nanoseconds are preserved
+in attributes; Phoenix displays microsecond precision using the installed Intake
+loader's UTC convention. Missing parents stay missing. Neither viewer invents a
+gateway-call, activation or public-turn join. S1's two judge purposes are explicitly
+derived from saved activation order, matching usage and native gate/quality trace
+kinds. Configured skills, possible subagents and memory access are not presented
+as observed execution without evidence.
+
+All **389 retained native files** and **751 pre-existing public/historical files**
+still match the pre-round baseline. The audit's complete **52,753-byte** pre-round
+prefix has SHA-256
+`cf38c78dc16bf07b447af7ae53727adadf15949ca712e2c9c388b935470f175b`.
+Source profiles, old failures, warnings and archives remain unchanged. No scenario
+rerun, model experiment, SDK upgrade or unrelated redesign occurred. Current
+selected demo identities remain those documented below. The master W4 checklist
+tracks publication separately; `main` remains unchanged.
+
+The publication scan checked **69 staged files**, including only three new
+sanitized companion files under `recordings/`, against configured credential
+values, credential-shaped literals and prohibited private paths/fields. It found
+no exposures. Local screenshots, imported payloads, SQLite storage and process
+receipts remain ignored. Four final focused browser cases and the dragged-group
+layout case also passed after the full 42-case run.
+
 ## Audit corrections and append-only report · 22 November 2026
 
 The user authorized original audit findings **1, 2, 3 and 6** only. A hash-verified

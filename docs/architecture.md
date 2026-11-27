@@ -75,7 +75,7 @@ One root-owned context retains scenario, lesson, operation and public turn acros
 
 `guide_lessons.py` binds observations to one verified pack and an independently verified companion. `capture_registry.json` and `captures.py` define capture requirements; `guide_metadata.py` resolves the selected public capture manifest for both Metadata rows and inline requirement references. Neither reader discovers private history, a newer run or another scenario's logs. Condition-specific settings/results require the matching condition; the two run-owned Switchyard summaries are explicit aggregates, not fallback proof. Entering another lesson clears the comparison selection. Public-turn receipts distinguish application-only clarification from real Fabric invocations, including the missing native subtree on an application-only turn.
 
-Code links target allowlisted committed symbols. Settings links target actual captured configuration or clearly labelled projections; they do not reuse the calling Python file as a configuration substitute. Fabric's typed object is assembled directly in code, whereas its public JSON snapshots are review projections. Inline references with multiple public files open Metadata at the matching requirement/condition instead of guessing a file. Library architecture references belong to library pages. Viewing another destination starts no inference, resets no episode and changes no workload ownership. Missing native correlations remain explicit; raw previews and generic cross-check sections are absent. Retained artifact APIs remain compatible and future live-log changes are deferred.
+Code links target allowlisted committed symbols. Settings links target actual captured configuration or clearly labelled projections; they do not reuse the calling Python file as a configuration substitute. Fabric's typed object is assembled directly in code, whereas its public JSON snapshots are review projections. Inline references with multiple public files open Metadata at the matching requirement/condition instead of guessing a file. Library architecture references belong to library pages. Viewing another destination starts no inference, resets no episode and changes no workload ownership. Missing native correlations remain explicit; generic cross-check sections are absent; v0.3.0 adds purposeful expandable execution details. Retained artifact APIs remain compatible and future live-log changes are deferred.
 
 Metadata returns only manifest-bound public paths and opaque private identities. It verifies scenario/run/condition bindings, file hashes, safe nested paths and source-to-projection relationships. A GitHub URL requires the exact public bytes at the committed revision. Private originals have no public path or URL; capture availability, privacy and execution outcome are independent. The selected demos have complete inventories; an older pack without one still returns unavailable registry rows rather than reconstructed capture claims. Creating an export alone does not promote a selected demo.
 
@@ -107,3 +107,25 @@ These are current source entry points. Historical source bytes and documentation
 ## Output retention
 
 Superseded run output and runtime artifacts are in ignored, manifest-verified private history. Active or unresolved owner records remain in place. [Housekeeping and recovery](output-housekeeping.md) preserves historical provenance without enabling application execution or changing the public source archives.
+
+
+## Historical execution inspection · v0.3.0
+
+The guide resolves one typed scenario/run/condition/public-turn scope for its map,
+observations and proof links. Standalone is the default deployment; selecting the
+managed condition switches both boundaries and evidence. Fixed routing does not
+highlight Switchyard as executed. A retail clarification uses the application
+path without creating a native invocation.
+
+The read-only execution service consumes immutable curated captures and exposes
+a safe DTO to the existing SvelteKit/worker boundary. Metadata shares the same
+condition identity and gains explicit artifact provenance. An obstacle-aware
+orthogonal router computes paths and label positions from current graph geometry;
+OpenShell groups, manual placement, saved layouts and pan/zoom remain interactive.
+
+Local Phoenix is a separate inspection process, not a new live Relay subscriber.
+An explicit importer converts retained ATOF/managed Intake records to OTLP Protobuf
+and verifies imported IDs, hierarchy and timestamps. It cannot reconstruct omitted
+managed model payloads or unavailable duration. The public guide remains usable
+when Phoenix is stopped. Existing runtime SDK environments and selected demos are
+unchanged; only the isolated observability environment is new.

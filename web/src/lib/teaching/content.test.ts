@@ -17,7 +17,9 @@ describe('destination-owned teaching content', () => {
       expect(simple.title).toBe(detailed.title);
       expect(simple.intro).not.toBe(detailed.intro);
       for (const page of [simple, detailed]) {
-        expect(page.intro.split(' ').length).toBeGreaterThan(20);
+        const approvedShortOpening = scenario === 'photography' && page === simple && ['run', 'evaluate'].includes(lesson);
+        expect(page.intro.split(' ').length).toBeGreaterThan(approvedShortOpening ? 5 : 20);
+        expect(text(page).split(/\s+/).length).toBeGreaterThan(60);
         expect(page.sections.flatMap(section => section.observation ? [section.observation] : [])).toEqual([lesson]);
         expect(page.sections.map(section => section.heading)).not.toContain('Why this matters');
         expect(text(page)).not.toContain('Check your implementation');
@@ -67,9 +69,28 @@ describe('destination-owned teaching content', () => {
     expect(run).toContain('not a third Fabric result');
     const routing = text(lessonPage('dreamjob', 'routing', true));
     expect(routing).toContain('MiniMax/Mistral');
-    expect(routing).toContain('Gemma/GLM failures');
+    for (const condition of ['fixed-candidate', 'switchyard', 'capable-access', 'available-fixed', 'available-switchyard']) {
+      expect(routing).toContain(condition);
+    }
+    expect(routing).not.toContain('Gemma/GLM failures');
     expect(routing).not.toContain('all conditions passed');
     expect(text(lessonPage('boardgames', 'routing', true))).toContain('not contain a native Switchyard decision');
+  });
+
+  it('keeps the approved first-scenario opening and explains the actual request counts', () => {
+    expect(lessonPage('photography', 'run', false).intro).toBe('UserSim now writes Caroline’s opening message:');
+    expect(text(lessonPage('photography', 'persona', false))).toContain('Caroline is her preferred English name');
+    expect(text(lessonPage('photography', 'run', false))).toContain('two model requests and one course search');
+    expect(text(lessonPage('photography', 'investigate', false))).toContain('not missing conversation turns');
+    expect(text(lessonPage('photography', 'deploy', false))).toContain('separate boundary tests, not actions requested by Caroline');
+  });
+
+  it('explains conceptual sequences in connected prose instead of orphan outlines', () => {
+    for (const scenario of scenarioIds) for (const block of simpleBlocks(scenario)) {
+      for (const action of [undefined, ...block.rows.map((_, index) => `${block.id}.${index}`)]) {
+        expect(simplePage(scenario, block.id, action).sections.some(section => section.flow?.length)).toBe(false);
+      }
+    }
   });
 
   it('references actual capture requirements and never adds generic architecture links to action pages', () => {

@@ -594,6 +594,7 @@ class JourneyService:
         action = params.pop('action', None)
         keys = {'presets': set(), 'readiness': set(), 'sample': {'source'}, 'start': {'spec'}, 'list': {'scenario_id'},
                 'lesson': {'scenario_id'}, 'demo-persona': {'scenario_id'}, 'metadata': {'scenario_id'},
+                'execution': {'scenario_id', 'condition_id', 'public_turn'},
                 'get': {'run_id'}, 'trace': {'run_id'}, 'cancel': {'run_id'}, 'recover': {'run_id'},
                 'source': {'component', 'module'}, 'artifacts': {'run_id'}, 'artifact': {'run_id', 'artifact_id'}}
         if action not in keys or set(params) - keys[action]:
@@ -606,6 +607,9 @@ class JourneyService:
         if action == 'metadata':
             from .guide_metadata import metadata
             return metadata(**params)
+        if action == 'execution':
+            from .guide_execution import execution
+            return execution(**params)
         if action == 'readiness':
             return await self.readiness()
         if action == 'sample':

@@ -36,6 +36,7 @@ function recording(scenario: string): Data {
   const folder = `recordings/${scenario}/${identity}`;
   const companion = `recordings/guide-context/${scenario}/${identity}`;
   const trace = read(`${folder}/trace.json`), extra: Data = {};
+  trace.run.condition_id ||= `${scenario}-offline-baseline`;
   for (const name of readdirSync(resolve('..', companion)).filter(name => name.endsWith('.json') && name !== 'manifest.json')) {
     extra[name] = read(`${companion}/${name}`);
   }
@@ -55,7 +56,7 @@ function recording(scenario: string): Data {
 }
 
 function metadata(scenario: string): Data {
-  const context = recording(scenario), condition = `${scenario}-offline-baseline`;
+  const context = recording(scenario), condition = context.trace.run.condition_id;
   return {schema: 'citizen-guide-metadata/v1', scenario_id: scenario, run_id: demos[scenario],
     available: true, inference_calls_for_inspection: 0,
     notice: 'Offline browser fixture: historical captures retain their original limitations.',
@@ -73,6 +74,31 @@ function metadata(scenario: string): Data {
     })};
 }
 
+// A bounded DTO from fixed fixtures: no new execution or private payload access.
+function execution(scenario: string, url: URL, fixture = recording(scenario)): Data {
+  const cid = url.searchParams.get('condition_id') || fixture.trace.run.condition_id;
+  const baseline = cid === fixture.trace.run.condition_id;
+  const turn = Number(url.searchParams.get('public_turn') || 1);
+  const applicationOnly = baseline && scenario === 'dreamjob' && turn === 2;
+  const records = fixture.trace.usage?.records || [];
+  const condition = {id: cid, purpose: baseline ? 'baseline' : 'switchyard', execution_status: 'completed'};
+  const total = (rows: Data[]) => ({calls: rows.length,
+    known_tokens: rows.reduce((sum, row) => sum + (row.usage?.total_tokens || 0), 0),
+    unknown_usage_calls: rows.filter(row => typeof row.usage?.total_tokens !== 'number').length,
+    model_request_ms: rows.reduce((sum, row) => sum + (row.latency_ms || 0), 0)});
+  return {schema:'citizen-guide-execution/v1', available:true, scenario_id:scenario, run_id:fixture.run_id,
+    condition, conditions:metadata(scenario).conditions, public_turn:turn,
+    spans:[], condition_span_count:0, tools:applicationOnly?[]:fixture.trace.tools || [],
+    correlation:{status:applicationOnly?'application-only':'condition-only', explanation:applicationOnly?
+      'The application returned its configured clarification without calling Fabric, an advisor model or a course tool.':
+      'The exported native scopes belong to this condition. No per-turn or gateway-call correlation is invented where the publication does not retain that join.'},
+    usage:{records, summary:{...total(records), by_role:[...new Set(records.map((row:Data)=>row.role))].map(role=>({role,...total(records.filter((row:Data)=>row.role===role))}))},
+      notice:'Offline accounting keeps gateway IDs separate from native scope IDs.'},
+    coverage:[{capability:'Tool inputs and returned course facts',status:applicationOnly?'not-executed':'observed'}],
+    phoenix:{available:false,notice:'No local Phoenix service is opened by this offline fixture.'},
+    inference_calls_for_inspection:0};
+}
+
 async function stage(page: Page, step: number) {
   const current = Number((await page.getByTestId('step-counter').innerText()).match(/Step (\d+)/)?.[1]);
   const button = current < step ? 'Next →' : '← Back';
@@ -84,7 +110,7 @@ async function noRejectedClutter(page: Page) {
   const panel = page.getByTestId('journey-panel');
   await expect(panel.getByRole('heading', {name: 'Why this matters', exact: true})).toHaveCount(0);
   await expect(panel.getByRole('heading', {name: 'Check your implementation', exact: true})).toHaveCount(0);
-  await expect(panel.locator('.operation-path, .concept-path, .component-reference, pre')).toHaveCount(0);
+  await expect(panel.locator('.operation-path, .concept-path, .component-reference')).toHaveCount(0);
   await expect(panel.getByTestId('record-state')).toHaveCount(0);
   await expect(panel.getByText('All files in this run', {exact: true})).toHaveCount(0);
   await expect(panel).not.toContainText('inspect the matching proof');
@@ -99,6 +125,7 @@ test.beforeEach(async ({page}) => {
     expect(request.method()).toBe('GET');
     const url = new URL(request.url()), scenario = url.searchParams.get('scenario_id') || 'photography';
     if (url.pathname.endsWith('/lesson')) await route.fulfill({json: recording(scenario)});
+    else if (url.pathname.endsWith('/execution')) await route.fulfill({json: execution(scenario, url)});
     else if (url.pathname.endsWith('/metadata')) await route.fulfill({json: metadata(scenario)});
     else if (url.pathname.endsWith('/demo-persona')) await route.fulfill({json: {
       available: true, name: `${scenario} profile fixture`, source: 'ngc', revision: 'offline-original',
@@ -206,7 +233,7 @@ test('Fabric links precise calling code and real configuration without repeating
   await page.getByRole('button', {name: 'Explain NeMo Fabric: Build the typed FabricConfig', exact: true}).click();
   const panel = page.getByTestId('journey-panel');
   await expect(panel.getByRole('link', {name: 'build_config ↗', exact: true})).toHaveAttribute('href', /\/src\/learning_lab\/fabric_target.py#L\d+$/);
-  await expect(panel.getByRole('link', {name: 'The captured typed settings ↗', exact: true})).toHaveAttribute('href',
+  await expect(panel.getByRole('link', {name: 'its effective settings ↗', exact: true})).toHaveAttribute('href',
     `${repo}/blob/offline-recording-fixture/recordings/photography/${demos.photography}/fabric-config.json`);
   await expect(panel).toContainText('Neither public file is loaded as runtime input');
   await expect(panel.locator('a[href*="docs.nvidia.com/nemo/fabric"]')).toHaveCount(0);
@@ -263,6 +290,7 @@ test('tool interpretation distinguishes empty search, error, details and compari
     ]},
   ];
   await page.route('**/api/journey/lesson?scenario_id=boardgames', route => route.fulfill({json: fixture}));
+  await page.route('**/api/journey/execution?**', route => route.fulfill({json: execution('boardgames', new URL(route.request().url()), fixture)}));
   await page.goto('/'); await page.getByLabel('Scenario', {exact: true}).selectOption('boardgames');
   await stage(page, 5);
   const facts = page.getByTestId('scenario-facts');
@@ -273,8 +301,8 @@ test('tool interpretation distinguishes empty search, error, details and compari
   await expect(facts).toContainText('Comparison fixture two');
   fixture.context['fabric-invocations.json'] = [];
   await page.reload();
-  await expect(facts).toContainText('no verified turn-to-invocation association');
-  await expect(facts.locator('.tool-fact')).toHaveCount(0);
+  await expect(facts).toContainText('No per-turn or gateway-call correlation is invented');
+  await expect(facts.locator('.tool-fact')).toHaveCount(4);
 });
 
 test('photography investigation explains recorded cost uncertainty and reveals exclusion reasons in Detailed', async ({page}) => {
@@ -284,13 +312,14 @@ test('photography investigation explains recorded cost uncertainty and reveals e
   fixture.context['fabric-invocations.json'] = [{public_turn: 1,
     tool_scope_uuids: fixture.trace.tools.map((tool: Data) => tool.scope_uuid)}];
   await page.route('**/api/journey/lesson?scenario_id=photography', route => route.fulfill({json: fixture}));
+  await page.route('**/api/journey/execution?**', route => route.fulfill({json: execution('photography', new URL(route.request().url()), fixture)}));
   await page.goto('/'); await stage(page, 5);
   const facts = page.getByTestId('scenario-facts');
   await expect(facts).toContainText('Additional costs are unconfirmed');
   await expect(facts).toContainText('Other checkout costs are unconfirmed');
   await expect(facts).toContainText('5 other listings were excluded by the search constraints');
-  await expect(facts).not.toContainText('Published class days conflict with availability');
-  await expect(facts).not.toContainText('Search terms matched:');
+  await expect(facts.locator('.tool-fact').locator('p').first()).not.toContainText('Published class days conflict with availability');
+  await expect(facts.locator('.tool-fact').locator('p').first()).not.toContainText('Search terms matched:');
   await page.getByRole('button', {name: 'Detailed', exact: true}).click();
   await expect(facts).toContainText('Additional costs are unconfirmed');
   await expect(facts).toContainText('Search terms matched: photo; photography; smartphone');
@@ -345,6 +374,17 @@ test('saved geometry, inspector resizing and reduced motion remain functional', 
   const width = await divider.getAttribute('aria-valuenow');
   await page.reload(); await expect(node).toHaveAttribute('style', transform!);
   await expect(divider).toHaveAttribute('aria-valuenow', width!);
+  const sandbox=page.locator('.svelte-flow__node[data-id="zone-sandbox"]');
+  const edge=page.locator('.svelte-flow__edge[data-id="learner-advisor-request"] .svelte-flow__edge-path');
+  const priorPath=await edge.getAttribute('d');
+  const groupHeader=await sandbox.locator('.zone-drag-handle').boundingBox();expect(groupHeader).not.toBeNull();
+  await page.mouse.move(groupHeader!.x+60,groupHeader!.y+12);await page.mouse.down();
+  await page.mouse.move(groupHeader!.x+80,groupHeader!.y+12,{steps:8});await page.mouse.up();
+  await expect(edge).not.toHaveAttribute('d',priorPath!);
+  const parent=await sandbox.boundingBox(),child=await page.locator('.svelte-flow__node[data-id="advisor"]').boundingBox();
+  expect(parent).not.toBeNull();expect(child).not.toBeNull();
+  expect(child!.x).toBeGreaterThanOrEqual(parent!.x);expect(child!.x+child!.width).toBeLessThanOrEqual(parent!.x+parent!.width);
+  expect(child!.y).toBeGreaterThanOrEqual(parent!.y);expect(child!.y+child!.height).toBeLessThanOrEqual(parent!.y+parent!.height);
   await page.getByRole('button', {name: 'Follow this step on the map →', exact: true}).click();
   await stage(page, 2);
   const animations = await page.locator('.integration-edge.is-active .svelte-flow__edge-path')
@@ -380,7 +420,7 @@ test('missing originals or captures stay unavailable without substitute configur
   await stage(page, 3); await page.getByRole('button', {name: 'Detailed', exact: true}).click();
   await page.getByRole('button', {name: 'Explain NeMo Fabric: Build the typed FabricConfig', exact: true}).click();
   await expect(page.getByTestId('journey-panel').locator('.unavailable-reference')
-    .filter({hasText: 'The captured typed settings'})).toHaveAttribute('title', /No matching public capture is available/);
+    .filter({hasText: 'its effective settings'})).toHaveAttribute('title', /No matching public capture is available/);
   await expect(page.getByTestId('journey-panel').locator('a[href*="fabric_target.py"]')).toHaveCount(0);
 });
 
@@ -495,7 +535,7 @@ test('Metadata distinguishes settings projections, private originals and missing
   await expect(page.locator('tr[data-requirement="CAP-FAB-01"]')).toContainText('PARTIAL');
   const privateRow = page.locator('tr[data-requirement="CAP-US-01"]');
   await expect(privateRow).toContainText('PRIVATE');
-  await expect(privateRow).toContainText('No public link');
+  await expect(privateRow).toContainText('Private source captures are retained outside Git');
   await expect(privateRow.locator('a')).toHaveCount(0);
   await expect(page.locator('tr[data-requirement="CAP-US-04"]')).toContainText('NOT EXIST');
   await expect(page.locator('tr[data-requirement="CAP-DD-01"]')).toContainText('NOT USED');
@@ -541,20 +581,20 @@ test('routing condition references follow the displayed condition and never borr
   await expect(page.getByLabel('Routing comparison condition', {exact: true})).toHaveValue(fixed);
   await expect(page.getByTestId('journey-panel').getByRole('link', {name: 'the comparison record ↗', exact: true})).toHaveAttribute('href', aggregateURL);
   await page.getByRole('button', {name: 'Explain NeMo Switchyard: Load candidates and routing policy', exact: true}).click();
-  await expect(page.getByTestId('journey-panel').getByRole('link', {name: 'The recorded routing configuration ↗', exact: true})).toHaveAttribute('href', policyURL);
+  await expect(page.getByTestId('journey-panel').getByRole('link', {name: 'The saved routing configuration ↗', exact: true})).toHaveAttribute('href', policyURL);
   await page.getByRole('button', {name: /Back to step 7/}).click();
   await page.getByRole('button', {name: 'Explain NeMo Fabric: Build the typed FabricConfig', exact: true}).click();
-  await expect(page.getByTestId('journey-panel').getByRole('link', {name: 'The captured typed settings ↗', exact: true})).toHaveAttribute('href', comparisonURL);
+  await expect(page.getByTestId('journey-panel').getByRole('link', {name: 'its effective settings ↗', exact: true})).toHaveAttribute('href', comparisonURL);
   await expect(page.getByTestId('journey-panel').locator('a[href*="framework-config.json"]')).toHaveCount(0);
   await page.getByRole('button', {name: /Back to step 7/}).click();
   await page.getByLabel('Routing comparison condition', {exact: true}).selectOption(missing);
   await expect(page.getByTestId('journey-panel').getByRole('link', {name: 'the comparison record ↗', exact: true})).toHaveAttribute('href', aggregateURL);
   await page.getByRole('button', {name: 'Explain NeMo Fabric: Build the typed FabricConfig', exact: true}).click();
-  await expect(page.getByTestId('journey-panel').getByRole('link', {name: 'The captured typed settings ↗', exact: true})).toHaveCount(0);
-  await expect(page.getByTestId('journey-panel').locator('.unavailable-reference').filter({hasText: 'The captured typed settings'})).toHaveAttribute('title', /No matching public capture/);
+  await expect(page.getByTestId('journey-panel').getByRole('link', {name: 'its effective settings ↗', exact: true})).toHaveCount(0);
+  await expect(page.getByTestId('journey-panel').locator('.unavailable-reference').filter({hasText: 'its effective settings'})).toHaveAttribute('title', /No matching public capture/);
   await page.getByRole('button', {name: 'Next →', exact: true}).click();
   await page.getByRole('button', {name: 'Explain NeMo Fabric: Build the typed FabricConfig', exact: true}).click();
-  await expect(page.getByTestId('journey-panel').getByRole('link', {name: 'The captured typed settings ↗', exact: true})).toHaveAttribute('href', baseline.artifacts[0].url);
+  await expect(page.getByTestId('journey-panel').getByRole('link', {name: 'its effective settings ↗', exact: true})).toHaveAttribute('href', baseline.artifacts[0].url);
 });
 
 test('named setup references resolve one projected file without accepting similar opaque prefixes', async ({page}) => {
@@ -566,10 +606,11 @@ test('named setup references resolve one projected file without accepting simila
     {path: `captures/${'a'.repeat(23)}-usersim-setup.projection.json`, url: 'https://example.invalid/wrong-prefix.json'},
     {path: `captures/${'a'.repeat(24)}-other-usersim-setup.projection.json`, url: 'https://example.invalid/wrong-name.json'});
   await page.route('**/api/journey/lesson?scenario_id=boardgames', route => route.fulfill({json: fixture}));
+  await page.route('**/api/journey/execution?**', route => route.fulfill({json: execution('boardgames', new URL(route.request().url()), fixture)}));
   await page.goto('/'); await page.getByLabel('Scenario', {exact: true}).selectOption('boardgames');
   await stage(page, 2); await page.getByRole('button', {name: 'Detailed', exact: true}).click();
   await page.getByRole('button', {name: 'Explain NeMo UserSim: Apply the custom learning-advisor hooks', exact: true}).click();
-  await expect(page.getByTestId('journey-panel').getByRole('link', {name: 'The saved simulator setup ↗', exact: true})).toHaveAttribute('href', projectedURL);
+  await expect(page.getByTestId('journey-panel').getByRole('link', {name: 'The saved setup ↗', exact: true})).toHaveAttribute('href', projectedURL);
   await expect(page.getByTestId('journey-panel').locator('a[href*="example.invalid"]')).toHaveCount(0);
 });
 
@@ -590,7 +631,7 @@ test('autoplay clears comparison scope before teaching the next lesson', async (
   await page.clock.fastForward(4300);
   await expect(page.getByTestId('step-counter')).toHaveText('Step 8 of 9');
   await page.getByRole('button', {name: 'Explain NeMo Fabric: Build the typed FabricConfig', exact: true}).click();
-  await expect(page.getByTestId('journey-panel').getByRole('link', {name: 'The captured typed settings ↗', exact: true})).toHaveAttribute('href', baseline.artifacts[0].url);
+  await expect(page.getByTestId('journey-panel').getByRole('link', {name: 'its effective settings ↗', exact: true})).toHaveAttribute('href', baseline.artifacts[0].url);
 });
 
 function savedComparisonFixture() {
@@ -621,11 +662,11 @@ test('saved retail comparison restores its run-bound proof and semantic destinat
   await page.getByLabel('Routing comparison condition',{exact:true}).selectOption(conditions[1]);
   await page.getByRole('button',{name:'Explain NeMo Fabric: Build the typed FabricConfig',exact:true}).click();
   await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('persona-lab-guide-wireframe:selection:v4')!)))
-    .toMatchObject({version:6,scenarioId:'dreamjob',stageId:'routing',turnIndex:2,selected:'fabric',operationId:'fabric.config',conditionId:conditions[1],conditionRunId:demos.dreamjob});
+    .toMatchObject({version:6,scenarioId:'dreamjob',stageId:'routing',turnIndex:0,selected:'fabric',operationId:'fabric.config',conditionId:conditions[1],conditionRunId:demos.dreamjob});
   await page.reload();
   await expect(page.locator('.step-title')).toHaveText('Build the typed FabricConfig');
   await expect(page.getByTestId('step-counter')).toHaveText('Step 7 of 9');
-  await expect(page.getByTestId('journey-panel').getByRole('link',{name:'The captured typed settings ↗',exact:true}))
+  await expect(page.getByTestId('journey-panel').getByRole('link',{name:'its effective settings ↗',exact:true}))
     .toHaveAttribute('href',new RegExp(`${conditions[1]}-fabric-config\\.json$`));
   await page.getByRole('button',{name:/Back to step 7/}).click();
   await expect(page.getByLabel('Routing comparison condition',{exact:true})).toHaveValue(conditions[1]);
@@ -650,12 +691,12 @@ for(const invalid of ['foreign-condition','previous-run'])test(`saved comparison
     run:invalid==='previous-run'?demos.photography:demos.dreamjob});
   await page.goto('/');
   await expect(page.locator('.step-title')).toHaveText('Build the typed FabricConfig');
-  await expect(page.getByTestId('journey-panel').getByRole('link',{name:'The captured typed settings ↗',exact:true}))
+  await expect(page.getByTestId('journey-panel').getByRole('link',{name:'its effective settings ↗',exact:true}))
     .toHaveAttribute('href',baseline.artifacts[0].url);
   await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('persona-lab-guide-wireframe:selection:v4')!).conditionId)).toBe('');
 });
 
-test('version five semantic selections migrate without changing turn or destination',async({page})=>{
+test('version five semantic selections migrate to turn one while preserving the destination',async({page})=>{
   await page.addInitScript(()=>localStorage.setItem('persona-lab-guide-wireframe:selection:v4',JSON.stringify({
     version:5,page:'map',scenarioId:'boardgames',stageId:'build',detailed:false,focused:true,
     selected:'advisor',operationId:'advisor.0',turnIndex:1,
@@ -664,7 +705,7 @@ test('version five semantic selections migrate without changing turn or destinat
   await expect(page.locator('.step-title')).toHaveText('Connect the selected agent');
   await expect(page.getByTestId('step-counter')).toHaveText('Step 3 of 9');
   await expect.poll(()=>page.evaluate(()=>JSON.parse(localStorage.getItem('persona-lab-guide-wireframe:selection:v4')!)))
-    .toMatchObject({version:6,scenarioId:'boardgames',turnIndex:1,selected:'advisor',operationId:'advisor.0',conditionId:''});
+    .toMatchObject({version:6,scenarioId:'boardgames',turnIndex:0,selected:'advisor',operationId:'advisor.0',conditionId:''});
 });
 
 test('guarded maps show both message directions while photography keeps its direct reply',async({page})=>{
@@ -697,6 +738,8 @@ test('only the recorded managed lesson or platform inspection changes the worklo
     await stage(page,9);
     if(await page.getByRole('button',{name:'Follow this step on the map →',exact:true}).count())
       await page.getByRole('button',{name:'Follow this step on the map →',exact:true}).click();
+    await expect(graph).toHaveAttribute('data-boundary','standalone');
+    await page.getByLabel('Deployment condition',{exact:true}).selectOption('managed');
     await expect(graph).toHaveAttribute('data-boundary','managed');
     const caller=await page.locator('.svelte-flow__node[data-id="zone-caller"]').boundingBox();
     const sandbox=await page.locator('.svelte-flow__node[data-id="zone-sandbox"]').boundingBox();

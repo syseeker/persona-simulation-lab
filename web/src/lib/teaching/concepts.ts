@@ -7,9 +7,8 @@ function choose(scenarioId: string, values: Record<Story, string>): string {
   return values[scenarioId as Story];
 }
 
-function page(title: string, intro: string, paragraphs: string[], flow?: string[], rows?: [string, string][]): TeachingPage {
-  return {title, intro, sections: [{heading: 'How it works', paragraphs,
-    ...(flow ? {flow} : {}), ...(rows ? {rows} : {})}]};
+function page(title: string, intro: string, paragraphs: string[]): TeachingPage {
+  return {title, intro, sections: [{heading: 'How it works', paragraphs}]};
 }
 
 /** Conceptual responsibilities and actions have their own prose and identities.
@@ -25,8 +24,8 @@ export function simplePage(scenarioId: string, blockId: string, actionId?: strin
   }
   switch (blockId) {
     case 'person': return page('Test person',
-      'This is the person-shaped input to the test, not a customer account or a real resident. The profile gives the simulator a consistent background from which to speak. Its value is that you can examine whom you tested with instead of treating one anonymous prompt as representative of everyone.', [
-        'Nemotron Personas supplies the original data; application code selects and preserves an original. Those are different responsibilities: the dataset describes a synthetic person, while the app decides which person participates in this test. A saved identity lets you return to the same input after changing the advisor.',
+      'A test needs someone to ask the application for help. Here we use an existing synthetic profile from Nemotron Personas. UserSim uses that profile to play the learner, while the citizen advisor is the application answering her questions.', [
+        'The dataset provides a person’s background and interests. Our application chooses one record and keeps a reference to it, so a later test can use the same person. In these recordings, the structured name is Min Hoon Lim and the preferred English name is Caroline. Both names belong to the same original profile.',
         choose(scenarioId, {
           photography: 'Here the person will participate in the photography story. Keep the person fixed while examining whether a different class request or advisor setup changes the outcome. Choosing the person does not yet send a message to the advisor.',
           boardgames: 'Here the person will take part in a board-game conversation. Their background helps the simulator portray a learner, but the public goal remains something the learner must actually say. The advisor does not receive the whole profile in advance.',
@@ -34,7 +33,7 @@ export function simplePage(scenarioId: string, blockId: string, actionId?: strin
         }),
       ]);
     case 'situation-block': return page('Test situation',
-      'A situation turns background into a task we can test. It says what help the learner will seek, what constraints apply and which details they will reveal later. This block owns those test choices; it does not claim the person’s profile already contained the request.', [
+      'The profile describes a person, but it does not tell us what she wants to do today. The situation supplies that task. It also tells the simulated learner which constraints matter and whether to share them immediately or later.', [
         choose(scenarioId, {
           photography: 'The application supplies a deliberately small photography situation. Authored constraints make the test easy to reproduce: the developer knows what a satisfactory answer must respect without asking a generator to choose a convenient budget or date.',
           boardgames: 'The application supplies a playing-related goal and a later comparison with game design. This tests a meaningful failure mode: an advisor can sound helpful while changing the kind of activity the learner wanted.',
@@ -43,23 +42,23 @@ export function simplePage(scenarioId: string, blockId: string, actionId?: strin
         'The prepared situation is handed to the simulated learner, not exposed wholesale to the advisor. This creates a useful information boundary: the learner can possess private context while the advisor must work from what has actually been said.',
       ]);
     case 'learner': return page('Simulated learner',
-      'The simulated learner is the test participant who speaks to the advisor and reacts to its replies. UserSim combines the selected person, interpreted behaviour and a task-specific probe. The probe describes this test; the inherited engine handles the conversation around it.', [
-        'The learner and advisor are different actors. UserSim generates learner messages and runs its configured checks and judges; the advisor receives the public message and handles course advice. A judge can assess that reply without becoming another citizen-facing participant.',
+      'UserSim plays the learner in this test. It combines the selected profile with behaviour settings and instructions for the task. It then writes a message, receives the citizen application’s reply and uses that reply when deciding what to say next.', [
+        'The task instructions come from our custom probe. The shared UserSim engine generates the learner’s message and checks that it stays in role before sending it to the application. After the application answers, UserSim’s answer-quality judge checks whether the reply addresses the request coherently. That judgment helps us inspect the interaction; the judge does not speak as another learner.',
         choose(scenarioId, {
           photography: 'For this short example, UserSim phrases the supplied photography task and records the exchange. Its persona context shapes the test input; it does not become extra knowledge supplied to the course advisor.',
           boardgames: 'Here UserSim must react to the first answer before asking its intended follow-up. The custom probe preserves the playing goal while the inherited engine still checks that the generated message stays in the learner’s role.',
           dreamjob: 'Here UserSim controls the learner side of staged disclosure. It knows the hypothetical salary before the advisor does, but must reveal it only at the intended public turn. This authored protocol is different from assuming that random incremental disclosure happened.',
         }),
-      ], ['Person, behaviour and task', 'Learner message and turn checks', 'Advisor reply', 'Judge, continue or stop']);
+      ]);
     case 'advisor': return page('Citizen advisor',
-      'The citizen advisor turns a public learning request into advice. The application decides which information the agent may receive, which course tools it may use and which responses can reach the learner. Fabric connects the selected agent, while the application keeps responsibility for these rules.', [
+      'This is the application we are testing: a citizen asks for learning advice and receives a reply. The application connects an agent to its model and course tools. It also decides what information to pass in and what answer to deliver.', [
         `The application owns what the advisor may do and what it delivers. Fabric connects that application to ${boardgames ? 'Hermes' : 'Deep Agents'} through a consistent runtime interface. The harness manages the model/tool loop; the course tools supply published facts. These cooperating parts do not all make the same decision.`,
         retail
           ? 'Retail makes this distinction visible: the app can ask for a missing budget and schedule before invoking the harness. When native execution is needed, it preserves the model’s proposal and separately presents verified returned facts. That is a deliberate application design, not evidence that the model itself always produced compliant prose.'
           : 'The application uses read-only course operations so advice cannot accidentally turn into a booking, purchase or account change. A different app might need those actions, but it would need explicit rules and additional evidence before granting them.',
-      ], ['Public request', 'Application decision', 'Selected agent and course tools when needed', 'Delivered advice']);
+      ]);
     case 'courses': return page('Course information',
-      'The advisor needs a reliable place to look up course facts. This responsibility combines a read-only tool interface with a frozen catalogue. The tool gives the agent a defined way to ask questions; the catalogue determines what information it can truthfully return.', [
+      'To recommend a course, the advisor needs facts about courses that actually appear in our source. We provide a saved catalogue and three read-only tools. The tools let the agent search, retrieve details and compare listings from that catalogue.', [
         'MCP is the connection and tool-description protocol, not the course database. Our application implements search, details and comparison over dated listings. The response can contain supported facts, unknown fields, no suitable matches or a structured error; those outcomes mean different things for the advice.',
         choose(scenarioId, {
           photography: 'A photography listing can establish the published class price and day without establishing the cost of materials. Keeping that unknown visible prevents a neat-looking recommendation from overstating what the source supports.',
@@ -68,35 +67,36 @@ export function simplePage(scenarioId: string, blockId: string, actionId?: strin
         }),
       ]);
     case 'models': return page('Model access',
-      'The advisor and simulated learner need access to language models, but they should not hold provider credentials or make unbounded calls. This block combines the application’s gateway, the model proxy and any selected routing policy. It is an access path, rather than another agent in the conversation.', [
+      'The advisor uses a model to answer, and UserSim uses models to generate and check the test conversation. Their requests pass through a controlled connection. This lets the application limit model work and record which role made each request.', [
         'The gateway admits and accounts for work under application limits. LiteLLM maps an application-facing model name to a provider deployment. When routing is enabled, Switchyard chooses within the configured candidate group. A successful selection still needs a successful provider response.',
+        'To lower API usage, first read the requests and tokens by role in Investigate execution. Ask missing factual questions in application code when a model is unnecessary, reuse already retrieved course facts and keep prompts and output limits focused on the task. Then compare the same saved task before and after the change, checking answer quality as well as resource use. The existing retail clarification is one concrete example of avoiding an extra advisor model request.',
         retail
           ? 'The retail comparisons make those responsibilities visible with a fixed candidate and a MiniMax/Mistral routing policy. Judge the conditions by their actual responses and measured usage. A routing choice on its own says nothing about whether the resulting course advice was suitable.'
           : 'This scenario intentionally fixes the model route. Keeping one variable steady makes its application behaviour easier to study. The recorded provider identity explains what ran; it is not evidence that model optimization was attempted.',
-      ], ['Application call limits', 'Model alias and provider connection', retail ? 'Configured model selection' : 'Fixed deployment', 'Response or explicit failure']);
+      ]);
     case 'evidence': return page('Execution records and checks',
-      'Understanding an answer needs both a record of what happened and a judgment about whether it met the requirement. This responsibility combines native traces, saved application evidence and the appropriate evaluation. A trace and a score answer different questions.', [
+      'Once we have an answer, we can ask two useful questions: how was it produced, and did it meet the test requirements? Execution records help answer the first question. Evaluation checks help answer the second.', [
         'Relay observes the agent’s model and tool activity. The app also retains public messages, configuration and model-call accounting, then packages the reviewed evidence for inspection. None of those records causes the answer; they let you examine the execution after it happened.',
         retail
           ? 'For retail, application-defined criteria are scored with Helix and a separate durable evaluation job. The criteria still have the scope of the rules we wrote. Native model proposals, application-delivered answers and the application-only clarification remain distinguishable, so a good score cannot hide which part produced the response.'
           : 'Here the application checks saved replies against the request, course facts and observed actions. UserSim’s own in-conversation judgments are separate observations. A helpful-looking answer can fail grounding, and a well-grounded no-match can still disappoint a helpfulness judge.',
-      ], ['Observed events and public output', 'Scenario-owned saved evidence', 'Explicit criteria', 'Result with coverage']);
+      ]);
     case 'guardrails': return page('Behavioural safeguards',
-      'These checks decide whether a public request or reply should continue under the application’s behaviour policy. They sit at the message boundaries, rather than replacing the advisor or supplying course facts.', [
+      'Some messages should continue to the advisor, while others should be stopped. Behavioural safeguards apply the rules we chose at those message boundaries. For example, asking about a course may continue, while asking for a provider credential should be blocked.', [
         scenarioId === 'photography'
           ? 'Photography does not connect native Guardrails. Its tool restrictions and instructions are application controls, so this map must not imply that a native behavioural check ran.'
           : 'The application loads its selected Guardrails rules and checks the relevant input or output. It records the resulting decision so you can distinguish an allowed learning request from the separate forbidden credential-request demonstration.',
         'A safety refusal is different from “there is no matching course.” The former is a policy decision; the latter is an ordinary information result. The implemented custom patterns have limited coverage, so demonstrating one blocked request is not proof that every unsafe interaction is covered.',
       ]);
     case 'openshell': return page('Controlled execution',
-      'The advisor can be useful without receiving general access to the developer’s machine. OpenShell provides the operational boundary: a trusted supervisor creates a sandbox, then limits what the contained application can reach.', [
+      'The advisor needs access to its course files and model connection to do its job. It does not need access to the rest of the developer’s machine. OpenShell creates a sandbox and applies a policy describing the allowed file and network access.', [
         'The advisor, selected harness and course tools execute inside. UserSim and the model gateway holding provider credentials stay outside. This split lets the learner test the application without handing the agent the private simulator profile or host credentials.',
         retail
           ? 'Retail has standalone runs and a separate managed session. Each needs its own loaded policy, observed denials and cleanup evidence. The managed example does not inherit proof from a standalone sandbox.'
           : 'A declared policy expresses our intention; a policy-specific denial demonstrates an enforced restriction. Finishing also means confirming removal of the workload owned by this run. An unrelated failed connection or an old container name proves neither.',
       ]);
     case 'platform': return page('Managed operations',
-      'Managed operations handle how an application package is registered, deployed and given sessions. They are outside the citizen advisor’s own decision-making. Helix provides this control-plane role in addition to its separate evaluation capability.', [
+      'After building an application, we need a way to deploy it and give each conversation its own session. Helix can manage those operations. It registers the application package, creates a deployment and manages the sessions used to call it.', [
         retail
           ? 'The retail managed condition deploys a reusable package and opens a fresh session with selected public context. It does not contain the original persona or resume a private local conversation. The advisor still needs its model and course-tool connections inside the chosen execution boundary.'
           : 'This preset uses standalone execution and does not connect Helix managed operations. The block remains visible to explain the wider architecture, without implying that a registration or managed session exists for this scenario.',
@@ -110,15 +110,15 @@ function actionPage(scenarioId: string, block: string, index: string): TeachingP
   const retail = scenarioId === 'dreamjob';
   switch (`${block}.${index}`) {
     case 'person.0': return page('Inspect a synthetic person',
-      'Read the chosen person before treating their simulated conversation as a useful test. Background and interests help you decide what this example might reveal; they do not establish a real person’s needs or eligibility.', [
-        'The app looks up the original identified by the recording and reads it from the installed distribution. [[call:persona.select|The selection code]] is the application operation to inspect. A retained chosen record shows whom we tested; it may not retain every filter or sampling decision that led to that choice.',
-        'Keep demographic context and behaviour traits separate when reading the fields. HF profile-only data does not provide the same OCEAN fields as NGC Extended. Missing source data should make this inspection unavailable, rather than cause the app to invent a replacement.',
+      'Read the profile before deciding what this test can tell you. Its background and interests explain who UserSim will portray. This helps you choose whether the person is useful for the learning situation you want to test.', [
+        'The application reads the selected original from the installed dataset. [[call:persona.select|The selection function]] supports sampling, while these recordings reuse an explicitly chosen profile. The heading and narrative may use different names for the same person: Caroline is the preferred English name recorded alongside Min Hoon Lim.',
+        'The profile also contains synthetic personality descriptions from NGC Extended. UserSim can use them to shape the learner’s interaction style. These fields are absent from the public HF profile-only distribution, so the choice of dataset affects what behaviour information is available. If the selected source is missing, this view should tell you rather than show another person.',
       ]);
     case 'person.1': return page('Keep the same original',
       'Preserve the selected person so a later change to the advisor does not quietly become a test with someone else. A repeatable input is especially useful when debugging an unexpected answer.', [
         '[[call:persona.lock|The locking operation]] records the source distribution, revision and a fingerprint of the original contents. [[cap:CAP-PER-01|The saved receipt]] lets the app detect a changed row instead of matching only a familiar name.',
         'This action preserves identity; it does not freeze the learner’s replies. Their wording can still depend on the situation, behaviour configuration and previous advisor answers. Generated additions stay separate so they cannot overwrite the original person.',
-      ], ['Selected original', 'Identity and content receipt', 'Same original for later comparisons']);
+      ]);
     case 'situation-block.0': return page('Supply the goal and constraints',
       'Choose what you want this test to ask of the advisor. A useful situation gives the learner an understandable goal and enough explicit constraints to recognize a suitable answer.', [
         choose(scenarioId, {
@@ -130,9 +130,9 @@ function actionPage(scenarioId: string, block: string, index: string): TeachingP
       ]);
     case 'situation-block.1': return retail ? page('Add hypothetical details',
       'Add variation without pretending the original dataset supplied it. In retail learning, generated brand preferences and a salary band are labelled hypotheses used to make the test situation richer.', [
-        'Data Designer receives an original seed and a limited schema describing the permitted extra fields. The app checks the generated result and stores the selected overlay separately. [[cap:CAP-DD-04|The retained additions and lineage]] show what was accepted and which original it came from.',
+        'Data Designer receives one original profile and produces one separate set of additions. [[cap:CAP-DD-04|The saved output]] contains brand interests, the fixed hypothetical salary band and a generated practical learning task. These are three fields inside one generated structured column, not three new people or changes to the source dataset.',
         'The overlay belongs to the simulator’s private test context. It is not a statement of real salary, employer endorsement or funding eligibility. The app keeps the authored disclosure protocol in charge of when a hypothetical detail becomes public.',
-      ], ['Original seed and permitted fields', 'Generated candidate', 'Validated separate overlay']) : page('Keep source and situation separate',
+      ]) : page('Keep source and situation separate',
       'Attach a request to the person without rewriting their biography. This distinction makes the test easier to reason about: the profile is background, while the situation says what the learner wants today.', [
         '[[call:situation.bind|The preparation code]] combines those inputs for UserSim while preserving their different roles. The original can be reused with another request, and the same request can be tried with another original.',
         'No separate Designer enrichment is needed for this preset. Adding generation just to fill a pipeline would introduce another uncertain input without helping explain the intended task.',
@@ -146,22 +146,22 @@ function actionPage(scenarioId: string, block: string, index: string): TeachingP
       ]);
     case 'learner.1': return page('Generate messages and react',
       'Let the learner take a turn, hear the advisor and decide what to say next. This is where preparation becomes an interaction: a follow-up is generated in the context of a received answer.', [
-        '[[call:usersim.loop|The inherited conversation runtime]] generates and checks a learner message, sends the public text to the target application, then processes the response and its judge/stop decisions. [[cap:CAP-US-04|The activation and trajectory records]] distinguish the messages actually produced from the intentions in the probe.',
+        '[[call:usersim.loop|The conversation runtime]] first generates a learner message and checks that it fits the test. It sends the accepted message to the citizen application, then gives the delivered reply back to UserSim. UserSim can rate that reply and generate a follow-up from the conversation so far. [[cap:CAP-US-04|The saved interaction]] records what actually happened at each of those stages.',
         choose(scenarioId, {
           photography: 'This story ends after its short photography exchange. A saved public reply and a saved judge decision are different outputs; neither should be invented to fill an incomplete pair.',
           boardgames: 'The next message must still express the learner’s intended comparison with game design. A generation rejected for role or language problems is a simulator event, not a second successful public conversation.',
           dreamjob: 'The learner hears the application’s confirmed clarification at turn 2 before stating budget and study days. That reply can advance UserSim even though the application did not invoke Fabric or another advisor model call for the clarification.',
         }),
-      ], ['Generate learner text', 'Check the turn', 'Receive public advisor output', 'Judge and continue or finish']);
+      ]);
     case 'advisor.0': return page('Connect the selected agent',
-      'Make the chosen harness ready to answer through the application. Connecting it means supplying instructions, a model connection and the approved course-tool interface, then checking that the runtime can start.', [
+      'Prepare the agent before sending it a learner’s question. Give it the instructions explaining its job, connect its model and register the course tools. Then check that this setup can start and remain available for the conversation.', [
         `The app uses [[call:fabric.config|one configuration builder]] to connect ${scenarioId === 'boardgames' ? 'Hermes' : 'Deep Agents'}. Fabric provides the common startup interface while the selected adapter handles the harness-specific setup. This is why a harness choice can change settings without duplicating the course-advisor application.`,
         '[[cap:CAP-FAB-03|The plan and preflight reports]] show whether those connections are understood; [[cap:CAP-FAB-04|startup evidence]] shows what became ready. Neither means a learner request has already run. Separate readiness from answer quality when diagnosing the setup.',
-      ], ['Instructions, model connection and tools', 'Configuration and readiness checks', 'Persistent selected runtime']);
+      ]);
     case 'advisor.1': return page('Use tools and return a reply',
       'Handle the learner’s public request with the information available at that moment. The advisor should retrieve facts when needed and produce advice that stays within those facts, rather than treating fluent prose as proof of a course listing.', [
         retail
-          ? 'The app first checks whether an options discussion is missing budget or study days. [[call:retail.response.clarify|It asks a clarification directly]] when those decisions are missing. Otherwise the selected harness can call the model and course tools, after which the app presents returned facts and keeps the native proposal separately.'
+          ? 'The app first checks whether an options discussion is missing budget or study days. [[call:retail.response.clarify|It fills a clarification template]] when those decisions are missing, with no advisor model call for that reply. Otherwise the selected harness can call the model and course tools, after which the app presents returned facts and keeps the native proposal separately.'
           : '[[call:fabric.invoke|The application invocation]] passes the public message into the selected harness. The harness can ask its model, call approved course tools and continue with the returned information before it finishes. One public reply can therefore involve more than one internal operation.',
         '[[cap:CAP-FAB-06|The native response record]] shows what the agent returned when it was invoked. Compare that boundary with the delivered public answer; if the application also transforms or checks the response, that responsibility must remain visible.',
       ]);
@@ -188,7 +188,7 @@ function actionPage(scenarioId: string, block: string, index: string): TeachingP
       'Decide how the proxy should select a model without changing the citizen-facing application request. A fixed candidate provides a baseline for comparing a policy that chooses within the same inventory.', [
         'Retail compares MiniMax/Mistral conditions with separate runtime state. [[cap:CAP-LLM-02|The loaded candidate settings]] define the available deployments. Switchyard’s policy chooses within that group; it does not answer the learner itself.',
         '[[cap-run:CAP-SW-02|The actual decisions and outcomes]] show whether a selection led to a completed and evaluated answer. Compare conditions that held inputs, catalogue, harness and limits steady. A different inventory or unfinished run cannot establish a policy improvement.',
-      ], ['Same public task', 'Fixed candidate or routing policy', 'Selected provider response', 'Comparable evaluation']) : page('Use the fixed model route',
+      ]) : page('Use the fixed model route',
       'Choose one configured model path for this example. Keeping the route fixed makes the advisor’s task behaviour easier to examine before adding a model-selection experiment.', [
         'The application requests an alias, and LiteLLM resolves it to its configured deployment. [[cap:CAP-LLM-01|The loaded proxy settings]] express that choice. The alias is a connection name, not another conversational participant.',
         '[[cap:CAP-GW-02|The observed provider identity]] lets you see what actually answered. Switchyard does not make a candidate decision here, so this example offers no evidence of routing optimization or model-policy savings.',

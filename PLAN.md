@@ -2,7 +2,9 @@
 
 ## Authority and current state
 
-**Last amended: 22 November 2026. This is the single active delivery plan.** The [canonical North Star](docs/project-goals.md) remains unchanged. It defines why the project exists; this file defines what happens next and how progress is tracked.
+**Last amended: 27 November 2026. This is the single active delivery plan.** The [canonical North Star](docs/project-goals.md) remains unchanged. It defines why the project exists; this file defines what happens next and how progress is tracked.
+
+**Current round — W4, Verified; publication pending:** the v0.3.0 implementation addresses all 48 review corrections with the original titles preserved. The approved body style, condition-scoped evidence/navigation, orthogonal diagrams, Metadata provenance/consolidation, in-app execution viewer and local Phoenix historical import are technically verified. No scenario reruns or existing SDK upgrades occurred. The [dated feedback register](docs/ux-review-spec.md#27-november-2026-feedback-148--v030) retains every request, approved writing reference and implementation result. Baseline `7974db4`, all 389 retained native files, immutable recordings and the complete pre-round audit are protected by `.private/history/2026-11-27-v030-baseline/`. Current results are in the [verification receipt](docs/verification.md#v030-developer-review--27-november-2026). Earlier delivery/status entries below describe their dated checkpoints, not user acceptance of W4.
 
 The user is developer zero and a one-person development team. The guide must teach enough background to understand a mechanism, make an engineering decision, inspect how that decision becomes effective configuration and interpret an actual result. Quiet, coherent teaching and precise code review take precedence over product lists, repeated tables and decorative proof links.
 
@@ -224,3 +226,32 @@ retains the failed HTTP-only readiness assumption and diagnostic cancellations.
 No application source, recordings, SDK versions or scenario execution changed.
 This completed runtime-recovery round is identified by the Git commit containing
 this entry; developer acceptance and findings 4, 5 and A9 remain open.
+
+
+## W4 amendment · 27 November 2026 · v0.3.0
+
+The user explicitly requested implementation of the approved plan, both execution
+viewers and richer local-only historical advisor traces. Their final correction
+freezes all original step/component/operation titles; the approved body voice
+does not authorize unrelated content changes. Phoenix supersedes the earlier
+collector exclusion for this round only.
+
+- [x] Preserve recoverable source baseline and hash all protected native/public evidence.
+- [x] Append the distinct feedback 1–48 register and approved nine-step body reference.
+- [x] Rewrite and review all lesson/concept/action/library/operation bodies.
+- [x] Apply first-page changes, preferred-name display and v0.3.0 review badge.
+- [x] Implement condition/turn context, deployment selector, readable graph routes and Metadata provenance.
+- [x] Explain evaluations, judges, Designer outputs, policy probes and five routing comparisons with measured usage.
+- [x] Implement read-only in-app execution viewer and isolated local Phoenix historical import.
+- [x] Verify all 94 historical spans, privacy, idempotence and zero model/deployment execution during inspection.
+- [x] Review all 54 lesson/view pages and reachable selections; run relevant automated/browser/archive checks.
+- [ ] Append actual verification/audit outcomes; scan final diff and staged data; commit/push verified round to dev.
+
+Selected demos and SDK pins remain unchanged. The application now displays
+v0.3.0 · Developer review; protocol/storage/recording versions retain their own
+identities. Main remains unchanged. Current checks: 759 Python tests, 69 web unit
+tests, 42 browser cases, zero Svelte errors/warnings, production build, Ruff,
+documentation/archive integrity and actual Phoenix read-back/browser review.
+Four final focused browser cases and the dragged-sandbox geometry case also
+passed. Publication follows the final staged-content scan. This checklist is
+implementation tracking, not a new approval gate or UX acceptance.

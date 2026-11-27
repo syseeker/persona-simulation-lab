@@ -1,6 +1,6 @@
 [project]
 name = "persona-simulation-lab"
-version = "0.2.0"
+version = "0.3.0"
 description = "A UI-first citizen application integration lab using Singapore Nemotron Personas and NeMo"
 requires-python = ">=3.12,<3.13"
 dependencies = [

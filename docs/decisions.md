@@ -158,3 +158,26 @@ Preserve the tested Fabric tool-schema boundary, generated Relay path and interp
 ## Historical decisions
 
 The [consolidated 19–20 November review journal](history/guide-reviews-2026-11-19-20.md) preserves the earlier seven-stage plan, naming/freeze changes and dated dataset/verification decisions. It is superseded for current journey sequencing. The immutable [v0.2](history/v0.2/INDEX.md) and [v0.1](history/v0.1/INDEX.md) archives preserve their original designs and findings. Historical runs are not current service readiness or acceptance of the replacement UI.
+
+
+## 27 November 2026 · v0.3.0 review corrections
+
+The user approved the full feedback 1–48 plan, the nine-step Scenario 1 body voice,
+both in-app and local Phoenix viewers, and richer local advisor traces. Their
+subsequent correction preserves every existing lesson/component/operation title.
+Body editing preserves facts and meaning except the explicitly requested
+clarifications/corrections. No scenario rerun, model experiment, existing SDK
+upgrade or general redesign is included.
+
+Use one condition identity across map, observations and proof links. Default
+deployment remains standalone; Helix-managed inspection is an explicit selection.
+Keep original recording bytes and append new configuration companions, preserving
+source hashes and the entire earlier audit. Historical failures remain retained
+even where distracting failure paragraphs leave the primary lesson.
+
+Phoenix is a loopback-only historical viewer in a new isolated environment. Its
+importer reads only selected hash-bound sources and filters advisor payloads; it
+does not run Fabric/UserSim/Helix/model execution. Missing managed payloads/end
+times and missing Relay parents remain explicit. The application release becomes
+v0.3.0 · Developer review, with backend/web metadata synchronized; this does not
+change protocol versions or imply final UX acceptance.

@@ -12,12 +12,15 @@
   import {learningResources} from '#lib/learningResources.ts';
   import {lessonFor,componentById,operationById,resolveComponent} from '#lib/lessonArchitecture.ts';
   import '../style.css';
+  import {version as appVersion} from '../../package.json';
+  import {resolveReviewScope,routingExecuted} from '../lib/reviewScope';
   type Page='why'|'map'|'qa'|'datasets'|'metadata';
   let page=$state<Page>('map'),scenarioId=$state('photography'),liveMode=$state(false);
   let liveRuns=$state<Record<string,string|null>>({photography:null,boardgames:null,dreamjob:null});
   let personaSource=$state('ngc'),lockedPersona=$state<Record<string,any>|null>(null);
   let reviewContext=$state<Record<string,any>|null>(null),metadataFocus=$state(''),metadataCondition=$state(''),conditionId=$state('');
   let conditionRunId=$state('');
+  let deploymentMode=$state<'standalone'|'managed'>('standalone');
   let setupOpen=$state(true),detailed=$state(false),stageIndex=$state(0),turnIndex=$state(0),focused=$state(false);
   let search=$state(''),qaSearch=$state(''),qaGroup=$state('all'),labels=$state(true);
   let selected=$state<string|null>(null),operationId=$state(''),playing=$state(false),notice=$state(''),restored=$state(false),reducedMotion=$state(false);
@@ -35,24 +38,26 @@
   const routingSummary=$derived(reviewContext?.trace?.run?.verification?.routing?.verified?'Fixed and Switchyard comparisons verified':reviewContext?.context?.['routing-comparison.json']?'Routing comparison incomplete':'Routing evidence unavailable');
   const lastStage=stages.length-1,faqGroups=[...new Set(faqs.map(f=>f.group))];
   const stage=$derived(stages[stageIndex]);
-  const applicationOnly=$derived(focused&&!selected&&scenarioId==='dreamjob'&&['run','investigate'].includes(stage.id)&&!!reviewContext?.context?.['application-turns.json']?.some((r:Record<string,any>)=>r.public_turn===turnIndex+1));
-  const managedCondition=$derived(!liveMode&&focused&&recordedManagedSelection(scenarioId,stage.id,selected,reviewContext));
-  const activeOperations=$derived(!focused?[]:applicationOnly?['usersim.loop','models.admit','models.request','models.alias','guardrails.check']:selected?detailed?(operationId?[operationId]:componentById[selected]?.operations.map(o=>o.id)||[]):conceptOperations(scenarioId,selected,operationId):lessonFor(scenarioId,stage.id).operations);
+  const reviewScope=$derived(resolveReviewScope(scenarioId,reviewContext,stage.id,selected,conditionId,deploymentMode,turnIndex));
+  const applicationOnly=$derived(focused&&reviewScope.purpose==='baseline'&&scenarioId==='dreamjob'&&['run','investigate'].includes(stage.id)&&!!reviewContext?.context?.['application-turns.json']?.some((r:Record<string,any>)=>r.public_turn===turnIndex+1));
+  const managedCondition=$derived(!liveMode&&reviewScope.deployment==='managed');
+  const candidateOperations=$derived(!focused?[]:applicationOnly?['usersim.loop','guardrails.check']:selected?detailed?(operationId?[operationId]:componentById[selected]?.operations.map(o=>o.id)||[]):conceptOperations(scenarioId,selected,operationId):lessonFor(scenarioId,stage.id).operations);
+  const activeOperations=$derived(candidateOperations.filter(id=>routingExecuted(reviewScope)||!id.startsWith('routing.')));
   const filteredFaqs=$derived(faqs.filter(f=>(qaGroup==='all'||f.group===qaGroup)&&`${f.question} ${f.answer}`.toLowerCase().includes(qaSearch.toLowerCase())));
   function stopPlayback(){playing=false;}
   function scrollInspectorTop(){void tick().then(()=>document.querySelector('.trace-inspector .inspector-content')?.scrollTo({top:0,behavior:'instant'}));}
   function overview(){focused=false;selected=null;operationId='';search='';}
   function changePage(next:Page){stopPlayback();page=next;if(next==='map')overview();}
-  async function locate(index:number,node?:string){stopPlayback();page='map';liveMode=false;stageIndex=Math.max(0,index);conditionId='';conditionRunId='';selected=null;operationId='';focused=true;
+  async function locate(index:number,node?:string){stopPlayback();page='map';liveMode=false;stageIndex=Math.max(0,index);turnIndex=0;deploymentMode='standalone';conditionId='';conditionRunId='';selected=null;operationId='';focused=true;
     if(node&&componentById[resolveComponent(node)]&&!lessonFor(scenarioId,stage.id).operations.some(id=>operationById[id].component===resolveComponent(node)))selected=resolveComponent(node);
     await tick();graph?.fit();scrollInspectorTop();}
-  function chooseStage(index:number){stopPlayback();liveMode=false;stageIndex=Math.max(0,Math.min(lastStage,index));conditionId='';conditionRunId='';selected=null;operationId='';focused=true;scrollInspectorTop();}
-  function inspect(component:string,operation=''){stopPlayback();if(!validSelection(scenarioId,detailed,component,operation))return;selected=component;operationId=operation;focused=true;scrollInspectorTop();}
+  function chooseStage(index:number){stopPlayback();liveMode=false;stageIndex=Math.max(0,Math.min(lastStage,index));turnIndex=0;deploymentMode='standalone';conditionId='';conditionRunId='';selected=null;operationId='';focused=true;scrollInspectorTop();}
+  function inspect(component:string,operation=''){stopPlayback();if(!validSelection(scenarioId,detailed,component,operation))return;selected=component;if(component==='platform')deploymentMode='managed';operationId=operation;focused=true;scrollInspectorTop();}
   function returnToPlayer(){selected=null;operationId='';scrollInspectorTop();}
-  function scenarioChanged(){stopPlayback();liveMode=false;stageIndex=0;turnIndex=0;conditionId='';conditionRunId='';if(reviewContext?.scenario_id!==scenarioId)reviewContext=null;metadataFocus='';overview();notice='';scrollInspectorTop();}
-  function changeDetail(value:boolean){stopPlayback();detailed=value;overview();scrollInspectorTop();}
+  function scenarioChanged(){stopPlayback();liveMode=false;stageIndex=0;turnIndex=0;deploymentMode='standalone';conditionId='';conditionRunId='';if(reviewContext?.scenario_id!==scenarioId)reviewContext=null;metadataFocus='';overview();notice='';scrollInspectorTop();}
+  function changeDetail(value:boolean){stopPlayback();detailed=value;turnIndex=0;deploymentMode='standalone';conditionId='';conditionRunId='';overview();scrollInspectorTop();}
   function saveLayout(){notice=graph?.saveLayout()?`${detailed?'Detailed':'Simplified'} layout saved in this browser.`:'Browser storage is unavailable. This layout has not been saved.';}
-  async function resetLayout(){stopPlayback();overview();await tick();graph?.resetLayout();notice='Default layout restored for this view. The whole architecture is visible.';}
+  async function resetLayout(){stopPlayback();deploymentMode='standalone';conditionId='';conditionRunId='';overview();await tick();graph?.resetLayout();notice='Default layout restored for this view. The whole architecture is visible.';}
   onMount(()=>{
     reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     try{
@@ -65,7 +70,8 @@
         if(typeof saved.setupOpen==='boolean')setupOpen=saved.setupOpen;
         const index=stages.findIndex(s=>s.id===(saved.version===2?legacyStageIds[saved.stageIndex]:saved.stageId));if(index>=0)stageIndex=index;
         if(typeof saved.detailed==='boolean')detailed=saved.detailed;
-        if(Number.isInteger(saved.turnIndex)&&saved.turnIndex>=0&&saved.turnIndex<currentScenario.turns.length)turnIndex=saved.turnIndex;
+        // A fresh visit begins at Turn 1; old preferences must not skip the opening exchange.
+        turnIndex=0;
         if(saved.version>=4){
           focused=saved.focused===true;
           if(saved.version>=5&&validSelection(scenarioId,detailed,saved.selected,saved.operationId||'')){selected=saved.selected;operationId=saved.operationId||'';}
@@ -93,7 +99,7 @@
   });
   $effect(()=>{const snapshot={version:6,page,scenarioId,setupOpen,stageId:stage.id,turnIndex,detailed,selected,operationId,focused,conditionId,conditionRunId,liveRunId:liveRuns[scenarioId]||null,liveRuns};if(restored)try{localStorage.setItem(storageKey,JSON.stringify(snapshot));}catch{/* Optional preference. */}});
   $effect(()=>{const width=preferredPanelWidth;if(restored)try{if(width===null)localStorage.removeItem(panelWidthKey);else localStorage.setItem(panelWidthKey,JSON.stringify(width));}catch{/* Optional preference. */}});
-  $effect(()=>{if(!playing||page!=='map')return;const position=stageIndex;const timer=window.setTimeout(()=>{if(position<lastStage){stageIndex=position+1;conditionId='';conditionRunId='';selected=null;operationId='';scrollInspectorTop();}else playing=false;},4200);return()=>window.clearTimeout(timer);});
+  $effect(()=>{if(!playing||page!=='map')return;const position=stageIndex;const timer=window.setTimeout(()=>{if(position<lastStage){stageIndex=position+1;turnIndex=0;deploymentMode='standalone';conditionId='';conditionRunId='';selected=null;operationId='';scrollInspectorTop();}else playing=false;},4200);return()=>window.clearTimeout(timer);});
 </script>
 
 <svelte:head><title>Building Citizen Apps with NeMo · Integration Guide</title></svelte:head>
@@ -104,6 +110,7 @@
       <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>
       <span><strong>Building Citizen Apps with NeMo</strong><small>NeMo Stack Integration Guide · Singapore</small></span>
     </button>
+    {#if page==='why'}<span class="status-pill app-version" data-testid="app-version">v{appVersion} · Developer review</span>{/if}
   </header>
 
   <nav class="main-nav" aria-label="Main sections">
@@ -121,8 +128,7 @@
         <div class="eyebrow">BUILD · INSPECT · IMPROVE · CONTAIN</div>
         <h1>Build citizen-focused AI.<br />Follow the agent development journey.</h1>
         <p class="hero-lead">Build and inspect a Singapore learning and community advisor, from choosing a test person to checking a deployed application.</p>
-        <div class="north-star"><span class="eyebrow">NORTH STAR</span><p>Teach developers to build a citizen-focused AI application with country-specific Nemotron Personas and the NVIDIA NeMo stack—by seeing how it works, following its information flow, and opening the code and evidence behind it.</p></div>
-        <p>Every lesson must answer:</p><p><strong>What are we trying to achieve → which components cooperate → what does the application call → what configuration is used → what comes back → where is the proof?</strong></p>
+        <div class="north-star"><span class="eyebrow">NORTH STAR</span><p>Teach developers to build a citizen-focused AI application with country-specific Nemotron Personas and the NVIDIA NeMo stack—by seeing how it works, following its information flow, and opening the code and evidence behind it.</p><p class="teaching-promise">Every lesson must answer:</p><p><strong>What are we trying to achieve → which components cooperate → what does the application call → what configuration is used → what comes back → where is the proof?</strong></p></div>
         <div class="application-story"><span class="eyebrow">THE APPLICATION WE ARE BUILDING</span><h2>A Singapore learning and community advisor</h2><p>This project builds an AI advisor that helps people find courses and community activities suited to their goals, budget and available time. A beginner looking for a photography class, a resident interested in board games and a retail worker exploring new skills put the same application to different tests.</p><p>The advisor retrieves published course information, explains what is known and asks when important details are missing. Country-specific synthetic personas provide test participants; the NeMo integrations support simulated conversations, agent execution, tracing, evaluation and controlled deployment. The guide connects each design decision to its calling code, recorded settings and observed result.</p></div>
       </section>
 
@@ -143,18 +149,17 @@
         <div class="scenario-grid">{#each scenarios as scenario, i}<article class="scenario-card"><span class="scenario-number">SCENARIO {i + 1}</span><h3>{scenario.title}</h3><p>{scenario.lesson}</p><button class="text-button" onclick={() => { scenarioId = scenario.id; scenarioChanged(); locate(0); }}>Explore this scenario →</button></article>{/each}</div>
       </section>
 
+      <section class="editorial-section">
+        <h2>Know what you are looking at.</h2>
+        <div class="availability-grid"><div><span class="tag">TRACE WALKTHROUGH</span><h3>Follow one request</h3><p>Choose a scenario and advance through nine stages. Explanatory flows connect its recorded inputs, actual operations and results.</p></div><div><span class="tag muted-tag">CODE AND LOGS</span><h3>Open the relevant detail</h3><p>Application calls and configuration link to committed repository symbols. Scenario logs open the matching fixed recording; missing evidence and failed comparisons stay explicit.</p></div><div><span class="tag muted-tag">EXPLICIT LIVE RUN</span><h3>Run a real interaction</h3><p>Simulate a Session opens separate execution controls. Check prerequisites, lock one test persona, then start a new saved condition.</p></div></div>
+        <button class="primary large" onclick={() => locate(0)}>Explore the Integration Map <span aria-hidden="true">→</span></button>
+      </section>
+
       <section class="editorial-section fit-section">
         <div><span class="eyebrow">WHERE IT FITS</span><h2>Keep your application at the centre.</h2><p>Bring your UI, approved service APIs and business rules. Fabric manages the selected harness. The lab connects test inputs, model access, execution evidence, evaluation and deployment around that application.</p><p>Designer prepares inputs. Relay observes execution. Helix supports evaluation, experiments and managed operations. Guardrails checks behaviour. OpenShell contains execution.</p></div>
         <dl class="fit-list"><div><dt>Your application</dt><dd>Business rules and read-only course services</dd></div><div><dt>Shared services</dt><dd>The UI, CLI and developer MCP use the same application services</dd></div><div><dt>Explicit extensions</dt><dd>Generation, routing comparisons and sandbox deployment</dd></div></dl>
       </section>
 
-      <section class="editorial-section">
-        <h2>Know what you are looking at.</h2>
-        <div class="availability-grid"><div><span class="tag">TRACE WALKTHROUGH</span><h3>Follow one request</h3><p>Choose a scenario and advance through nine stages. Explanatory flows connect its recorded inputs, actual operations and results.</p></div><div><span class="tag muted-tag">CODE AND LOGS</span><h3>Open the relevant detail</h3><p>Application calls and configuration link to committed repository symbols. Scenario logs open the matching fixed recording; missing evidence and failed comparisons stay explicit.</p></div><div><span class="tag muted-tag">EXPLICIT LIVE RUN</span><h3>Run a real interaction</h3><p>Simulate a Session opens separate execution controls. Check prerequisites, lock one test persona, then start a new saved condition.</p></div></div>
-        <details class="disclosure"><summary>Prerequisites and integration limits</summary><p>The actual lab needs local persona data and configured model endpoints. Designer, Helix evaluation and Platform adapters retain their separately compatible environments. NGC scope is Singapore Nemotron Personas Extended only.</p><p>Each scenario supplies its own recorded native evidence. Historical records do not establish current live readiness. The selected retail recording identifies the model inventory, verification results and deployment limitations actually observed; earlier failed conditions remain in the verification history.</p><p>The guide reads installed originals and curated scenario packs. Source/log inspection and playback start no inference.</p></details>
-        <button class="primary large" onclick={() => locate(0)}>Explore the Integration Map <span aria-hidden="true">→</span></button>
-      </section>
-      <footer class="editorial-footer">Current code and selected-run evidence are distinct. Each scenario has its own recording; failed comparisons remain visible.</footer>
     </main>
   {:else if page === 'map'}
     <section class="map-page" aria-label="Integration workspace">
@@ -189,7 +194,7 @@
             {#if liveMode}
               <LiveSessionPanel {scenarioId} bind:runId={liveRuns[scenarioId]} bind:source={personaSource} bind:persona={lockedPersona} />
             {:else}
-              <JourneyPanel {scenarioId} stageId={stage.id} {detailed} component={selected||''} operation={operationId} {focused} bind:turnIndex bind:conditionId onback={returnToPlayer} onfollow={()=>chooseStage(stageIndex)} oncontext={value=>reviewContext=value} onmetadata={(id,condition)=>{metadataFocus=id;metadataCondition=condition||'';changePage('metadata');}} />
+              <JourneyPanel scope={reviewScope} bind:deploymentMode {scenarioId} stageId={stage.id} {detailed} component={selected||''} operation={operationId} {focused} bind:turnIndex bind:conditionId onback={returnToPlayer} onfollow={()=>chooseStage(stageIndex)} oncontext={value=>reviewContext=value} onmetadata={(id,condition)=>{metadataFocus=id;metadataCondition=condition||'';changePage('metadata');}} />
             {/if}
           </div>
           <div class="player-footer"><span class="footer-step">Step {stageIndex+1} of {stages.length}</span><div class="playback-controls"><button onclick={()=>chooseStage(stageIndex-1)} disabled={stageIndex===0}>← Back</button><button class="primary" onclick={()=>chooseStage(stageIndex+1)} disabled={stageIndex===lastStage}>Next →</button><button aria-pressed={playing} onclick={()=>{if(stageIndex===lastStage)stageIndex=0;returnToPlayer();liveMode=false;focused=true;playing=!playing;}}>{playing?'Pause':'Play'}</button><button onclick={()=>{chooseStage(0);turnIndex=0;}} aria-label="Reset playback">Reset</button></div></div>

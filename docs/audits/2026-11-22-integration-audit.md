@@ -479,3 +479,82 @@ or called successful requests. They do not reproduce the import-error overlay.
 hard-refresh the existing tab. Future link-readiness claims must include an actual
 browser module/render check at the exact shared URL. Findings 4, 5, A9 and teaching
 UX acceptance remain open; this incident does not change their status.
+
+
+## A12 · 27 November 2026 · v0.3.0 review corrections started
+
+The user approved implementation of feedback 1–48 and the nine-step body-writing
+sample, with all existing titles preserved. New findings from read-only review:
+Caroline is the selected original profile's preferred English name; managed proof
+links can resolve baseline; retail investigation mixes baseline scopes with whole-run
+accounting; two Helix configuration projections omit requested settings; the
+Guardrails negative request displayed in the UI is not the exact executed wording.
+These findings are queued/implementing, not verified corrections. Their full
+requirements are in the new dated UX register and W4 in the single master plan.
+
+Both an in-app trace viewer and local Phoenix are now explicitly authorized.
+Phoenix imports existing advisor records locally; it does not rerun scenarios or
+retroactively establish live OTLP collection. Immutable files, private originals,
+previous failures and all preceding audit bytes remain unchanged.
+
+
+## A13 · 27 November 2026 · v0.3.0 implementation verified
+
+The approved F01–F48 revision is implemented for developer review. The dated
+[feedback register](../ux-review-spec.md#implementation-and-verification--27-november-2026)
+records each result; the [verification receipt](../verification.md#v030-developer-review--27-november-2026)
+contains current checks and limitations. All existing lesson/component/operation
+titles were preserved. The approved connected body style covers 54 lesson/view
+pages and all reachable Simplified/Detailed destinations. First-page changes,
+Caroline's existing preferred-name display and the v0.3.0 review badge are scoped
+to the user's requests.
+
+Updated findings:
+
+1. **Original finding 4 — implementation addressed:** UserSim authoring now
+   explains the participant, interpreted behaviour, probe/task, disclosure,
+   advisor strategy, harness, tools, model and evaluation, with real extension
+   points and the distinction from legacy `spec["strategies"]`. It does not claim
+   a 100,000-case orchestrator or validated Sim2Real behaviour.
+2. **Original finding 5 — scoped navigation addressed:** the in-app viewer shows
+   curated hierarchy, timing, tool results and separate gateway accounting. Local
+   Phoenix gives the owner filtered retained advisor model/tool I/O. Original
+   persona records, private UserSim prompts, reasoning and credentials remain
+   excluded. This is historical import, not retroactive live instrumentation.
+3. **A9 — managed proof scope addressed:** an explicit standalone/managed selector
+   resolves the map, policy, probes, configuration and Metadata links to one
+   condition. New client/agent configuration companions recover omitted fields
+   with original and secondary-source hashes. Old packs are immutable.
+4. **New findings from A12 — addressed:** negative-test wording matches executed
+   source; ordinary Guardrails checks group by turn/boundary; evaluation authors,
+   categories and disagreements are explained; routing options distinguish public
+   turns, attempts, decisions, criterion results, tokens, durations and retry waits.
+5. **Original finding 7 — still open:** user acceptance of teaching clarity and
+   usefulness. Automated/editorial review does not substitute for that acceptance.
+
+The current full checks passed **759 Python tests, 69 web unit tests and 42 browser
+cases**, including actual selected demos and installed datasets. Svelte reports
+zero errors/warnings; production build, Ruff, documentation and immutable archive
+checks pass. Representative node movement/saved layouts, label/card collision
+checks, managed/narrow views, reduced motion and GET-only guide inspection were
+verified. Initial browser assertion failures reflected changed requested labels,
+Turn 1/default-deployment behavior and grouped Metadata counts; expectations were
+updated without weakening exact source/condition bindings. A sandbox thread-wakeup
+limitation was isolated; the unchanged web worker tests passed on the host.
+
+Phoenix 22.1.0 is isolated and loopback-only. All **94 imported records / nine
+conditions / ten trace groups** passed read-back, privacy and duplicate-free
+reimport checks. Actual browser inspection displayed model → course tool → model
+and the saved reply. Stop/restart retained history; the guide never starts a
+service/import. Managed model payloads are absent from the hash-bound source;
+six missing end times remain explicit unknown-duration markers. Phoenix displays
+microsecond precision and optional bundled-price cost estimates. Those limits,
+missing parents and absent gateway/span joins are preserved, not reconstructed.
+
+All **389 native files** and **751 pre-existing public/historical files** still
+match baseline. This audit's entire **52,753-byte pre-round prefix**, including
+all earlier follow-ups and A11, retains SHA-256
+`cf38c78dc16bf07b447af7ae53727adadf15949ca712e2c9c388b935470f175b`.
+The earlier 22,452-byte original prefix remains contained within that unchanged
+prefix. No new scenario, model experiment, SDK upgrade or deployment occurred.
+Publication is tracked in W4; `main` remains unchanged.

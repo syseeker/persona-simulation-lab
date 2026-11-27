@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from . import __version__
+
 import asyncio
 from contextlib import AsyncExitStack
 from datetime import datetime, timezone
@@ -146,7 +148,7 @@ class LabService:
         load_environment()
         return {
             "app": "Singapore Learning & Classes Advisor",
-            "version": "0.2.0",
+            "version": __version__,
             "nim_key_present": bool(os.getenv("NVIDIA_API_KEY")),
             "inference_configured": inference_configured(),
             "ngc_key_present": bool(os.getenv("NGC_CLI_API_KEY")),

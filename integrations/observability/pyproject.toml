@@ -1,0 +1,11 @@
+[project]
+name = "citizen-lab-observability"
+version = "0.3.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "arize-phoenix==22.1.0",
+  "opentelemetry-proto>=1.40,<2",
+]
+
+[tool.uv]
+package = false

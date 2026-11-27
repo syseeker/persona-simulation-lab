@@ -38,7 +38,7 @@ for (const scenario of scenarios) test(`${scenario}: verify the promoted origina
     const request = route.request(), url = new URL(request.url());
     requests.push({method: request.method(), path: url.pathname, scenario: url.searchParams.get('scenario_id')});
     expect(request.method()).toBe('GET');
-    expect(['/api/journey/lesson', '/api/journey/demo-persona', '/api/journey/metadata']).toContain(url.pathname);
+    expect(['/api/journey/lesson', '/api/journey/demo-persona', '/api/journey/metadata', '/api/journey/execution']).toContain(url.pathname);
     await route.continue();
   });
   const response = (action: string) => page.waitForResponse(value => {
@@ -73,7 +73,7 @@ for (const scenario of scenarios) test(`${scenario}: verify the promoted origina
     for (let step = 1; step <= 9; step++) {
       await expect(page.locator('.step-title')).toHaveText(titles[step - 1]);
       await expect(page.getByTestId('journey-panel').getByRole('alert')).toHaveCount(0);
-      await expect(page.getByTestId('journey-panel').locator('pre, .component-reference, .operation-path')).toHaveCount(0);
+      await expect(page.getByTestId('journey-panel').locator('.component-reference, .operation-path')).toHaveCount(0);
       if (step < 9) await page.getByRole('button', {name: 'Next →', exact: true}).click();
     }
   }
@@ -89,7 +89,7 @@ for (const scenario of scenarios) test(`${scenario}: verify the promoted origina
   }
   await expect(facts.getByText("This turn's Fabric result", {exact: true})).toHaveCount(1);
   await page.getByRole('button', {name: 'Explain NeMo Fabric: Build the typed FabricConfig', exact: true}).click();
-  const config = page.getByTestId('journey-panel').getByRole('link', {name: 'The captured typed settings ↗', exact: true});
+  const config = page.getByTestId('journey-panel').getByRole('link', {name: 'its effective settings ↗', exact: true});
   await expect(config).toHaveAttribute('href', new RegExp(`/recordings/captures/${scenario}/${runId}/`));
   await expect(page.getByTestId('journey-panel').getByRole('link', {name: 'build_config ↗', exact: true})).toHaveAttribute('href', /github\.com\/syseeker\/persona-simulation-lab\/blob\/[^/]+\/src\/learning_lab\/fabric_target\.py#L\d+$/);
   async function capture(file: string) {
@@ -101,7 +101,11 @@ for (const scenario of scenarios) test(`${scenario}: verify the promoted origina
   await page.getByRole('button', {name: /5\s+Metadata/}).click();
   await expect(page.getByRole('columnheader', {name: 'YAML / JSON file', exact: true})).toBeVisible();
   await expect(page.locator('.run-identity')).toContainText(runId);
-  await expect(page.locator('tr[data-requirement]')).toHaveCount(inventory.rows.length);
+  await expect(page.locator('tr[data-requirement]')).toHaveCount(new Set(inventory.rows.filter((row:Record<string,any>)=>!row.condition_id||row.condition_purpose==='baseline').map((row:Record<string,any>)=>row.id)).size);
+  if (inventory.conditions.length>1) {
+    await page.getByRole('combobox',{name:'Condition',exact:true}).selectOption('*');
+    await expect(page.locator('tr[data-requirement]')).toHaveCount(new Set(inventory.rows.map((row:Record<string,any>)=>row.id)).size);
+  }
   await expect(page.locator('.metadata-page a[href^="/home/"], .metadata-page a[href^="file:"]')).toHaveCount(0);
   await capture('02-metadata.png');
   expect(errors).toEqual([]);

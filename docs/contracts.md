@@ -119,3 +119,36 @@ The native OpenShell package uses an explicit hash-checked public photography/S$
 ## Historical output retention
 
 The [private output archive policy](output-housekeeping.md) separates active or unresolved work from superseded records. Archived raw records retain their original identities and statuses. Recovery verifies checksums into a new directory; it does not install a recording pack, reopen a session or rewrite the retained worker protocol.
+
+
+## v0.3.0 read-only review additions
+
+`GET /api/journey/execution` accepts `scenario_id`, optional `condition_id` and
+optional `public_turn` (1–3). The shared JourneyService dispatch exposes the same
+`execution` action to compatible developer callers. It returns
+`citizen-guide-execution/v1`, validates that the condition belongs to the explicitly
+selected recording, and reads hash-verified public capture data only. Public DTOs
+include native hierarchy/timing, approved tool facts, separate condition usage,
+correlation limits, coverage and an optional owned local Phoenix link. They never
+read private model payloads for the browser. An application-only turn has no
+fabricated native agent subtree; condition-wide usage remains labelled as such.
+
+The existing Metadata v1 contract gains additive producer, consumer, direction,
+purpose, source_schema, representation and shared-condition descriptions. The
+selected condition defaults to baseline unless navigation supplies a condition.
+Grouping requires identical bytes plus matching semantic role/schema.
+
+`recordings/review-context/SCENARIO/RUN/` is an additional immutable supplement.
+Its manifest binds each sanitized managed configuration to scenario/run/condition,
+source artifact hash, original recording manifest and capture manifest. It does
+not rewrite either older pack. The reader rejects unsafe paths, symlinks, altered
+bytes and mismatched provenance. Public links require the exact committed bytes.
+
+Phoenix startup, import and stop are explicit local CLI operations in a separate
+locked environment. Viewing the guide performs no import or lifecycle mutation.
+A local receipt identifies the owned process and imported projects. Availability
+requires that same process identity and a loopback listening socket. Historical
+conversion uses deterministic IDs and original timestamps; partial records retain
+missing parents/end times and never become invented complete execution. Unknown
+usage is not zero usage. Richer filtered advisor payloads stay in ignored local
+storage, with no credentials, private UserSim prompts, source records or reasoning.

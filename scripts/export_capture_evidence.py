@@ -301,9 +301,10 @@ def projection(path, value, folder, row):
         return pick(value, ['schema', 'run_id', 'condition_id', 'status', 'provider_status', 'model_alias', 'public_preset',
             'inference_calls', 'native_resource_definitions', 'agent', 'deployment', 'package', 'session', 'invocation',
             'policy', 'probes', 'removed', 'absent', 'cleanup_confirmed', 'native_absence_confirmed', 'boundary',
-            'connection', 'executor', 'server', 'configured_executor', 'source_hashes']), 'application-projection'
+            'connection', 'executor', 'server', 'configured_executor', 'source_hashes',
+            'client', 'server_executor']), 'application-projection'
     if name == 'agent.yaml':
-        return pick(value, ['name', 'description', 'harness', 'models', 'runtime', 'tools', 'mcp', 'environment',
+        return pick(value, ['config_format', 'name', 'description', 'default_harness', 'harnesses', 'harness', 'models', 'runtime', 'tools', 'mcp', 'environment',
                             'skills', 'resources', 'metadata']), 'application-projection'
     if name == 'gateway-calls.jsonl':
         return [pick(item, CALL_FIELDS) for item in value], 'application-projection'

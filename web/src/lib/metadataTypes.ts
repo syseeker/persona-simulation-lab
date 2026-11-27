@@ -7,6 +7,12 @@ export interface MetadataArtifact {
   url?: string | null;
   kind: string;
   source_kind?: string | null;
+  source_schema?: string | null;
+  producer?: string;
+  consumer?: string;
+  direction?: 'input'|'output'|'input and output';
+  purpose?: string;
+  representation?: string;
   privacy: Exclude<CapturePrivacy, 'unknown'>;
   status: CaptureAvailability;
   sha256: string;

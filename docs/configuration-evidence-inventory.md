@@ -22,6 +22,33 @@ Photography passed 9/9 application assertions. Board games passed 11/11 and reta
 
 The retail capture pack exposes 198 Metadata rows across seven conditions, including explicit unused requirements; 181 are required applicable captures. Its salary-only public turn two is an application clarification with zero advisor inference, while turns one and three have native Fabric invocations. See [retail integration](retail-integration.md) for the source-rendering and initial-tool-choice boundaries. These new results do not relabel the earlier failed Gemma/GLM pool or remove development failures.
 
+## Review presentation amendment · 27 November 2026
+
+The v0.3.0 Metadata reader retains the same immutable inventories and adds each
+artifact's representation, producer, consumer and input/output purpose. Native
+configuration, captured SDK arguments, native results, application accounting and
+sanitized projections are identified separately. The default is the relevant
+selected condition. “All conditions” groups a requirement once and shares settings
+only when content hash, schema and semantic role agree; condition-specific results
+and their links remain separate. This changes presentation, not capture counts.
+
+The new [retail review companion](../recordings/review-context/dreamjob/8ce3ace2-0bb4-46f7-898c-795bc7da4794/manifest.json)
+recovers omitted **CAP-PLAT-01** client settings and **CAP-PLAT-02** registered-agent
+settings from retained originals. It is a new sanitized publication with explicit
+source hashes, including the deployment source used by the registered-agent
+export. The reader checks those bindings. It does not replace an immutable capture,
+claim a new deployment, or turn the registered configuration into a complete
+reproducible package. Private authentication values and provider environment
+values are excluded.
+
+The read-only [execution reader](../src/learning_lab/guide_execution.py) resolves
+native scopes, tool inputs/results and model accounting from those same selected
+conditions. It does not invent a turn-to-scope or gateway-to-span join. Retail's
+application-only Turn 2 has no native agent subtree. Its displayed gateway usage
+is explicitly condition-wide. The optional [local Phoenix integration](../integrations/observability/README.md)
+adds filtered historical advisor payloads privately, with explicit startup/import
+and verified local project links. Browser inspection never starts either operation.
+
 ## Baseline audit · 22 November 2026 (`19b26b8`)
 
 The P/B/R keys and 51 requirement rows below refer only to the original audit. Their run identities, locations and findings remain unchanged so a newly complete capture cannot be mistaken for an older run's evidence.

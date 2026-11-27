@@ -2,6 +2,12 @@
   let {operation,scenarioId,context,turnIndex=0,conditionId=''}:{operation:string;scenarioId:string;context:Record<string,any>|null;turnIndex?:number;conditionId?:string}=$props();
   const notes=$derived.by(()=>{
     const data=context?.context||{},trace=context?.trace,cfg=data['framework-config.json'];
+    const managed=data['platform-condition.json'];
+    if(conditionId&&conditionId===managed?.condition_id){
+      if(operation.startsWith('openshell.'))return [`This evidence belongs to the Helix-managed deployment. Its executor created the sandbox; the recorded managed policy and boundary probes apply to that sandbox. Cleanup ${managed.cleanup_confirmed?'was confirmed':'is not confirmed'}.`];
+      if(operation.startsWith('platform.'))return [`Helix registered the application package, deployed it through the OpenShell executor, opened a fresh session and invoked a public request. Recorded status: ${managed.status}; cleanup ${managed.cleanup_confirmed?'confirmed':'not confirmed'}.`];
+      return ['This selection is scoped to the fresh Helix-managed condition. Its configuration and native Intake evidence are separate from the standalone conversation; the matching links above retain that condition identity.'];
+    }
     if(conditionId&&(data['routing-comparison.json']?.conditions||[]).some((c:Record<string,any>)=>c.condition_id===conditionId))return [];
     if(!trace)return [];
     const turns=data['fabric-invocations.json']||[],native=turns.find((r:Record<string,any>)=>r.public_turn===turnIndex+1);
@@ -23,7 +29,7 @@
         const tools=(trace.tools||[]).filter((t:Record<string,any>)=>t.name?.endsWith(name));
         return tools.length?[`${tools.length} ${name} event${tools.length===1?' is':'s are'} retained in this run. Step 5 interprets the returned facts for the selected public turn; the native record preserves arguments and the complete result.`]:[`The ${name} tool was available, but no call to it is recorded in this scenario.`];
       }
-      case 'relay.configure':return cfg?[`Relay is ${cfg.relay.enabled?'enabled':'disabled'}; full-payload instrumentation is ${cfg.relay.observability.enable_full_payloads?'enabled':'disabled'}. Export used the native file sink, without a Phoenix or collector session.`]:[];
+      case 'relay.configure':return cfg?[`Relay is ${cfg.relay.enabled?'enabled':'disabled'}; full-payload instrumentation is ${cfg.relay.observability.enable_full_payloads?'enabled':'disabled'}. The original execution exported to its native file sink. Local Phoenix now imports retained historical events; it was not the collector during that execution.`]:[];
       case 'relay.scopes':return [`The run retains ${trace.relay?.scopes?.length||0} native scopes. Their parent IDs describe the observed harness execution; gateway accounting has separate identities.`];
       case 'helix.job':return data['helix-job.json']?[`The durable job status is ${data['helix-job.json'].status}. Its result belongs to saved criterion scoring, separate from generating another advisor response.`]:[];
       case 'openshell.probe':return data['boundary-probes.json']?[`The standalone probes recorded ${(data['boundary-probes.json'].probes||[]).filter((p:Record<string,any>)=>p.denied).length} denied operations. Cleanup ${data['cleanup.json']?.native_absence_confirmed?'confirmed that the owned sandbox was absent':'is not confirmed in this recording'}.`]:[];

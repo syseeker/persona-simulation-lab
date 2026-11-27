@@ -118,6 +118,45 @@ describe('Detailed library and operation teaching destinations',()=>{
     expect(text('dreamjob','helix','helix.evaluate')).toContain('not general correctness');
   });
 
+  it('teaches how to author a learner test separately from an advisor strategy',()=>{
+    const usersim=prose(detailedPage('dreamjob','usersim')).join('\n');
+    for(const term of ['RunSpec', '--paired', 'episode_started', 'persona index', 'scenario binding', '100,000-case', 'JourneyService']) {
+      expect(usersim).toContain(term);
+    }
+    const probe=prose(detailedPage('dreamjob','usersim','usersim.probe')).join('\n');
+    expect(probe).toContain('src/learning_lab/probe.py');
+    expect(probe).toContain('usersim.probes');
+    expect(probe).toContain('format_assistant_judge_prompt');
+    expect(probe).toContain('does not override that generic rubric');
+    const loop=prose(detailedPage('dreamjob','usersim','usersim.loop')).join('\n');
+    expect(loop).toContain('clarification template in application code');
+    expect(loop).toContain('No advisor language-model call');
+    expect(loop).toContain('separate judge model');
+  });
+
+  it('explains the actual Designer output and compatible SDK environments',()=>{
+    const designer=prose(detailedPage('dreamjob','designer')).join('\n');
+    for(const term of ['0.10.0', '0.9.7', 'UserSim 0.3.0', '1.0.1', '0.1.0 version is not the Designer SDK']) {
+      expect(designer).toContain(term);
+    }
+    const generation=prose(detailedPage('dreamjob','designer','designer.generate')).join('\n');
+    expect(generation).toContain('one row and three physical columns');
+    expect(generation).toContain('three nested generated fields');
+    expect(generation).toContain('does not append a new person');
+    expect(generation).toContain('[[file:designer-output.json|');
+  });
+
+  it('identifies who defines criteria and what the two Helix execution paths measure',()=>{
+    const helix=prose(detailedPage('dreamjob','helix')).join('\n');
+    for(const term of ['nhx_evals_sdk', 'nemo_evals.sdk', '0.9.1', '0.10.0', '24 criterion rows', 'NeMo Gym']) {
+      expect(helix).toContain(term);
+    }
+    expect(helix).toContain('not 24 model calls');
+    expect(helix).toContain('Neither path generates another conversation');
+    const checks=prose(detailedPage('boardgames','checks','checks.evaluate')).join('\n');
+    for(const purpose of ['functional/runtime', 'grounding', 'privacy/safety', 'latency, token or cost target']) expect(checks).toContain(purpose);
+  });
+
   it('never maps an invalid technical selection onto an unrelated component',()=>{
     expect(detailedPage('photography','fabric','persona.lock').title).toBe('Explanation unavailable');
     expect(detailedPage('photography','nonexistent').title).toBe('Explanation unavailable');

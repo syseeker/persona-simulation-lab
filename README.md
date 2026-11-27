@@ -1,5 +1,12 @@
 # Building Citizen Apps with NeMo
 
+**v0.3.0 · Developer review.** The first page displays the application version at
+the top right. The nine existing lesson titles are preserved; the bodies explain
+the same integrations in connected, plain English. Execution inspection now has a
+condition-scoped in-app viewer and a separate local Phoenix historical viewer.
+See the [v0.3 walkthrough](docs/learning-guide.md#v030-review-flow--27-november-2026)
+and [local Phoenix setup](integrations/observability/README.md).
+
 *NeMo Stack Integration Guide · Singapore*
 
 ## North Star
@@ -57,7 +64,7 @@ CLI inspection and orchestration share application services. The host-only `lear
 
 Use `uv run learning-lab guide status`, `guide runs --scenario boardgames` and `guide trace RUN_ID` for inspection. A CLI `guide start SOURCE_ID ORIGINAL_SHA256 --source ngc --scenario photography|boardgames|dreamjob` explicitly runs and awaits its own condition; omit `--scenario` for photography. It cannot cancel a run owned by the web worker. Closing a UI panel never cancels that worker's run. Retail execution additionally requires the isolated Designer/Helix environments, requested-pool proxy and managed images described in [retail setup](docs/retail-integration.md#explicit-setup-and-execution).
 
-Completed rounds are committed and pushed to **`dev`**, leaving `main` unchanged. The [fixed recording packs](recordings/README.md) provide scenario-specific GitHub log links after cloning; the teaching panel interprets selected proof facts rather than embedding raw previews. The selected demos retain their own configuration, native records and cleanup evidence, including the board-games helpfulness warning. Earlier failed conditions remain preserved separately. Only sanitized public projections are published. Future live-log linking is deferred.
+Completed rounds are committed and pushed to **`dev`**, leaving `main` unchanged. The [fixed recording packs](recordings/README.md) provide scenario-specific GitHub log links after cloning; the teaching panel interprets selected proof facts with purposeful expandable execution details in v0.3.0. The selected demos retain their own configuration, native records and cleanup evidence, including the board-games helpfulness warning. Earlier failed conditions remain preserved separately. Only sanitized public projections are published. Future live-log linking is deferred.
 
 Preserve an existing `.env`; [.env.example](.env.example) documents configuration. Dataset installation is required for Explore profiles; schema and scenario illustrations remain available without it. Original Parquet files stay in ignored local storage, outside Git. The retained [persona services](docs/personas.md) distinguish public HF profiles from **Singapore NGC Extended only**; missing Extended data must not be replaced silently.
 

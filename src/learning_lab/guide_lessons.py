@@ -17,6 +17,7 @@ import pyarrow.dataset as pads
 from . import recordings
 from .datasets import DatasetQuery, _dataset, profile_hash
 from .guide_sources import _git, operation_links, repository_url
+from .guide_review_context import companion as review_companion
 from .settings import ROOT
 
 CANONICAL_DEMOS = {'photography': '94e49df8-7dfa-445b-9614-d79e31f2c024',
@@ -78,8 +79,10 @@ def lesson_context(scenario_id='photography') -> dict:
             result.update(state='unavailable', notice='The tagged demo recording is unavailable. No other recording was substituted.')
         else:
             extra = companion(scenario_id, run_id)
+            supplement = review_companion(scenario_id, run_id)
             hashes = extra.get('source_hashes', {})
             context = dict(extra['data'])
+            context.update(supplement['data'])
             for name in ['fabric-plan.json', 'fabric-doctor.json', 'effective-policy.json',
                          'boundary-probes.json', 'cleanup.json', 'runtime-receipt.json',
                          'guardrails-config.json', 'guardrails-probe.json',
@@ -98,7 +101,7 @@ def lesson_context(scenario_id='photography') -> dict:
                 if name in recordings.load(run_id)['files']:
                     context[name] = [json.loads(line) for line in recordings.read(run_id, name).splitlines() if line.strip()]
             result.update(state='recorded', trace=trace, context=context,
-                          artifacts=trace['artifacts'] + extra['artifacts'],
+                          artifacts=trace['artifacts'] + extra['artifacts'] + supplement['artifacts'],
                           notice=extra['notice'])
     else:
         result['notice'] = 'Planned scenario: no conversation, native decisions or execution logs have been recorded.'
@@ -168,7 +171,12 @@ def resolve_original(source: str, revision: str, digest: str) -> dict:
         if isinstance(value, dict):
             traits.append({'name': key, 'label': value.get('label'), 'description': value.get('description')})
     name = ' '.join(str(row[k]) for k in ['first_name', 'middle_name', 'last_name'] if row.get(k))
-    return {'available': True, 'name': name or 'Selected original synthetic profile', 'fields': fields, 'traits': traits,
+    preferred = row.get('preferred_english_name')
+    preferred = preferred.strip() if isinstance(preferred, str) else ''
+    display = f'{preferred} ({name})' if preferred and name and preferred != name else preferred or name
+    return {'available': True, 'name': display or 'Selected original synthetic profile',
+            'structured_name': name, 'preferred_english_name': preferred or None,
+            'fields': fields, 'traits': traits,
             'source': source, 'revision': revision, 'original_sha256': digest,
             'notice': 'Exact original matched against the recorded SHA-256. Synthetic test data, not a real resident.'}
 

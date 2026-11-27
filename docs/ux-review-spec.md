@@ -279,3 +279,216 @@ Acceptance: a developer can follow one selected scenario from original person an
 ## Review evidence · 22 November 2026
 
 Implementation and selected recordings are committed in `c96d904`. Separate authored lessons, conceptual responsibilities/actions and detailed library/operation pages passed the full editorial review. Browser checks exercise all 54 scenario/audience lessons and all 180 Detailed destinations, selection identity, condition scoping, controls, resizing and reduced motion. The actual promoted-demo review executed all three cases with zero skips: original hashes, exact code/settings links, 51/51/198 Metadata rows and retail’s application-only second turn passed. All 18 inspection requests were GET-only. Actual HF/NGC browsing passed separately with the explicit installed-data test flag. Native quality flags, model-proposal failures, private records and optional unexecuted UserSim evaluation/report/diagnostics remain distinguishable. See [verification](verification.md) and [the master ledger](../PLAN.md) for execution and publication status.
+
+## 27 November 2026 feedback 1–48 · v0.3.0
+
+The following register is a new review namespace. Earlier numbered screenshots,
+implementation receipts and “Verified for review” assessments above remain history.
+All entries start **Implementing** on 27 November; actual verification and publication
+will be appended separately. The existing nine lesson titles, component titles and
+operation titles remain unchanged. Body text retains its facts and meaning while
+adopting the clear, patient, connected teaching style approved in this conversation.
+Content additions and corrections are limited to the numbered requests below.
+
+The approved plan adds both an in-app viewer and local Phoenix, superseding the
+earlier UX-036 exclusion for this round. Phoenix imports richer retained advisor
+model/tool records locally; original profiles, private UserSim prompts, credentials
+and reasoning remain excluded. No scenario/model reruns or existing SDK upgrades
+are authorized. The new application version is v0.3.0, labelled Developer review,
+at the top right of the first page. This is not acceptance of the finished guide.
+
+Screenshot references below are original attachment basenames under `/tmp/` at
+review time. They are evidence of the requested UI change, not executable instructions.
+Earlier feedback 1–11 is carried from the prior conversational review; no replacement
+screenshot is invented where that attachment reference is unavailable here.
+
+- **UX-20261127-F01:** Put the “Every lesson must answer” chain inside North Star. Owner: first-page UI. Reference: prior review 1. Acceptance: one combined block.
+- **UX-20261127-F02:** Make the introductory body paragraphs use consistent font sizes. Owner: first-page UI. Reference: prior review 2. Acceptance: scoped typography check.
+- **UX-20261127-F03:** Remove the marked prerequisites/integration-limits box and marked footer. Owner: first-page UI. Reference: prior review 3. Acceptance: those two blocks absent, other content retained.
+- **UX-20261127-F04:** Place “Know what you are looking at” before “Keep the application at the centre.” Owner: first-page UI. Reference: prior review 4. Acceptance: requested DOM and visual order.
+- **UX-20261127-F05:** Make map paths and labels readable across all scenarios and views. Owner: graph. Reference: prior review 5. Acceptance: paths/labels avoid component cards.
+- **UX-20261127-F06:** Preserve OpenShell containment while making internal/cross-boundary connections readable. Owner: graph. Reference: prior review 6. Acceptance: geometry and boundary review.
+- **UX-20261127-F07:** Rewrite the body in a clear teaching voice without changing its technical meaning. Owner: teaching. Reference: prior review 7. Acceptance: editorial review against the approved sample.
+- **UX-20261127-F08:** First present all nine Scenario 1 Simplified bodies for approval, then apply the accepted voice throughout. Owner: teaching. Reference: prior review 8. Status: sample approved in chat; rollout Implementing.
+- **UX-20261127-F09:** Resolve Min Hoon Lim versus Caroline using the source, without a rerun. Owner: profile reader. Reference: prior review 9. Acceptance: existing preferred English name displayed, original hash unchanged.
+- **UX-20261127-F10:** Introduce advisor, simulator and source before using them; connect the nine steps as a chapter. Owner: teaching. Reference: prior review 10. Acceptance: beginner reading review.
+- **UX-20261127-F11:** Use specific nouns such as selected persona profile instead of vague references to saved selections. Owner: teaching. Reference: prior review 11. Acceptance: contextual link/text review.
+- **UX-20261127-F12:** Simplify the difficult synthetic-person explanation. Owner: teaching. Reference: codex-clipboard-413a2bd9-dfac-445b-a1f4-71e310b5957b.png. Acceptance: connected explanation of source/selection/use.
+- **UX-20261127-F13:** Change connection colours/hierarchy to reduce visual traffic. Owner: graph. Reference: codex-clipboard-200d13f1-77a1-4de5-a49b-c2850f4ef63a.png. Acceptance: subdued overview, selected-path emphasis, no ordinary travel animation.
+- **UX-20261127-F14:** Explain numbered flows before/after showing them, or fold redundant lists into prose everywhere. Owner: teaching. References: preceding image and codex-clipboard-a3e790e9-43b9-415f-a20e-c140d2e4db37.png. Acceptance: no unexplained keyword lists.
+- **UX-20261127-F15:** Explain what each projection is, who generates it and whether it is input or output. Owner: Metadata/evidence. Reference: codex-clipboard-733337ea-435b-4c26-b001-323c91a4c5dd.png. Acceptance: representation and producer/consumer shown.
+- **UX-20261127-F16:** Name criterion authors and distinguish evaluation from collected execution facts. Owner: evaluation. References: preceding image and codex-clipboard-b2f90dcd-74d4-4180-9a11-82ad3e0226f3.png. Acceptance: categories, authorship and coverage shown.
+- **UX-20261127-F17:** Explain tool/LLM I/O, skills, subagents, memory, hierarchy, tokens, latency and what was actually captured/evaluated; distinguish calls to judges. Owner: execution/evaluation. References: F16 images. Acceptance: condition-specific measurements and explicit missing/unused coverage.
+- **UX-20261127-F18:** Explain advisor calls 3/4, earlier roles, aliases/providers and fixed versus Switchyard routing. Owner: routing/teaching. Reference: codex-clipboard-1105c2a6-4154-4457-ae41-0a712403d9bf.png. Acceptance: advisor ordinal plus global ID and full role accounting.
+- **UX-20261127-F19:** Explain why denied operations were deliberately tested and where their OpenShell policy rules are. Owner: deployment. Reference: codex-clipboard-eefc89be-d1cf-4890-a110-77687967ac9f.png. Acceptance: actual probe, expected/observed result and effective policy.
+- **UX-20261127-F20:** Identify each judge's component, trigger, purpose and relationship to other checks. Owner: UserSim/evaluation. Reference: codex-clipboard-959ddb14-d003-46ea-8041-f3aeebd61a94.png. Acceptance: learner gate, quality judge, application assertions and Helix distinguished.
+- **UX-20261127-F21:** Explain `spec["strategies"]`, stored run/episode/source/story/preferences and experiment design for behavioural scientists. Owner: UserSim teaching. Reference: codex-clipboard-dff60151-ce5e-4996-9fda-268bb5ea46ec.png. Acceptance: legacy advisor strategy versus participant/probe behaviour, current limits and extension points explained; no claim of 100k orchestration.
+- **UX-20261127-F22:** Merge unintroduced quoted/highlighted paragraphs or label their purpose. Owner: teaching/facts. Reference: codex-clipboard-d2b08fe2-44a2-4212-8f0a-6975f17237d9.png. Acceptance: applies to all unexplained callouts.
+- **UX-20261127-F23:** Connect the model/tool-loop list to the explanation. Owner: teaching. Reference: codex-clipboard-fb42e1bf-abbf-4f2f-998a-4c6220e9778f.png. Acceptance: narrative input/action/output sequence.
+- **UX-20261127-F24:** Rewrite Relay paragraphs with continuity. Owner: teaching. Reference: codex-clipboard-c36966c6-dc23-4f8a-b956-994803b60837.png. Acceptance: causal explanation before implementation details.
+- **UX-20261127-F25:** Explain Relay export/parent relationships and separate controls in context. Owner: teaching. Reference: F24 image. Acceptance: factual connected prose, no unsupported collector claim.
+- **UX-20261127-F26:** Explain repeated Guardrails cards by message, turn, boundary, action and result. Owner: safeguards. Reference: codex-clipboard-5ca7c536-d79a-423c-b951-800ba0f185ca.png. Acceptance: ordinary checks grouped by public turn, separate test not duplicated.
+- **UX-20261127-F27:** Prove the separate negative probe was implemented. Owner: safeguards. Reference: F26 image. Acceptance: exact executed request and native result replace invented display wording.
+- **UX-20261127-F28:** Start each scenario/lesson at Turn 1. Owner: selection. References: codex-clipboard-e6be14b2-4c6f-48c2-8c6c-455e6cb35b93.png and codex-clipboard-303566d3-e583-48da-97e1-7fddcba52404.png. Acceptance: no stale restored Turn 2 on ordinary entry.
+- **UX-20261127-F29:** Explain UserSim quality flags, counts and criteria instead of overwhelming the learner with a blanket failure. Owner: evaluation. Reference: codex-clipboard-d6b729b4-175d-4d87-b17f-6d4e3558da61.png. Acceptance: judge reasons preserved beside narrowly passing application checks.
+- **UX-20261127-F30:** Explain exact Designer SDK/helper versions and when to use each environment versus newer 1.x. Owner: Designer teaching. Reference: codex-clipboard-0e89a740-4466-47a9-b487-843e9d7bc392.png. Acceptance: 0.1 helper is not SDK; existing pins unchanged.
+- **UX-20261127-F31:** Show generated data, record/column counts and retained output. Owner: Designer facts. Reference: codex-clipboard-e6ba0398-0083-4548-81e7-c09ae8ebe153.png. Acceptance: copied seed versus one generated structure with three fields.
+- **UX-20261127-F32:** Reduce repeated Metadata rows and explain condition differences. Owner: Metadata. Reference: codex-clipboard-265a917a-57d2-4d41-9aef-8c5bc29c3e57.png. Acceptance: selected-condition default, hash/role-aware shared settings.
+- **UX-20261127-F33:** Explain retail Turn 2's answer without an advisor/Fabric invocation. Owner: application teaching/selection. Reference: codex-clipboard-519473bb-ecab-431a-b77d-143a98b2becb.png. Acceptance: fixed clarification path, zero advisor inference, safeguards still applied.
+- **UX-20261127-F34:** Teach investigation with actual Relay events/I/O and separate gateway accounting; provide useful dashboard access. Owner: execution/Phoenix. References: codex-clipboard-0a30d375-cb4f-4a07-884d-ed23dec46d28.png, codex-clipboard-5d3bcce5-f8ef-47ed-be98-967bff4a090c.png and codex-clipboard-913334d4-f9fa-41d1-980d-725430a44ba5.png. Acceptance: both read-only in-app viewer and richer local historical Phoenix approved.
+- **UX-20261127-F35:** Explain actual Helix local/durable evaluation and its package lineage. Owner: evaluation teaching. Reference: codex-clipboard-db58b99b-11f1-4fdb-af53-440187a3cd35.png. Acceptance: same saved dataset, SDK versus service lifecycle clear.
+- **UX-20261127-F36:** Explain retail's UserSim quality disagreement as in F29. Owner: evaluation. Reference: F35 image. Acceptance: turn-specific verdicts retained, not equated with run failure.
+- **UX-20261127-F37:** Explain authorship, purpose and categories of criteria, including metrics collected without evaluation thresholds. Owner: evaluation. Reference: F35 image. Acceptance: functional/grounding/safety/privacy/provenance/performance coverage.
+- **UX-20261127-F38:** State that scenario-specific code creates criteria and Helix ExactMatch compares extracted values. Owner: evaluation. Reference: codex-clipboard-03db4b2c-4fe7-4a34-849e-3499bbb77876.png. Acceptance: no independent semantic certification claim.
+- **UX-20261127-F39:** Consolidate repeated Helix Metadata rows without merging distinct results. Owner: Metadata. Reference: codex-clipboard-9392d075-7e20-4e56-9d74-dd7ffeb2e229.png. Acceptance: exact bytes/schema/role grouping with per-condition links.
+- **UX-20261127-F40:** Explain `nemo_evals.sdk` package ownership versus legacy NeMo Evaluator/Gym. Owner: evaluation teaching. Reference: codex-clipboard-c3f528c0-7e1e-45cf-9a3a-84d66aa86455.png. Acceptance: installed Helix namespaces and official references.
+- **UX-20261127-F41:** Remove distracting Gemma/GLM history from primary routing lesson prose. Owner: teaching. Reference: codex-clipboard-5e4b1530-a9e3-487d-b5ef-9288dce1b42c.png. Acceptance: retained historical evidence remains discoverable.
+- **UX-20261127-F42:** Explain fixed MiniMax, actual request counts, 24 criterion rows and measured performance. Owner: routing facts. Reference: F41 image. Acceptance: calls/decisions/checks/tokens/durations distinguished.
+- **UX-20261127-F43:** Remove distracting old Docker failure paragraph and state the selected managed outcome. Owner: teaching. Reference: codex-clipboard-a43d12c1-146c-45ab-82b8-6e3e18073197.png. Acceptance: selected managed success/cleanup explained, failure history retained.
+- **UX-20261127-F44:** Explain standalone versus Helix-managed execution and who creates OpenShell. Owner: deployment. Reference: codex-clipboard-410ac230-d2f2-4d81-93e1-383b797441c6.png. Acceptance: management versus model hosting clear.
+- **UX-20261127-F45:** Scope inside/outside, denial probes and effective policy to the chosen deployment. Owner: deployment/selection. Reference: F44 image. Acceptance: managed map never paired with baseline policy/results.
+- **UX-20261127-F46:** Explain Helix configuration and agent lifecycle as a separate fresh managed session. Owner: deployment. Reference: F44 image. Acceptance: exact config/proof links, registration through cleanup.
+- **UX-20261127-F47:** Give all five routing conditions plain-language descriptions. Owner: routing. Reference: codex-clipboard-c1162c2d-5184-4789-b8af-bc00b70fd970.png. Acceptance: pools, fixed/routed pairing and diagnostic purpose shown.
+- **UX-20261127-F48:** Summarize repeated model choices with actual counts; do not imply five conditions means five calls or claim an unrecorded rationale. Owner: routing. Reference: F47 image. Acceptance: selections summarized, individual recorded decisions expandable.
+
+### Approved writing reference — Scenario 1 Simplified
+
+The user approved these bodies and subsequently required the **existing titles**
+below. This is the voice reference, not a replacement for recorded technical facts.
+
+#### 1. Choose a test persona
+
+We will test a citizen advisor that helps people find learning opportunities. To begin, we need someone to ask it a question. UserSim will play that person during the test.
+
+This recording uses Caroline, a synthetic profile from the Singapore Extended persona dataset. Her structured name is Min Hoon Lim, and Caroline is her preferred English name. Both names belong to the same profile. She is described as a 24-year-old university student living in Bukit Timah.
+
+The application keeps a reference to the selected original profile so we can check which person was used. At this point, we have chosen our test participant. The conversation has not started.
+
+#### 2. Create a situation
+
+A persona tells us who the simulated learner is. We also need to decide what she wants to do in this test.
+
+For this scenario, we supply a specific task: find a beginner photography class on Saturday for less than S$50. These requirements come from the scenario we authored. They are separate from Caroline’s original profile.
+
+UserSim will use the profile and this task to write the learner’s message. This lets us test how the advisor handles a clear request while keeping track of which information came from the profile and which information we supplied. This scenario does not use Data Designer to generate additional fields.
+
+#### 3. Build and connect the agent
+
+The advisor needs instructions, a language model and access to course information. The instructions explain its job. The model decides how to respond, and the course tools let it retrieve facts from the saved catalogue.
+
+Here, Deep Agents manages the conversation between the model and its tools. Fabric provides the application’s interface for configuring, starting and calling that agent. We prepare one runtime and keep it available throughout the test.
+
+The advisor can search for courses, retrieve course details and compare courses. These tools read catalogue information; they cannot book a class or make a payment. Completing this setup makes the advisor ready to receive Caroline’s question.
+
+#### 4. Run the application
+
+UserSim now writes Caroline’s opening message:
+
+“Hi, I'm looking for a beginner photography class that meets on Saturdays and costs under S$50. Do you have any recommendations?”
+
+The application sends this public message to the advisor. The advisor searches the catalogue and returns a recommendation for Photography and Photo Enhancement with AI (AI30) at Toa Payoh West CC.
+
+In the saved catalogue, the class runs on Saturday and has a published fee of S$10. The reply also explains that materials may cost extra and that the learner should confirm the total cost.
+
+This recording contains one learner message and one delivered advisor reply. Producing that reply involved two model requests and one course search.
+
+#### 5. Investigate execution
+
+Suppose we want to check where the recommendation came from. We can follow the recorded execution: the model requests a course search, the tool returns catalogue information, and the model uses that result to write its reply.
+
+Relay records activity inside the agent, including the captured model and tool operations. Open the course-search record to inspect the actual arguments and returned facts. This is where we can check whether the recommendation has evidence behind it.
+
+The application also records model usage for the whole test. That includes generating Caroline’s message and running UserSim’s checks. The advisor’s two model requests have global IDs 3 and 4 because other requests happened first. They are the advisor’s first and second requests, not missing conversation turns.
+
+#### 6. Evaluate behaviour
+
+Now we can compare the delivered answer with the requirements of this test.
+
+The lab’s developers wrote nine checks for this scenario. They cover whether an answer was saved, whether the original profile was preserved, whether the request contains the intended constraints, and whether selected course details agree with the saved catalogue and tool evidence.
+
+All nine checks passed. These checks run as application code and make no additional model requests.
+
+Their coverage is specific. For example, checking a published fee does not establish the total checkout cost, and checking a course link does not confirm available seats or travel distance. UserSim also assessed the reply during the conversation using its own answer-quality judge. That is a separate assessment, which we will identify by name when displaying its result.
+
+#### 7. Optimize model routing
+
+This recording uses one fixed model for the advisor: Nemotron 3.5 Lightning. Both advisor model requests go through LiteLLM to that configured model.
+
+A fixed route gives us a straightforward starting point: we know which model was asked to produce the answer. Switchyard is not used in this scenario, so there is no automatic model-selection decision to inspect.
+
+To study a different route later, we would keep the task and course information steady, change the model-selection condition, and compare the resulting answers and resource usage. This recording establishes the fixed-route example.
+
+#### 8. Configure behavioural safeguards
+
+The advisor receives instructions to use course evidence and explain uncertainty. Its permitted tools are also restricted to the course catalogue. These controls work together: instructions guide the answer, while the tool restrictions limit the operations available to the agent.
+
+Three course tools are available in this scenario. The execution record shows that the advisor used the search tool for this reply. Making a tool available and actually calling it are different events.
+
+This photography scenario does not use NeMo Guardrails. The board-game scenario introduces that component and shows the checks it performs on messages entering and leaving the application.
+
+#### 9. Deploy with controlled access
+
+The advisor ran inside an OpenShell sandbox. That sandbox contained the application, Deep Agents and the course tools. UserSim and the gateway holding the model-provider credentials ran outside it.
+
+The sandbox policy permits the file and network access needed for the task. To check enforcement, the test also deliberately tried to read a file outside the permitted locations and connect to an unlisted network address. Both attempts received a permission-denied result. These were separate boundary tests, not actions requested by Caroline.
+
+The policy view should show the relevant rules alongside those observed results. The recording also confirms that permitted model and tool work completed and that the sandbox was removed afterward.
+
+This boundary was already active when the conversation ran. We explain it here so you can connect the saved answer with the environment in which it was produced. Photography uses standalone OpenShell; the retail scenario separately demonstrates Helix-managed deployment.
+
+### Implementation and verification · 27 November 2026
+
+All 48 entries above are **Implemented for developer review**. The checks below
+establish implementation and evidence scope; the user's acceptance of clarity
+remains pending. The approved sample, original titles and preceding review history
+remain intact. Full commands, counts and limits are recorded in the
+[v0.3.0 verification receipt](verification.md#v030-developer-review--27-november-2026).
+
+- **F01:** Verified combined teaching promise/North Star in the first-page DOM and screenshot.
+- **F02:** Verified scoped introduction paragraph sizing and first-page screenshot.
+- **F03:** Verified marked prerequisites/footer blocks removed; surrounding page retained.
+- **F04:** Verified requested section order in source and rendered first page.
+- **F05:** Verified orthogonal path/label geometry, both views and representative node movements.
+- **F06:** Verified containment, managed boundary, saved layouts and routes outside cards.
+- **F07:** Reviewed all 54 lesson bodies and reachable concept/library/action/operation bodies against the sample.
+- **F08:** Retained the approved nine-body reference and verified its rollout under unchanged titles.
+- **F09:** Verified preferred-name display from the existing field and unchanged original/native hashes.
+- **F10:** Reviewed actor introductions and connected input/action/output explanations across nine steps.
+- **F11:** Reviewed contextual nouns and links across selectable destinations.
+- **F12:** Verified the synthetic participant explanation connects the original, selection and simulator.
+- **F13:** Verified neutral overview paths, selected-flow colours, readable labels and absent traffic animation.
+- **F14:** Reviewed flows in both views; removed redundant unintroduced lists.
+- **F15:** Verified artifact representation, producer, consumer and input/output purpose in Metadata and its resolver tests.
+- **F16:** Verified developer authorship, criterion categories and limited coverage beside results.
+- **F17:** Verified hierarchy/tool data, condition usage and explicit unestablished skill/subagent/memory activity in both viewers.
+- **F18:** Verified advisor ordinals/global IDs and fixed-route versus executed routing highlighting.
+- **F19:** Verified intentional file/network tests beside the selected effective policy.
+- **F20:** Verified learner gate, answer-quality judge and later application/Helix checks are distinguished. S1 request-purpose attribution uses saved activation order and matching usage, not a native span join.
+- **F21:** Reviewed participant, behaviour, task/probe, disclosure, advisor strategy, harness, tools, model and evaluation authoring; no 100,000-case orchestration claim.
+- **F22:** Reviewed callouts; retained observations identify their purpose instead of presenting unexplained quotations.
+- **F23:** Verified connected public-request → model/tool loop → reply explanation.
+- **F24:** Reviewed Relay explanations for a continuous account of the selected execution.
+- **F25:** Verified parent/missing-parent handling and separate gateway accounting without invented joins.
+- **F26:** Verified ordinary Guardrails input/output results grouped by public turn.
+- **F27:** Verified the negative-test input against executed source and the recorded blocking action/result.
+- **F28:** Verified Turn 1 on ordinary scenario, lesson, view and reload entry.
+- **F29:** Verified native quality-flag counts/reasons retained alongside the application checks.
+- **F30:** Verified Designer helper/SDK/environment distinctions; existing dependency pins unchanged.
+- **F31:** Verified one-row, copied-seed/generated-structure explanation and expandable actual generated fields.
+- **F32:** Verified relevant-condition defaults and hash/schema/semantic-role grouping without merging outputs.
+- **F33:** Verified retail Turn 2's application clarification, zero advisor requests and absent Fabric/tool subtree.
+- **F34:** Verified in-app inspection and actual local Phoenix model → tool → model browsing; stopped Phoenix does not start automatically.
+- **F35:** Verified local scoring and durable-job explanation for the same saved 24 criteria.
+- **F36:** Verified both retail native quality disagreements remain visible with their turn-specific reasons.
+- **F37:** Verified functional, grounding, safety/privacy, provenance and output-limit categories; performance measurements have no invented thresholds.
+- **F38:** Verified application extraction and Helix ExactMatch equality scoring are explicitly attributed.
+- **F39:** Verified shared Helix settings consolidate while separate results retain condition-specific links.
+- **F40:** Verified Helix package namespaces and linked official documentation distinguish the separate legacy Evaluator/Gym project.
+- **F41:** Verified primary routing prose omits distracting failure history; preserved historical records remain discoverable.
+- **F42:** Reconciled model attempts, token usage, request durations, retry waiting and 24 criterion rows against saved records.
+- **F43:** Verified managed success/cleanup explanation replaces the distracting Docker-failure paragraph; history remains unchanged.
+- **F44:** Verified explicit standalone/managed selector and sandbox ownership explanation.
+- **F45:** Verified managed graph, policy, denial probes, configuration and Metadata links share the managed condition.
+- **F46:** Verified registration → deployment → session → invocation → cleanup explanation and new hash-bound configuration companions.
+- **F47:** Verified all five options explain their pool, fixed/automatic choice and diagnostic purpose in plain language.
+- **F48:** Verified repeated choices summarize actual counts with individual decisions expandable and no invented rationale.
